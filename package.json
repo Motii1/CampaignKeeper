@@ -1,0 +1,19 @@
+{
+  "name": "campaignkeeper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Motii1/CampaignKeeper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Motii1/CampaignKeeper/issues"
+  },
+  "homepage": "https://github.com/Motii1/CampaignKeeper#readme"
+}
