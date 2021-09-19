@@ -1,0 +1,30 @@
+{
+  "env": {
+    "node": true,
+    "es2021": true
+  },
+  "extends": [
+    "plugin:security/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["security", "@typescript-eslint"],
+  "rules": {
+    "no-console": "error",
+    "eqeqeq": "error",
+    "no-useless-return": "error",
+    "yoda": "error",
+    "camelcase": "error",
+    "arrow-body-style": ["error", "as-needed"],
+    "prefer-arrow-callback": "error",
+    "prefer-const": "error",
+    "func-style": "error",
+    "@typescript-eslint/no-extra-semi": "off"
+  }
+}
