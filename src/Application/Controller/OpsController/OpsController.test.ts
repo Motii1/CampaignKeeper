@@ -1,8 +1,8 @@
 import request from 'supertest';
-import { createApp } from '../../App/AppFactory/AppFactory';
-import { OpsRoutes } from './OpsController';
+import { App } from '../../App/App';
+import { OpsController, OpsRoutes } from './OpsController';
 
-const testApp = createApp();
+const testApp = new App([[`/ops${OpsRoutes.Ping}`, new OpsController()]]);
 
 describe('OpsController tests', () => {
   test('Ping should return empty json with status code 200', async () => {
