@@ -1,0 +1,22 @@
+stages:
+  - "Test"
+
+language: node_js
+node_js:
+  - "14.17.6"
+cache: npm
+
+install:
+  - npm i --prefix backend/
+
+jobs:
+  include:
+    - stage: "Test"
+      name: "Audit-backend"
+      script: cd backend && npm audit
+    - stage: "Test"
+      name: "Lint-backend"
+      script: cd backend && npm run lint
+    - stage: "Test"
+      name: "Test-backend"
+      script: cd backend && npm run test
