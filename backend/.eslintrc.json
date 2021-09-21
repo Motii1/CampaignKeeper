@@ -14,8 +14,9 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["security", "@typescript-eslint"],
+  "plugins": ["security", "@typescript-eslint", "prettier"],
   "rules": {
+    "prettier/prettier": ["error"],
     "no-console": "error",
     "eqeqeq": "error",
     "no-useless-return": "error",

@@ -11,7 +11,7 @@ const configSchema = Joi.object<Config>({
   port: Joi.number().port().default(defaultHttpPort),
 });
 
-export const validateConfig = (configSource: Record<string, unknown>):                                                                               Config => {
+export const validateConfig = (configSource: Record<string, unknown>): Config => {
   const preparedConfig = prepareConfig(configSource);
   const { error, value: validatedConfig } = configSchema.validate(preparedConfig);
   if (error) {
