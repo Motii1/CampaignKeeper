@@ -1,3 +1,5 @@
+/* eslint-disable no-undef, @typescript-eslint/no-var-requires */
+
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // proxying all requests matching /app/* routes in development environment
@@ -11,3 +13,5 @@ module.exports = app => {
     })
   );
 };
+
+/* eslint-enable */
