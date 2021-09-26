@@ -8,6 +8,7 @@ cache: npm
 
 install:
   - npm i --prefix backend/
+  - npm i -- prefix frontend/
 
 jobs:
   include:
@@ -20,3 +21,15 @@ jobs:
     - stage: "Test"
       name: "Test-backend"
       script: cd backend && npm run test
+
+    - stage: "Test"
+      name: "Audit-frontend"
+      script: cd frontend && npm audit
+
+    - stage: "Test"
+      name: "Lint-frontend"
+      script: cd frontend && npm run lint
+
+    - stage: "Test"
+      name: "Test-frontend"
+      script: cd frontend && npm run test
