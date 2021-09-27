@@ -34,6 +34,10 @@ export class App implements IApp {
       this.app.use(route, controller.getRouter());
     });
   }
+
+  public getRouter(): Express {
+    return this.app;
+  }
 }
 
 export type ControllerWithRoute = [string, IController];
