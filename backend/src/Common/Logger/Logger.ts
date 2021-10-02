@@ -34,6 +34,7 @@ const standardTransports = [
   }),
 ];
 
+// standard logger
 export const logger = createLogger({
   format: format.simple(),
   transports: standardTransports,
