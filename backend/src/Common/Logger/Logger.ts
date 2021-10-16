@@ -1,41 +1,75 @@
-import { createLogger, format, transports } from 'winston';
+import { Format } from 'logform';
+import winston, { createLogger, format, transports } from 'winston';
+import { config } from '../../Application/Config/Config';
+class Logger {
+  private logger: winston.Logger;
+  private loggerWithTransportToFile: winston.Logger;
+  private loggerFormat: Format;
+  private loggerWithTransportToFileFormat: Format;
 
-const standardTransports = [
-  new transports.File({
-    filename: '../../logs/errors.log',
-    level: 'error',
-  }),
-  new transports.File({
-    filename: '../../logs/warn.log',
-    level: 'warn',
-  }),
-  new transports.File({
-    filename: '../../logs/info.log',
-    level: 'info',
-  }),
-  new transports.File({
-    filename: '../../logs/http.log',
-    level: 'http',
-  }),
-  new transports.File({
-    filename: '../../logs/verbose.log',
-    level: 'verbose',
-  }),
-  new transports.File({
-    filename: '../../logs/debug.log',
-    level: 'debug',
-  }),
-  new transports.File({
-    filename: '../../logs/all.log',
-    level: 'silly',
-  }),
-  new transports.Console({
-    level: 'debug',
-  }),
-];
+  constructor() {
+    this.loggerFormat = format.combine(
+      format.colorize(),
+      format.timestamp({
+        format: 'YYYY-MM-DD HH:mm:ss',
+      }),
+      format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
+    );
+    this.loggerWithTransportToFileFormat = format.combine(
+      format.timestamp({
+        format: 'YYYY-MM-DD HH:mm:ss',
+      }),
+      format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
+    );
 
-// standard logger
-export const logger = createLogger({
-  format: format.simple(),
-  transports: standardTransports,
-});
+    this.logger = createLogger({
+      format: this.loggerFormat,
+      transports: [
+        new transports.Console({
+          level: 'debug',
+        }),
+      ],
+    });
+    this.loggerWithTransportToFile = createLogger({
+      format: this.loggerWithTransportToFileFormat,
+      transports: [
+        new transports.File({
+          filename: `${config.logsPath}/combined.logs`,
+          maxsize: 5242880,
+          maxFiles: 5,
+          level: 'http',
+        }),
+        new transports.Console({
+          level: 'debug',
+        }),
+      ],
+    });
+  }
+
+  error(message: string, saveToFile = false): void {
+    if (saveToFile) this.loggerWithTransportToFile.log('error', message);
+    else this.logger.log('error', message);
+  }
+
+  fatal(message: string, saveToFile = false): void {
+    if (saveToFile) this.loggerWithTransportToFile.log('warn', message);
+    else this.logger.log('warn', message);
+  }
+
+  info(message: string, saveToFile = false): void {
+    if (saveToFile) this.loggerWithTransportToFile.log('info', message);
+    else this.logger.log('info', message);
+  }
+
+  http(message: string, saveToFile = false): void {
+    if (saveToFile) this.loggerWithTransportToFile.log('http', message);
+    else this.logger.log('http', message);
+  }
+
+  debug(message: string, saveToFile = false): void {
+    if (saveToFile) this.loggerWithTransportToFile.log('debug', message);
+    else this.logger.log('debug', message);
+  }
+}
+
+export const logger = new Logger();

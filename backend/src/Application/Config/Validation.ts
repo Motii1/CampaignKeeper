@@ -9,6 +9,7 @@ const configSchema = Joi.object<Config>({
     .valid(...Object.values(NodeEnv))
     .required(),
   port: Joi.number().port().default(defaultHttpPort),
+  logsPath: Joi.string(),
 });
 
 export const validateConfig = (configSource: Record<string, unknown>): Config => {
@@ -23,6 +24,7 @@ export const validateConfig = (configSource: Record<string, unknown>): Config =>
 const prepareConfig = (configSource: Record<string, unknown>): Record<keyof Config, unknown> => ({
   nodeEnv: configSource.NODE_ENV,
   port: configSource.PORT,
+  logsPath: configSource.LOGS_PATH,
 });
 
 class ConfigValidationError extends ErrorWrapper {}
