@@ -2,6 +2,7 @@ import compression from 'compression';
 import cors from 'cors';
 import express, { Express } from 'express';
 import helmet from 'helmet';
+import morgan from 'morgan';
 import { logger } from '../../Common/Logger/Logger';
 import { config } from '../Config/Config';
 import { IController } from '../Controller/IController';
@@ -25,6 +26,7 @@ export class App implements IApp {
     this.app.use(helmet());
     this.app.use(cors());
     this.app.use(compression());
+    this.app.use(morgan('dev'));
 
     this.configureRouting();
   }
