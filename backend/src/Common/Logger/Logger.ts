@@ -2,36 +2,36 @@ import { Format } from 'logform';
 import winston, { createLogger, format, transports } from 'winston';
 import { config } from '../../Application/Config/Config';
 class Logger {
-  private logger: winston.Logger;
-  private loggerWithTransportToFile: winston.Logger;
-  private loggerFormat: Format;
-  private loggerWithTransportToFileFormat: Format;
+  private consoleLogger: winston.Logger;
+  private consoleAndFileLogger: winston.Logger;
+  private consoleLoggerFormat: Format;
+  private consoleAndFileLoggerFormat: Format;
 
   constructor() {
-    this.loggerFormat = format.combine(
+    this.consoleLoggerFormat = format.combine(
       format.colorize(),
       format.timestamp({
         format: 'YYYY-MM-DD HH:mm:ss',
       }),
       format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
     );
-    this.loggerWithTransportToFileFormat = format.combine(
-      format.timestamp({
-        format: 'YYYY-MM-DD HH:mm:ss',
-      }),
-      format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
-    );
-
-    this.logger = createLogger({
-      format: this.loggerFormat,
+    this.consoleLogger = createLogger({
+      format: this.consoleLoggerFormat,
       transports: [
         new transports.Console({
           level: 'debug',
         }),
       ],
     });
-    this.loggerWithTransportToFile = createLogger({
-      format: this.loggerWithTransportToFileFormat,
+
+    this.consoleAndFileLoggerFormat = format.combine(
+      format.timestamp({
+        format: 'YYYY-MM-DD HH:mm:ss',
+      }),
+      format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
+    );
+    this.consoleAndFileLogger = createLogger({
+      format: this.consoleAndFileLoggerFormat,
       transports: [
         new transports.File({
           filename: `${config.logsPath}/combined.logs`,
@@ -47,28 +47,27 @@ class Logger {
   }
 
   error(message: string, saveToFile = false): void {
-    if (saveToFile) this.loggerWithTransportToFile.log('error', message);
-    else this.logger.log('error', message);
+    if (saveToFile) this.consoleAndFileLogger.log('error', message);
+    else this.consoleLogger.log('error', message);
   }
 
   fatal(message: string, saveToFile = false): void {
-    if (saveToFile) this.loggerWithTransportToFile.log('warn', message);
-    else this.logger.log('warn', message);
+    if (saveToFile) this.consoleAndFileLogger.log('warn', message);
+    else this.consoleLogger.log('warn', message);
   }
 
   info(message: string, saveToFile = false): void {
-    if (saveToFile) this.loggerWithTransportToFile.log('info', message);
-    else this.logger.log('info', message);
+    if (saveToFile) this.consoleAndFileLogger.log('info', message);
+    else this.consoleLogger.log('info', message);
   }
 
   http(message: string, saveToFile = false): void {
-    if (saveToFile) this.loggerWithTransportToFile.log('http', message);
-    else this.logger.log('http', message);
+    if (saveToFile) this.consoleAndFileLogger.log('http', message);
+    else this.consoleLogger.log('http', message);
   }
 
-  debug(message: string, saveToFile = false): void {
-    if (saveToFile) this.loggerWithTransportToFile.log('debug', message);
-    else this.logger.log('debug', message);
+  debug(message: string): void {
+    this.consoleLogger.log('debug', message);
   }
 }
 
