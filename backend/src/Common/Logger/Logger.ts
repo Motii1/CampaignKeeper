@@ -40,34 +40,35 @@ class Logger {
           level: 'http',
         }),
         new transports.Console({
-          level: 'debug',
+          level: config.consoleLoggingLevel,
         }),
       ],
     });
   }
 
-  error(message: string, saveToFile = false): void {
-    if (saveToFile) this.consoleAndFileLogger.log('error', message);
-    else this.consoleLogger.log('error', message);
+  private logMessage(message: string, level: string, saveToFile: boolean): void {
+    if (saveToFile) this.consoleAndFileLogger.log(level, message);
+    else this.consoleLogger.log(level, message);
   }
 
-  fatal(message: string, saveToFile = false): void {
-    if (saveToFile) this.consoleAndFileLogger.log('warn', message);
-    else this.consoleLogger.log('warn', message);
+  error(message: string, saveToFile = false): void {
+    this.logMessage(message, 'error', saveToFile);
+  }
+
+  warn(message: string, saveToFile = false): void {
+    this.logMessage(message, 'warn', saveToFile);
   }
 
   info(message: string, saveToFile = false): void {
-    if (saveToFile) this.consoleAndFileLogger.log('info', message);
-    else this.consoleLogger.log('info', message);
+    this.logMessage(message, 'info', saveToFile);
   }
 
   http(message: string, saveToFile = false): void {
-    if (saveToFile) this.consoleAndFileLogger.log('http', message);
-    else this.consoleLogger.log('http', message);
+    this.logMessage(message, 'http', saveToFile);
   }
 
-  debug(message: string): void {
-    this.consoleLogger.log('debug', message);
+  debug(message: string, saveToFile = false): void {
+    this.logMessage(message, 'debug', saveToFile);
   }
 }
 

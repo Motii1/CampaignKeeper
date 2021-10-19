@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
 import { ErrorWrapper } from '../../Common/Type/ErrorWrapper';
+import { LoggingLevels } from '../../Common/Type/LoggingLevels';
 import { NodeEnv } from '../../Common/Type/NodeEnv';
 import { Config } from './Config';
 
@@ -9,7 +10,10 @@ const configSchema = Joi.object<Config>({
     .valid(...Object.values(NodeEnv))
     .required(),
   port: Joi.number().port().default(defaultHttpPort),
-  logsPath: Joi.string(),
+  logsPath: Joi.string().required(),
+  consoleLoggingLevel: Joi.string()
+    .valid(...Object.values(LoggingLevels))
+    .required(),
 });
 
 export const validateConfig = (configSource: Record<string, unknown>): Config => {
@@ -25,6 +29,7 @@ const prepareConfig = (configSource: Record<string, unknown>): Record<keyof Conf
   nodeEnv: configSource.NODE_ENV,
   port: configSource.PORT,
   logsPath: configSource.LOGS_PATH,
+  consoleLoggingLevel: configSource.CONSOLE_LOGGING_LEVEL,
 });
 
 class ConfigValidationError extends ErrorWrapper {}
