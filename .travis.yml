@@ -13,18 +13,11 @@ install:
 jobs:
   include:
     - stage: "Test"
-      name: "Audit-backend"
-      script: cd backend && npm audit
-    - stage: "Test"
       name: "Lint-backend"
       script: cd backend && npm run lint
     - stage: "Test"
       name: "Test-backend"
       script: cd backend && npm run test
-
-    - stage: "Test"
-      name: "Audit-frontend"
-      script: cd frontend && npm audit --audit-level=high
 
     - stage: "Test"
       name: "Lint-frontend"
