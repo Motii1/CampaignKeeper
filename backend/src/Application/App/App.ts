@@ -2,6 +2,8 @@ import compression from 'compression';
 import cors from 'cors';
 import express, { Express } from 'express';
 import helmet from 'helmet';
+import morgan from 'morgan';
+import { logger } from '../../Common/Logger/Logger';
 import { config } from '../Config/Config';
 import { IController } from '../Controller/IController';
 import { IApp } from './IApp';
@@ -16,8 +18,7 @@ export class App implements IApp {
 
   start(): void {
     this.app.listen(config.port, () => {
-      // @todo replace console.log with proper loggerf
-      console.log(`Application is listening on port: ${config.port}`); // eslint-disable-line
+      logger.info(`Application is listening on port: ${config.port}`, true);
     });
   }
 
@@ -25,6 +26,7 @@ export class App implements IApp {
     this.app.use(helmet());
     this.app.use(cors());
     this.app.use(compression());
+    this.app.use(morgan('dev'));
 
     this.configureRouting();
   }

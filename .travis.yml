@@ -22,7 +22,6 @@ jobs:
     - stage: "Test"
       name: "Lint-frontend"
       script: cd frontend && npm run lint
-
     - stage: "Test"
       name: "Test-frontend"
       script: cd frontend && npm run test

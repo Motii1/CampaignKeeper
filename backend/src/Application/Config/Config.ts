@@ -5,6 +5,8 @@ import { validateConfig } from './Validation';
 export type Config = {
   nodeEnv: NodeEnv;
   port: number;
+  logsPath: string;
+  consoleLoggingLevel: string;
 };
 
 dotenv.config();
