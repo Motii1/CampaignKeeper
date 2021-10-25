@@ -22,6 +22,8 @@ We used SQL Server database technology with the support of Redis. To successfull
 docker-compose up -d
 ```
 
+Due to some problems with SQL Server container start could failed. To fix the issue you need to grant appropriate permissions to `storage/database` directory. The easiest way to do it is to execute `chmod -R 777 storage/` and run `docker-compose` again.
+
 #### Web (frontend and backend)
 
 Firstly you need to install all required packages. To achieve that you should run `npm install` command inside `frontend` and `backend` directories. Then you should start client and server:
@@ -34,6 +36,7 @@ npm run start:dev:watch
 ```
 
 #### Mobile
+
 **TODO**
 
 That's it :smile:. The app is now up and running.
