@@ -14,6 +14,14 @@ const configSchema = Joi.object<Config>({
   consoleLoggingLevel: Joi.string()
     .valid(...Object.values(LoggingLevels))
     .required(),
+  dbHost: Joi.string().required(),
+  dbUser: Joi.string().required(),
+  dbPassword: Joi.string().required(),
+  dbPort: Joi.number().port().required(),
+  dbName: Joi.string().required(),
+  cacheHost: Joi.string().required(),
+  cachePort: Joi.number().port().required(),
+  jwtSecret: Joi.string().required(),
 });
 
 export const validateConfig = (configSource: Record<string, unknown>): Config => {
@@ -30,6 +38,14 @@ const prepareConfig = (configSource: Record<string, unknown>): Record<keyof Conf
   port: configSource.PORT,
   logsPath: configSource.LOGS_PATH,
   consoleLoggingLevel: configSource.CONSOLE_LOGGING_LEVEL,
+  dbHost: configSource.DB_HOST,
+  dbUser: configSource.DB_USER,
+  dbPassword: configSource.DB_PASSWORD,
+  dbPort: configSource.DB_PORT,
+  dbName: configSource.DB_NAME,
+  cacheHost: configSource.CACHE_HOST,
+  cachePort: configSource.CACHE_PORT,
+  jwtSecret: configSource.JWT_SECRET,
 });
 
 class ConfigValidationError extends ErrorWrapper {}
