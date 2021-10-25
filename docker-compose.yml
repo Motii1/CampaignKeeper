@@ -6,11 +6,12 @@ services:
     ports:
       - 1433:1433
     volumes:
-      - ./storage/database/data:/data
+      - ./storage/database/data:/var/opt/mssql/data
     environment:
       - MSSQL_SA_PASSWORD=Admin123
       - MSSQL_PID=Developer
       - ACCEPT_EULA=Y
+    command: /bin/sh -c "(/opt/mssql/bin/sqlservr &) && sleep 10s && /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Admin123 -d master -Q 'CREATE DATABASE campaign_keeper' && sleep infinity"
 
   redis:
     image: redis:6.2.6

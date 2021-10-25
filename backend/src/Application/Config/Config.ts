@@ -7,6 +7,14 @@ export type Config = {
   port: number;
   logsPath: string;
   consoleLoggingLevel: string;
+  dbHost: string;
+  dbUser: string;
+  dbPassword: string;
+  dbPort: number;
+  dbName: string;
+  cacheHost: string;
+  cachePort: number;
+  jwtSecret: string;
 };
 
 dotenv.config();
