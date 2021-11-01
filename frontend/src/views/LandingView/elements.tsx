@@ -1,6 +1,6 @@
 import { Container, Grid, Paper } from '@mui/material';
-import OwlImage from './graphics/giantOwl.jpg';
-import Logo from './graphics/logo.png';
+import OwlImage from '../graphics/giantOwl.jpg';
+import Logo from '../graphics/logo.png';
 
 export const LandingGrid: React.FC = ({ children }) => (
   <Grid container sx={{ minHeight: '100vh' }}>
@@ -11,7 +11,7 @@ export const LandingGrid: React.FC = ({ children }) => (
 export const Sidebar: React.FC = ({ children }) => (
   <Grid
     item
-    lg={3}
+    lg={4}
     md={6}
     sm={9}
     xs={12}
@@ -28,22 +28,22 @@ export const Sidebar: React.FC = ({ children }) => (
 
 export const FormPaper: React.FC = ({ children }) => (
   <Container sx={{ width: '80%' }}>
-    <Container
-      sx={{
-        backgroundImage: `url(${Logo})`,
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
-        width: '80%',
-        height: '100px',
-        zIndex: '1',
-      }}
-    />
     <Paper
       elevation={6}
       sx={{
+        borderRadius: '20px',
         backgroundColor: '#2B3D49',
       }}
     >
+      <Container
+        sx={{
+          backgroundImage: `url(${Logo})`,
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          height: '120px',
+        }}
+      />
       {children}
     </Paper>
   </Container>
@@ -52,7 +52,7 @@ export const FormPaper: React.FC = ({ children }) => (
 export const LandingGraphic: React.FC = () => (
   <Grid
     item
-    lg={9}
+    lg={8}
     md={6}
     sm={3}
     xs={false}
