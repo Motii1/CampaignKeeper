@@ -17,7 +17,7 @@ export class OpsController implements IController {
     this.router.get(OpsRoutes.Ping, this.pingHandler);
   }
 
-  private pingHandler(_req: Request, res: Response) {
+  private pingHandler(_req: Request, res: Response): void {
     res.status(200).json({});
   }
 
