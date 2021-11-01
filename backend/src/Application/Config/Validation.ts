@@ -21,6 +21,7 @@ const configSchema = Joi.object<Config>({
   dbName: Joi.string().required(),
   cacheHost: Joi.string().required(),
   cachePort: Joi.number().port().required(),
+  cachePassword: Joi.string().required(),
   jwtSecret: Joi.string().required(),
   frontendBuildPath: Joi.string().required(),
 });
@@ -46,6 +47,7 @@ const prepareConfig = (configSource: Record<string, unknown>): Record<keyof Conf
   dbName: configSource.DB_NAME,
   cacheHost: configSource.CACHE_HOST,
   cachePort: configSource.CACHE_PORT,
+  cachePassword: configSource.CACHE_PASSWORD,
   jwtSecret: configSource.JWT_SECRET,
   frontendBuildPath: configSource.FRONTEND_BUILD_PATH,
 });

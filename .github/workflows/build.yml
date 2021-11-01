@@ -27,9 +27,15 @@ jobs:
       - run: cd backend && npm run test
 
   deploy:
-    if: contains( github.ref, 'github_actions')
     runs-on: ubuntu-20.04
     needs: [build_backend, build_frontend]
+    if: contains(github.base_ref, 'master') || github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
-      - run: echo deploy
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          usedocker: true
+          dontautocreate: true

@@ -24,7 +24,7 @@ export class App implements IApp {
   }
 
   private configureApp(): void {
-    this.app.use(helmet());
+    this.app.use(helmet({ contentSecurityPolicy: false }));
     this.app.use(cors());
     this.app.use(compression());
     this.app.use(morgan('dev'));

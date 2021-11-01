@@ -10,13 +10,17 @@ module.exports = {
   database: process.env.DB_NAME,
   synchronize: true,
   logging: false,
-  cache: {
-    type: 'redis',
-    options: {
-      host: process.env.CACHE_HOST,
-      port: +process.env.CACHE_PORT,
-    },
-  },
+  cache:
+    process.env.NODE_ENV === 'development' // temporary disabled for production due to costs related to redis cache in cloud
+      ? {
+          type: 'redis',
+          options: {
+            host: process.env.CACHE_HOST,
+            port: +process.env.CACHE_PORT,
+            password: process.env.CACHE_PASSWORD,
+          },
+        }
+      : undefined,
   extra: {
     trustServerCertificate: process.env.NODE_ENV !== 'production',
   },

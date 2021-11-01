@@ -4,22 +4,23 @@ WORKDIR /app
 
 FROM base as front
 
-COPY frontend/ static/
-RUN npm ci --prefix static
-RUN cd static && npm run build
-
-FROM front as back
-
-COPY --from=front /app/static/build ./static/build
-
-COPY backend/package*.json ./
+COPY frontend/ ./
 RUN npm ci
-COPY ./backend ./
 RUN npm run build
 
-FROM back as release
+FROM base as back
 
-COPY --from=back /app/ ./
-COPY backend/.env.example ./.env
+COPY --from=front /app/build ./frontend
+COPY ./backend/ ./
+RUN npm ci
+RUN npm run build
+
+FROM base as release
+
+COPY --from=back /app/dist ./dist
+COPY --from=back /app/frontend ./frontend
+COPY backend/package*.json backend/.env.example backend/ormconfig.js ./
+RUN mv .env.example .env
+RUN npm ci --only=production
 
 CMD ["node", "dist/Index.js"]
