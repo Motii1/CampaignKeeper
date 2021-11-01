@@ -22,6 +22,7 @@ const configSchema = Joi.object<Config>({
   cacheHost: Joi.string().required(),
   cachePort: Joi.number().port().required(),
   jwtSecret: Joi.string().required(),
+  frontendBuildPath: Joi.string().required(),
 });
 
 export const validateConfig = (configSource: Record<string, unknown>): Config => {
@@ -46,6 +47,7 @@ const prepareConfig = (configSource: Record<string, unknown>): Record<keyof Conf
   cacheHost: configSource.CACHE_HOST,
   cachePort: configSource.CACHE_PORT,
   jwtSecret: configSource.JWT_SECRET,
+  frontendBuildPath: configSource.FRONTEND_BUILD_PATH,
 });
 
 class ConfigValidationError extends ErrorWrapper {}

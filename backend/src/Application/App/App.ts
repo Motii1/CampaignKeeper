@@ -37,7 +37,11 @@ export class App implements IApp {
 
   private configureRouting(): void {
     this.controllers.forEach(([route, controller]) => {
-      this.app.use(route, controller.getRouter());
+      this.app.use(`/api${route}`, controller.getRouter());
+    });
+    this.app.use(express.static(config.frontendBuildPath));
+    this.app.get('*', (_, res) => {
+      res.sendFile('index.html', { root: config.frontendBuildPath });
     });
   }
 

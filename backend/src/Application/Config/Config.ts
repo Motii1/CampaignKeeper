@@ -15,6 +15,7 @@ export type Config = {
   cacheHost: string;
   cachePort: number;
   jwtSecret: string;
+  frontendBuildPath: string;
 };
 
 dotenv.config();
