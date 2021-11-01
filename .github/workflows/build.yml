@@ -1,0 +1,35 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+      - production
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build_frontend:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm ci --prefix frontend/
+      - run: cd frontend && npm run lint
+      - run: cd frontend && npm run test
+
+  build_backend:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: cp backend/.env.example backend/.env
+      - run: npm ci --prefix backend/
+      - run: cd backend && npm run lint
+      - run: cd backend && npm run test
+
+  deploy:
+    if: contains( github.ref, 'github_actions')
+    runs-on: ubuntu-20.04
+    needs: [build_backend, build_frontend]
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo deploy
