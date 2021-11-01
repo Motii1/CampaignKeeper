@@ -16,7 +16,7 @@ export const Sidebar: React.FC = ({ children }) => (
     sm={9}
     xs={12}
     sx={{
-      backgroundColor: '#262E38',
+      backgroundColor: 'background.default',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -32,7 +32,7 @@ export const FormPaper: React.FC = ({ children }) => (
       elevation={6}
       sx={{
         borderRadius: '20px',
-        backgroundColor: '#2B3D49',
+        backgroundColor: 'secondary.main',
       }}
     >
       <Container
