@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 
 type HeaderProps = {
   text: string;
@@ -8,6 +8,9 @@ type InputProps = {
   text: string;
   id: string;
   placeholder: string;
+  error: boolean;
+  helperText: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 type ButtonProps = {
@@ -18,6 +21,7 @@ type ChangeProps = {
   firstLineText: string;
   secondLineText: string;
   buttonText: string;
+  onSubmit: () => void;
 };
 
 export const FormHeader: React.FC<HeaderProps> = props => (
@@ -26,52 +30,72 @@ export const FormHeader: React.FC<HeaderProps> = props => (
   </Typography>
 );
 
-export const LabeledTextInput: React.FC<InputProps> = pros => (
-  <Box sx={{ padding: '10px 0px' }}>
+export const LabeledTextInput: React.FC<InputProps> = props => (
+  <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={0.5}>
     <Typography variant="subtitle1" sx={{ color: 'common.white' }}>
-      <b>{pros.text}</b>
+      <b>{props.text}</b>
     </Typography>
     <TextField
       required
-      id={pros.id}
-      placeholder={pros.placeholder}
+      id={props.id}
+      placeholder={props.placeholder}
+      error={props.error}
+      helperText={props.helperText}
       variant="outlined"
       fullWidth
+      onChange={props.onChange}
       sx={{ backgroundColor: 'background.paper', color: 'common.white' }}
     />
-  </Box>
+  </Stack>
 );
 
-export const LabeledPasswordInput: React.FC<InputProps> = pros => (
-  <Box sx={{ padding: '10px 0px' }}>
+export const LabeledPasswordInput: React.FC<InputProps> = props => (
+  <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={0.5}>
     <Typography variant="subtitle1" sx={{ color: 'common.white' }}>
-      <b>{pros.text}</b>
+      <b>{props.text}</b>
     </Typography>
     <TextField
       required
-      id={pros.id}
-      placeholder={pros.placeholder}
+      id={props.id}
+      placeholder={props.placeholder}
+      error={props.error}
+      helperText={props.helperText}
       type="password"
       variant="outlined"
       fullWidth
+      onChange={props.onChange}
       sx={{ backgroundColor: 'background.paper' }}
     />
-  </Box>
+  </Stack>
 );
 
 export const StandardButton: React.FC<ButtonProps> = props => (
-  <Button variant="contained">{props.text}</Button>
+  <Button
+    variant="contained"
+    type="submit"
+    sx={{ marginTop: '10px', width: '30%', minWidth: '100px' }}
+  >
+    {props.text}
+  </Button>
 );
 
 export const ChangeFormComponent: React.FC<ChangeProps> = props => (
-  <Box sx={{ position: 'relative', right: '0px' }}>
+  <Stack
+    direction="column"
+    justifyContent="flex-start"
+    alignItems="flex-end"
+    spacing={0.5}
+    onSubmit={props.onSubmit}
+    component="form"
+    sx={{ width: '100%' }}
+  >
     <Typography variant="subtitle2" sx={{ color: 'common.white', textAlign: 'right' }}>
       {props.firstLineText}
       <br />
       {props.secondLineText}
     </Typography>
-    <Button variant="contained" sx={{ float: 'right' }}>
+    <Button variant="contained" type="submit">
       {props.buttonText}
     </Button>
-  </Box>
+  </Stack>
 );
