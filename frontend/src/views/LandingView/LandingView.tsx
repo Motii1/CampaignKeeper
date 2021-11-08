@@ -1,31 +1,32 @@
+/* eslint-disable no-console */
 import { useState } from 'react';
 import { FormPaper, LandingGraphic, LandingGrid, Sidebar } from './elements';
 import { LoginForm } from './forms/LoginForm';
 import { RegisterForm } from './forms/RegisterForm';
 
 export const LandingView: React.FC = () => {
-  const changeForm = () => {
-    if (currentForm.name === 'login')
-      setCurrentForm({
-        name: 'register',
-        component: <RegisterForm onChangeForm={changeForm} />,
-      });
-    else
-      setCurrentForm({
-        name: 'login',
-        component: <LoginForm onChangeForm={changeForm} />,
-      });
-  };
-
-  const [currentForm, setCurrentForm] = useState({
-    name: 'login',
-    component: <LoginForm onChangeForm={changeForm} />,
-  });
+  const [currentForm, setCurrentForm] = useState('login');
+  const loginForm = (
+    <LoginForm
+      onChangeForm={(event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setCurrentForm('register');
+      }}
+    />
+  );
+  const registerForm = (
+    <RegisterForm
+      onChangeForm={(event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setCurrentForm('login');
+      }}
+    />
+  );
 
   return (
     <LandingGrid>
       <Sidebar>
-        <FormPaper>{currentForm.component}</FormPaper>
+        <FormPaper>{currentForm === 'login' ? loginForm : registerForm}</FormPaper>
       </Sidebar>
       <LandingGraphic />
     </LandingGrid>

@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 import { Stack } from '@mui/material';
 import { useState } from 'react';
+import { register } from '../../../services/auth/authServices';
 import {
   ChangeFormComponent,
   FormHeader,
@@ -9,7 +11,7 @@ import {
 } from './elements';
 
 type FormProps = {
-  onChangeForm: () => void;
+  onChangeForm: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
 type TextFieldState = {
@@ -93,10 +95,45 @@ export const RegisterForm: React.FC<FormProps> = props => {
     // here should be comparing password and changing their states if necessary
   };
 
-  const handleRegisterButton = (): void => {
+  const handleRegisterButton = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
     if (buttonState) {
-      window.alert('Register');
-      // here should be sending request to register and handling response
+      register(
+        username.value,
+        email.value,
+        emailRepeat.value,
+        password.value,
+        passwordRepeat.value
+      ).then(
+        response => {
+          if (response.status === 200) {
+            const message = response.data.message;
+            if (message) {
+              if (message === 'User with given username already exists')
+                setUsername({
+                  value: username.value,
+                  error: true,
+                  helperText: 'Sorry, this username is already used.',
+                });
+              else if (message === 'User with given email already exists') {
+                setEmail({
+                  value: email.value,
+                  error: true,
+                  helperText: 'Sorry, this email is already used.',
+                });
+              }
+            } else {
+              window.alert('Here we login user');
+            }
+          } else {
+            window.alert('Unexpected error');
+            // should we even consider such option? It can only came from our own error
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
   };
 

@@ -1,5 +1,6 @@
 import { Stack } from '@mui/material';
 import { useState } from 'react';
+import { login } from '../../../services/auth/authServices';
 import {
   ChangeFormComponent,
   FormHeader,
@@ -9,7 +10,7 @@ import {
 } from './elements';
 
 type FormProps = {
-  onChangeForm: () => void;
+  onChangeForm: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
 export const LoginForm: React.FC<FormProps> = props => {
@@ -47,10 +48,32 @@ export const LoginForm: React.FC<FormProps> = props => {
     });
   };
 
-  const handleLoginButton = (): void => {
+  const handleLoginButton = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
     if (buttonState) {
-      window.alert('Login');
-      // here should be sending request to login and handling response
+      login(username.value, password.value).then(
+        response => {
+          if (response.status === 200) {
+            window.alert('Here we should log in');
+          } else {
+            window.alert('Unexpected behaviour');
+          }
+        },
+        error => {
+          if (error.response.status === 401) {
+            setUsername({
+              value: username.value,
+              error: true,
+              helperText: 'Sorry, username or email are incorrect',
+            });
+            setPassword({
+              value: password.value,
+              error: true,
+              helperText: 'Sorry, username or email are incorrect',
+            });
+          } else window.alert('Unexpected error');
+        }
+      );
     }
   };
 

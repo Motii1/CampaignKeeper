@@ -4,6 +4,8 @@ export const axiosForCookies = axios.create({
   withCredentials: true,
 });
 
+const authUrl = '/api/auth';
+
 export const register = (
   username: string,
   email: string,
@@ -11,16 +13,16 @@ export const register = (
   password: string,
   passwordRepeat: string
 ): Promise<AxiosResponse> =>
-  axiosForCookies.post('/api/register', {
+  axiosForCookies.post(`${authUrl}/register`, {
     username: username,
     email: email,
-    emailRepeat: emailRepeat,
+    repeatedEmail: emailRepeat,
     password: password,
-    passwordRepeat: passwordRepeat,
+    repeatedPassword: passwordRepeat,
   });
 
 export const login = (username: string, password: string): Promise<AxiosResponse> =>
-  axiosForCookies.post('/api/login', {
+  axiosForCookies.post(`${authUrl}/login`, {
     username: username,
     password: password,
   });

@@ -21,7 +21,7 @@ type ChangeProps = {
   firstLineText: string;
   secondLineText: string;
   buttonText: string;
-  onSubmit: () => void;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
 export const FormHeader: React.FC<HeaderProps> = props => (
