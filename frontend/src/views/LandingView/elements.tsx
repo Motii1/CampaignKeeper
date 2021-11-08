@@ -1,6 +1,6 @@
 import { Container, Grid, Paper } from '@mui/material';
-import OwlImage from '../graphics/giantOwl.jpg';
-import Logo from '../graphics/logo.png';
+import OwlImage from '../../graphics/giantOwl.jpg';
+import Logo from '../../graphics/logo.png';
 
 export const LandingGrid: React.FC = ({ children }) => (
   <Grid container sx={{ minHeight: '100vh' }}>
