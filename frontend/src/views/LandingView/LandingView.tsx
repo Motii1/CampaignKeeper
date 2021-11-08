@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useState } from 'react';
 import { FormPaper, LandingGraphic, LandingGrid, Sidebar } from './elements';
 import { LoginForm } from './forms/LoginForm';

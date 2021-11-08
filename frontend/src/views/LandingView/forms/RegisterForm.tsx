@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import { Stack } from '@mui/material';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { register } from '../../../services/auth/authServices';
 import {
   ChangeFormComponent,
@@ -21,6 +21,7 @@ type TextFieldState = {
 };
 
 export const RegisterForm: React.FC<FormProps> = props => {
+  const history = useHistory();
   const usernameRegex = /^(?=.{8,12}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9]+(?<![_.])$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,255}$/;
@@ -123,15 +124,15 @@ export const RegisterForm: React.FC<FormProps> = props => {
                 });
               }
             } else {
-              window.alert('Here we login user');
+              history.push('/welcome');
             }
           } else {
-            window.alert('Unexpected error');
-            // should we even consider such option? It can only came from our own error
+            window.alert('Unexpected behaviour');
+            // should we even consider such option?
           }
         },
         error => {
-          console.log(error);
+          window.alert(`Unexpected error: ${error.response.status}`);
         }
       );
     }

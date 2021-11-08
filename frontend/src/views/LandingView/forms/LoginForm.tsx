@@ -1,5 +1,6 @@
 import { Stack } from '@mui/material';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { login } from '../../../services/auth/authServices';
 import {
   ChangeFormComponent,
@@ -14,6 +15,7 @@ type FormProps = {
 };
 
 export const LoginForm: React.FC<FormProps> = props => {
+  const history = useHistory();
   const [username, setUsername] = useState({
     value: '',
     error: false,
@@ -54,7 +56,7 @@ export const LoginForm: React.FC<FormProps> = props => {
       login(username.value, password.value).then(
         response => {
           if (response.status === 200) {
-            window.alert('Here we should log in');
+            history.push('/welcome');
           } else {
             window.alert('Unexpected behaviour');
           }
