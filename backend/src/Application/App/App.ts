@@ -24,7 +24,7 @@ export class App implements IApp {
   }
 
   private configureApp(): void {
-    this.app.use(helmet());
+    this.app.use(helmet({ contentSecurityPolicy: false }));
     this.app.use(cors());
     this.app.use(compression());
     this.app.use(morgan('dev'));
@@ -37,7 +37,11 @@ export class App implements IApp {
 
   private configureRouting(): void {
     this.controllers.forEach(([route, controller]) => {
-      this.app.use(route, controller.getRouter());
+      this.app.use(`/api${route}`, controller.getRouter());
+    });
+    this.app.use(express.static(config.frontendBuildPath));
+    this.app.get('*', (_, res) => {
+      res.sendFile('index.html', { root: config.frontendBuildPath });
     });
   }
 
