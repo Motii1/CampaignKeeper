@@ -3,6 +3,19 @@ import { User } from '../../../Domain/User/User';
 import { mapEntityToDomainObject } from './Mapping';
 import { UserEntity } from './UserEntity';
 
+// Email or username is considered as 'identity string'
+export const findUserByIdentityString = async (identity: string): Promise<User | null> => {
+  const userRepository = getRepository(UserEntity);
+  const entity = await userRepository.findOne({
+    where: [{ username: identity }, { email: identity }],
+  });
+  if (!entity) {
+    return null;
+  }
+
+  return mapEntityToDomainObject(entity);
+};
+
 export const findUserByName = async (username: string): Promise<User | null> => {
   const userRepository = getRepository(UserEntity);
   const entity = await userRepository.findOne({ where: { username } });
