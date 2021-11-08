@@ -39,13 +39,21 @@ export const LabeledTextInput: React.FC<InputProps> = props => (
       required
       id={props.id}
       placeholder={props.placeholder}
-      error={props.error}
-      helperText={props.helperText}
       variant="outlined"
       fullWidth
       onChange={props.onChange}
       sx={{ backgroundColor: 'background.paper', color: 'common.white' }}
     />
+    <Typography
+      variant="subtitle2"
+      sx={{
+        color: 'common.white',
+        marginLeft: '10px',
+        display: `${props.error ? 'block' : 'none'}`,
+      }}
+    >
+      <i>{props.helperText}</i>
+    </Typography>
   </Stack>
 );
 
@@ -58,14 +66,22 @@ export const LabeledPasswordInput: React.FC<InputProps> = props => (
       required
       id={props.id}
       placeholder={props.placeholder}
-      error={props.error}
-      helperText={props.helperText}
       type="password"
       variant="outlined"
       fullWidth
       onChange={props.onChange}
       sx={{ backgroundColor: 'background.paper' }}
     />
+    <Typography
+      variant="subtitle2"
+      sx={{
+        color: 'common.white',
+        marginLeft: '10px',
+        display: `${props.error ? 'block' : 'none'}`,
+      }}
+    >
+      <i>{props.helperText}</i>
+    </Typography>
   </Stack>
 );
 

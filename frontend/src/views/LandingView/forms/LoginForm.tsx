@@ -27,32 +27,29 @@ export const LoginForm: React.FC<FormProps> = props => {
     helperText: '',
   });
 
-  const [buttonState, setButtonState] = useState(true);
-
-  const handleChange = (): void => {
-    const anyFieldInvalid = username.error && password.error;
-    setButtonState(!anyFieldInvalid);
-  };
-
   const handleUsernameTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    const isNewValueCorrect = newValue.length > 7 && newValue.length < 13;
     setUsername({
-      value: event.currentTarget.value,
-      error: username.error,
-      helperText: username.helperText,
+      value: newValue,
+      error: !isNewValueCorrect,
+      helperText: isNewValueCorrect ? '' : 'Username is 8-12 characters long',
     });
   };
 
   const handlePasswordTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    const isNewValueCorrect = newValue.length > 8 && newValue.length < 255;
     setPassword({
-      value: event.currentTarget.value,
-      error: password.error,
-      helperText: password.helperText,
+      value: newValue,
+      error: !isNewValueCorrect,
+      helperText: isNewValueCorrect ? '' : 'Password is 8-255 characters long',
     });
   };
 
   const handleLoginButton = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    if (buttonState) {
+    if (!(username.error && password.error)) {
       login(username.value, password.value).then(
         response => {
           if (response.status === 200) {
@@ -94,13 +91,12 @@ export const LoginForm: React.FC<FormProps> = props => {
         spacing={1}
         component="form"
         sx={{ width: '100%' }}
-        onChange={handleChange}
         onSubmit={handleLoginButton}
       >
         <LabeledTextInput
           text="Username"
           id="login-username"
-          placeholder=""
+          placeholder="Thou name, brave hero"
           onChange={event => handleUsernameTextFieldChange(event)}
           helperText={username.helperText}
           error={username.error}
@@ -108,7 +104,7 @@ export const LoginForm: React.FC<FormProps> = props => {
         <LabeledPasswordInput
           text="Password"
           id="login-password"
-          placeholder=""
+          placeholder="Phrase that must not be spoken"
           onChange={event => handlePasswordTextFieldChange(event)}
           helperText={password.helperText}
           error={password.error}

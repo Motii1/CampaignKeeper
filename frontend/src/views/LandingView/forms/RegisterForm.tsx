@@ -52,21 +52,12 @@ export const RegisterForm: React.FC<FormProps> = props => {
     helperText: '',
   });
 
-  const [buttonState, setButtonState] = useState(true);
-
-  const handleChange = (): void => {
-    const anyFieldInvalid =
-      username.error && email.error && emailRepeat.error && password.error && passwordRepeat.error;
-    setButtonState(!anyFieldInvalid);
-  };
-
   const handleUsernameTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const isUsernameCorrect = usernameRegex.test(event.target.value);
     setUsername({
       value: event.currentTarget.value,
-      error: !usernameRegex.test(event.currentTarget.value),
-      helperText: usernameRegex.test(event.currentTarget.value)
-        ? ''
-        : 'Username should be 8-12 characters long',
+      error: !isUsernameCorrect,
+      helperText: isUsernameCorrect ? '' : 'Sorry, username should be 8-12 characters long',
     });
   };
 
@@ -74,31 +65,38 @@ export const RegisterForm: React.FC<FormProps> = props => {
     event: React.ChangeEvent<HTMLInputElement>,
     setStateFn: (newState: TextFieldState) => void
   ): void => {
+    const isEmailCorrect = emailRegex.test(event.target.value);
     setStateFn({
-      value: event.currentTarget.value,
-      error: !emailRegex.test(event.currentTarget.value),
-      helperText: emailRegex.test(event.currentTarget.value) ? '' : 'Invalid email',
+      value: event.target.value,
+      error: !isEmailCorrect,
+      helperText: isEmailCorrect ? '' : 'Sorry, this email is invalid',
     });
-    // here should be comparing emails and changing their states if necessary
   };
 
   const handlePasswordTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     setStateFn: (newState: TextFieldState) => void
   ): void => {
+    const isPassswordCorrect = passwordRegex.test(event.target.value);
     setStateFn({
-      value: event.currentTarget.value,
-      error: !passwordRegex.test(event.currentTarget.value),
-      helperText: passwordRegex.test(event.currentTarget.value)
-        ? ''
-        : 'Invalid password, it should be 8-255 characters long',
+      value: event.target.value,
+      error: !isPassswordCorrect,
+      helperText: isPassswordCorrect ? '' : 'Sorry, this password is invalid',
     });
     // here should be comparing password and changing their states if necessary
   };
 
   const handleRegisterButton = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    if (buttonState) {
+    if (
+      !(
+        username.error &&
+        email.error &&
+        emailRepeat.error &&
+        password.error &&
+        passwordRepeat.error
+      )
+    ) {
       register(
         username.value,
         email.value,
@@ -153,7 +151,6 @@ export const RegisterForm: React.FC<FormProps> = props => {
         spacing={1}
         component="form"
         sx={{ width: '100%' }}
-        onChange={handleChange}
         onSubmit={handleRegisterButton}
       >
         <LabeledTextInput
