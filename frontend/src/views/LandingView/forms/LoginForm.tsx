@@ -10,16 +10,7 @@ import {
   LabeledTextInput,
   StandardButton,
 } from './elements';
-import { AUTH_URL } from './RegisterForm';
-
-type TextFieldState = {
-  value: string;
-  helperText: null | string;
-};
-
-type FormProps = {
-  onChangeForm: (event: React.FormEvent<HTMLFormElement>) => void;
-};
+import { AUTH_URL, FormProps, TextFieldState } from './RegisterForm';
 
 const login = (username: string, password: string): Promise<AxiosResponse> =>
   protectedApiClient.post(`${AUTH_URL}/login`, {
@@ -29,14 +20,14 @@ const login = (username: string, password: string): Promise<AxiosResponse> =>
 
 export const LoginForm: React.FC<FormProps> = props => {
   const history = useHistory();
-  const [username, setUsername] = useState<TextFieldState>({
+
+  const initalState = {
     value: '',
-    helperText: null,
-  });
-  const [password, setPassword] = useState<TextFieldState>({
-    value: '',
-    helperText: null,
-  });
+    helperText: '',
+  };
+
+  const [username, setUsername] = useState<TextFieldState>(initalState);
+  const [password, setPassword] = useState<TextFieldState>(initalState);
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>,

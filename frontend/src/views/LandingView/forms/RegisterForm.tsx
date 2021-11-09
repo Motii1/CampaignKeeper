@@ -11,11 +11,11 @@ import {
   StandardButton,
 } from './elements';
 
-type FormProps = {
+export type FormProps = {
   onChangeForm: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
-type TextFieldState = {
+export type TextFieldState = {
   value: string;
   helperText: null | string;
 };
@@ -43,31 +43,16 @@ export const RegisterForm: React.FC<FormProps> = props => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,255}$/;
 
-  /*const initalState = {
+  const initalState = {
     value: '',
     helperText: '',
-  }*/
+  };
 
-  const [username, setUsername] = useState<TextFieldState>({
-    value: '',
-    helperText: null,
-  });
-  const [email, setEmail] = useState<TextFieldState>({
-    value: '',
-    helperText: null,
-  });
-  const [emailRepeat, setEmailRepeat] = useState<TextFieldState>({
-    value: '',
-    helperText: null,
-  });
-  const [password, setPassword] = useState<TextFieldState>({
-    value: '',
-    helperText: null,
-  });
-  const [passwordRepeat, setPasswordRepeat] = useState<TextFieldState>({
-    value: '',
-    helperText: null,
-  });
+  const [username, setUsername] = useState<TextFieldState>(initalState);
+  const [email, setEmail] = useState<TextFieldState>(initalState);
+  const [emailRepeat, setEmailRepeat] = useState<TextFieldState>(initalState);
+  const [password, setPassword] = useState<TextFieldState>(initalState);
+  const [passwordRepeat, setPasswordRepeat] = useState<TextFieldState>(initalState);
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>,
