@@ -1,0 +1,41 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+      - production
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build_frontend:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm ci --prefix frontend/
+      - run: cd frontend && npm run lint
+      - run: cd frontend && npm run test
+
+  build_backend:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: cp backend/.env.example backend/.env
+      - run: npm ci --prefix backend/
+      - run: cd backend && npm run lint
+      - run: cd backend && npm run test
+
+  deploy:
+    runs-on: ubuntu-20.04
+    needs: [build_backend, build_frontend]
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          usedocker: true
+          dontautocreate: true
