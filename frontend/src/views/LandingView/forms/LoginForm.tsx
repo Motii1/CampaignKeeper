@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import { AxiosResponse } from 'axios';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { protectedApiClient } from '../../../axios/axios';
+import protectedApiClient from '../../../axios/axios';
 import {
   ChangeFormComponent,
   FormHeader,
@@ -61,8 +61,6 @@ export const LoginForm: React.FC<FormProps> = props => {
           value: password.value,
           helperText: 'Invalid username/email or password',
         });
-      } else {
-        window.alert('Unexpected behaviour');
       }
     }
   };

@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import { AxiosResponse } from 'axios';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { protectedApiClient } from '../../../axios/axios';
+import protectedApiClient from '../../../axios/axios';
 import {
   ChangeFormComponent,
   FormHeader,
@@ -101,9 +101,6 @@ export const RegisterForm: React.FC<FormProps> = props => {
         } else {
           history.push('/welcome');
         }
-      } else {
-        window.alert('Unexpected behaviour');
-        // should we even consider such option?
       }
     }
   };
