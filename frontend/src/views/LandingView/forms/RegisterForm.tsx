@@ -1,7 +1,8 @@
 import { Stack } from '@mui/material';
+import { AxiosResponse } from 'axios';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { register } from '../../../services/auth/authServices';
+import { protectedApiClient } from '../../../axios/axios';
 import {
   ChangeFormComponent,
   FormHeader,
@@ -16,9 +17,25 @@ type FormProps = {
 
 type TextFieldState = {
   value: string;
-  error: boolean;
-  helperText: string;
+  helperText: null | string;
 };
+
+export const AUTH_URL = '/api/auth';
+
+const register = (
+  username: string,
+  email: string,
+  emailRepeat: string,
+  password: string,
+  passwordRepeat: string
+): Promise<AxiosResponse> =>
+  protectedApiClient.post(`${AUTH_URL}/register`, {
+    username: username,
+    email: email,
+    repeatedEmail: emailRepeat,
+    password: password,
+    repeatedPassword: passwordRepeat,
+  });
 
 export const RegisterForm: React.FC<FormProps> = props => {
   const history = useHistory();
@@ -26,113 +43,83 @@ export const RegisterForm: React.FC<FormProps> = props => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,255}$/;
 
-  const [username, setUsername] = useState({
+  /*const initalState = {
     value: '',
-    error: false,
     helperText: '',
+  }*/
+
+  const [username, setUsername] = useState<TextFieldState>({
+    value: '',
+    helperText: null,
   });
-  const [email, setEmail] = useState({
+  const [email, setEmail] = useState<TextFieldState>({
     value: '',
-    error: false,
-    helperText: '',
+    helperText: null,
   });
-  const [emailRepeat, setEmailRepeat] = useState({
+  const [emailRepeat, setEmailRepeat] = useState<TextFieldState>({
     value: '',
-    error: false,
-    helperText: '',
+    helperText: null,
   });
-  const [password, setPassword] = useState({
+  const [password, setPassword] = useState<TextFieldState>({
     value: '',
-    error: false,
-    helperText: '',
+    helperText: null,
   });
-  const [passwordRepeat, setPasswordRepeat] = useState({
+  const [passwordRepeat, setPasswordRepeat] = useState<TextFieldState>({
     value: '',
-    error: false,
-    helperText: '',
+    helperText: null,
   });
 
-  const handleUsernameTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const isUsernameCorrect = usernameRegex.test(event.target.value);
-    setUsername({
-      value: event.currentTarget.value,
-      error: !isUsernameCorrect,
-      helperText: isUsernameCorrect ? '' : 'Sorry, username should be 8-12 characters long',
-    });
-  };
-
-  const handleEmailTextFieldChange = (
+  const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    setStateFn: (newState: TextFieldState) => void
+    elementRegex: RegExp,
+    setStateFn: (newState: TextFieldState) => void,
+    helperText: string
   ): void => {
-    const isEmailCorrect = emailRegex.test(event.target.value);
     setStateFn({
       value: event.target.value,
-      error: !isEmailCorrect,
-      helperText: isEmailCorrect ? '' : 'Sorry, this email is invalid',
+      helperText: elementRegex.test(event.target.value) ? null : helperText,
     });
   };
 
-  const handlePasswordTextFieldChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setStateFn: (newState: TextFieldState) => void
-  ): void => {
-    const isPassswordCorrect = passwordRegex.test(event.target.value);
-    setStateFn({
-      value: event.target.value,
-      error: !isPassswordCorrect,
-      helperText: isPassswordCorrect ? '' : 'Sorry, this password is invalid',
-    });
-    // here should be comparing password and changing their states if necessary
-  };
-
-  const handleRegisterButton = (event: React.FormEvent<HTMLFormElement>): void => {
+  const handleRegisterButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     if (
-      !(
-        username.error &&
-        email.error &&
-        emailRepeat.error &&
-        password.error &&
-        passwordRepeat.error
-      )
+      username.helperText === null &&
+      email.helperText === null &&
+      emailRepeat.helperText === null &&
+      password.helperText === null &&
+      passwordRepeat.helperText === null
     ) {
-      register(
+      const response = await register(
         username.value,
         email.value,
         emailRepeat.value,
         password.value,
         passwordRepeat.value
-      ).then(
-        response => {
-          if (response.status === 200) {
-            const message = response.data.message;
-            if (message) {
-              if (message === 'User with given username already exists')
-                setUsername({
-                  value: username.value,
-                  error: true,
-                  helperText: 'Sorry, this username is already used.',
-                });
-              else if (message === 'User with given email already exists') {
-                setEmail({
-                  value: email.value,
-                  error: true,
-                  helperText: 'Sorry, this email is already used.',
-                });
-              }
-            } else {
-              history.push('/welcome');
-            }
-          } else {
-            window.alert('Unexpected behaviour');
-            // should we even consider such option?
-          }
-        },
-        error => {
-          window.alert(`Unexpected error: ${error.response.status}`);
-        }
       );
+      // eslint-disable-next-line no-console
+      console.log(response);
+      if (response.status === 200) {
+        const message = response.data.message;
+        if (message) {
+          if (message === 'User with given username already exists')
+            setUsername({
+              value: username.value,
+              helperText: 'Sorry, this username is already used.',
+            });
+          else if (message === 'User with given email already exists') {
+            setEmail({
+              value: email.value,
+              helperText: 'Sorry, this email is already used.',
+            });
+          }
+        } else {
+          history.push('/welcome');
+        }
+      } else {
+        window.alert('Unexpected behaviour');
+        // should we even consider such option?
+      }
     }
   };
 
@@ -157,41 +144,61 @@ export const RegisterForm: React.FC<FormProps> = props => {
           text="Username"
           id="register-username"
           placeholder=""
-          onChange={event => handleUsernameTextFieldChange(event)}
           helperText={username.helperText}
-          error={username.error}
+          onChange={event =>
+            handleTextFieldChange(
+              event,
+              usernameRegex,
+              setUsername,
+              'Sorry, username should be 8-12 characters long'
+            )
+          }
         />
         <LabeledTextInput
           text="Email"
           id="register-email-1"
           placeholder=""
-          onChange={event => handleEmailTextFieldChange(event, setEmail)}
           helperText={email.helperText}
-          error={email.error}
+          onChange={event =>
+            handleTextFieldChange(event, emailRegex, setEmail, 'Sorry, this email is invalid')
+          }
         />
         <LabeledTextInput
           text="Repeat email"
           id="register-email-2"
           placeholder=""
-          onChange={event => handleEmailTextFieldChange(event, setEmailRepeat)}
           helperText={emailRepeat.helperText}
-          error={emailRepeat.error}
+          onChange={event =>
+            handleTextFieldChange(event, emailRegex, setEmailRepeat, 'Sorry, this email is invalid')
+          }
         />
         <LabeledPasswordInput
           text="Password"
           id="register-password-1"
           placeholder=""
-          onChange={event => handlePasswordTextFieldChange(event, setPassword)}
           helperText={password.helperText}
-          error={password.error}
+          onChange={event =>
+            handleTextFieldChange(
+              event,
+              passwordRegex,
+              setPassword,
+              'Sorry, this password is invalid'
+            )
+          }
         />
         <LabeledPasswordInput
           text="Repeat password"
           id="register-password-2"
           placeholder=""
-          onChange={event => handlePasswordTextFieldChange(event, setPasswordRepeat)}
           helperText={passwordRepeat.helperText}
-          error={passwordRepeat.error}
+          onChange={event =>
+            handleTextFieldChange(
+              event,
+              passwordRegex,
+              setPasswordRepeat,
+              'Sorry, this password is invalid'
+            )
+          }
         />
         <StandardButton text="Register" />
       </Stack>

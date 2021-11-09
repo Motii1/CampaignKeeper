@@ -8,8 +8,7 @@ type InputProps = {
   text: string;
   id: string;
   placeholder: string;
-  error: boolean;
-  helperText: string;
+  helperText: null | string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -49,7 +48,7 @@ export const LabeledTextInput: React.FC<InputProps> = props => (
       sx={{
         color: 'common.white',
         marginLeft: '10px',
-        display: `${props.error ? 'block' : 'none'}`,
+        display: `${props.helperText ? 'block' : 'none'}`,
       }}
     >
       <i>{props.helperText}</i>
@@ -77,7 +76,7 @@ export const LabeledPasswordInput: React.FC<InputProps> = props => (
       sx={{
         color: 'common.white',
         marginLeft: '10px',
-        display: `${props.error ? 'block' : 'none'}`,
+        display: `${props.helperText ? 'block' : 'none'}`,
       }}
     >
       <i>{props.helperText}</i>
