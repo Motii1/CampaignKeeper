@@ -40,7 +40,7 @@ class _SettingsState extends State<Settings> {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text("Settings"),
-        backgroundColor: Theme.of(context).backgroundColor,
+        //backgroundColor: Theme.of(context).backgroundColor,
       ),
       body: Center(
         child: Column(
@@ -48,7 +48,7 @@ class _SettingsState extends State<Settings> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
               child: Text(
                 "App theme",
                 style: Theme.of(context).textTheme.subtitle2,
