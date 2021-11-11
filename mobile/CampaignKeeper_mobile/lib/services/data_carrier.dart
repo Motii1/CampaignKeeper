@@ -42,10 +42,4 @@ class DataCarrier {
       _managers[T]!.refresh(groupId: groupId);
     }
   }
-
-  Future<void> cacheAll<T>() async {
-    if (_managers.containsKey(T)) {
-      _managers[T]!.cacheAll();
-    }
-  }
 }

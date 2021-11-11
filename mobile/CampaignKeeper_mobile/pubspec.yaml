@@ -25,7 +25,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  websafe_svg:
+  flutter_svg:
   flutter_secure_storage: ^4.2.1
   http:
   shared_preferences:

@@ -5,7 +5,7 @@ import 'dart:convert';
 
 class UserLoginManager implements BaseManager<UserLoginEntity> {
   final FlutterSecureStorage _storage = new FlutterSecureStorage();
-  static const List _fields = ["name", "email", "password", "id"];
+  static const List _fields = ["name", "email", "password"];
   UserLoginEntity? _entity;
 
   UserLoginManager();
@@ -13,6 +13,7 @@ class UserLoginManager implements BaseManager<UserLoginEntity> {
   @override
   void attach(UserLoginEntity entity) {
     _entity = entity;
+    _cacheAll();
   }
 
   @override
@@ -32,16 +33,18 @@ class UserLoginManager implements BaseManager<UserLoginEntity> {
   }
 
   @override
-  Future<void> refresh({int groupId = -1}) async {
+  Future<int> refresh({int groupId = -1}) async {
     if (_entity == null) {
       // try load from cache
       Map data = await _readFromCache();
       _entity = _createEntity(data);
     }
+
+    return 0;
   }
 
-  @override
-  Future<void> cacheAll() async {
+  // TODO: create cache_util and replace this function with it
+  Future<void> _cacheAll() async {
     await _storage.deleteAll();
 
     if (_entity != null) {
@@ -49,7 +52,6 @@ class UserLoginManager implements BaseManager<UserLoginEntity> {
         "name": _entity!.name,
         "email": _entity!.email,
         "password": _entity!.password,
-        "id": _entity!.id,
       };
 
       await _storage.write(key: "UserData", value: json.encode(data));
@@ -72,10 +74,8 @@ class UserLoginManager implements BaseManager<UserLoginEntity> {
       String name = data["name"];
       String email = data["email"];
       String password = data["password"];
-      int id = int.parse(data["id"]);
 
       return new UserLoginEntity(
-          id: id,
           name: name,
           email: email,
           password: password,);

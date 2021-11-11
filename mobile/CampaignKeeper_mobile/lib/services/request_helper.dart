@@ -4,6 +4,18 @@ import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:http/http.dart' as http;
 
+enum ServerStatus {
+  Available,
+  Error,
+  TimeOut,
+}
+
+enum LoginStatus {
+  Success,
+  IncorrectData,
+  ServerError,
+}
+
 class RequestHelper {
   static final RequestHelper _helper = RequestHelper._internal();
   static const String _url = "http://10.0.2.2:4000";
@@ -21,8 +33,9 @@ class RequestHelper {
     DataCarrier().refresh<UserLoginEntity>();
   }
 
+  // TODO: create enum login state
   // login returns: 0 - success, -1 - incorrect data, -2 - server error
-  Future<int> autoLogin() async {
+  Future<LoginStatus> autoLogin() async {
     UserLoginEntity? loginEntity = DataCarrier().getEntity();
     if (loginEntity != null) {
       String name = loginEntity.name;
@@ -30,28 +43,30 @@ class RequestHelper {
       return await login(name: name, password: password);
     }
 
-    return -1;
+    return LoginStatus.ServerError;
   }
 
-  Future<int> login({required String name, required String password}) async {
-    return -1;
+  Future<LoginStatus> login({required String name, required String password}) async {
+
+
+    return LoginStatus.ServerError;
   }
 
   Future<int> logout() async {
     return -1;
   }
 
-  Future<int> testConnection() async {
+  Future<ServerStatus> testConnection() async {
     try {
       http.Response response = await http.get(Uri.parse("$_url$_pingEnd")).timeout(Duration(seconds: 2));
       switch (response.statusCode) {
         case 200:
-          return 0;
+          return ServerStatus.Available;
         default:
-          return -1;
+          return ServerStatus.Error;
       }
     } on TimeoutException catch (_) {
-      return -2;
+      return ServerStatus.TimeOut;
     }
 }
 

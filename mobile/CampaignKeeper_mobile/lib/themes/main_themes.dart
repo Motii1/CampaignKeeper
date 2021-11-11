@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MainThemes {
+  static const double _textColorOpacity = 0.9;
+  static const double _radius = 10.0;
+
   static const Color _primaryLight = Color(0xfffabe02);
   static const Color _onPrimaryLight = Color(0xff242424);
 
@@ -11,8 +14,10 @@ class MainThemes {
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  static const Color _light = Color(0xffe7f1fd);
-  static const Color _lighterLight = Color(0xfff5f9ff);
+  //static const Color _light = Color(0xffe7f1fd);
+  //static const Color _lighterLight = Color(0xfff6f9ff);
+  static const Color _light = Color(0xffe0ecfc);
+  static const Color _lighterLight = Color(0xfff3f6ff);
   static final MaterialColor _swatchLight =
       MaterialColor(_primaryLight.value, const <int, Color>{
     50: _primaryLight,
@@ -27,6 +32,10 @@ class MainThemes {
     900: _primaryLight,
   });
 
+  static final TextStyle _textColorLight = TextStyle(
+    color: _lighterDark.withOpacity(_textColorOpacity),
+  );
+
   static const Color _primaryDark = Color(0xffffe082);
   static const Color _onPrimaryDark = Color(0xff242424);
 
@@ -37,7 +46,7 @@ class MainThemes {
   static const Color _onErrorDark = Color(0xff242424);
 
   static const Color _dark = Color(0xff262E38);
-  static const Color _lighterDark = Color(0xff2a333e);
+  static const Color _lighterDark = Color(0xff323b49);
   static final MaterialColor _swatchDark =
       MaterialColor(_primaryDark.value, const <int, Color>{
     50: _primaryDark,
@@ -52,6 +61,10 @@ class MainThemes {
     900: _primaryDark,
   });
 
+  static final TextStyle _textColorDark = TextStyle(
+    color: _light.withOpacity(_textColorOpacity),
+  );
+
   static final ThemeData light = ThemeData(
     appBarTheme: AppBarTheme(
       elevation: 0.0,
@@ -60,7 +73,10 @@ class MainThemes {
       titleTextStyle: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w500,
-        color: _dark,
+        color: _lighterDark.withOpacity(_textColorOpacity),
+      ),
+      iconTheme: IconThemeData(
+        color: _lighterDark.withOpacity(_textColorOpacity),
       ),
     ),
     backgroundColor: _lighterLight,
@@ -85,6 +101,64 @@ class MainThemes {
     primarySwatch: _swatchLight,
     scaffoldBackgroundColor: _light,
     toggleableActiveColor: _primaryLight,
+    cardColor: _lighterLight,
+    inputDecorationTheme: InputDecorationTheme(
+      contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+      filled: true,
+      fillColor: _light,
+      labelStyle: TextStyle(
+        color: _lighterDark.withOpacity(0.7),
+      ),
+      errorStyle: TextStyle(
+        color: _errorLight,
+      ),
+      border: UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(_radius),
+            topRight: Radius.circular(_radius)),
+      ),
+      enabledBorder: UnderlineInputBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(_radius),
+              topRight: Radius.circular(_radius)),
+          borderSide: BorderSide(
+            color: _lighterDark,
+            width: 1.8,
+          )),
+      errorBorder: UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(_radius),
+            topRight: Radius.circular(_radius)),
+        borderSide: BorderSide(
+          color: _errorLight,
+          width: 1.8,
+        ),
+      ),
+    ),
+    textTheme: TextTheme(
+      headline1: _textColorLight,
+      headline2: _textColorLight,
+      headline3: _textColorLight,
+      headline4: _textColorLight,
+      headline5: _textColorLight,
+      headline6: _textColorLight,
+      subtitle1: _textColorLight,
+      subtitle2: _textColorLight,
+      bodyText1: _textColorLight,
+      bodyText2: _textColorLight,
+      caption: _textColorLight,
+    ),
+    cardTheme: CardTheme(
+        shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(_radius)),
+    )),
+    snackBarTheme: SnackBarThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(_radius)),
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: _dark,
+    ),
   );
 
   static final ThemeData dark = ThemeData(
@@ -95,7 +169,10 @@ class MainThemes {
       titleTextStyle: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w500,
-        color: _lighterLight,
+        color: _light.withOpacity(_textColorOpacity),
+      ),
+      iconTheme: IconThemeData(
+        color: _light.withOpacity(_textColorOpacity),
       ),
     ),
     backgroundColor: _lighterDark,
@@ -121,5 +198,63 @@ class MainThemes {
     primarySwatch: _swatchDark,
     scaffoldBackgroundColor: _dark,
     toggleableActiveColor: _primaryDark,
+    cardColor: _lighterDark,
+    inputDecorationTheme: InputDecorationTheme(
+      contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+      filled: true,
+      fillColor: _dark,
+      labelStyle: TextStyle(
+        color: _light.withOpacity(0.7),
+      ),
+      errorStyle: TextStyle(
+        color: _errorDark,
+      ),
+      border: UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(_radius),
+            topRight: Radius.circular(_radius)),
+      ),
+      enabledBorder: UnderlineInputBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(_radius),
+              topRight: Radius.circular(_radius)),
+          borderSide: BorderSide(
+            color: _light,
+            width: 1.8,
+          )),
+      errorBorder: UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(_radius),
+            topRight: Radius.circular(_radius)),
+        borderSide: BorderSide(
+          color: _errorDark,
+          width: 1.8,
+        ),
+      ),
+    ),
+    textTheme: TextTheme(
+      headline1: _textColorDark,
+      headline2: _textColorDark,
+      headline3: _textColorDark,
+      headline4: _textColorDark,
+      headline5: _textColorDark,
+      headline6: _textColorDark,
+      subtitle1: _textColorDark,
+      subtitle2: _textColorDark,
+      bodyText1: _textColorDark,
+      bodyText2: _textColorDark,
+      caption: _textColorDark,
+    ),
+    cardTheme: CardTheme(
+        shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    )),
+    snackBarTheme: SnackBarThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(_radius)),
+      ),
+      backgroundColor: _lighterLight,
+      behavior: SnackBarBehavior.floating,
+    ),
   );
 }
