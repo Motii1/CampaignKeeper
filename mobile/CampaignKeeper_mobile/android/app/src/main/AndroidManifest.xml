@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.campaignkeeperteam.app.campaign_keeper_mobile">
    <application
-        android:label="campaign_keeper_mobile"
+        android:label="Campaign Keeper"
         android:icon="@mipmap/ic_launcher"
        android:allowBackup="false">
         <activity

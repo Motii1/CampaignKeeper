@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MainThemes {
-  static const double _textColorOpacity = 0.9;
+  static const double _textColorOpacitySecondary = 0.7;
+  static const double _textColorOpacityPrimary = 0.9;
   static const double _radius = 10.0;
 
   static const Color _primaryLight = Color(0xfffabe02);
@@ -17,7 +18,7 @@ class MainThemes {
   //static const Color _light = Color(0xffe7f1fd);
   //static const Color _lighterLight = Color(0xfff6f9ff);
   static const Color _light = Color(0xffe0ecfc);
-  static const Color _lighterLight = Color(0xfff3f6ff);
+  static const Color _lighterLight = Color(0xfff7f9ff);
   static final MaterialColor _swatchLight =
       MaterialColor(_primaryLight.value, const <int, Color>{
     50: _primaryLight,
@@ -33,7 +34,10 @@ class MainThemes {
   });
 
   static final TextStyle _textColorLight = TextStyle(
-    color: _lighterDark.withOpacity(_textColorOpacity),
+    color: _lighterDark.withOpacity(_textColorOpacitySecondary),
+  );
+  static final TextStyle _textColorTitleLight = TextStyle(
+    color: _lighterDark.withOpacity(_textColorOpacityPrimary),
   );
 
   static const Color _primaryDark = Color(0xffffe082);
@@ -62,7 +66,10 @@ class MainThemes {
   });
 
   static final TextStyle _textColorDark = TextStyle(
-    color: _light.withOpacity(_textColorOpacity),
+    color: _light.withOpacity(_textColorOpacitySecondary),
+  );
+  static final TextStyle _textColorTitleDark = TextStyle(
+    color: _light.withOpacity(_textColorOpacityPrimary),
   );
 
   static final ThemeData light = ThemeData(
@@ -73,10 +80,10 @@ class MainThemes {
       titleTextStyle: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w500,
-        color: _lighterDark.withOpacity(_textColorOpacity),
+        color: _lighterDark.withOpacity(_textColorOpacityPrimary),
       ),
       iconTheme: IconThemeData(
-        color: _lighterDark.withOpacity(_textColorOpacity),
+        color: _lighterDark.withOpacity(_textColorOpacitySecondary),
       ),
     ),
     backgroundColor: _lighterLight,
@@ -136,13 +143,13 @@ class MainThemes {
       ),
     ),
     textTheme: TextTheme(
-      headline1: _textColorLight,
-      headline2: _textColorLight,
-      headline3: _textColorLight,
-      headline4: _textColorLight,
-      headline5: _textColorLight,
-      headline6: _textColorLight,
-      subtitle1: _textColorLight,
+      headline1: _textColorTitleLight,
+      headline2: _textColorTitleLight,
+      headline3: _textColorTitleLight,
+      headline4: _textColorTitleLight,
+      headline5: _textColorTitleLight,
+      headline6: _textColorTitleLight,
+      subtitle1: _textColorTitleLight,
       subtitle2: _textColorLight,
       bodyText1: _textColorLight,
       bodyText2: _textColorLight,
@@ -169,10 +176,10 @@ class MainThemes {
       titleTextStyle: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w500,
-        color: _light.withOpacity(_textColorOpacity),
+        color: _light.withOpacity(_textColorOpacityPrimary),
       ),
       iconTheme: IconThemeData(
-        color: _light.withOpacity(_textColorOpacity),
+        color: _light.withOpacity(_textColorOpacitySecondary),
       ),
     ),
     backgroundColor: _lighterDark,
@@ -233,13 +240,13 @@ class MainThemes {
       ),
     ),
     textTheme: TextTheme(
-      headline1: _textColorDark,
-      headline2: _textColorDark,
-      headline3: _textColorDark,
-      headline4: _textColorDark,
-      headline5: _textColorDark,
-      headline6: _textColorDark,
-      subtitle1: _textColorDark,
+      headline1: _textColorTitleDark,
+      headline2: _textColorTitleDark,
+      headline3: _textColorTitleDark,
+      headline4: _textColorTitleDark,
+      headline5: _textColorTitleDark,
+      headline6: _textColorTitleDark,
+      subtitle1: _textColorTitleDark,
       subtitle2: _textColorDark,
       bodyText1: _textColorDark,
       bodyText2: _textColorDark,

@@ -17,7 +17,7 @@ class MainApp extends StatefulWidget {
       context.findAncestorStateOfType<_MainAppState>();
 }
 
-class _MainAppState extends State<MainApp> {
+class _MainAppState extends State<MainApp>{
   ThemeMode _themeMode = ThemeMode.dark;
   ThemeData _theme = MainThemes.light;
   ThemeData _themeDark = MainThemes.dark;

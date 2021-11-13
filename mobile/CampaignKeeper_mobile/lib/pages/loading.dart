@@ -12,16 +12,23 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
   void autoLogin() async {
     await AppPrefs().refresh(context);
-    // TODO: Use RequestHelper for a cached login attempt
-    // If failed open login screen
-    // Else open campaign screen
+    precachePicture(ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, 'assets/campaign_logo.svg'), context);
+    LoginStatus status = await RequestHelper().autoLogin();
+    await Future.delayed(Duration(milliseconds: 500));
 
-    //int loginRes = await RequestHelper().autoLogin();
-
-    var test = await RequestHelper().testConnection();
-    print(test);
-
-    Navigator.pushReplacementNamed(context, "/login");
+    switch (status) {
+      case LoginStatus.Success:
+        // TODO: replace settings with campaign screen
+        Navigator.pushReplacementNamed(context, "/settings");
+        break;
+      case LoginStatus.ServerError:
+        // TODO: campaign screen with argument for snackbar with offline info "Can't connect to the matrix, using local data."
+        Navigator.pushReplacementNamed(context, "/settings");
+        break;
+      default:
+        Navigator.pushReplacementNamed(context, "/login");
+        break;
+    }
   }
 
   @override
@@ -32,8 +39,6 @@ class _LoadingState extends State<Loading> {
 
   @override
   Widget build(BuildContext context) {
-    precachePicture(ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, 'assets/campaign_logo.svg'), context);
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(0),

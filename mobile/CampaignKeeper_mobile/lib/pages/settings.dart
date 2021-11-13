@@ -1,16 +1,51 @@
+import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
+import 'package:campaign_keeper_mobile/services/lifecycle_helper.dart';
+import 'package:campaign_keeper_mobile/services/request_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../main.dart';
+import 'package:campaign_keeper_mobile/main.dart';
+import 'package:flutter/services.dart';
 
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
-  bool isSystemThemeAvailable = true;
+class _SettingsState extends State<Settings>  with WidgetsBindingObserver {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final debugUrlController = TextEditingController();
+  bool isSystemThemeAvailable = false;
+  bool isDebugMode = false;
 
   ThemeMode? _theme;
+
+  String? validateDebugUrl(String? url) {
+    if (url == null || url.isEmpty) {
+      return 'Please enter url address with port';
+    } else if (!url.contains("http")) {
+      return "Url doesn't contain http";
+    } else if (':'.allMatches(url).length != 2) {
+      return "Url doesn't contain port";
+    }
+
+    return null;
+  }
+
+  void setDebugUrl() async {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+
+    if (_formKey.currentState!.validate()) {
+      AppPrefs().url = debugUrlController.text;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(KeeperSnackBars().debugUrl);
+    } else if (debugUrlController.text.isEmpty) {
+      AppPrefs().resetDebugUrl();
+      debugUrlController.text = AppPrefs().url;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(KeeperSnackBars().debugUrl);
+    }
+  }
 
   void setTheme(ThemeMode? value) {
     _theme = value;
@@ -19,9 +54,30 @@ class _SettingsState extends State<Settings> {
     }
   }
 
+  void logout() async {
+    await RequestHelper().logout(force: true);
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/login', (Route<dynamic> route) => false);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        LifeCycleHelper().loginOnResume(context);
+        break;
+      case AppLifecycleState.paused:
+        LifeCycleHelper().logoutOnPaused();
+        break;
+      default:
+        break;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
 
     AppPrefs().getSdkVersion().then((ver) {
       if (ver >= 29) {
@@ -31,6 +87,11 @@ class _SettingsState extends State<Settings> {
       }
     });
 
+    setState(() {
+      isDebugMode = !kReleaseMode;
+      debugUrlController.text = AppPrefs().url;
+    });
+
     _theme = MainApp.of(context)!.getTheme();
   }
 
@@ -38,44 +99,120 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        title: Text("Settings"),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
-              child: Text(
-                "App theme",
-                style: Theme.of(context).textTheme.subtitle2,
+      body: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: (overScroll) {
+          overScroll.disallowGlow();
+          return false;
+        },
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverAppBar(
+                  pinned: true,
+                  expandedHeight: 160,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text(
+                      'Settings',
+                      style: TextStyle(
+                        color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
-            RadioListTile(
-              title: Text("Light"),
-              value: ThemeMode.light,
-              groupValue: _theme,
-              onChanged: setTheme,
-            ),
-            RadioListTile(
-              title: Text("Dark"),
-              value: ThemeMode.dark,
-              groupValue: _theme,
-              onChanged: setTheme,
-            ),
-            Visibility(
-              visible: isSystemThemeAvailable,
-              child: RadioListTile(
-                title: Text("System"),
-                value: ThemeMode.system,
-                groupValue: _theme,
-                onChanged: setTheme,
-              ),
-            ),
-          ],
+            ];
+          },
+          body: Builder(
+            builder: (BuildContext context) {
+              return CustomScrollView(
+                slivers: [
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
+                          child: Text(
+                            "USER",
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            "Log out",
+                          ),
+                          onTap: logout,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 15, 18, 0),
+                          child: Text(
+                            "APP THEME",
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                        ),
+                        RadioListTile(
+                          title: Text("Light"),
+                          value: ThemeMode.light,
+                          groupValue: _theme,
+                          onChanged: setTheme,
+                        ),
+                        RadioListTile(
+                          title: Text("Dark"),
+                          value: ThemeMode.dark,
+                          groupValue: _theme,
+                          onChanged: setTheme,
+                        ),
+                        Visibility(
+                          visible: isSystemThemeAvailable,
+                          child: RadioListTile(
+                            title: Text("System"),
+                            value: ThemeMode.system,
+                            groupValue: _theme,
+                            onChanged: setTheme,
+                          ),
+                        ),
+                        Visibility(
+                          visible: isDebugMode,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  TextFormField(
+                                    //initialValue: AppPrefs().url,
+                                    decoration:
+                                      InputDecoration(helperText: " ", labelText: "Debug url"),
+                                    controller: debugUrlController,
+                                    validator: validateDebugUrl,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: setDebugUrl,
+                                    onLongPress: () {
+                                      Navigator.pushNamed(context, "/settings");
+                                    },
+                                    child: const Text('SET URL'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

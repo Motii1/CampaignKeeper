@@ -1,10 +1,9 @@
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
+import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
 class UserLoginManager implements BaseManager<UserLoginEntity> {
-  final FlutterSecureStorage _storage = new FlutterSecureStorage();
   static const List _fields = ["name", "email", "password"];
   UserLoginEntity? _entity;
 
@@ -13,7 +12,11 @@ class UserLoginManager implements BaseManager<UserLoginEntity> {
   @override
   void attach(UserLoginEntity entity) {
     _entity = entity;
-    _cacheAll();
+    Map? data = _mapEntity();
+
+    if (data != null) {
+      CacheUtil().addSecure("UserData", json.encode(data));
+    }
   }
 
   @override
@@ -35,18 +38,17 @@ class UserLoginManager implements BaseManager<UserLoginEntity> {
   @override
   Future<int> refresh({int groupId = -1}) async {
     if (_entity == null) {
-      // try load from cache
-      Map data = await _readFromCache();
-      _entity = _createEntity(data);
+      String? data = await CacheUtil().getSecure("UserData");
+
+      if (data != null) {
+        _entity = _createEntity(json.decode(data));
+      }
     }
 
     return 0;
   }
 
-  // TODO: create cache_util and replace this function with it
-  Future<void> _cacheAll() async {
-    await _storage.deleteAll();
-
+  Map? _mapEntity() {
     if (_entity != null) {
       Map data = {
         "name": _entity!.name,
@@ -54,8 +56,10 @@ class UserLoginManager implements BaseManager<UserLoginEntity> {
         "password": _entity!.password,
       };
 
-      await _storage.write(key: "UserData", value: json.encode(data));
+      return data;
     }
+
+    return null;
   }
 
   UserLoginEntity? _createEntity(Map data) {
@@ -82,14 +86,5 @@ class UserLoginManager implements BaseManager<UserLoginEntity> {
     }
 
     return null;
-  }
-
-  Future<Map> _readFromCache() async {
-    String? cachedData = await _storage.read(key: "UserData");
-    if (cachedData != null) {
-      return jsonDecode(cachedData);
-    }
-
-    return new Map();
   }
 }

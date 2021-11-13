@@ -1,4 +1,5 @@
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
+import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/managers/user_login_manager.dart';
 
@@ -39,7 +40,12 @@ class DataCarrier {
 
   Future<void> refresh<T>({int groupId = -1}) async {
     if (_managers.containsKey(T)) {
-      _managers[T]!.refresh(groupId: groupId);
+      await _managers[T]!.refresh(groupId: groupId);
     }
+  }
+
+  Future<void> deleteCache() async {
+    await CacheUtil().deleteSecure();
+    await CacheUtil().delete();
   }
 }
