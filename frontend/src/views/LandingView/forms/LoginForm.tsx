@@ -31,24 +31,27 @@ export const LoginForm: React.FC<FormProps> = props => {
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    validationFn: () => boolean,
+    validationFn: (value: string) => boolean,
     setStateFn: (newState: TextFieldState) => void,
     helperText: string
   ): void => {
+    const newValue = event.target.value;
+    let newHelperText = null;
+    if (!validationFn(newValue)) newHelperText = helperText;
     setStateFn({
       value: event.target.value,
-      helperText: validationFn() ? null : helperText,
+      helperText: newHelperText,
     });
   };
 
-  const validateUsername = () =>
-    username.value.includes('@') || (username.value.length > 7 && username.value.length < 13);
+  const validateUsername = (value: string) =>
+    value.includes('@') || (value.length > 7 && value.length < 13);
 
-  const validatePassword = () => password.value.length > 7 && password.value.length < 256;
+  const validatePassword = (value: string) => value.length > 7 && value.length < 256;
 
   const handleLoginButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
-    if (username.helperText === null && password.helperText === null) {
+    if (validateUsername(username.value) && validatePassword(password.value)) {
       const response = await login(username.value, password.value);
       if (response.status === 200) {
         history.push('/welcome');
@@ -83,7 +86,7 @@ export const LoginForm: React.FC<FormProps> = props => {
         onSubmit={handleLoginButton}
       >
         <LabeledTextInput
-          text="Username"
+          text="Email or username"
           id="login-username"
           placeholder="Thou name, brave hero"
           helperText={username.helperText}

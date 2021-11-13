@@ -60,9 +60,29 @@ export const RegisterForm: React.FC<FormProps> = props => {
     setStateFn: (newState: TextFieldState) => void,
     helperText: string
   ): void => {
+    const newValue = event.target.value;
     setStateFn({
-      value: event.target.value,
+      value: newValue,
       helperText: elementRegex.test(event.target.value) ? null : helperText,
+    });
+  };
+
+  const handleTextFieldChangeTwin = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    elementRegex: RegExp,
+    setStateFn: (newState: TextFieldState) => void,
+    invalidValueHelperText: string,
+    twinTextFieldValue: string,
+    mismatchValueHelperText: string
+  ): void => {
+    const newValue = event.target.value;
+    let newHelperText = null;
+    if (twinTextFieldValue && twinTextFieldValue !== newValue)
+      newHelperText = mismatchValueHelperText;
+    if (!elementRegex.test(event.target.value)) newHelperText = invalidValueHelperText;
+    setStateFn({
+      value: newValue,
+      helperText: newHelperText,
     });
   };
 
@@ -82,8 +102,6 @@ export const RegisterForm: React.FC<FormProps> = props => {
         password.value,
         passwordRepeat.value
       );
-      // eslint-disable-next-line no-console
-      console.log(response);
       if (response.status === 200) {
         const message = response.data.message;
         if (message) {
@@ -94,6 +112,10 @@ export const RegisterForm: React.FC<FormProps> = props => {
             });
           else if (message === 'User with given email already exists') {
             setEmail({
+              value: email.value,
+              helperText: 'Sorry, this email is already used.',
+            });
+            setEmailRepeat({
               value: email.value,
               helperText: 'Sorry, this email is already used.',
             });
@@ -142,7 +164,14 @@ export const RegisterForm: React.FC<FormProps> = props => {
           placeholder=""
           helperText={email.helperText}
           onChange={event =>
-            handleTextFieldChange(event, emailRegex, setEmail, 'Sorry, this email is invalid')
+            handleTextFieldChangeTwin(
+              event,
+              emailRegex,
+              setEmail,
+              'Sorry, this email is invalid',
+              emailRepeat.value,
+              "Emails don't match"
+            )
           }
         />
         <LabeledTextInput
@@ -151,7 +180,14 @@ export const RegisterForm: React.FC<FormProps> = props => {
           placeholder=""
           helperText={emailRepeat.helperText}
           onChange={event =>
-            handleTextFieldChange(event, emailRegex, setEmailRepeat, 'Sorry, this email is invalid')
+            handleTextFieldChangeTwin(
+              event,
+              emailRegex,
+              setEmailRepeat,
+              'Sorry, this email is invalid',
+              email.value,
+              "Emails don't match"
+            )
           }
         />
         <LabeledPasswordInput
@@ -160,11 +196,13 @@ export const RegisterForm: React.FC<FormProps> = props => {
           placeholder=""
           helperText={password.helperText}
           onChange={event =>
-            handleTextFieldChange(
+            handleTextFieldChangeTwin(
               event,
               passwordRegex,
               setPassword,
-              'Sorry, this password is invalid'
+              'Sorry, this password is invalid',
+              passwordRepeat.value,
+              "Sorry, the passwords don't match"
             )
           }
         />
@@ -174,11 +212,13 @@ export const RegisterForm: React.FC<FormProps> = props => {
           placeholder=""
           helperText={passwordRepeat.helperText}
           onChange={event =>
-            handleTextFieldChange(
+            handleTextFieldChangeTwin(
               event,
               passwordRegex,
               setPasswordRepeat,
-              'Sorry, this password is invalid'
+              'Sorry, this password is invalid',
+              password.value,
+              "Sorry, the passwords don't match"
             )
           }
         />
