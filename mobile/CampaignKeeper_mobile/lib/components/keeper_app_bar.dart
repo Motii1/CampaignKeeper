@@ -24,6 +24,7 @@ class KeeperAppBar extends StatelessWidget {
               NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
                 pinned: true,
+                collapsedHeight: 58.4,
                 expandedHeight: 160,
                 backgroundColor: _bgColor,
                 flexibleSpace: FlexibleSpaceBar(
