@@ -1,9 +1,9 @@
 import 'package:campaign_keeper_mobile/components/keeper_logo_cart.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
+import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/request_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -135,7 +135,9 @@ class _LoginCardState extends State<LoginCard> {
             ElevatedButton(
               onPressed: loginAttempt,
               onLongPress: () {
-                Navigator.pushNamed(context, "/settings");
+                if (AppPrefs.debug) {
+                  Navigator.pushNamed(context, "/settings");
+                }
               },
               child: const Text('LOGIN'),
             ),

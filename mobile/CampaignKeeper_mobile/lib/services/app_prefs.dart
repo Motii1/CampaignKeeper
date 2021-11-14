@@ -5,21 +5,22 @@ import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/main.dart';
-import 'package:flutter/foundation.dart';
 
 class AppPrefs {
   static final AppPrefs _app = AppPrefs._internal();
+  static const core.String milestone = "Eden Prime";
   static const core.String _key = "app_prefs";
   static const core.String _url = "http://10.0.2.2:4000";
+  static const core.bool debug = true;
 
   core.String _debugUrl = _url;
   ThemeMode _theme = ThemeMode.dark;
 
   core.String get url {
-    if (kReleaseMode) {
-      return _url;
-    } else {
+    if (debug) {
       return _debugUrl;
+    } else {
+      return _url;
     }
   }
 

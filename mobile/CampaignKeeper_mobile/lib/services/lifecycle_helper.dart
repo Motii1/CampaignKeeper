@@ -2,7 +2,6 @@ import 'package:campaign_keeper_mobile/services/request_helper.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:flutter/material.dart';
 
-
 class LifeCycleHelper {
   static final LifeCycleHelper _life = LifeCycleHelper._internal();
 
@@ -10,7 +9,22 @@ class LifeCycleHelper {
     return _life;
   }
 
-  void loginOnResume(BuildContext context) async {
+  LifeCycleHelper._internal();
+
+  Future<void> testConnectionOnResume(BuildContext context) async {
+    var status = await RequestHelper().testConnection();
+
+    switch (status) {
+      case ServerStatus.Error:
+      case ServerStatus.TimeOut:
+        ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
+        break;
+      default:
+        break;
+    }
+  }
+
+  Future<void> loginOnResume(BuildContext context) async {
     var status = await RequestHelper().autoLogin();
 
     switch (status) {
@@ -27,9 +41,7 @@ class LifeCycleHelper {
     }
   }
 
-  void logoutOnPaused() async {
-    RequestHelper().logout();
+  Future<void> logoutOnPaused() async {
+    await RequestHelper().logout();
   }
-
-  LifeCycleHelper._internal();
 }

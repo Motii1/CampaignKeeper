@@ -15,8 +15,6 @@ class MainThemes {
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  //static const Color _light = Color(0xffe7f1fd);
-  //static const Color _lighterLight = Color(0xfff6f9ff);
   static const Color _light = Color(0xffe0ecfc);
   static const Color _lighterLight = Color(0xfff7f9ff);
   static final MaterialColor _swatchLight =

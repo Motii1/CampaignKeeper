@@ -58,6 +58,8 @@ class RequestHelper {
       }).timeout(Duration(seconds: 2));
     } on TimeoutException catch (_) {
       return LoginStatus.ServerError;
+    } on SocketException catch (_) {
+      return LoginStatus.ServerError;
     }
 
     switch (response.statusCode) {
@@ -91,6 +93,8 @@ class RequestHelper {
         response = await http.post(Uri.parse("${AppPrefs().url}$_logoutEnd"), headers: headers).timeout(Duration(seconds: 3));
       } on TimeoutException catch (_) {
         return LogoutStatus.ServerError;
+      } on SocketException catch (_) {
+        return LogoutStatus.ServerError;
       }
 
       switch (response.statusCode) {
@@ -113,6 +117,8 @@ class RequestHelper {
           .timeout(Duration(seconds: 2));
     } on TimeoutException catch (_) {
       return ServerStatus.TimeOut;
+    } on SocketException catch (_) {
+      return ServerStatus.Error;
     }
 
     switch (response.statusCode) {

@@ -14,7 +14,6 @@ class _LoadingState extends State<Loading> {
     await AppPrefs().refresh(context);
     precachePicture(ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, 'assets/campaign_logo.svg'), context);
     LoginStatus status = await RequestHelper().autoLogin();
-    await Future.delayed(Duration(milliseconds: 500));
 
     switch (status) {
       case LoginStatus.Success:

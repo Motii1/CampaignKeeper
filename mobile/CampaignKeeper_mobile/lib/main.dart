@@ -1,3 +1,4 @@
+import 'package:campaign_keeper_mobile/pages/about.dart';
 import 'package:campaign_keeper_mobile/pages/login.dart';
 import 'package:campaign_keeper_mobile/themes/main_themes.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,7 @@ class _MainAppState extends State<MainApp>{
         routes: {
           "/loading": (context) => Loading(),
           "/settings": (context) => Settings(),
+          "/settings/about": (context) => About(),
           "/login": (context) => Login(),
         },
       ),
