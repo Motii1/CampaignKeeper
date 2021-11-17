@@ -79,7 +79,6 @@ export const LoginForm: React.FC<FormProps> = props => {
       <FormHeader text="LOGIN" />
       <Stack
         direction="column"
-        alignItems="stretch"
         spacing={1}
         component="form"
         sx={{ width: '100%' }}
