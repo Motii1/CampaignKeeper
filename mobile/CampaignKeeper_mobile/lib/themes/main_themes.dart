@@ -118,10 +118,13 @@ class MainThemes {
         color: _errorLight,
       ),
       border: UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(_radius),
-            topRight: Radius.circular(_radius)),
-      ),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(_radius),
+              topRight: Radius.circular(_radius)),
+          borderSide: BorderSide(
+            color: _lighterDark,
+            width: 1.8,
+          )),
       enabledBorder: UnderlineInputBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(_radius),
@@ -215,10 +218,13 @@ class MainThemes {
         color: _errorDark,
       ),
       border: UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(_radius),
-            topRight: Radius.circular(_radius)),
-      ),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(_radius),
+              topRight: Radius.circular(_radius)),
+          borderSide: BorderSide(
+            color: _light,
+            width: 1.8,
+          )),
       enabledBorder: UnderlineInputBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(_radius),
