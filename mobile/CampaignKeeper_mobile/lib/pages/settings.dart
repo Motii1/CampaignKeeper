@@ -68,7 +68,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
-        await LifeCycleHelper().testConnectionOnResume(context);
+        await LifeCycleHelper().loginOnResume(context);
         break;
       default:
         break;

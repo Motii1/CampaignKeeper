@@ -15,11 +15,10 @@ class LifeCycleHelper {
     var status = await RequestHelper().testConnection();
 
     switch (status) {
-      case ServerStatus.Error:
-      case ServerStatus.TimeOut:
-        ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
+      case ServerStatus.Available:
         break;
       default:
+        ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
         break;
     }
   }

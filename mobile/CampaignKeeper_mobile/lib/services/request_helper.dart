@@ -36,6 +36,17 @@ class RequestHelper {
   RequestHelper._internal();
 
   Future<LoginStatus> autoLogin() async {
+    if (_isCookieValid()) {
+      var status = await testConnection();
+
+      switch (status) {
+        case ServerStatus.Available:
+          return LoginStatus.Success;
+        default:
+          return LoginStatus.ServerError;
+      }
+    }
+
     await DataCarrier().refresh<UserLoginEntity>();
 
     UserLoginEntity? loginEntity = DataCarrier().getEntity();
@@ -134,15 +145,16 @@ class RequestHelper {
     throw new Exception("Error");
   }
 
-  // Will be used in get
   bool _isCookieValid() {
     if (_cookie != null) {
       DateTime? expire = _cookie!.expires;
-      if (expire != null) {
-        return DateTime.now().isBefore(expire);
+
+      if (expire != null && DateTime.now().isBefore(expire)) {
+        return true;
       }
     }
 
+    _cookie = null;
     return false;
   }
 
