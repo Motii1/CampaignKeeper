@@ -59,6 +59,8 @@ export const LandingGraphic: React.FC = () => (
     xs={false}
     sx={{
       backgroundImage: `url(${OwlImage})`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'auto',
     }}
   />
 );

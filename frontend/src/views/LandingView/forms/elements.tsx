@@ -88,9 +88,18 @@ export const StandardButton: React.FC<ButtonProps> = props => (
   <Button
     variant="contained"
     type="submit"
-    sx={{ marginTop: '10px', width: '30%', minWidth: '100px' }}
+    sx={{
+      marginTop: '10px',
+      width: '30%',
+      minWidth: '100px',
+      color: 'common.black',
+      backgroundColor: 'customColors.gold',
+      '&.MuiButtonBase-root:hover': {
+        bgcolor: 'customColors.gold',
+      },
+    }}
   >
-    {props.text}
+    <b>{props.text}</b>
   </Button>
 );
 
@@ -109,8 +118,18 @@ export const ChangeFormComponent: React.FC<ChangeProps> = props => (
       <br />
       {props.secondLineText}
     </Typography>
-    <Button variant="contained" type="submit">
-      {props.buttonText}
+    <Button
+      variant="contained"
+      type="submit"
+      sx={{
+        color: 'common.black',
+        backgroundColor: 'customColors.gold',
+        '&.MuiButtonBase-root:hover': {
+          bgcolor: 'customColors.gold',
+        },
+      }}
+    >
+      <b>{props.buttonText}</b>
     </Button>
   </Stack>
 );

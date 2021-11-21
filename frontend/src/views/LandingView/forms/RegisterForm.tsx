@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
 import {
   ChangeFormComponent,
-  FormHeader,
   LabeledPasswordInput,
   LabeledTextInput,
   StandardButton,
@@ -135,7 +134,6 @@ export const RegisterForm: React.FC<FormProps> = props => {
       spacing={1}
       sx={{ marginLeft: '10px', marginRight: '10px', marginBottom: '10px' }}
     >
-      <FormHeader text="REGISTER" />
       <Stack
         direction="column"
         alignItems="stretch"
