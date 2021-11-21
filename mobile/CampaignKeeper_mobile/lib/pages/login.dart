@@ -49,7 +49,7 @@ class _LoginCardState extends State<LoginCard> {
       return 'Please enter login or email address';
     } else if (login.length < 5) {
       return "Login is too short";
-    } else if (login.length > 20) {
+    } else if (login.length > 256) {
       return "Login is too long";
     }
 
@@ -108,6 +108,7 @@ class _LoginCardState extends State<LoginCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TextFormField(
+              autocorrect: false,
               decoration:
                   InputDecoration(helperText: " ", labelText: "Login or email"),
               controller: loginController,
