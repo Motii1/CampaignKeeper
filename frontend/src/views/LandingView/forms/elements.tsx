@@ -41,7 +41,12 @@ export const LabeledTextInput: React.FC<InputProps> = props => (
       variant="outlined"
       fullWidth
       onChange={props.onChange}
-      sx={{ backgroundColor: 'customBackgrounds.textField', color: 'common.white' }}
+      sx={{
+        backgroundColor: 'customBackgrounds.textField',
+        '& .MuiInputBase-root': {
+          color: 'common.white',
+        },
+      }}
     />
     <Typography
       variant="subtitle2"
@@ -69,7 +74,12 @@ export const LabeledPasswordInput: React.FC<InputProps> = props => (
       variant="outlined"
       fullWidth
       onChange={props.onChange}
-      sx={{ backgroundColor: 'customBackgrounds.textField' }}
+      sx={{
+        backgroundColor: 'customBackgrounds.textField',
+        '& .MuiInputBase-root': {
+          color: 'common.white',
+        },
+      }}
     />
     <Typography
       variant="subtitle2"
