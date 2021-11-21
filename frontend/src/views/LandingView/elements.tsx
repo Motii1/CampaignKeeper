@@ -1,6 +1,6 @@
 import { Container, Grid, Paper } from '@mui/material';
 import OwlImage from '../../graphics/giantOwl.jpg';
-import Logo from '../../graphics/logo.png';
+import Logo from '../../graphics/logo.svg';
 
 export const LandingGrid: React.FC = ({ children }) => (
   <Grid container sx={{ minHeight: '100vh' }}>
@@ -31,7 +31,7 @@ export const FormPaper: React.FC = ({ children }) => (
       elevation={6}
       sx={{
         borderRadius: '20px',
-        backgroundColor: '#2B3D49',
+        backgroundColor: 'customBackgrounds.lightGray',
         paddingBottom: '10px',
       }}
     >
@@ -41,8 +41,10 @@ export const FormPaper: React.FC = ({ children }) => (
           backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          height: '120px',
-          marginBottom: '10px',
+          position: 'relative',
+          top: '-75px',
+          height: '150px',
+          marginBottom: '-75px',
         }}
       />
       {children}

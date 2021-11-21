@@ -132,7 +132,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
       justifyContent="flex-start"
       alignItems="flex-start"
       spacing={1}
-      sx={{ marginLeft: '10px', marginRight: '10px', marginBottom: '10px' }}
+      sx={{ marginLeft: '20px', marginRight: '20px', marginBottom: '20px' }}
     >
       <Stack
         direction="column"
