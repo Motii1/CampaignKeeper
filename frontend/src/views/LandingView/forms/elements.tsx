@@ -24,7 +24,7 @@ type ChangeProps = {
 };
 
 export const FormHeader: React.FC<HeaderProps> = props => (
-  <Typography variant="h4" sx={{ color: 'primary.main' }}>
+  <Typography variant="h4" sx={{ color: 'customColors.gold' }}>
     <b>{props.text}</b>
   </Typography>
 );
@@ -41,7 +41,7 @@ export const LabeledTextInput: React.FC<InputProps> = props => (
       variant="outlined"
       fullWidth
       onChange={props.onChange}
-      sx={{ backgroundColor: 'background.paper', color: 'common.white' }}
+      sx={{ backgroundColor: 'customBackgrounds.textField', color: 'common.white' }}
     />
     <Typography
       variant="subtitle2"
@@ -69,7 +69,7 @@ export const LabeledPasswordInput: React.FC<InputProps> = props => (
       variant="outlined"
       fullWidth
       onChange={props.onChange}
-      sx={{ backgroundColor: 'background.paper' }}
+      sx={{ backgroundColor: 'customBackgrounds.textField' }}
     />
     <Typography
       variant="subtitle2"

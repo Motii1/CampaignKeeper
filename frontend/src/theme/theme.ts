@@ -1,19 +1,31 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from '@mui/material';
 
 export const theme = createTheme({
   palette: {
-    primary: {
-      main: '#FFE082',
+    customColors: {
+      gold: '#FFE082',
     },
-    secondary: {
-      main: '#2B3D49',
+    customBackgrounds: {
+      lightGray: '#2B3D49',
+      textField: '#3C4C57',
     },
     background: {
       default: '#262E38',
-      paper: '#3C4C57',
     },
     text: {
       primary: '#FFFFFF',
     },
   },
 });
+
+declare module '@mui/material/styles' {
+  interface PaletteOptions {
+    customColors?: {
+      gold?: string;
+    };
+    customBackgrounds?: {
+      lightGray?: string;
+      textField?: string;
+    };
+  }
+}
