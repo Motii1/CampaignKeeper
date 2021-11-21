@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": ["es6", "dom", "dom.iterable", "esnext"],
     "outDir": "dist",
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,12 +17,13 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "noImplicitAny": true,
+    "noImplicitThis": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
   },
   "include": ["src"]
 }
