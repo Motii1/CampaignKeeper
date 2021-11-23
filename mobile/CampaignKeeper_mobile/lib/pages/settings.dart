@@ -59,7 +59,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   }
 
   void about() async {
-    await RequestHelper().logout(force: true);
     Navigator.pushNamed(
         context, '/settings/about',);
   }
@@ -162,6 +161,13 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 15, 18, 8),
+                          child: Text(
+                            "DEBUG",
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                        ),
                         TextFormField(
                           //initialValue: AppPrefs().url,
                           decoration: InputDecoration(
@@ -195,130 +201,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                 onTap: about,
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget build2(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (overScroll) {
-          overScroll.disallowGlow();
-          return false;
-        },
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverAppBar(
-                  pinned: true,
-                  expandedHeight: 160,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Text(
-                      'Settings',
-                      style: TextStyle(
-                        color:
-                            Theme.of(context).appBarTheme.titleTextStyle!.color,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ];
-          },
-          body: Builder(
-            builder: (BuildContext context) {
-              return CustomScrollView(
-                slivers: [
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
-                          child: Text(
-                            "USER",
-                            style: Theme.of(context).textTheme.subtitle2,
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            "Log out",
-                          ),
-                          onTap: logout,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(18, 15, 18, 0),
-                          child: Text(
-                            "APP THEME",
-                            style: Theme.of(context).textTheme.subtitle2,
-                          ),
-                        ),
-                        RadioListTile(
-                          title: Text("Light"),
-                          value: ThemeMode.light,
-                          groupValue: _theme,
-                          onChanged: setTheme,
-                        ),
-                        RadioListTile(
-                          title: Text("Dark"),
-                          value: ThemeMode.dark,
-                          groupValue: _theme,
-                          onChanged: setTheme,
-                        ),
-                        Visibility(
-                          visible: isSystemThemeAvailable,
-                          child: RadioListTile(
-                            title: Text("System"),
-                            value: ThemeMode.system,
-                            groupValue: _theme,
-                            onChanged: setTheme,
-                          ),
-                        ),
-                        Visibility(
-                          visible: isDebugMode,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  TextFormField(
-                                    //initialValue: AppPrefs().url,
-                                    decoration: InputDecoration(
-                                        helperText: " ",
-                                        labelText: "Debug url"),
-                                    controller: debugUrlController,
-                                    validator: validateDebugUrl,
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: setDebugUrl,
-                                    onLongPress: () {
-                                      Navigator.pushNamed(context, "/settings");
-                                    },
-                                    child: const Text('SET URL'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              );
-            },
           ),
         ),
       ),
