@@ -16,9 +16,21 @@ export const theme = createTheme({
       primary: '#FFFFFF',
     },
   },
+  dimensions: {
+    navBarHeight: 200,
+    navBarExpandedHeight: 250,
+    navBarLogoHeight: 400,
+  },
 });
 
 declare module '@mui/material/styles' {
+  interface Theme {
+    dimensions: {
+      navBarHeight: number;
+      navBarExpandedHeight: number;
+      navBarLogoHeight: number;
+    };
+  }
   interface PaletteOptions {
     customColors?: {
       gold?: string;
@@ -26,6 +38,13 @@ declare module '@mui/material/styles' {
     customBackgrounds?: {
       lightGray?: string;
       textField?: string;
+    };
+  }
+  interface ThemeOptions {
+    dimensions?: {
+      navBarHeight?: number;
+      navBarExpandedHeight?: number;
+      navBarLogoHeight?: number;
     };
   }
 }
