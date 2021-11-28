@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
-import { goToStart } from '../../viewsSlice';
+import { View } from '../../../enums/View';
+import { goToView } from '../../viewsSlice';
 import {
   ChangeFormComponent,
   LabeledPasswordInput,
@@ -123,7 +124,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
             });
           }
         } else {
-          dispatch(goToStart);
+          dispatch(goToView(View.Start));
           history.push('/welcome');
         }
       }

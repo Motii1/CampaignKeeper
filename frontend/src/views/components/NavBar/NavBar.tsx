@@ -3,22 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { View } from '../../../enums/View';
 import { RootState } from '../../../store';
-import {
-  goToCampaign,
-  goToCodex,
-  goToLogout,
-  goToMap,
-  goToNotes,
-  goToSessions,
-  goToStart,
-} from '../../viewsSlice';
+import { goToView } from '../../viewsSlice';
 import { Logo, LogoutPanel, PrimaryNavBarButton, SecondaryNavBarButton } from './elements';
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const currentView = useSelector((state: RootState) => state.views.value);
-
+  // eslint-disable-next-line no-console
+  console.log(currentView);
   const areSecondaryButtonsDisplayed =
     currentView === View.Campaign ||
     currentView === View.Map ||
@@ -37,7 +30,7 @@ export const NavBar: React.FC = () => {
           text="START"
           isChosen={currentView === View.Start}
           onClick={() => {
-            dispatch(goToStart);
+            dispatch(goToView(View.Start));
             history.push('/welcome');
           }}
         />
@@ -45,7 +38,7 @@ export const NavBar: React.FC = () => {
           text="CAMPAIGN"
           isChosen={areSecondaryButtonsDisplayed}
           onClick={() => {
-            dispatch(goToCampaign);
+            dispatch(goToView(View.Campaign));
             history.push('/campaign');
           }}
         />
@@ -54,7 +47,7 @@ export const NavBar: React.FC = () => {
           isChosen={currentView === View.Map}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {
-            dispatch(goToMap);
+            dispatch(goToView(View.Map));
             history.push('/map');
           }}
         />
@@ -63,7 +56,7 @@ export const NavBar: React.FC = () => {
           isChosen={currentView === View.Sessions}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {
-            dispatch(goToSessions);
+            dispatch(goToView(View.Sessions));
             history.push('/sessions');
           }}
         />
@@ -72,7 +65,7 @@ export const NavBar: React.FC = () => {
           isChosen={currentView === View.Codex}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {
-            dispatch(goToCodex);
+            dispatch(goToView(View.Codex));
             history.push('/codex');
           }}
         />
@@ -80,13 +73,13 @@ export const NavBar: React.FC = () => {
           text="NOTES"
           isChosen={currentView === View.Notes}
           onClick={() => {
-            dispatch(goToNotes);
+            dispatch(goToView(View.Notes));
             history.push('/notes');
           }}
         />
         <LogoutPanel
           onClick={() => {
-            dispatch(goToLogout);
+            dispatch(goToView(View.Logout));
             history.push('/welcome');
           }}
         />

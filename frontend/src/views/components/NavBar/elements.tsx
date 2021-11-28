@@ -80,7 +80,6 @@ type SecondaryNavBarButtonProps = {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
-// MAP, SESSIONS, CODEX
 export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props => {
   const outerPaperStyle = {
     backgroundColor: 'customBackgrounds.lightGray',
@@ -99,7 +98,7 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            borderRadius: '50%',
+            borderRadius: '10%',
           }}
         >
           <Typography

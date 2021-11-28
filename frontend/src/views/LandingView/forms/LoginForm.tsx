@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
-import { goToStart } from '../../viewsSlice';
+import { View } from '../../../enums/View';
+import { goToView } from '../../viewsSlice';
 import {
   ChangeFormComponent,
   LabeledPasswordInput,
@@ -56,7 +57,7 @@ export const LoginForm: React.FC<FormProps> = props => {
     if (validateUsername(username.value) && validatePassword(password.value)) {
       const response = await login(username.value, password.value);
       if (response.status === 200) {
-        dispatch(goToStart);
+        dispatch(goToView(View.Start));
         history.push('/welcome');
       } else if (response.status === 401) {
         setUsername({
