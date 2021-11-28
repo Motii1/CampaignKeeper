@@ -24,7 +24,6 @@ export const Logo: React.FC = () => (
   />
 );
 
-// START, CAMPAIGN, NOTES
 export const BigNavBarButton: React.FC<NavBarButtonProps> = props => {
   if (props.isChosen)
     return (
@@ -54,7 +53,7 @@ export const BigNavBarButton: React.FC<NavBarButtonProps> = props => {
     <Paper
       elevation={0}
       sx={{
-        backgroundColor: 'customBackgrounds.lightGray',
+        backgroundColor: 'customBackgrounds.gray',
         height: 50,
         display: 'flex',
         justifyContent: 'center',

@@ -6,7 +6,8 @@ export const theme = createTheme({
       gold: '#FFE082',
     },
     customBackgrounds: {
-      lightGray: '#2B3D49',
+      ligthGray: '#3B5163',
+      gray: '#2B3D49',
       textField: '#3C4C57',
     },
     background: {
@@ -17,9 +18,9 @@ export const theme = createTheme({
     },
   },
   dimensions: {
-    navBarHeight: 200,
-    navBarExpandedHeight: 250,
-    navBarLogoHeight: 400,
+    navBarHeight: 50,
+    navBarExpandedHeight: 60,
+    navBarLogoHeight: 100,
   },
 });
 
@@ -36,7 +37,8 @@ declare module '@mui/material/styles' {
       gold?: string;
     };
     customBackgrounds?: {
-      lightGray?: string;
+      ligthGray?: string;
+      gray?: string;
       textField?: string;
     };
   }

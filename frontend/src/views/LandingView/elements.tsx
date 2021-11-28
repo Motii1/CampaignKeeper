@@ -31,7 +31,7 @@ export const FormPaper: React.FC = ({ children }) => (
       elevation={6}
       sx={{
         borderRadius: '20px',
-        backgroundColor: 'customBackgrounds.lightGray',
+        backgroundColor: 'customBackgrounds.gray',
         paddingBottom: '10px',
       }}
     >

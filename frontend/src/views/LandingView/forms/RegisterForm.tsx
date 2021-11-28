@@ -1,8 +1,10 @@
 import { Stack } from '@mui/material';
 import { AxiosResponse } from 'axios';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
+import { goToStart } from '../../viewsSlice';
 import {
   ChangeFormComponent,
   LabeledPasswordInput,
@@ -38,6 +40,7 @@ const register = (
 
 export const RegisterForm: React.FC<FormProps> = props => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const usernameRegex = /^(?=.{8,12}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9]+(?<![_.])$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,255}$/;
@@ -120,6 +123,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
             });
           }
         } else {
+          dispatch(goToStart);
           history.push('/welcome');
         }
       }
