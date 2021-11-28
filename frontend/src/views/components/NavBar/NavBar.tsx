@@ -1,42 +1,84 @@
 import { Paper, Stack } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { goToCampaign, goToLogout, goToNotes, goToStart } from '../../viewsSlice';
-import { BigNavBarButton, Logo, LogoutPanel } from './elements';
+import { View } from '../../../enums/View';
+import { RootState } from '../../../store';
+import {
+  goToCampaign,
+  goToCodex,
+  goToLogout,
+  goToMap,
+  goToNotes,
+  goToSessions,
+  goToStart,
+} from '../../viewsSlice';
+import { Logo, LogoutPanel, PrimaryNavBarButton, SecondaryNavBarButton } from './elements';
 
-// how to pass info which button should be chosen to NavBar?
-// how to disable onClick in button when it is chosen?
 export const NavBar: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const currentView = useSelector((state: RootState) => state.views.value);
+
+  const areSecondaryButtonsDisplayed =
+    currentView === View.Campaign ||
+    currentView === View.Map ||
+    currentView === View.Sessions ||
+    currentView === View.Codex;
 
   return (
     <Paper
-      elevation={12}
+      elevation={6}
       sx={{ backgroundColor: 'customBackgrounds.gray', height: 50, overflow: 'visible' }}
       square
     >
       <Stack direction="row" spacing={0} justifyContent="flex-start" alignItems="flex-start">
         <Logo />
-        <BigNavBarButton
+        <PrimaryNavBarButton
           text="START"
-          isChosen={true}
+          isChosen={currentView === View.Start}
           onClick={() => {
             dispatch(goToStart);
             history.push('/welcome');
           }}
         />
-        <BigNavBarButton
+        <PrimaryNavBarButton
           text="CAMPAIGN"
-          isChosen={false}
+          isChosen={areSecondaryButtonsDisplayed}
           onClick={() => {
             dispatch(goToCampaign);
             history.push('/campaign');
           }}
         />
-        <BigNavBarButton
+        <SecondaryNavBarButton
+          text="MAP"
+          isChosen={currentView === View.Map}
+          isDisplayed={areSecondaryButtonsDisplayed}
+          onClick={() => {
+            dispatch(goToMap);
+            history.push('/map');
+          }}
+        />
+        <SecondaryNavBarButton
+          text="SESSIONS"
+          isChosen={currentView === View.Sessions}
+          isDisplayed={areSecondaryButtonsDisplayed}
+          onClick={() => {
+            dispatch(goToSessions);
+            history.push('/sessions');
+          }}
+        />
+        <SecondaryNavBarButton
+          text="CODEX"
+          isChosen={currentView === View.Codex}
+          isDisplayed={areSecondaryButtonsDisplayed}
+          onClick={() => {
+            dispatch(goToCodex);
+            history.push('/codex');
+          }}
+        />
+        <PrimaryNavBarButton
           text="NOTES"
-          isChosen={false}
+          isChosen={currentView === View.Notes}
           onClick={() => {
             dispatch(goToNotes);
             history.push('/notes');

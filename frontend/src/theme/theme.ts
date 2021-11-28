@@ -6,7 +6,7 @@ export const theme = createTheme({
       gold: '#FFE082',
     },
     customBackgrounds: {
-      ligthGray: '#3B5163',
+      lightGray: '#3B5163',
       gray: '#2B3D49',
       textField: '#3C4C57',
     },
@@ -37,7 +37,7 @@ declare module '@mui/material/styles' {
       gold?: string;
     };
     customBackgrounds?: {
-      ligthGray?: string;
+      lightGray?: string;
       gray?: string;
       textField?: string;
     };

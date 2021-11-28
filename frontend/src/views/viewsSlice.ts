@@ -4,7 +4,7 @@ import { View } from '../enums/View';
 export const viewsSlice = createSlice({
   name: 'views',
   initialState: {
-    value: View.Landing,
+    value: View.Campaign, //CHANGE TO LANDING AFTER NAVBAR FINISH
   },
   reducers: {
     goToLanding: state => {

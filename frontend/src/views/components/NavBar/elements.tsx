@@ -1,12 +1,7 @@
+/* eslint-disable arrow-body-style */
 import { AccountCircle, MoreVert } from '@mui/icons-material';
 import { Container, Paper, Stack, Typography } from '@mui/material';
 import LogoGraphic from '../../../graphics/logo.svg';
-
-type NavBarButtonProps = {
-  text: string;
-  isChosen: boolean;
-  onClick: (event: React.MouseEvent<HTMLElement>) => void;
-};
 
 export const Logo: React.FC = () => (
   <Container
@@ -24,7 +19,13 @@ export const Logo: React.FC = () => (
   />
 );
 
-export const BigNavBarButton: React.FC<NavBarButtonProps> = props => {
+type PrimaryNavBarButtonProps = {
+  text: string;
+  isChosen: boolean;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
+};
+
+export const PrimaryNavBarButton: React.FC<PrimaryNavBarButtonProps> = props => {
   if (props.isChosen)
     return (
       <Paper
@@ -72,12 +73,55 @@ export const BigNavBarButton: React.FC<NavBarButtonProps> = props => {
   );
 };
 
-/*
-// MAP, SESSIONS, CODEX
-export const SmallNavBarButton = (props: NavBarButtonProps): React.FC => {
+type SecondaryNavBarButtonProps = {
+  text: string;
+  isChosen: boolean;
+  isDisplayed: boolean;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
+};
 
-} 
-*/
+// MAP, SESSIONS, CODEX
+export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props => {
+  const outerPaperStyle = {
+    backgroundColor: 'customBackgrounds.lightGray',
+    height: 50,
+    display: props.isDisplayed ? 'flex' : 'none',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+  if (props.isChosen)
+    return (
+      <Paper elevation={0} sx={outerPaperStyle} onClick={props.onClick} square>
+        <Paper
+          sx={{
+            backgroundColor: 'customColors.gold',
+            height: 40,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '50%',
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{ cursor: 'pointer', color: 'common.black', paddingLeft: 2, paddingRight: 2 }}
+          >
+            <b>{props.text}</b>
+          </Typography>
+        </Paper>
+      </Paper>
+    );
+  return (
+    <Paper elevation={0} sx={outerPaperStyle} onClick={props.onClick} square>
+      <Typography
+        variant="h6"
+        sx={{ cursor: 'pointer', color: 'common.white', paddingLeft: 2, paddingRight: 2 }}
+      >
+        <b>{props.text}</b>
+      </Typography>
+    </Paper>
+  );
+};
 
 type LogoutProps = {
   onClick: (event: React.MouseEvent<SVGSVGElement>) => void;
