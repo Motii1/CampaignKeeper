@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import { logger } from '../../Common/Logger/Logger';
 import { config } from '../Config/Config';
 import { IController } from '../Controller/IController';
+import { setupDocumentationGenerator } from './Docs';
 import { IApp } from './IApp';
 
 export class App implements IApp {
@@ -32,6 +33,7 @@ export class App implements IApp {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
 
+    setupDocumentationGenerator(this);
     this.configureRouting();
   }
 
