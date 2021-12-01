@@ -37,6 +37,7 @@ export class UserController implements IController {
    */
   private getImageHandler = async (req: Request, res: Response): Promise<void> => {
     const user = await extractUserFromCookies(req.cookies);
+    // @todo check if user image is null and return image placeholder in that case
     res.end(user!.image!, 'binary');
   };
 
