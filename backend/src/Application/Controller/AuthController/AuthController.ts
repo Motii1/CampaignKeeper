@@ -12,6 +12,7 @@ import { isUsernameExistsError } from '../../../Domain/User/Type/UsernameExistsE
 import { TOKEN_COOKIE_NAME } from '../../AppConstants';
 import { config } from '../../Config/Config';
 import { authorization } from '../../Middleware/Auth/Authorization';
+import { JwtPayload } from '../../Type/JwtPayload';
 import { IController } from '../IController';
 import { UserInfo } from './Dto/UserInfo';
 import { userLoginDataSchema } from './Dto/UserLoginData';
@@ -110,14 +111,13 @@ export class AuthController implements IController {
    * @route POST /auth/logout
    * @group auth - Operations related to user authentication and authorization
    * @returns {EmptyResponse.model} 200 - Successful logout
-   * @returns {EmptyResponse.model} 403 - Forbidden
    * @security cookieAuth
    */
   private logoutHandler = (_req: Request, res: Response): void => {
     res.clearCookie(TOKEN_COOKIE_NAME).status(200).json({});
   };
 
-  private createJwtToken = ({ username }: UserLoginData): string =>
+  private createJwtToken = ({ username }: JwtPayload): string =>
     jwt.sign({ username }, config.jwtSecret);
 
   getRouter = (): Router => this.router;

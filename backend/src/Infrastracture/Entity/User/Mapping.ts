@@ -6,4 +6,5 @@ export const mapEntityToDomainObject = (entity: UserEntity): User => ({
   passwordHash: entity.passwordHash,
   email: entity.email,
   id: entity.id,
+  image: entity.image,
 });

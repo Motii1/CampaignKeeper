@@ -15,4 +15,7 @@ export class UserEntity {
   @Column()
   @Index({ unique: true })
   email!: string;
+
+  @Column({ type: 'varbinary', nullable: true, length: 'max' })
+  image!: Buffer | null;
 }
