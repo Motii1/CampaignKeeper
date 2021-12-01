@@ -3,4 +3,5 @@ export type User = {
   username: string;
   passwordHash: string;
   email: string;
+  image: Buffer | null;
 };
