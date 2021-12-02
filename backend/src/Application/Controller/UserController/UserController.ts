@@ -12,6 +12,7 @@ const IMAGE_FILE_FIELD_NAME = 'image-file';
 enum UserRoutes {
   Details = '/details',
   Image = '/image',
+  Status = '/status',
 }
 
 export class UserController implements IController {
@@ -26,6 +27,7 @@ export class UserController implements IController {
     this.router.get(UserRoutes.Image, authorization, asyncHandler(this.getImageHandler));
     this.router.put(UserRoutes.Image, authorization, asyncHandler(this.uploadImageHandler));
     this.router.get(UserRoutes.Details, authorization, asyncHandler(this.detailsHandler));
+    this.router.get(UserRoutes.Status, authorization, asyncHandler(this.statusHandler));
   };
 
   /**
@@ -73,6 +75,18 @@ export class UserController implements IController {
   private detailsHandler = async (req: Request, res: Response): Promise<void> => {
     const user = await extractUserFromCookies(req.cookies);
     res.status(200).json({ username: user!.username, email: user!.email });
+  };
+
+  /**
+   * @route GET /user/details
+   * @group user - Operations related to user data
+   * @returns {UserInformation.model} 200 - User details
+   * @security cookieAuth
+   */
+  private statusHandler = async (req: Request, res: Response): Promise<void> => {
+    const user = await extractUserFromCookies(req.cookies);
+    if (user) res.status(200).json();
+    else res.status(403).json();
   };
 
   getRouter = (): Router => this.router;

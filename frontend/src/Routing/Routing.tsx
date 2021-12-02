@@ -8,18 +8,20 @@ import { NotesView } from '../views/NotesView/NotesView';
 import { SessionsView } from '../views/SessionsView/SessionsView';
 import viewsRoutes from '../views/viewsRoutes';
 import { WelcomeView } from '../views/WelcomeView/WelcomeView';
+import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute';
 
 export const Routing: React.FC = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path={viewsRoutes.LANDING} component={LandingView} />
-      <Route exact path={viewsRoutes.START} component={WelcomeView} />
-      <Route exact path={viewsRoutes.CAMPAIGN} component={CampaignView} />
-      <Route exact path={viewsRoutes.MAP} component={MapView} />
-      <Route exact path={viewsRoutes.SESSIONS} component={SessionsView} />
-      <Route exact path={viewsRoutes.CODEX} component={CodexView} />
-      <Route exact path={viewsRoutes.NOTES} component={NotesView} />
+      <ProtectedRoute path={viewsRoutes.START} component={WelcomeView} />
+      <ProtectedRoute path={viewsRoutes.CAMPAIGN} component={CampaignView} />
+      <ProtectedRoute path={viewsRoutes.MAP} component={MapView} />
+      <ProtectedRoute path={viewsRoutes.SESSIONS} component={SessionsView} />
+      <ProtectedRoute path={viewsRoutes.CODEX} component={CodexView} />
+      <ProtectedRoute path={viewsRoutes.NOTES} component={NotesView} />
       <Route exact path={viewsRoutes.ERROR} component={ErrorView} />
+      <Route exact component={ErrorView} />
     </Switch>
   </BrowserRouter>
 );
