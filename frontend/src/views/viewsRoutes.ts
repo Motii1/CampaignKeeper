@@ -12,8 +12,6 @@ export const CODEX = '/codex';
 
 export const NOTES = '/notes';
 
-export const LOGOUT = '/logout';
-
 export const ERROR = '/error';
 
-export default { LANDING, START, CAMPAIGN, MAP, SESSIONS, CODEX, NOTES, LOGOUT, ERROR };
+export default { LANDING, START, CAMPAIGN, MAP, SESSIONS, CODEX, NOTES, ERROR };

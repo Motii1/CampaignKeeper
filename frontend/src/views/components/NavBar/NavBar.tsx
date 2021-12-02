@@ -19,7 +19,7 @@ export const NavBar: React.FC = () => {
 
   const handleLogoutButton = async () => {
     const response = await logout();
-    if (response.status === 200) history.push(viewsRoutes.LOGOUT);
+    if (response.status === 200) history.push(viewsRoutes.LANDING);
     else history.push(viewsRoutes.ERROR);
   };
 
