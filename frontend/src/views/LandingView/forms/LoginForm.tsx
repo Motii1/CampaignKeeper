@@ -1,11 +1,9 @@
 import { Stack } from '@mui/material';
 import { AxiosResponse } from 'axios';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
-import { View } from '../../../enums/View';
-import { goToView } from '../../viewsSlice';
+import viewsRoutes from '../../viewsRoutes';
 import {
   ChangeFormComponent,
   LabeledPasswordInput,
@@ -22,7 +20,6 @@ const login = (username: string, password: string): Promise<AxiosResponse> =>
 
 export const LoginForm: React.FC<FormProps> = props => {
   const history = useHistory();
-  const dispatch = useDispatch();
 
   const initalState = {
     value: '',
@@ -57,8 +54,7 @@ export const LoginForm: React.FC<FormProps> = props => {
     if (validateUsername(username.value) && validatePassword(password.value)) {
       const response = await login(username.value, password.value);
       if (response.status === 200) {
-        dispatch(goToView(View.Start));
-        history.push('/welcome');
+        history.push(viewsRoutes.START);
       } else if (response.status === 401) {
         setUsername({
           value: username.value,

@@ -1,22 +1,18 @@
 import { Paper, Stack } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
-import { View } from '../../../enums/View';
-import { RootState } from '../../../store';
-import { goToView } from '../../viewsSlice';
+import { useHistory, useLocation } from 'react-router';
+import viewsRoutes from '../../viewsRoutes';
 import { Logo, LogoutPanel, PrimaryNavBarButton, SecondaryNavBarButton } from './elements';
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const currentView = useSelector((state: RootState) => state.views.value);
+  const currentView = useLocation().pathname;
   // eslint-disable-next-line no-console
   console.log(currentView);
   const areSecondaryButtonsDisplayed =
-    currentView === View.Campaign ||
-    currentView === View.Map ||
-    currentView === View.Sessions ||
-    currentView === View.Codex;
+    currentView === viewsRoutes.CAMPAIGN ||
+    currentView === viewsRoutes.MAP ||
+    currentView === viewsRoutes.SESSIONS ||
+    currentView === viewsRoutes.CODEX;
 
   return (
     <Paper
@@ -28,59 +24,52 @@ export const NavBar: React.FC = () => {
         <Logo />
         <PrimaryNavBarButton
           text="START"
-          isChosen={currentView === View.Start}
+          isChosen={currentView === viewsRoutes.START}
           onClick={() => {
-            dispatch(goToView(View.Start));
-            history.push('/welcome');
+            history.push(viewsRoutes.START);
           }}
         />
         <PrimaryNavBarButton
           text="CAMPAIGN"
           isChosen={areSecondaryButtonsDisplayed}
           onClick={() => {
-            dispatch(goToView(View.Campaign));
-            history.push('/campaign');
+            history.push(viewsRoutes.CAMPAIGN);
           }}
         />
         <SecondaryNavBarButton
           text="MAP"
-          isChosen={currentView === View.Map}
+          isChosen={currentView === viewsRoutes.MAP}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {
-            dispatch(goToView(View.Map));
-            history.push('/map');
+            history.push(viewsRoutes.MAP);
           }}
         />
         <SecondaryNavBarButton
           text="SESSIONS"
-          isChosen={currentView === View.Sessions}
+          isChosen={currentView === viewsRoutes.SESSIONS}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {
-            dispatch(goToView(View.Sessions));
-            history.push('/sessions');
+            history.push(viewsRoutes.SESSIONS);
           }}
         />
         <SecondaryNavBarButton
           text="CODEX"
-          isChosen={currentView === View.Codex}
+          isChosen={currentView === viewsRoutes.CODEX}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {
-            dispatch(goToView(View.Codex));
-            history.push('/codex');
+            history.push(viewsRoutes.CODEX);
           }}
         />
         <PrimaryNavBarButton
           text="NOTES"
-          isChosen={currentView === View.Notes}
+          isChosen={currentView === viewsRoutes.NOTES}
           onClick={() => {
-            dispatch(goToView(View.Notes));
-            history.push('/notes');
+            history.push(viewsRoutes.NOTES);
           }}
         />
         <LogoutPanel
           onClick={() => {
-            dispatch(goToView(View.Logout));
-            history.push('/welcome');
+            history.push(viewsRoutes.LOGOUT);
           }}
         />
       </Stack>
