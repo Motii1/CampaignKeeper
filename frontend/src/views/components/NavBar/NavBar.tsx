@@ -1,18 +1,27 @@
 import { Paper, Stack } from '@mui/material';
+import { AxiosResponse } from 'axios';
 import { useHistory, useLocation } from 'react-router';
+import protectedApiClient from '../../../axios/axios';
+import { AUTH_URL } from '../../LandingView/forms/RegisterForm';
 import viewsRoutes from '../../viewsRoutes';
 import { Logo, LogoutPanel, PrimaryNavBarButton, SecondaryNavBarButton } from './elements';
+
+const logout = (): Promise<AxiosResponse> => protectedApiClient.post(`${AUTH_URL}/logout`, {});
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
   const currentView = useLocation().pathname;
-  // eslint-disable-next-line no-console
-  console.log(currentView);
   const areSecondaryButtonsDisplayed =
     currentView === viewsRoutes.CAMPAIGN ||
     currentView === viewsRoutes.MAP ||
     currentView === viewsRoutes.SESSIONS ||
     currentView === viewsRoutes.CODEX;
+
+  const handleLogoutButton = async () => {
+    const response = await logout();
+    if (response.status === 200) history.push(viewsRoutes.LOGOUT);
+    else history.push(viewsRoutes.ERROR);
+  };
 
   return (
     <Paper
@@ -67,11 +76,7 @@ export const NavBar: React.FC = () => {
             history.push(viewsRoutes.NOTES);
           }}
         />
-        <LogoutPanel
-          onClick={() => {
-            history.push(viewsRoutes.LOGOUT);
-          }}
-        />
+        <LogoutPanel onClick={handleLogoutButton} />
       </Stack>
     </Paper>
   );
