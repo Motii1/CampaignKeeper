@@ -1,9 +1,11 @@
 import { Stack } from '@mui/material';
 import { AxiosResponse } from 'axios';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
 import viewsRoutes from '../../viewsRoutes';
+import { updateDetails } from '../userDetailsSlice';
 import {
   ChangeFormComponent,
   LabeledPasswordInput,
@@ -20,6 +22,7 @@ const login = (username: string, password: string): Promise<AxiosResponse> =>
 
 export const LoginForm: React.FC<FormProps> = props => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const initalState = {
     value: '',
@@ -54,6 +57,10 @@ export const LoginForm: React.FC<FormProps> = props => {
     if (validateUsername(username.value) && validatePassword(password.value)) {
       const response = await login(username.value, password.value);
       if (response.status === 200) {
+        const userDetails = await protectedApiClient.get('api/user/details');
+        dispatch(
+          updateDetails({ username: userDetails.data.username, email: userDetails.data.email })
+        );
         history.push(viewsRoutes.START);
       } else if (response.status === 401) {
         setUsername({

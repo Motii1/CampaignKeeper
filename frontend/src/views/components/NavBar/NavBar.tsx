@@ -1,7 +1,9 @@
 import { Paper, Stack } from '@mui/material';
 import { AxiosResponse } from 'axios';
+import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
 import protectedApiClient from '../../../axios/axios';
+import { RootState } from '../../../store';
 import { AUTH_URL } from '../../LandingView/forms/RegisterForm';
 import viewsRoutes from '../../viewsRoutes';
 import { Logo, LogoutPanel, PrimaryNavBarButton, SecondaryNavBarButton } from './elements';
@@ -10,6 +12,7 @@ const logout = (): Promise<AxiosResponse> => protectedApiClient.post(`${AUTH_URL
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
+  const username = useSelector((state: RootState) => state.userDetailsReducer.username);
   const currentView = useLocation().pathname;
   const areSecondaryButtonsDisplayed =
     currentView === viewsRoutes.CAMPAIGN ||
@@ -76,7 +79,7 @@ export const NavBar: React.FC = () => {
             history.push(viewsRoutes.NOTES);
           }}
         />
-        <LogoutPanel onClick={handleLogoutButton} />
+        <LogoutPanel username={username} onClick={handleLogoutButton} />
       </Stack>
     </Paper>
   );

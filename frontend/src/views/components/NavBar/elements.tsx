@@ -123,6 +123,7 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
 };
 
 type LogoutProps = {
+  username: null | string;
   onClick: (event: React.MouseEvent<SVGSVGElement>) => void;
 };
 
@@ -144,7 +145,7 @@ export const LogoutPanel: React.FC<LogoutProps> = props => (
     <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="flex-start">
       <AccountCircle sx={{ color: 'common.black' }} />
       <Typography variant="subtitle1" sx={{ color: 'common.black' }}>
-        <b>{'PhenoilGray2137'}</b>
+        <b>{props.username}</b>
       </Typography>
       <MoreVert onClick={props.onClick} sx={{ color: 'common.black' }} />
     </Stack>
