@@ -12,7 +12,9 @@ import { isUsernameExistsError } from '../../../Domain/User/Type/UsernameExistsE
 import { TOKEN_COOKIE_NAME } from '../../AppConstants';
 import { config } from '../../Config/Config';
 import { authorization } from '../../Middleware/Auth/Authorization';
+import { JwtPayload } from '../../Type/JwtPayload';
 import { IController } from '../IController';
+import { UserInfo } from './Dto/UserInfo';
 import { userLoginDataSchema } from './Dto/UserLoginData';
 import { userRegisterDataSchema } from './Dto/UserRegisterData';
 
@@ -38,6 +40,14 @@ export class AuthController implements IController {
     this.router.post(AuthRoutes.Logout, authorization, this.logoutHandler);
   };
 
+  /**
+   * @route POST /auth/login
+   * @group auth - Operations related to user authentication and authorization
+   * @param {UserLoginData.model} data.body.required - user's authentication data
+   * @returns {UserInformation.model} 200 - User information
+   * @returns {EmptyResponse.model} 400 - Data in wrong format
+   * @returns {EmptyResponse.model} 401 - Invalid credentials
+   */
   private loginHandler = async (req: Request, res: Response): Promise<void> => {
     const { error, value } = userLoginDataSchema.validate(req.body);
     if (error) {
@@ -46,21 +56,32 @@ export class AuthController implements IController {
       return;
     }
     const userLoginData = value as UserLoginData;
-    const loginPermission = await shouldLogUser(userLoginData);
-    if (loginPermission) {
+    const userWithLoginPermission = await shouldLogUser(userLoginData);
+    if (userWithLoginPermission) {
       const token = this.createJwtToken(userLoginData);
       const tokenOptions = {
         httpOnly: true,
         secure: config.nodeEnv === NodeEnv.Production,
         maxAge: DAY_IN_MS,
       };
-      res.cookie(TOKEN_COOKIE_NAME, token, tokenOptions).status(200).json({});
+      const userInfo: UserInfo = {
+        username: userWithLoginPermission.username,
+        email: userWithLoginPermission.email,
+      };
+      res.cookie(TOKEN_COOKIE_NAME, token, tokenOptions).status(200).json(userInfo);
       return;
     }
 
     res.status(401).json({});
   };
 
+  /**
+   * @route POST /auth/register
+   * @group auth - Operations related to user authentication and authorization
+   * @param {UserRegisterData.model} data.body.required - user's register data
+   * @returns 200 - Successful registration or message about conflict with existing data
+   * @returns {EmptyResponse.model} 400 - Data in wrong format
+   */
   private registerHandler = async (req: Request, res: Response): Promise<void> => {
     const { error, value } = userRegisterDataSchema.validate(req.body);
     if (error) {
@@ -86,11 +107,17 @@ export class AuthController implements IController {
     res.status(200).json({});
   };
 
+  /**
+   * @route POST /auth/logout
+   * @group auth - Operations related to user authentication and authorization
+   * @returns {EmptyResponse.model} 200 - Successful logout
+   * @security cookieAuth
+   */
   private logoutHandler = (_req: Request, res: Response): void => {
     res.clearCookie(TOKEN_COOKIE_NAME).status(200).json({});
   };
 
-  private createJwtToken = ({ username }: UserLoginData): string =>
+  private createJwtToken = ({ username }: JwtPayload): string =>
     jwt.sign({ username }, config.jwtSecret);
 
   getRouter = (): Router => this.router;

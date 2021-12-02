@@ -19,7 +19,7 @@ class Logger {
       format: this.consoleLoggerFormat,
       transports: [
         new transports.Console({
-          level: 'debug',
+          level: config.consoleLoggingLevel,
         }),
       ],
     });

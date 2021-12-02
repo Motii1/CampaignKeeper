@@ -26,6 +26,7 @@
     "prefer-arrow-callback": "error",
     "prefer-const": "error",
     "func-style": "error",
-    "@typescript-eslint/no-extra-semi": "off"
+    "@typescript-eslint/no-extra-semi": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   }
 }

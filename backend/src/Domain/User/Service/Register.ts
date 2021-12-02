@@ -21,6 +21,7 @@ export const registerUser = async ({
     username,
     email,
     passwordHash,
+    image: null,
   };
   await saveUser(user);
 };
