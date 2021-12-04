@@ -12,6 +12,7 @@ import {
   LabeledTextInput,
   StandardButton,
 } from './elements';
+import { login } from './LoginForm';
 
 export type FormProps = {
   onChangeForm: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -99,15 +100,15 @@ export const RegisterForm: React.FC<FormProps> = props => {
       password.helperText === null &&
       passwordRepeat.helperText === null
     ) {
-      const response = await register(
+      const registerResponse = await register(
         username.value,
         email.value,
         emailRepeat.value,
         password.value,
         passwordRepeat.value
       );
-      if (response.status === 200) {
-        const message = response.data.message;
+      if (registerResponse.status === 200) {
+        const message = registerResponse.data.message;
         if (message) {
           if (message === 'User with given username already exists')
             setUsername({
@@ -125,9 +126,12 @@ export const RegisterForm: React.FC<FormProps> = props => {
             });
           }
         } else {
-          const userDetails = await protectedApiClient.get('api/user/details');
+          const loginResponse = await login(username.value, password.value);
           dispatch(
-            updateDetails({ username: userDetails.data.username, email: userDetails.data.email })
+            updateDetails({
+              username: loginResponse.data.username,
+              email: loginResponse.data.email,
+            })
           );
           history.push(viewsRoutes.START);
         }

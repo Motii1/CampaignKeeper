@@ -14,7 +14,7 @@ import {
 } from './elements';
 import { AUTH_URL, FormProps, TextFieldState } from './RegisterForm';
 
-const login = (username: string, password: string): Promise<AxiosResponse> =>
+export const login = (username: string, password: string): Promise<AxiosResponse> =>
   protectedApiClient.post(`${AUTH_URL}/login`, {
     username: username,
     password: password,
@@ -57,10 +57,7 @@ export const LoginForm: React.FC<FormProps> = props => {
     if (validateUsername(username.value) && validatePassword(password.value)) {
       const response = await login(username.value, password.value);
       if (response.status === 200) {
-        const userDetails = await protectedApiClient.get('api/user/details');
-        dispatch(
-          updateDetails({ username: userDetails.data.username, email: userDetails.data.email })
-        );
+        dispatch(updateDetails({ username: response.data.username, email: response.data.email }));
         history.push(viewsRoutes.START);
       } else if (response.status === 401) {
         setUsername({
