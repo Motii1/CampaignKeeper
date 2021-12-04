@@ -1,6 +1,6 @@
 import { Container, Grid, Paper } from '@mui/material';
-import OwlImage from '../../graphics/giantOwl.jpg';
 import Logo from '../../graphics/logo.svg';
+import WorldImage from '../../graphics/world.jpg';
 
 export const LandingGrid: React.FC = ({ children }) => (
   <Grid container sx={{ minHeight: '100vh' }}>
@@ -60,9 +60,10 @@ export const LandingGraphic: React.FC = () => (
     sm={3}
     xs={false}
     sx={{
-      backgroundImage: `url(${OwlImage})`,
+      backgroundImage: `url(${WorldImage})`,
       backgroundRepeat: 'no-repeat',
-      backgroundSize: 'auto',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
     }}
   />
 );
