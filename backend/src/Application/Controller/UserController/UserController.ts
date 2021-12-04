@@ -78,15 +78,13 @@ export class UserController implements IController {
   };
 
   /**
-   * @route GET /user/details
+   * @route GET /user/status
    * @group user - Operations related to user data
-   * @returns {UserInformation.model} 200 - User details
+   * @returns {EmptyResponse.model} 200 - User can access restricted page
    * @security cookieAuth
    */
-  private statusHandler = async (req: Request, res: Response): Promise<void> => {
-    const user = await extractUserFromCookies(req.cookies);
-    if (user) res.status(200).json();
-    else res.status(403).json();
+  private statusHandler = async (_req: Request, res: Response): Promise<void> => {
+    res.status(200).json({});
   };
 
   getRouter = (): Router => this.router;
