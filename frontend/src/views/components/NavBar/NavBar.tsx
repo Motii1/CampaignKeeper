@@ -14,11 +14,14 @@ export const NavBar: React.FC = () => {
   const history = useHistory();
   const username = useSelector((state: RootState) => state.userDetailsReducer.username);
   const currentView = useLocation().pathname;
-  const areSecondaryButtonsDisplayed =
-    currentView === viewsRoutes.CAMPAIGN ||
-    currentView === viewsRoutes.MAP ||
-    currentView === viewsRoutes.SESSIONS ||
-    currentView === viewsRoutes.CODEX;
+
+  const secondaryButtonDisplayableViews = [
+    viewsRoutes.CAMPAIGN,
+    viewsRoutes.MAP,
+    viewsRoutes.SESSIONS,
+    viewsRoutes.CODEX,
+  ];
+  const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(currentView);
 
   const handleLogoutButton = async () => {
     const response = await logout();
