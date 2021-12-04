@@ -14,12 +14,24 @@ export const Routing: React.FC = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path={viewsRoutes.LANDING} component={LandingView} />
-      <ProtectedRoute path={viewsRoutes.START} component={WelcomeView} />
-      <ProtectedRoute path={viewsRoutes.CAMPAIGN} component={CampaignView} />
-      <ProtectedRoute path={viewsRoutes.MAP} component={MapView} />
-      <ProtectedRoute path={viewsRoutes.SESSIONS} component={SessionsView} />
-      <ProtectedRoute path={viewsRoutes.CODEX} component={CodexView} />
-      <ProtectedRoute path={viewsRoutes.NOTES} component={NotesView} />
+      <ProtectedRoute path={viewsRoutes.START}>
+        <WelcomeView />
+      </ProtectedRoute>
+      <ProtectedRoute path={viewsRoutes.CAMPAIGN}>
+        <CampaignView />
+      </ProtectedRoute>
+      <ProtectedRoute path={viewsRoutes.MAP}>
+        <MapView />
+      </ProtectedRoute>
+      <ProtectedRoute path={viewsRoutes.SESSIONS}>
+        <SessionsView />
+      </ProtectedRoute>
+      <ProtectedRoute path={viewsRoutes.CODEX}>
+        <CodexView />
+      </ProtectedRoute>
+      <ProtectedRoute path={viewsRoutes.NOTES}>
+        <NotesView />
+      </ProtectedRoute>
       <Route exact path={viewsRoutes.ERROR} component={ErrorView} />
       <Route exact component={ErrorView} />
     </Switch>

@@ -4,7 +4,6 @@ import protectedApiClient from '../../axios/axios';
 
 type ProtectedRouteProps = {
   path: string;
-  component: React.FC;
 };
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = props => {
@@ -18,7 +17,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = props => {
 
   return (
     <Route path={props.path} exact>
-      {isAccessValid ? props.component : <Redirect to="/error" />}
+      {isAccessValid ? props.children : <Redirect to="/error" />}
     </Route>
   );
 };
