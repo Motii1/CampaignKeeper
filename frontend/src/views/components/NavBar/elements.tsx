@@ -9,8 +9,8 @@ export const Logo: React.FC = () => (
       backgroundImage: `url(${LogoGraphic})`,
       backgroundSize: 'contain',
       backgroundRepeat: 'no-repeat',
-      height: 100,
-      width: 260,
+      height: 95,
+      width: 247,
       marginLeft: 2,
       marginRight: 2,
       overflow: 'visible',
@@ -43,10 +43,16 @@ export const PrimaryNavBarButton: React.FC<PrimaryNavBarButtonProps> = props => 
         square
       >
         <Typography
-          variant="h5"
-          sx={{ cursor: 'pointer', color: 'common.black', paddingLeft: 3, paddingRight: 3 }}
+          variant="h6"
+          sx={{
+            cursor: 'pointer',
+            color: 'common.black',
+            paddingLeft: 2,
+            paddingRight: 2,
+            fontWeight: 'bold',
+          }}
         >
-          <b>{props.text}</b>
+          {props.text}
         </Typography>
       </Paper>
     );
@@ -65,9 +71,16 @@ export const PrimaryNavBarButton: React.FC<PrimaryNavBarButtonProps> = props => 
     >
       <Typography
         variant="h6"
-        sx={{ cursor: 'pointer', color: 'common.white', paddingLeft: 2, paddingRight: 2 }}
+        sx={{
+          cursor: 'pointer',
+          color: 'common.white',
+          paddingLeft: 2,
+          paddingRight: 2,
+          letterSpacing: 0.21,
+          fontWeight: 'medium',
+        }}
       >
-        <b>{props.text}</b>
+        {props.text}
       </Typography>
     </Paper>
   );
@@ -94,18 +107,28 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
         <Paper
           sx={{
             backgroundColor: 'customColors.gold',
-            height: 40,
+            borderRadius: 5,
+            height: 35,
+            marginLeft: 1,
+            marginRight: 1,
+            paddingLeft: 1.5,
+            paddingRight: 1.5,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            borderRadius: '10%',
           }}
         >
           <Typography
             variant="h6"
-            sx={{ cursor: 'pointer', color: 'common.black', paddingLeft: 2, paddingRight: 2 }}
+            sx={{
+              cursor: 'pointer',
+              color: 'common.black',
+              letterSpacing: -0.15,
+              fontWeight: 'bold',
+              fontSize: 17,
+            }}
           >
-            <b>{props.text}</b>
+            {props.text}
           </Typography>
         </Paper>
       </Paper>
@@ -114,9 +137,16 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
     <Paper elevation={0} sx={outerPaperStyle} onClick={props.onClick} square>
       <Typography
         variant="h6"
-        sx={{ cursor: 'pointer', color: 'common.white', paddingLeft: 2, paddingRight: 2 }}
+        sx={{
+          cursor: 'pointer',
+          color: 'common.white',
+          paddingLeft: 2.5,
+          paddingRight: 2.5,
+          fontWeight: 'medium',
+          fontSize: 17,
+        }}
       >
-        <b>{props.text}</b>
+        {props.text}
       </Typography>
     </Paper>
   );

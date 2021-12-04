@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   palette: {
@@ -21,6 +21,9 @@ export const theme = createTheme({
     navBarHeight: 50,
     navBarExpandedHeight: 60,
     navBarLogoHeight: 100,
+  },
+  typography: {
+    fontFamily: ['Roboto', 'cursive'].join(','),
   },
 });
 
