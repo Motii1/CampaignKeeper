@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
+import axiosErrorReducer from './axios/axiosErrorSlice';
 import userDetailsReducer from './views/LandingView/userDetailsSlice';
 
 export const store = configureStore({
   reducer: {
     userDetailsReducer,
+    axiosErrorReducer,
   },
 });
 
