@@ -10,30 +10,7 @@ const protectedApiClient = axios.create({
 protectedApiClient.interceptors.response.use(
   response => response,
   error => {
-    const errorStatus = error.status;
-    switch (errorStatus) {
-      case 500:
-        store.dispatch(
-          updateAxiosError({ isError: true, status: errorStatus, message: 'Internal server error' })
-        );
-        break;
-      case 502:
-      case 503:
-      case 504:
-        store.dispatch(
-          updateAxiosError({ isError: true, status: errorStatus, message: 'Server unavailable' })
-        );
-        break;
-      default:
-        store.dispatch(
-          updateAxiosError({
-            isError: true,
-            status: errorStatus,
-            message: 'Connection to server error',
-          })
-        );
-        break;
-    }
+    store.dispatch(updateAxiosError({ isError: true }));
     return error;
   }
 );

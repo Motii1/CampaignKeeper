@@ -9,7 +9,7 @@ import { SessionsView } from '../views/SessionsView/SessionsView';
 import viewsRoutes from '../views/viewsRoutes';
 import { WelcomeView } from '../views/WelcomeView/WelcomeView';
 import { AxiosRoute } from './AxiosRoute/AxiosRoute';
-import { ProtectedAxiosRoute } from './ProtectedAxiosRoute/ProtectedAxiosRoute';
+// import { ProtectedAxiosRoute } from './AxiosRoute/AxiosRoute';
 
 export const Routing: React.FC = () => (
   <BrowserRouter>
@@ -17,24 +17,24 @@ export const Routing: React.FC = () => (
       <AxiosRoute path={viewsRoutes.LANDING}>
         <LandingView />
       </AxiosRoute>
-      <ProtectedAxiosRoute path={viewsRoutes.START}>
+      <AxiosRoute path={viewsRoutes.START}>
         <WelcomeView />
-      </ProtectedAxiosRoute>
-      <ProtectedAxiosRoute path={viewsRoutes.CAMPAIGN}>
+      </AxiosRoute>
+      <AxiosRoute path={viewsRoutes.CAMPAIGN}>
         <CampaignView />
-      </ProtectedAxiosRoute>
-      <ProtectedAxiosRoute path={viewsRoutes.MAP}>
+      </AxiosRoute>
+      <AxiosRoute path={viewsRoutes.MAP}>
         <MapView />
-      </ProtectedAxiosRoute>
-      <ProtectedAxiosRoute path={viewsRoutes.SESSIONS}>
+      </AxiosRoute>
+      <AxiosRoute path={viewsRoutes.SESSIONS}>
         <SessionsView />
-      </ProtectedAxiosRoute>
-      <ProtectedAxiosRoute path={viewsRoutes.CODEX}>
+      </AxiosRoute>
+      <AxiosRoute path={viewsRoutes.CODEX}>
         <CodexView />
-      </ProtectedAxiosRoute>
-      <ProtectedAxiosRoute path={viewsRoutes.NOTES}>
+      </AxiosRoute>
+      <AxiosRoute path={viewsRoutes.NOTES}>
         <NotesView />
-      </ProtectedAxiosRoute>
+      </AxiosRoute>
       <AxiosRoute path={viewsRoutes.ERROR}>
         <ErrorView />
       </AxiosRoute>
