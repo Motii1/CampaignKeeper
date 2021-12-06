@@ -29,10 +29,10 @@ const configSchema = Joi.object<Config>({
 export const validateConfig = (configSource: Record<string, unknown>): Config => {
   const preparedConfig = prepareConfig(configSource);
   const { error, value: validatedConfig } = configSchema.validate(preparedConfig);
-  if (error) {
+  if (error !== undefined) {
     throw new ConfigValidationError(error.message);
   }
-  return validatedConfig;
+  return validatedConfig!;
 };
 
 const prepareConfig = (configSource: Record<string, unknown>): Record<keyof Config, unknown> => ({
