@@ -32,6 +32,7 @@ export const validateConfig = (configSource: Record<string, unknown>): Config =>
   if (error) {
     throw new ConfigValidationError(error.message);
   }
+
   return validatedConfig;
 };
 

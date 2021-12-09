@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:core' as core;
-import 'dart:io';
+import 'dart:core';
+import 'dart:io' show Platform;
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
@@ -8,15 +8,15 @@ import 'package:campaign_keeper_mobile/main.dart';
 
 class AppPrefs {
   static final AppPrefs _app = AppPrefs._internal();
-  static const core.String milestone = "Eden Prime";
-  static const core.String _key = "app_prefs";
-  static const core.String _url = "http://10.0.2.2:4000";
-  static const core.bool debug = true;
+  static const String milestone = "Eden Prime";
+  static const String _key = "app_prefs";
+  static const String _url = "http://10.0.2.2:4000";
+  static const bool debug = true;
 
-  core.String _debugUrl = _url;
+  String _debugUrl = _url;
   ThemeMode _theme = ThemeMode.dark;
 
-  core.String get url {
+  String get url {
     if (debug) {
       return _debugUrl;
     } else {
@@ -24,7 +24,7 @@ class AppPrefs {
     }
   }
 
-  set url(core.String value) {
+  set url(String value) {
     _debugUrl = value;
     _cachePrefs();
   }
@@ -33,11 +33,11 @@ class AppPrefs {
 
   AppPrefs._internal();
 
-  core.Future<void> refresh(BuildContext context) async {
+  Future<void> refresh(BuildContext context) async {
     var val = await CacheUtil().get(_key);
 
     if (val != null) {
-      core.Map decodedPrefs = {};
+      Map decodedPrefs = {};
 
       try {
         decodedPrefs = json.decode(val);
@@ -66,7 +66,7 @@ class AppPrefs {
 
   ThemeMode getTheme(BuildContext context) => _theme;
 
-  core.Future<core.int> getSdkVersion() async {
+  Future<int> getSdkVersion() async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
     if (Platform.isAndroid) {
@@ -82,7 +82,7 @@ class AppPrefs {
     _cachePrefs();
   }
 
-  core.Future<ThemeMode> _stringToTheme(core.String? theme) async {
+  Future<ThemeMode> _stringToTheme(String? theme) async {
     if (theme == null) {
       return await _getDefaultTheme();
     } else {
@@ -97,7 +97,7 @@ class AppPrefs {
     }
   }
 
-  core.String _themeToString(ThemeMode? theme) {
+  String _themeToString(ThemeMode? theme) {
     switch (theme) {
       case ThemeMode.light:
         return "light";
@@ -108,7 +108,7 @@ class AppPrefs {
     }
   }
 
-  core.Future<ThemeMode> _getDefaultTheme() async {
+  Future<ThemeMode> _getDefaultTheme() async {
     var sdk = await getSdkVersion();
 
     if (sdk >= 29) {
@@ -119,7 +119,7 @@ class AppPrefs {
   }
 
   void _cachePrefs() {
-    core.Map prefs = {"theme": _themeToString(_theme), "debugUrl": _debugUrl};
+    Map prefs = {"theme": _themeToString(_theme), "debugUrl": _debugUrl};
     CacheUtil().add(_key, json.encode(prefs));
   }
 }
