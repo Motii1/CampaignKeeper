@@ -25,8 +25,7 @@ export const ProtectedRouteWrapper: React.FC<ProtectedRouteWrapperProps> = ({
   }, []);
 
   if (!isFetchingFinished) return <></>;
-  else if (!isAccessValid)
-    dispatch(updateError({ isError: true, message: 'You are not authorized to access this page' }));
+  else if (!isAccessValid) dispatch(updateError({ isError: true, message: 'Unauthorized access' }));
 
   return (
     <RouteWrapper path={path} {...rest}>
