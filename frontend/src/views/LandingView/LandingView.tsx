@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FormPaper, LandingGraphic, LandingGrid, Sidebar } from './elements';
+import { ViewWithSidebarWrapper } from '../components/ViewWithSidebarWrapper/ViewWithSidebarWrapper';
 import { LoginForm } from './forms/LoginForm';
 import { RegisterForm } from './forms/RegisterForm';
 
@@ -23,11 +23,8 @@ export const LandingView: React.FC = () => {
   );
 
   return (
-    <LandingGrid>
-      <Sidebar>
-        <FormPaper>{currentForm === 'login' ? loginForm : registerForm}</FormPaper>
-      </Sidebar>
-      <LandingGraphic />
-    </LandingGrid>
+    <ViewWithSidebarWrapper>
+      {currentForm === 'login' ? loginForm : registerForm}
+    </ViewWithSidebarWrapper>
   );
 };

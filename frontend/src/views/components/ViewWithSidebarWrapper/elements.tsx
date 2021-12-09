@@ -1,8 +1,8 @@
 import { Container, Grid, Paper } from '@mui/material';
-import Logo from '../../graphics/logo.svg';
-import WorldImage from '../../graphics/world.jpg';
+import Logo from '../../../graphics/logo.svg';
+import WorldImage from '../../../graphics/world.jpg';
 
-export const LandingGrid: React.FC = ({ children }) => (
+export const SidebarViewGrid: React.FC = ({ children }) => (
   <Grid container sx={{ minHeight: '100vh' }}>
     {children}
   </Grid>
@@ -25,7 +25,7 @@ export const Sidebar: React.FC = ({ children }) => (
   </Grid>
 );
 
-export const FormPaper: React.FC = ({ children }) => (
+export const SidebarPaper: React.FC = ({ children }) => (
   <Container sx={{ width: '80%' }}>
     <Paper
       elevation={6}
@@ -52,7 +52,7 @@ export const FormPaper: React.FC = ({ children }) => (
   </Container>
 );
 
-export const LandingGraphic: React.FC = () => (
+export const BackgroundGraphic: React.FC = () => (
   <Grid
     item
     lg={8}
