@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { CampaignView } from '../views/CampaignView/CampaignView';
 import { CodexView } from '../views/CodexView/CodexView';
 import { ErrorView } from '../views/ErrorView/ErrorView';
@@ -8,37 +8,34 @@ import { NotesView } from '../views/NotesView/NotesView';
 import { SessionsView } from '../views/SessionsView/SessionsView';
 import viewsRoutes from '../views/viewsRoutes';
 import { WelcomeView } from '../views/WelcomeView/WelcomeView';
-import { AxiosRoute } from './AxiosRoute/AxiosRoute';
-// import { ProtectedAxiosRoute } from './AxiosRoute/AxiosRoute';
+import { ProtectedRouteWrapper } from './ProtectedRouteWrapper/ProtectedRouteWrapper';
+import { RouteWrapper } from './RouteWrapper/RouteWrapper';
 
 export const Routing: React.FC = () => (
-  <BrowserRouter>
-    <Switch>
-      <AxiosRoute path={viewsRoutes.LANDING}>
-        <LandingView />
-      </AxiosRoute>
-      <AxiosRoute path={viewsRoutes.START}>
-        <WelcomeView />
-      </AxiosRoute>
-      <AxiosRoute path={viewsRoutes.CAMPAIGN}>
-        <CampaignView />
-      </AxiosRoute>
-      <AxiosRoute path={viewsRoutes.MAP}>
-        <MapView />
-      </AxiosRoute>
-      <AxiosRoute path={viewsRoutes.SESSIONS}>
-        <SessionsView />
-      </AxiosRoute>
-      <AxiosRoute path={viewsRoutes.CODEX}>
-        <CodexView />
-      </AxiosRoute>
-      <AxiosRoute path={viewsRoutes.NOTES}>
-        <NotesView />
-      </AxiosRoute>
-      <AxiosRoute path={viewsRoutes.ERROR}>
-        <ErrorView />
-      </AxiosRoute>
-      <Route exact component={ErrorView} />
-    </Switch>
-  </BrowserRouter>
+  <Switch>
+    <ProtectedRouteWrapper path={viewsRoutes.START}>
+      <WelcomeView />
+    </ProtectedRouteWrapper>
+    <ProtectedRouteWrapper path={viewsRoutes.CAMPAIGN}>
+      <CampaignView />
+    </ProtectedRouteWrapper>
+    <ProtectedRouteWrapper path={viewsRoutes.MAP}>
+      <MapView />
+    </ProtectedRouteWrapper>
+    <ProtectedRouteWrapper path={viewsRoutes.SESSIONS}>
+      <SessionsView />
+    </ProtectedRouteWrapper>
+    <ProtectedRouteWrapper path={viewsRoutes.CODEX}>
+      <CodexView />
+    </ProtectedRouteWrapper>
+    <ProtectedRouteWrapper path={viewsRoutes.NOTES}>
+      <NotesView />
+    </ProtectedRouteWrapper>
+    <Route path={viewsRoutes.ERROR}>
+      <ErrorView />
+    </Route>
+    <RouteWrapper path={viewsRoutes.LANDING} exact>
+      <LandingView />
+    </RouteWrapper>
+  </Switch>
 );

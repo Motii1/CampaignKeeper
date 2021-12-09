@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { store } from '../store';
-import { updateAxiosError } from './axiosErrorSlice';
+import { updateError } from '../views/ErrorView/errorSlice';
 
 const protectedApiClient = axios.create({
   validateStatus: status => status < 500,
@@ -10,7 +10,7 @@ const protectedApiClient = axios.create({
 protectedApiClient.interceptors.response.use(
   response => response,
   error => {
-    store.dispatch(updateAxiosError({ isError: true }));
+    store.dispatch(updateError({ isError: true, message: 'Internal server error' }));
     return error;
   }
 );

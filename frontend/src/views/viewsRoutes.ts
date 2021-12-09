@@ -1,17 +1,17 @@
-export const LANDING = '/';
+const LANDING = '/';
 
-export const START = '/welcome';
+const START = '/welcome';
 
-export const CAMPAIGN = '/campaign';
+const CAMPAIGN = '/campaign';
 
-export const MAP = '/map';
+const MAP = '/map';
 
-export const SESSIONS = '/sessions';
+const SESSIONS = '/sessions';
 
-export const CODEX = '/codex';
+const CODEX = '/codex';
 
-export const NOTES = '/notes';
+const NOTES = '/notes';
 
-export const ERROR = '/error';
+const ERROR = '/error';
 
 export default { LANDING, START, CAMPAIGN, MAP, SESSIONS, CODEX, NOTES, ERROR };
