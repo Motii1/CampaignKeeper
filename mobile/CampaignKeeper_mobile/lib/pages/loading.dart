@@ -17,12 +17,10 @@ class _LoadingState extends State<Loading> {
 
     switch (status) {
       case LoginStatus.Success:
-        // TODO: replace settings with campaign screen
-        Navigator.pushReplacementNamed(context, "/settings");
+        Navigator.pushReplacementNamed(context, "/campaigns");
         break;
       case LoginStatus.ServerError:
-        // TODO: campaign screen with argument for snackbar with offline info "Can't connect to the matrix, using local data."
-        Navigator.pushReplacementNamed(context, "/settings");
+        Navigator.pushReplacementNamed(context, "/campaigns");
         break;
       default:
         Navigator.pushReplacementNamed(context, "/login");

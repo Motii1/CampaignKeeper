@@ -1,5 +1,6 @@
-// TODO: make UserDataEntity with campaign info, avatar, etc.
 class UserLoginEntity {
+  static const String loginEndpoint = "/api/user/details";
+
   String name;
   String email;
   String password;

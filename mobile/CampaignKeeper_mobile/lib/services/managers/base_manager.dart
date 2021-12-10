@@ -9,10 +9,10 @@ abstract class BaseManager<T> {
 
   List<T> getEntities({int groupId= -1});
 
-  // TODO: enum instead of int
+  // TODO: Rethink refresh return
   // Should be debated about caching all vs specified data
   // Get all data from cache, then try to download new, specified one
-  // If successful cache all data and return 1
-  // Else return 0
-  Future<int> refresh({int groupId = -1});
+  // Compare data and if there are differences return true
+  // Else return false
+  Future<bool> refresh({int groupId = -1});
 }

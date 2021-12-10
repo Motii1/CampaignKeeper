@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
+import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:http/http.dart' as http;
+import 'package:campaign_keeper_mobile/services/dependencies_helper.dart';
 
 enum ServerStatus {
   Available,
@@ -22,11 +25,19 @@ enum LogoutStatus {
   ServerError,
 }
 
+enum ResponseStatus {
+  Success,
+  Error,
+  TimeOut,
+}
+
 class RequestHelper {
   static final RequestHelper _helper = RequestHelper._internal();
+
   static const String _pingEnd = "/api/ops/ping";
   static const String _loginEnd = "/api/auth/login";
   static const String _logoutEnd = "/api/auth/logout";
+  static const int _timeout = 2;
   Cookie? _cookie;
 
   factory RequestHelper() {
@@ -63,10 +74,12 @@ class RequestHelper {
   Future<LoginStatus> login(String name, String password) async {
     var response;
     try {
-      response = await http.post(Uri.parse("${AppPrefs().url}$_loginEnd"), body: {
+      response = await DependenciesHelper()
+          .client
+          .post(Uri.parse("${AppPrefs().url}$_loginEnd"), body: {
         "username": name,
         "password": password
-      }).timeout(Duration(seconds: 2));
+      }).timeout(Duration(seconds: _timeout));
     } on TimeoutException catch (_) {
       return LoginStatus.ServerError;
     } on SocketException catch (_) {
@@ -76,11 +89,23 @@ class RequestHelper {
     switch (response.statusCode) {
       case 200:
         _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
-        UserLoginEntity loginEntity = new UserLoginEntity(
-            name: name.contains("@") ? "" : name,
-            email: name.contains("@") ? name : "",
-            password: password);
-        DataCarrier().attach(loginEntity);
+        Response userResponse = await get(UserLoginEntity.loginEndpoint);
+
+        switch(userResponse.status) {
+          case ResponseStatus.Success:
+            Map<String, dynamic> user = jsonDecode(userResponse.data!);
+
+            UserLoginEntity loginEntity = new UserLoginEntity(
+                name: user["username"],
+                email: user["email"],
+                password: password);
+
+            DataCarrier().attach(loginEntity);
+            break;
+        }
+
+        await DataCarrier().refresh<UserDataEntity>();
+
         return LoginStatus.Success;
       case 400:
         return LoginStatus.IncorrectData;
@@ -101,7 +126,10 @@ class RequestHelper {
       var response;
 
       try {
-        response = await http.post(Uri.parse("${AppPrefs().url}$_logoutEnd"), headers: headers).timeout(Duration(seconds: 3));
+        response = await DependenciesHelper()
+            .client
+            .post(Uri.parse("${AppPrefs().url}$_logoutEnd"), headers: headers)
+            .timeout(Duration(seconds: _timeout));
       } on TimeoutException catch (_) {
         return LogoutStatus.ServerError;
       } on SocketException catch (_) {
@@ -123,9 +151,10 @@ class RequestHelper {
   Future<ServerStatus> testConnection() async {
     var response;
     try {
-      response = await http
+      response = await DependenciesHelper()
+          .client
           .get(Uri.parse("${AppPrefs().url}$_pingEnd"))
-          .timeout(Duration(seconds: 2));
+          .timeout(Duration(seconds: _timeout));
     } on TimeoutException catch (_) {
       return ServerStatus.TimeOut;
     } on SocketException catch (_) {
@@ -140,9 +169,39 @@ class RequestHelper {
     }
   }
 
-  // Returns string json or throws exception
-  Future<String> get(String endpoint) async {
-    throw new Exception("Error");
+  // Returns pair of a respond status and a string json
+  Future<Response> get(String endpoint) async {
+    if (!_isCookieValid()) {
+      LoginStatus status = await autoLogin();
+
+      switch(status) {
+        case LoginStatus.Success:
+          break;
+        default:
+          return new Response(ResponseStatus.Error, null, null);
+      }
+    }
+
+    Map<String, String> headers = {"cookie": _cookie.toString()};
+    var response;
+
+    try {
+      response = await DependenciesHelper()
+          .client
+          .get(Uri.parse("${AppPrefs().url}$endpoint"), headers: headers)
+          .timeout(Duration(seconds: _timeout));
+    } on TimeoutException catch (_) {
+      return new Response(ResponseStatus.TimeOut, null, null);
+    } on Exception catch (_) {
+      return new Response(ResponseStatus.Error, null, null);
+    }
+
+    switch (response.statusCode) {
+      case 200:
+        return new Response(ResponseStatus.Success, response.body, response.bodyBytes);
+      default:
+        return new Response(ResponseStatus.Error, null, null);
+    }
   }
 
   bool _isCookieValid() {
@@ -161,4 +220,10 @@ class RequestHelper {
   String? getCookie() => _cookie.toString();
 }
 
-// TODO: make proper exceptions for http get
+class Response {
+  ResponseStatus status;
+  String? data;
+  dynamic dataBytes;
+
+  Response(this.status, this.data, this.dataBytes);
+}
