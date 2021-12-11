@@ -8,5 +8,5 @@ export const shouldLogUser = async ({
   password,
 }: UserLoginData): Promise<User | null> => {
   const user = await findUserByIdentityString(username);
-  return !!user && comparePassword(password, user?.passwordHash) ? user : null;
+  return !!user && (await comparePassword(password, user?.passwordHash)) ? user : null;
 };
