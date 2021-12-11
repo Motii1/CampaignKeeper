@@ -1,32 +1,29 @@
 import { AxiosError, AxiosResponse, Method } from 'axios';
 import { useCallback, useState } from 'react';
 import protectedApiClient from './axios';
-// import requestMethods from './requestMethods';
+import requestMethods from './requestMethods';
 
 type useQueryArgs<T> = {
   isLoading: boolean;
   data: undefined | T;
-  status: number;
+  status: undefined | number;
   error: undefined | AxiosError;
-  runQuery: (data: unknown) => void;
+  runQuery: (data?: unknown) => void;
 };
 
-export const useQuery = <T>(
-  url: string,
-  method: Method /* = requestMethods.GET*/
-): useQueryArgs<T> => {
+export const useQuery = <T>(url: string, method: Method = requestMethods.GET): useQueryArgs<T> => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<undefined | T>();
-  const [status, setStatus] = useState<number>(0);
+  const [status, setStatus] = useState<number>();
   const [error, setError] = useState<undefined | AxiosError>();
 
-  const handleError = (error: AxiosError) => {
-    setError(error);
-    setIsLoading(false);
-  };
-
   const runQuery = useCallback(
-    (payload: unknown = undefined) => {
+    (payload?: unknown) => {
+      const handleError = (error: AxiosError) => {
+        setError(error);
+        setIsLoading(false);
+      };
+
       const handleSuccess = (res: AxiosResponse) => {
         setData(res.data);
         setStatus(res.status);
@@ -42,7 +39,7 @@ export const useQuery = <T>(
         .then(handleSuccess)
         .catch(handleError);
     },
-    [method, url]
+    [method, url, setIsLoading, setData, setStatus, setError]
   );
 
   return { isLoading, data, status, error, runQuery };

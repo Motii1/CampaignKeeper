@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import protectedApiClient from '../../axios/axios';
+import { useQuery } from '../../axios/useQuery';
 import { updateError } from '../../views/ErrorView/errorSlice';
 import { RouteWrapper } from '../RouteWrapper/RouteWrapper';
 
@@ -13,19 +13,27 @@ export const ProtectedRouteWrapper: React.FC<ProtectedRouteWrapperProps> = ({
   children,
   ...rest
 }) => {
-  const [isAccessValid, setIsAccessValid] = useState(false);
-  const [isFetchingFinished, setIsFetchingFinished] = useState(false);
+  const [isAccessValid, setIsAccessValid] = useState(true);
+  const [wasAccessChecked, setWasAccessChecked] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    protectedApiClient.get('/api/user/status').then(response => {
-      setIsAccessValid(response.status === 200);
-      setIsFetchingFinished(true);
-    });
-  }, []);
+  // handles status query
+  const { isLoading, status, runQuery } = useQuery('/api/user/status');
 
-  if (!isFetchingFinished) return <></>;
-  else if (!isAccessValid) dispatch(updateError({ isError: true, message: 'Unauthorized access' }));
+  useEffect(() => {
+    runQuery();
+  }, [runQuery]);
+
+  useEffect(() => {
+    if (!isLoading && status) {
+      setWasAccessChecked(true);
+      setIsAccessValid(status === 200);
+    }
+  }, [isLoading, status]);
+
+  if (isLoading || !wasAccessChecked) return <></>;
+  else if (!isLoading && !isAccessValid)
+    dispatch(updateError({ isError: true, message: 'Unauthorized access' }));
 
   return (
     <RouteWrapper path={path} {...rest}>
