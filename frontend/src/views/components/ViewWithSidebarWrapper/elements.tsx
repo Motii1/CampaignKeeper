@@ -1,6 +1,8 @@
 import { Container, Grid, Paper } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 import Logo from '../../../graphics/logo.svg';
 import WorldImage from '../../../graphics/world.jpg';
+import viewsRoutes from '../../viewsRoutes';
 
 export const SidebarViewGrid: React.FC = ({ children }) => (
   <Grid container sx={{ minHeight: '100vh' }}>
@@ -25,32 +27,39 @@ export const Sidebar: React.FC = ({ children }) => (
   </Grid>
 );
 
-export const SidebarPaper: React.FC = ({ children }) => (
-  <Container sx={{ width: '80%' }}>
-    <Paper
-      elevation={6}
-      sx={{
-        borderRadius: '20px',
-        backgroundColor: 'customBackgrounds.gray',
-        paddingBottom: '10px',
-      }}
-    >
-      <Container
+export const SidebarPaper: React.FC = ({ children }) => {
+  const history = useHistory();
+  return (
+    <Container sx={{ width: '80%' }}>
+      <Paper
+        elevation={6}
         sx={{
-          backgroundImage: `url(${Logo})`,
-          backgroundSize: 'contain',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          position: 'relative',
-          top: '-75px',
-          height: '150px',
-          marginBottom: '-75px',
+          borderRadius: '20px',
+          backgroundColor: 'customBackgrounds.gray',
+          paddingBottom: '10px',
         }}
-      />
-      {children}
-    </Paper>
-  </Container>
-);
+      >
+        <Container
+          onClick={() => {
+            history.push(viewsRoutes.LANDING);
+          }}
+          sx={{
+            cursor: 'pointer',
+            backgroundImage: `url(${Logo})`,
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            position: 'relative',
+            top: '-75px',
+            height: '150px',
+            marginBottom: '-75px',
+          }}
+        />
+        {children}
+      </Paper>
+    </Container>
+  );
+};
 
 export const BackgroundGraphic: React.FC = () => (
   <Grid

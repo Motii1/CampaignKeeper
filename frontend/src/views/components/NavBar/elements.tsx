@@ -1,23 +1,29 @@
-/* eslint-disable arrow-body-style */
 import { AccountCircle, MoreVert } from '@mui/icons-material';
 import { Container, Paper, Stack, Typography } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 import LogoGraphic from '../../../graphics/logo.svg';
+import viewsRoutes from '../../viewsRoutes';
 
-export const Logo: React.FC = () => (
-  <Container
-    sx={{
-      backgroundImage: `url(${LogoGraphic})`,
-      backgroundSize: 'contain',
-      backgroundRepeat: 'no-repeat',
-      height: 95,
-      width: 247,
-      marginLeft: 2,
-      marginRight: 2,
-      overflow: 'visible',
-      zIndex: 1,
-    }}
-  />
-);
+export const Logo: React.FC = () => {
+  const history = useHistory();
+  return (
+    <Container
+      onClick={() => history.push(viewsRoutes.LANDING)}
+      sx={{
+        cursor: 'pointer',
+        backgroundImage: `url(${LogoGraphic})`,
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat',
+        height: 95,
+        width: 247,
+        marginLeft: 2,
+        marginRight: 2,
+        overflow: 'visible',
+        zIndex: 1,
+      }}
+    />
+  );
+};
 
 type PrimaryNavBarButtonProps = {
   text: string;
