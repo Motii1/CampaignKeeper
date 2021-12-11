@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
+import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
@@ -39,7 +40,10 @@ export const LoginForm: React.FC<FormProps> = props => {
   const [password, setPassword] = useState<TextFieldState>(initalState);
 
   // handles login query
-  const { isLoading, data, status, runQuery } = useQuery<UserData>(`${AUTH_URL}/login`);
+  const { isLoading, data, status, runQuery } = useQuery<UserData>(
+    `${AUTH_URL}/login`,
+    requestMethods.POST
+  );
 
   const handleRunQuery = useCallback(() => {
     if (!isLoading && data && status) {

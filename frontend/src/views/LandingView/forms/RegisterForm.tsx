@@ -2,6 +2,7 @@ import { Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
@@ -53,7 +54,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
     data: dataLogin,
     status: statusLogin,
     runQuery: runQueryLogin,
-  } = useQuery<UserData>(`${AUTH_URL}/login`);
+  } = useQuery<UserData>(`${AUTH_URL}/login`, requestMethods.POST);
 
   const handleRunQueryLogin = useCallback(() => {
     if (!isLoadingLogin && dataLogin && statusLogin) {
@@ -74,7 +75,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
     data: dataRegister,
     status: statusRegister,
     runQuery: runQueryRegister,
-  } = useQuery<RegisterData>(`${AUTH_URL}/register`);
+  } = useQuery<RegisterData>(`${AUTH_URL}/register`, requestMethods.POST);
 
   const handleUseQueryRegister = useCallback(() => {
     if (!isLoadingRegister && dataRegister && statusRegister) {
