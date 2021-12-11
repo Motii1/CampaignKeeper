@@ -58,8 +58,6 @@ class RequestHelper {
       }
     }
 
-    await DataCarrier().refresh<UserLoginEntity>();
-
     UserLoginEntity? loginEntity = DataCarrier().getEntity();
     if (loginEntity != null) {
       String name =
@@ -103,8 +101,6 @@ class RequestHelper {
             DataCarrier().attach(loginEntity);
             break;
         }
-
-        await DataCarrier().refresh<UserDataEntity>();
 
         return LoginStatus.Success;
       case 400:

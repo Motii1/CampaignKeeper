@@ -6,11 +6,11 @@ class UserDataEntity {
 
   Uint8List? imageData;
 
-  UserDataEntity(this.imageData);
+  UserDataEntity({this.imageData});
 
   Image get avatar {
     if (imageData == null) {
-      return new Image.asset("user.png");
+      return new Image.asset("assets/user.png");
     }
     else {
       return new Image.memory(imageData!);

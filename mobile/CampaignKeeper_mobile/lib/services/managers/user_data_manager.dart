@@ -41,23 +41,21 @@ class UserDataManager implements BaseManager<UserDataEntity> {
   // TODO: use get from request helper here
   @override
   Future<bool> refresh({int groupId = -1}) async {
+    UserDataEntity userData = new UserDataEntity();
     if (_entity == null) {
+      _entity = userData;
       String? data = await CacheUtil().get(_key);
       if (data != null) {
-        _entity = _createEntity(json.decode(data));
+        _entity!.imageData = json.decode(data);
       }
     }
 
-    Response userResponse = await RequestHelper().get(UserDataEntity.imageEndpoint);
-    switch(userResponse.status) {
-      case ResponseStatus.Success:
-        UserDataEntity userData = new UserDataEntity(userResponse.dataBytes);
-        if (_entity == null || _entity != userData) {
-          _entity = userData;
-          return true;
-        }
-
-        break;
+    Response userResponse =
+        await RequestHelper().get(UserDataEntity.imageEndpoint);
+    if (userResponse.status == ResponseStatus.Success &&
+        _entity!.imageData != userResponse.dataBytes) {
+      _entity!.imageData = userResponse.dataBytes;
+      return true;
     }
 
     return false;
@@ -70,16 +68,6 @@ class UserDataManager implements BaseManager<UserDataEntity> {
       };
 
       return data;
-    }
-
-    return null;
-  }
-
-  UserDataEntity? _createEntity(Map data) {
-    if (data.isNotEmpty) {
-      Uint8List imageData = data["imageData"];
-
-      return new UserDataEntity(imageData);
     }
 
     return null;
