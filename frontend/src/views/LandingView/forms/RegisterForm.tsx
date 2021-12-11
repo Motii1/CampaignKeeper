@@ -1,9 +1,8 @@
 import { Stack } from '@mui/material';
-import { AxiosResponse } from 'axios';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import protectedApiClient from '../../../axios/axios';
+import { useQuery } from '../../../axios/useQuery';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import {
@@ -12,7 +11,11 @@ import {
   LabeledTextInput,
   StandardButton,
 } from './elements';
-import { login } from './LoginForm';
+import { UserData } from './LoginForm';
+
+type RegisterData = {
+  message: string;
+};
 
 export type FormProps = {
   onChangeForm: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -24,21 +27,6 @@ export type TextFieldState = {
 };
 
 export const AUTH_URL = '/api/auth';
-
-const register = (
-  username: string,
-  email: string,
-  emailRepeat: string,
-  password: string,
-  passwordRepeat: string
-): Promise<AxiosResponse> =>
-  protectedApiClient.post(`${AUTH_URL}/register`, {
-    username: username,
-    email: email,
-    repeatedEmail: emailRepeat,
-    password: password,
-    repeatedPassword: passwordRepeat,
-  });
 
 export const RegisterForm: React.FC<FormProps> = props => {
   const history = useHistory();
@@ -58,6 +46,77 @@ export const RegisterForm: React.FC<FormProps> = props => {
   const [emailRepeat, setEmailRepeat] = useState<TextFieldState>(initalState);
   const [password, setPassword] = useState<TextFieldState>(initalState);
   const [passwordRepeat, setPasswordRepeat] = useState<TextFieldState>(initalState);
+
+  // handles login query after successful registration query
+  const {
+    isLoading: isLoadingLogin,
+    data: dataLogin,
+    status: statusLogin,
+    runQuery: runQueryLogin,
+  } = useQuery<UserData>(`${AUTH_URL}/login`);
+
+  const handleRunQueryLogin = useCallback(() => {
+    if (!isLoadingLogin && dataLogin && statusLogin) {
+      if (statusLogin === 200) {
+        dispatch(updateDetails({ username: dataLogin.username, email: dataLogin.email }));
+        history.push(viewsRoutes.START);
+      } else history.push(viewsRoutes.ERROR);
+    }
+  }, [dataLogin, dispatch, history, isLoadingLogin, statusLogin]);
+
+  useEffect(() => {
+    handleRunQueryLogin();
+  }, [handleRunQueryLogin]);
+
+  // handles registration query
+  const {
+    isLoading: isLoadingRegister,
+    data: dataRegister,
+    status: statusRegister,
+    runQuery: runQueryRegister,
+  } = useQuery<RegisterData>(`${AUTH_URL}/register`);
+
+  const handleUseQueryRegister = useCallback(() => {
+    if (!isLoadingRegister && dataRegister && statusRegister) {
+      if (statusRegister === 200) {
+        const message = dataRegister.message;
+        if (message) {
+          if (message === 'User with given username already exists')
+            setUsername({
+              value: username.value,
+              helperText: 'Sorry, this username is already used.',
+            });
+          else if (message === 'User with given email already exists') {
+            setEmail({
+              value: email.value,
+              helperText: 'Sorry, this email is already used.',
+            });
+            setEmailRepeat({
+              value: email.value,
+              helperText: 'Sorry, this email is already used.',
+            });
+          }
+        } else {
+          runQueryLogin({
+            username: username.value,
+            password: password.value,
+          });
+        }
+      }
+    }
+  }, [
+    dataRegister,
+    email.value,
+    isLoadingRegister,
+    password.value,
+    runQueryLogin,
+    statusRegister,
+    username.value,
+  ]);
+
+  useEffect(() => {
+    handleUseQueryRegister();
+  }, [handleUseQueryRegister]);
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -100,42 +159,13 @@ export const RegisterForm: React.FC<FormProps> = props => {
       password.helperText === null &&
       passwordRepeat.helperText === null
     ) {
-      const registerResponse = await register(
-        username.value,
-        email.value,
-        emailRepeat.value,
-        password.value,
-        passwordRepeat.value
-      );
-      if (registerResponse.status === 200) {
-        const message = registerResponse.data.message;
-        if (message) {
-          if (message === 'User with given username already exists')
-            setUsername({
-              value: username.value,
-              helperText: 'Sorry, this username is already used.',
-            });
-          else if (message === 'User with given email already exists') {
-            setEmail({
-              value: email.value,
-              helperText: 'Sorry, this email is already used.',
-            });
-            setEmailRepeat({
-              value: email.value,
-              helperText: 'Sorry, this email is already used.',
-            });
-          }
-        } else {
-          const loginResponse = await login(username.value, password.value);
-          dispatch(
-            updateDetails({
-              username: loginResponse.data.username,
-              email: loginResponse.data.email,
-            })
-          );
-          history.push(viewsRoutes.START);
-        }
-      }
+      runQueryRegister({
+        username: username.value,
+        email: email.value,
+        repeatedEmail: emailRepeat.value,
+        password: password.value,
+        repeatedPassword: passwordRepeat.value,
+      });
     }
   };
 

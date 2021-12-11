@@ -21,7 +21,7 @@ export const login = (username: string, password: string): Promise<AxiosResponse
     password: password,
   });
 
-export type userData = {
+export type UserData = {
   username: string;
   email: string;
 };
@@ -37,7 +37,9 @@ export const LoginForm: React.FC<FormProps> = props => {
 
   const [username, setUsername] = useState<TextFieldState>(initalState);
   const [password, setPassword] = useState<TextFieldState>(initalState);
-  const { isLoading, data, status, runQuery } = useQuery<userData>(`${AUTH_URL}/login`);
+
+  // handles login query
+  const { isLoading, data, status, runQuery } = useQuery<UserData>(`${AUTH_URL}/login`);
 
   const handleRunQuery = useCallback(() => {
     if (!isLoading && data && status) {
@@ -57,7 +59,6 @@ export const LoginForm: React.FC<FormProps> = props => {
     }
   }, [data, dispatch, history, isLoading, password.value, status, username.value]);
 
-  // handles effects of fetching userdata from server
   useEffect(() => {
     handleRunQuery();
   }, [handleRunQuery]);
