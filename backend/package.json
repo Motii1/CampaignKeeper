@@ -14,7 +14,7 @@
     "start:dev": "node dist/Index.js",
     "run:dev:watch": "npm run copy-images && npm run start",
     "start:dev:watch": "tsc-watch --outDir ./dist --onSuccess \"npm run run:dev:watch\"",
-    "lint": "eslint ./src/**/* --ext ts,js",
+    "lint": "eslint \"./src/**/*.{ts,js}\"",
     "format": "npm run lint -- --fix"
   },
   "repository": {

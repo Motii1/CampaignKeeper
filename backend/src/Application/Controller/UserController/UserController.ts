@@ -1,13 +1,19 @@
 import { Request, Response, Router } from 'express';
 import asyncHandler from 'express-async-handler';
+import * as path from 'path';
 import { handleUserImagePersistance } from '../../../Domain/User/Service/Image';
 import { authorization } from '../../Middleware/Auth/Authorization';
 import { buildSingleImageUploader } from '../../Middleware/Upload/Image';
 import { extractUserFromCookies } from '../../Util/Authorization';
+import { loadImage } from '../../Util/Image';
 import { IController } from '../IController';
 
 const MAX_FILE_SIZE_LIMIT = 500000;
 const IMAGE_FILE_FIELD_NAME = 'image-file';
+const USER_IMAGE_DEFAULT_PATH = path.resolve(
+  __dirname,
+  path.join('..', '..', '..', 'Common', 'Image', 'User.png')
+);
 
 enum UserRoutes {
   Details = '/details',
@@ -37,8 +43,8 @@ export class UserController implements IController {
    */
   private getImageHandler = async (req: Request, res: Response): Promise<void> => {
     const user = await extractUserFromCookies(req.cookies);
-    // @todo check if user image is null and return image placeholder in that case
-    res.end(user!.image!, 'binary');
+    const image = user.image ?? (await loadImage(USER_IMAGE_DEFAULT_PATH));
+    res.end(image, 'binary');
   };
 
   /**
