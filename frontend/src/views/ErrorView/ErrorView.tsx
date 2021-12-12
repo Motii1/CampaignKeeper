@@ -6,13 +6,12 @@ import { ViewWithSidebarWrapper } from '../components/ViewWithSidebarWrapper/Vie
 import { clearError } from './errorSlice';
 
 export const ErrorView: React.FC = () => {
-  const { isError, message } = useSelector((state: RootState) => state.errorReducer);
-  const messageForView = isError ? message : 'Unexpected error';
+  const { message } = useSelector((state: RootState) => state.errorReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(clearError());
-  });
+  }, [dispatch]);
 
   return (
     <ViewWithSidebarWrapper>
@@ -20,7 +19,7 @@ export const ErrorView: React.FC = () => {
         variant="h4"
         sx={{ color: 'common.white', fontWeight: 'medium', textAlign: 'center', paddingY: 1 }}
       >
-        {`Error: ${messageForView}`}
+        {`Error: ${message}`}
       </Typography>
     </ViewWithSidebarWrapper>
   );

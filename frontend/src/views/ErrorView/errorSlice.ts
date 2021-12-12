@@ -4,20 +4,19 @@ const errorSlice = createSlice({
   name: 'error',
   initialState: {
     isError: false,
-    message: null,
+    message: 'Unexpected error',
   },
   reducers: {
-    updateError: (state, action) => {
+    setError: (state, action) => {
       state.isError = action.payload.isError;
       state.message = action.payload.message;
     },
     clearError: state => {
       state.isError = false;
-      state.message = null;
     },
   },
 });
 
-export const { updateError, clearError } = errorSlice.actions;
+export const { setError, clearError } = errorSlice.actions;
 
 export default errorSlice.reducer;

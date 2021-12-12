@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useQuery } from '../../axios/useQuery';
-import { updateError } from '../../views/ErrorView/errorSlice';
+import { setError } from '../../views/ErrorView/errorSlice';
 import { LoadingView } from '../../views/LoadingView/LoadingView';
 import { RouteWrapper } from '../RouteWrapper/RouteWrapper';
 
@@ -34,7 +34,7 @@ export const ProtectedRouteWrapper: React.FC<ProtectedRouteWrapperProps> = ({
 
   if (isLoading || !wasAccessChecked) return <LoadingView />;
   else if (!isLoading && !isAccessValid)
-    dispatch(updateError({ isError: true, message: 'Unauthorized access' }));
+    dispatch(setError({ isError: true, message: 'Unauthorized access' }));
 
   return (
     <RouteWrapper path={path} {...rest}>
