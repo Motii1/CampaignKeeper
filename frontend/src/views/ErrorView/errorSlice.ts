@@ -4,7 +4,7 @@ const errorSlice = createSlice({
   name: 'error',
   initialState: {
     isError: false,
-    message: 'Unexpected error',
+    message: null,
   },
   reducers: {
     setError: (state, action) => {
@@ -13,6 +13,7 @@ const errorSlice = createSlice({
     },
     clearError: state => {
       state.isError = false;
+      state.message = null;
     },
   },
 });
