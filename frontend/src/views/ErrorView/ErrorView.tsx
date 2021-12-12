@@ -1,11 +1,18 @@
 import { Typography } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ViewWithSidebarWrapper } from '../components/ViewWithSidebarWrapper/ViewWithSidebarWrapper';
+import { clearError } from './errorSlice';
 
 export const ErrorView: React.FC = () => {
   const { isError, message } = useSelector((state: RootState) => state.errorReducer);
   const messageForView = isError ? message : 'Unexpected error';
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearError());
+  });
 
   return (
     <ViewWithSidebarWrapper>
