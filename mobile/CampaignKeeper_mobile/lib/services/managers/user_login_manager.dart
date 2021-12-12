@@ -3,7 +3,7 @@ import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
 import 'dart:convert';
 
-class UserLoginManager implements BaseManager<UserLoginEntity> {
+class UserLoginManager extends BaseManager<UserLoginEntity> {
   static const List _fields = ["name", "email", "password"];
   static const String _key = "UserLogin";
   UserLoginEntity? _entity;

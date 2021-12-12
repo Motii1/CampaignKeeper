@@ -82,8 +82,7 @@ class _LoginCardState extends State<LoginCard> {
 
       switch (status) {
         case LoginStatus.Success:
-          // TODO: replace settings with campaign screen
-          Navigator.pushReplacementNamed(context, "/settings");
+          Navigator.pushReplacementNamed(context, "/campaigns");
           break;
         case LoginStatus.IncorrectData:
           isLoginCorrect = isPasswordCorrect = false;

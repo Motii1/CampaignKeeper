@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
@@ -18,6 +19,12 @@ class DataCarrier {
   DataCarrier._internal() {
     _managers[UserLoginEntity] = new UserLoginManager();
     _managers[UserDataEntity] = new UserDataManager();
+  }
+
+  void addListener<T>(VoidCallback listener) {
+    if (_managers.containsKey(T)) {
+      _managers[T]!.addListener(listener);
+    }
   }
 
   void attach<T>(T entity)

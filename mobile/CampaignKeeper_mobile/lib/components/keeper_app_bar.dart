@@ -2,29 +2,52 @@ import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 
-class KeeperPopUp extends StatelessWidget {
-  KeeperPopUp({Key? key, required this.itemBuilder, this.onSelected})
+class KeeperPopup extends StatefulWidget {
+  KeeperPopup({Key? key, required this.itemBuilder, this.onSelected})
       : super(key: key);
 
   final List<PopupMenuEntry<dynamic>> Function(BuildContext) itemBuilder;
   final void Function(dynamic)? onSelected;
 
-  // TODO: Fix ripple effect
+  @override
+  _KeeperPopupState createState() => _KeeperPopupState();
+}
+
+class _KeeperPopupState extends State<KeeperPopup> {
+  Widget userImage = DataCarrier().getEntity<UserDataEntity>()!.avatar;
+
+  @override
+  void initState() {
+    super.initState();
+    DataCarrier().addListener<UserDataEntity>(() {
+      setState(() {userImage = DataCarrier().getEntity<UserDataEntity>()!.avatar;});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      child: CircleAvatar(
-        radius: 14,
-        backgroundColor: Theme.of(context).colorScheme.onBackground,
-        child: ClipOval(
-          child: DataCarrier().getEntity<UserDataEntity>()!.avatar,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: Material(
+        color: Colors.transparent,
+        child: PopupMenuButton(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: CircleAvatar(
+              radius: 14,
+              backgroundColor: Theme.of(context).colorScheme.onBackground,
+              child: ClipOval(
+                child: userImage,
+              ),
+            ),
+          ),
+          itemBuilder: widget.itemBuilder,
+          onSelected: widget.onSelected,
+          offset: const Offset(0, 35),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
         ),
-      ),
-      itemBuilder: itemBuilder,
-      onSelected: onSelected,
-      offset: const Offset(0, 35),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
     );
   }
@@ -121,12 +144,12 @@ class KeeperAppBar extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              left: 5,
-                              right: 12,
-                              bottom: 17 + itemBottomPadding),
+                              left: 0,
+                              right: 2,
+                              bottom: 8 + itemBottomPadding),
                           child: popupItemBuilder == null
                               ? Container()
-                              : KeeperPopUp(
+                              : KeeperPopup(
                                   itemBuilder: popupItemBuilder!,
                                   onSelected: popupOnSelected),
                         ),

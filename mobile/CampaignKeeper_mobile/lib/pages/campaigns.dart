@@ -1,4 +1,6 @@
 import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
+import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
+import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/lifecycle_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +18,7 @@ class _CampaignsState extends State<Campaigns> with WidgetsBindingObserver {
       case AppLifecycleState.resumed:
         await LifeCycleHelper().loginOnResume(context);
         // TODO: refresh icon and list
+        await DataCarrier().refresh<UserDataEntity>();
         break;
       default:
         break;
@@ -25,6 +28,8 @@ class _CampaignsState extends State<Campaigns> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+
     LifeCycleHelper().testConnectionOnResume(context);
   }
 
@@ -41,8 +46,7 @@ class _CampaignsState extends State<Campaigns> with WidgetsBindingObserver {
           )
         ],
         popupOnSelected: (dynamic value) {
-          print("What");
-          switch(value) {
+          switch (value) {
             case "Settings":
               Navigator.pushNamed(context, "/settings");
               break;

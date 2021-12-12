@@ -1,18 +1,27 @@
-abstract class BaseManager<T> {
+import 'package:flutter/material.dart';
+
+class BaseManager<T> extends ChangeNotifier{
   // Data locations: cache, ram, server
 
   // Attaches given entity to the local base and cache it
   // If ever this app would save new data then it should also update server database
-  void attach(T entity);
+  void attach(T entity) {
+    throw new UnimplementedError();
+  }
 
-  T? getEntity({int groupId= -1, int entId= -1});
+  T? getEntity({int groupId= -1, int entId= -1}) {
+    throw new UnimplementedError();
+  }
 
-  List<T> getEntities({int groupId= -1});
+  List<T> getEntities({int groupId= -1}) {
+    throw new UnimplementedError();
+  }
 
-  // TODO: Rethink refresh return
   // Should be debated about caching all vs specified data
   // Get all data from cache, then try to download new, specified one
-  // Compare data and if there are differences return true
+  // Compare data and if there are differences call notifyListeners() and return true
   // Else return false
-  Future<bool> refresh({int groupId = -1});
+  Future<bool> refresh({int groupId = -1}) {
+    throw new UnimplementedError();
+  }
 }

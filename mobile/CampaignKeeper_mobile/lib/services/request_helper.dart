@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
-import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
@@ -37,7 +35,7 @@ class RequestHelper {
   static const String _pingEnd = "/api/ops/ping";
   static const String _loginEnd = "/api/auth/login";
   static const String _logoutEnd = "/api/auth/logout";
-  static const int _timeout = 2;
+  static const int _timeout = 5;
   Cookie? _cookie;
 
   factory RequestHelper() {
