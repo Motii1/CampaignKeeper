@@ -8,7 +8,7 @@ export const Logo: React.FC = () => {
   const history = useHistory();
   return (
     <Container
-      onClick={() => history.push(viewsRoutes.LANDING)}
+      onClick={() => history.push(viewsRoutes.START)}
       sx={{
         cursor: 'pointer',
         backgroundImage: `url(${LogoGraphic})`,
