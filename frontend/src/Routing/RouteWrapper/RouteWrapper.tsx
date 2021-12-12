@@ -9,7 +9,7 @@ type RouteWrapperProps = {
 } & Record<string, unknown>;
 
 export const RouteWrapper: React.FC<RouteWrapperProps> = ({ path, children, ...rest }) => {
-  const isError = useSelector((state: RootState) => state.errorReducer.isError);
+  const isError = useSelector((state: RootState) => state.error.isError);
 
   if (isError)
     return (

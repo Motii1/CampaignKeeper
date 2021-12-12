@@ -12,7 +12,7 @@ const logout = (): Promise<AxiosResponse> => protectedApiClient.post(`${AUTH_URL
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
-  const username = useSelector((state: RootState) => state.userDetailsReducer.username);
+  const username = useSelector((state: RootState) => state.user.username);
   const currentView = useLocation().pathname;
 
   const secondaryButtonDisplayableViews = [

@@ -6,7 +6,7 @@ import { ViewWithSidebarWrapper } from '../components/ViewWithSidebarWrapper/Vie
 import { clearError } from './errorSlice';
 
 export const ErrorView: React.FC = () => {
-  const { isError, message } = store.getState().errorReducer;
+  const { isError, message } = store.getState().error;
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -1,13 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import errorReducer from './views/ErrorView/errorSlice';
-import userDetailsReducer from './views/LandingView/userDetailsSlice';
+import { applyMiddleware, createStore } from '@reduxjs/toolkit';
+import thunkMiddleware from 'redux-thunk';
+import { rootReducer } from './reducer';
 
-export const store = configureStore({
-  reducer: {
-    userDetailsReducer,
-    errorReducer,
-  },
-});
+const thunkEnhancer = applyMiddleware(thunkMiddleware);
+
+export const store = createStore(rootReducer, thunkEnhancer);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
