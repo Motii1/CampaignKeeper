@@ -20,7 +20,9 @@ class _KeeperPopupState extends State<KeeperPopup> {
   void initState() {
     super.initState();
     DataCarrier().addListener<UserDataEntity>(() {
-      setState(() {userImage = DataCarrier().getEntity<UserDataEntity>()!.avatar;});
+      setState(() {
+        userImage = DataCarrier().getEntity<UserDataEntity>()!.avatar;
+      });
     });
   }
 
@@ -70,6 +72,9 @@ class KeeperAppBar extends StatelessWidget {
   final bool autoLeading;
   final List<PopupMenuEntry<dynamic>> Function(BuildContext)? popupItemBuilder;
   final void Function(dynamic)? popupOnSelected;
+  final double _expandedHeight = 160.0;
+  final double _collapsedHeight = 58.4;
+  double _realAppBarHeight = 24.0;
 
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
@@ -98,13 +103,17 @@ class KeeperAppBar extends StatelessWidget {
               sliver: SliverAppBar(
                 automaticallyImplyLeading: false,
                 pinned: true,
-                collapsedHeight: 58.4,
-                expandedHeight: 160,
+                collapsedHeight: _collapsedHeight,
+                expandedHeight: _expandedHeight,
                 backgroundColor: _bgColor,
                 flexibleSpace: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
+                    _realAppBarHeight =
+                        MediaQuery.of(context).padding.top + _collapsedHeight;
                     double itemBottomPadding =
-                        (constraints.biggest.height - 82.4) / 101.6 * 4;
+                        (constraints.biggest.height - _realAppBarHeight) /
+                            (_expandedHeight - _realAppBarHeight) *
+                            3.75;
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -144,9 +153,7 @@ class KeeperAppBar extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              left: 0,
-                              right: 2,
-                              bottom: 8 + itemBottomPadding),
+                              left: 0, right: 2, bottom: 8 + itemBottomPadding),
                           child: popupItemBuilder == null
                               ? Container()
                               : KeeperPopup(
