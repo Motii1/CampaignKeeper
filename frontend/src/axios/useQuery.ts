@@ -7,7 +7,7 @@ type useQueryArgs<T> = {
   isLoading: boolean;
   data: undefined | T;
   status: undefined | number;
-  error: undefined | AxiosError;
+  error?: AxiosError;
   runQuery: (data?: unknown) => void;
 };
 

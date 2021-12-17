@@ -34,7 +34,7 @@ export const Routing: React.FC = () => (
     <Route path={viewsRoutes.ERROR}>
       <ErrorView />
     </Route>
-    <RouteWrapper path={viewsRoutes.LANDING} exact>
+    <RouteWrapper path={viewsRoutes.LANDING}>
       <LandingView />
     </RouteWrapper>
   </Switch>

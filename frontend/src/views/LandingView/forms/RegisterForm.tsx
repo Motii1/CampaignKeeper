@@ -78,31 +78,27 @@ export const RegisterForm: React.FC<FormProps> = props => {
   } = useQuery<RegisterData>(`${AUTH_URL}/register`, requestMethods.POST);
 
   const handleUseQueryRegister = useCallback(() => {
-    if (!isLoadingRegister && dataRegister && statusRegister) {
-      if (statusRegister === 200) {
-        const message = dataRegister.message;
-        if (message) {
-          if (message === 'User with given username already exists')
-            setUsername({
-              value: username.value,
-              helperText: 'Sorry, this username is already used.',
-            });
-          else if (message === 'User with given email already exists') {
-            setEmail({
-              value: email.value,
-              helperText: 'Sorry, this email is already used.',
-            });
-            setEmailRepeat({
-              value: email.value,
-              helperText: 'Sorry, this email is already used.',
-            });
-          }
-        } else {
-          runQueryLogin({
-            username: username.value,
-            password: password.value,
-          });
-        }
+    if (!isLoadingRegister && dataRegister?.message && statusRegister === 200) {
+      const message = dataRegister.message;
+      if (message === 'User with given username already exists')
+        setUsername({
+          value: username.value,
+          helperText: 'Sorry, this username is already used.',
+        });
+      else if (message === 'User with given email already exists') {
+        setEmail({
+          value: email.value,
+          helperText: 'Sorry, this email is already used.',
+        });
+        setEmailRepeat({
+          value: email.value,
+          helperText: 'Sorry, this email is already used.',
+        });
+      } else {
+        runQueryLogin({
+          username: username.value,
+          password: password.value,
+        });
       }
     }
   }, [

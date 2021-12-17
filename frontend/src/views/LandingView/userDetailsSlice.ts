@@ -1,6 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
-import { AppDispatch } from '../../store';
+
+export const fetchUserDetails = createAsyncThunk('userDetails/fetchDetails', async () => {
+  const response = await protectedApiClient.get('api/user/details');
+  return response.data;
+});
 
 const userDetailsSlice = createSlice({
   name: 'userDetails',
@@ -16,14 +20,15 @@ const userDetailsSlice = createSlice({
       state.email = action.payload.email;
     },
   },
+  extraReducers: builder => {
+    builder.addCase(fetchUserDetails.fulfilled, (state, action) => {
+      state.isDownloaded = true;
+      state.username = action.payload.username;
+      state.email = action.payload.email;
+    });
+  },
 });
 
 export const { updateDetails } = userDetailsSlice.actions;
 
 export default userDetailsSlice.reducer;
-
-export const fetchUserDetails = async (dispatch: AppDispatch): Promise<void> => {
-  const response = await protectedApiClient.get('api/user/details');
-  if (response.status === 200)
-    dispatch(updateDetails({ username: response.data.username, email: response.data.email }));
-};

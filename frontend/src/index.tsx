@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { App } from './App';
 import { store } from './store';
-// import { fetchUserDetails } from './views/LandingView/userDetailsSlice';
-
-// store.dispatch(fetchUserDetails);
 
 ReactDOM.render(
   <React.StrictMode>
