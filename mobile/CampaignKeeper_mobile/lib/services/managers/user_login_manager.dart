@@ -3,8 +3,9 @@ import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
 import 'dart:convert';
 
-class UserLoginManager implements BaseManager<UserLoginEntity> {
+class UserLoginManager extends BaseManager<UserLoginEntity> {
   static const List _fields = ["name", "email", "password"];
+  static const String _key = "UserLogin";
   UserLoginEntity? _entity;
 
   UserLoginManager();
@@ -15,7 +16,7 @@ class UserLoginManager implements BaseManager<UserLoginEntity> {
     Map? data = _mapEntity();
 
     if (data != null) {
-      CacheUtil().addSecure("UserData", json.encode(data));
+      CacheUtil().addSecure(_key, json.encode(data));
     }
   }
 
@@ -36,16 +37,16 @@ class UserLoginManager implements BaseManager<UserLoginEntity> {
   }
 
   @override
-  Future<int> refresh({int groupId = -1}) async {
+  Future<bool> refresh({int groupId = -1}) async {
     if (_entity == null) {
-      String? data = await CacheUtil().getSecure("UserData");
+      String? data = await CacheUtil().getSecure(_key);
 
       if (data != null) {
         _entity = _createEntity(json.decode(data));
       }
     }
 
-    return 0;
+    return false;
   }
 
   Map? _mapEntity() {

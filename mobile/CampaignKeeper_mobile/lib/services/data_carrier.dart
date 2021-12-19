@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/managers/user_login_manager.dart';
+import 'package:campaign_keeper_mobile/services/managers/user_data_manager.dart';
 
 class DataCarrier {
   static final DataCarrier _dc = DataCarrier._internal();
@@ -15,6 +18,13 @@ class DataCarrier {
   // Adding managers
   DataCarrier._internal() {
     _managers[UserLoginEntity] = new UserLoginManager();
+    _managers[UserDataEntity] = new UserDataManager();
+  }
+
+  void addListener<T>(VoidCallback listener) {
+    if (_managers.containsKey(T)) {
+      _managers[T]!.addListener(listener);
+    }
   }
 
   void attach<T>(T entity)
@@ -38,10 +48,12 @@ class DataCarrier {
     return [];
   }
 
-  Future<void> refresh<T>({int groupId = -1}) async {
+  Future<bool> refresh<T>({int groupId = -1}) async {
     if (_managers.containsKey(T)) {
-      await _managers[T]!.refresh(groupId: groupId);
+      return await _managers[T]!.refresh(groupId: groupId);
     }
+
+    return false;
   }
 
   Future<void> deleteCache() async {
