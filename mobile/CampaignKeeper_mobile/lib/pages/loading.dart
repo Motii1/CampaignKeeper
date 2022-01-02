@@ -15,10 +15,6 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
   void autoLogin() async {
     await AppPrefs().refresh(context);
-    precachePicture(
-        ExactAssetPicture(
-            SvgPicture.svgStringDecoderBuilder, 'assets/campaign_logo.svg'),
-        context);
 
     await DataCarrier().refresh<UserLoginEntity>();
 
@@ -39,9 +35,20 @@ class _LoadingState extends State<Loading> {
     }
   }
 
+  void loadAssets() async {
+    precachePicture(
+        ExactAssetPicture(
+            SvgPicture.svgStringDecoderBuilder, 'assets/campaign_logo.svg'),
+        context);
+
+    precacheImage(Image.asset("assets/user.png").image, context);
+    precacheImage(Image.asset("assets/campaign_default.png").image, context);
+  }
+
   @override
   void initState() {
     super.initState();
+    loadAssets();
     autoLogin();
   }
 

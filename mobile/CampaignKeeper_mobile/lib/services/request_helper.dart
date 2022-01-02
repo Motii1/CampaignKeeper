@@ -85,7 +85,7 @@ class RequestHelper {
     switch (response.statusCode) {
       case 200:
         _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
-        Response userResponse = await get(UserLoginEntity.loginEndpoint);
+        Response userResponse = await get(UserLoginEntity.endpoint);
 
         switch(userResponse.status) {
           case ResponseStatus.Success:

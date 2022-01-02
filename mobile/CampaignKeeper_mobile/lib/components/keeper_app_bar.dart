@@ -14,14 +14,14 @@ class KeeperPopup extends StatefulWidget {
 }
 
 class _KeeperPopupState extends State<KeeperPopup> {
-  Widget userImage = DataCarrier().getEntity<UserDataEntity>()!.avatar;
+  Widget userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
 
   @override
   void initState() {
     super.initState();
     DataCarrier().addListener<UserDataEntity>(() {
       setState(() {
-        userImage = DataCarrier().getEntity<UserDataEntity>()!.avatar;
+        userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
       });
     });
   }

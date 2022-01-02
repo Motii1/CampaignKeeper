@@ -4,7 +4,7 @@ import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/request_helper.dart';
 
-class UserDataManager extends BaseManager<UserDataEntity>{
+class UserDataManager extends BaseManager<UserDataEntity> {
   static const String _key = "UserData";
   UserDataEntity? _entity;
 
@@ -47,8 +47,7 @@ class UserDataManager extends BaseManager<UserDataEntity>{
       }
     }
 
-    Response userResponse =
-        await RequestHelper().get(UserDataEntity.imageEndpoint);
+    Response userResponse = await RequestHelper().get(UserDataEntity.endpoint);
     if (userResponse.status == ResponseStatus.Success &&
         _entity!.imageData != userResponse.dataBytes) {
       _entity!.imageData = userResponse.dataBytes;
