@@ -1,1 +1,13 @@
-export const WelcomeView: React.FC = () => <h1>{'Here will be welcome page'}</h1>;
+import { Paper, Stack } from '@mui/material';
+import { NavBar } from '../components/NavBar/NavBar';
+
+export const WelcomeView: React.FC = () => (
+  <Stack>
+    <NavBar />
+    <Paper
+      elevation={0}
+      sx={{ backgroundColor: 'background.default', minHeight: '100vh' }}
+      square
+    />
+  </Stack>
+);

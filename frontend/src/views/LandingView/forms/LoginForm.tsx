@@ -1,8 +1,13 @@
 import { Stack } from '@mui/material';
 import { AxiosResponse } from 'axios';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
+import requestMethods from '../../../axios/requestMethods';
+import { useQuery } from '../../../axios/useQuery';
+import viewsRoutes from '../../viewsRoutes';
+import { updateDetails } from '../userDetailsSlice';
 import {
   ChangeFormComponent,
   LabeledPasswordInput,
@@ -11,14 +16,20 @@ import {
 } from './elements';
 import { AUTH_URL, FormProps, TextFieldState } from './RegisterForm';
 
-const login = (username: string, password: string): Promise<AxiosResponse> =>
+export const login = (username: string, password: string): Promise<AxiosResponse> =>
   protectedApiClient.post(`${AUTH_URL}/login`, {
     username: username,
     password: password,
   });
 
+export type UserData = {
+  username: string;
+  email: string;
+};
+
 export const LoginForm: React.FC<FormProps> = props => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const initalState = {
     value: '',
@@ -27,6 +38,34 @@ export const LoginForm: React.FC<FormProps> = props => {
 
   const [username, setUsername] = useState<TextFieldState>(initalState);
   const [password, setPassword] = useState<TextFieldState>(initalState);
+
+  // handles login query
+  const { isLoading, data, status, runQuery } = useQuery<UserData>(
+    `${AUTH_URL}/login`,
+    requestMethods.POST
+  );
+
+  const handleRunQuery = useCallback(() => {
+    if (!isLoading && data && status) {
+      if (status === 200) {
+        dispatch(updateDetails({ username: data.username, email: data.email }));
+        history.push(viewsRoutes.START);
+      } else if (status === 401) {
+        setUsername({
+          value: username.value,
+          helperText: 'Invalid username/email or password',
+        });
+        setPassword({
+          value: password.value,
+          helperText: 'Invalid username/email or password',
+        });
+      }
+    }
+  }, [data, dispatch, history, isLoading, password.value, status, username.value]);
+
+  useEffect(() => {
+    handleRunQuery();
+  }, [handleRunQuery]);
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -51,19 +90,10 @@ export const LoginForm: React.FC<FormProps> = props => {
   const handleLoginButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     if (validateUsername(username.value) && validatePassword(password.value)) {
-      const response = await login(username.value, password.value);
-      if (response.status === 200) {
-        history.push('/welcome');
-      } else if (response.status === 401) {
-        setUsername({
-          value: username.value,
-          helperText: 'Invalid username/email or password',
-        });
-        setPassword({
-          value: password.value,
-          helperText: 'Invalid username/email or password',
-        });
-      }
+      runQuery({
+        username: username.value,
+        password: password.value,
+      });
     }
   };
 
