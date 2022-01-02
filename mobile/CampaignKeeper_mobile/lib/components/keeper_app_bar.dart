@@ -121,7 +121,7 @@ class KeeperAppBar extends StatelessWidget {
                           padding: EdgeInsets.only(
                               left: 5,
                               right: 5,
-                              bottom: 8.5 + itemBottomPadding),
+                              bottom: 7.8 + itemBottomPadding),
                           child: canPop(context)
                               ? IconButton(
                                   onPressed: () {

@@ -35,20 +35,25 @@ class _LoadingState extends State<Loading> {
     }
   }
 
-  void loadAssets() async {
+  Future<void> loadAssets() async {
     precachePicture(
         ExactAssetPicture(
             SvgPicture.svgStringDecoderBuilder, 'assets/campaign_logo.svg'),
         context);
 
     precacheImage(Image.asset("assets/user.png").image, context);
-    precacheImage(Image.asset("assets/campaign_default.png").image, context);
+    precacheImage(Image.asset("assets/campaign_default.jpg").image, context);
   }
 
   @override
   void initState() {
     super.initState();
-    loadAssets();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    await loadAssets();
     autoLogin();
   }
 

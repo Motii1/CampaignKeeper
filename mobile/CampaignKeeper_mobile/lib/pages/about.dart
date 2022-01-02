@@ -1,5 +1,5 @@
 import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
-import 'package:campaign_keeper_mobile/components/keeper_logo_cart.dart';
+import 'package:campaign_keeper_mobile/components/keeper_logo_card.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,6 @@
 import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
+import 'package:campaign_keeper_mobile/components/keeper_campaign_title.dart';
+import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/lifecycle_helper.dart';
@@ -12,13 +14,23 @@ class Campaigns extends StatefulWidget {
 }
 
 class _CampaignsState extends State<Campaigns> with WidgetsBindingObserver {
+  List<CampaignEntity> _entities = [];
+
+  void refresh() async {
+    await DataCarrier().refresh<CampaignEntity>();
+
+    setState(() {
+      _entities = DataCarrier().getEntities<CampaignEntity>();
+    });
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
         await LifeCycleHelper().loginOnResume(context);
-        // TODO: refresh icon and list
         await DataCarrier().refresh<UserDataEntity>();
+        await DataCarrier().refresh<CampaignEntity>();
         break;
       default:
         break;
@@ -31,6 +43,10 @@ class _CampaignsState extends State<Campaigns> with WidgetsBindingObserver {
     WidgetsBinding.instance!.addObserver(this);
 
     LifeCycleHelper().testConnectionOnResume(context);
+
+    DataCarrier().addListener<CampaignEntity>(refresh);
+    //TODO: Should be refresh on DC
+    refresh();
   }
 
   @override
@@ -52,9 +68,20 @@ class _CampaignsState extends State<Campaigns> with WidgetsBindingObserver {
               break;
           }
         },
-        sliver: SliverToBoxAdapter(
-          child: Container(),
-        ),
+        sliver: _entities.isEmpty
+            ? SliverFillRemaining(
+                child: Center(
+                  child: Text(
+                    "There's nothing here.\nStart new adventures on our website!",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+            : SliverList(
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                return KeeperCampaignTile(entity: _entities[index]);
+              }, childCount: _entities.length)),
       ),
     );
   }

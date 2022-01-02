@@ -12,7 +12,7 @@ class CampaignEntity {
 
   Image get image {
     if (imageData == null) {
-      return Image.asset("assets/campaign_default.png");
+      return Image.asset("assets/campaign_default.jpg");
     } else {
       return Image.memory(imageData!);
     }

@@ -43,9 +43,9 @@ class DataCarrier {
     return null;
   }
 
-  List getEntities<T>() {
+  List<T> getEntities<T>() {
     if (_managers.containsKey(T)) {
-      return _managers[T]!.getEntities();
+      return _managers[T]!.getEntities() as List<T>;
     }
     return [];
   }

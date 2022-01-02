@@ -6,7 +6,7 @@ import 'package:campaign_keeper_mobile/services//cache_util.dart';
 
 class CampaignManager extends BaseManager<CampaignEntity> {
   static const String _key = "Campaign";
-  List<CampaignEntity> _entities = List<CampaignEntity>.empty();
+  List<CampaignEntity> _entities = [];
 
   CampaignManager();
 

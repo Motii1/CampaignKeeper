@@ -1,4 +1,4 @@
-import 'package:campaign_keeper_mobile/components/keeper_logo_cart.dart';
+import 'package:campaign_keeper_mobile/components/keeper_logo_card.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/request_helper.dart';

@@ -35,6 +35,7 @@ class RequestHelper {
   static const String _pingEnd = "/api/ops/ping";
   static const String _loginEnd = "/api/auth/login";
   static const String _logoutEnd = "/api/auth/logout";
+  //TODO: Add debug option for custom timeout
   static const int _timeout = 5;
   Cookie? _cookie;
 
@@ -87,20 +88,20 @@ class RequestHelper {
         _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
         Response userResponse = await get(UserLoginEntity.endpoint);
 
-        switch(userResponse.status) {
-          case ResponseStatus.Success:
-            Map<String, dynamic> user = jsonDecode(userResponse.data!);
+        if (userResponse.status == ResponseStatus.Success) {
+          Map<String, dynamic> user = jsonDecode(userResponse.data!);
 
-            UserLoginEntity loginEntity = new UserLoginEntity(
-                name: user["username"],
-                email: user["email"],
-                password: password);
+          UserLoginEntity loginEntity = new UserLoginEntity(
+              name: user["username"],
+              email: user["email"],
+              password: password);
 
-            DataCarrier().attach(loginEntity);
-            break;
+          DataCarrier().attach(loginEntity);
+
+          return LoginStatus.Success;
         }
 
-        return LoginStatus.Success;
+        return LoginStatus.ServerError;
       case 400:
         return LoginStatus.IncorrectData;
       case 401:
