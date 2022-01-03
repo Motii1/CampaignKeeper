@@ -1,11 +1,17 @@
 import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
+import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/keeper_logo_card.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:flutter/material.dart';
 
-class About extends StatelessWidget {
+class About extends StatefulWidget {
   const About({Key? key}) : super(key: key);
 
+  @override
+  _AboutState createState() => _AboutState();
+}
+
+class _AboutState extends KeeperState<About> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +31,7 @@ class About extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        "Version: ${AppPrefs.milestone}",
+                        "Version: ${AppPrefs().milestone}",
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       SizedBox(

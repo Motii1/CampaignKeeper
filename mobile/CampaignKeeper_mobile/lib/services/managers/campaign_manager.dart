@@ -43,7 +43,8 @@ class CampaignManager extends BaseManager<CampaignEntity> {
     _entities.add(new CampaignEntity(id: 3, name: "Three"));
     _entities.add(new CampaignEntity(id: 4, name: "Four"));
 
-    return false;
+    notifyListeners();
+    return true;
   }
 
   void _cacheAll() {

@@ -2,7 +2,8 @@ import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/services/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/screen_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,6 +14,8 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
+  bool _loaded = false;
+
   void autoLogin() async {
     await AppPrefs().refresh(context);
 
@@ -27,7 +30,7 @@ class _LoadingState extends State<Loading> {
         Navigator.pushReplacementNamed(context, "/campaigns");
         break;
       case LoginStatus.ServerError:
-        Navigator.pushReplacementNamed(context, "/campaigns");
+        Navigator.pushReplacementNamed(context, "/campaigns", arguments: ScreenArguments("connection", "false"));
         break;
       default:
         Navigator.pushReplacementNamed(context, "/login");
@@ -52,9 +55,12 @@ class _LoadingState extends State<Loading> {
 
   @override
   void didChangeDependencies() async {
-    super.didChangeDependencies();
-    await loadAssets();
-    autoLogin();
+    if (!_loaded) {
+      _loaded = true;
+      super.didChangeDependencies();
+      await loadAssets();
+      autoLogin();
+    }
   }
 
   @override

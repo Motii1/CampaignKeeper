@@ -20,9 +20,11 @@ class _KeeperPopupState extends State<KeeperPopup> {
   void initState() {
     super.initState();
     DataCarrier().addListener<UserDataEntity>(() {
-      setState(() {
-        userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
-      });
+      if (this.mounted) {
+        setState(() {
+          userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
+        });
+      }
     });
   }
 
@@ -61,6 +63,7 @@ class KeeperAppBar extends StatelessWidget {
       this.backgroundColor,
       this.popupItemBuilder,
       this.popupOnSelected,
+      this.onRefresh,
       required this.title,
       required this.sliver,
       this.autoLeading = true})
@@ -72,16 +75,19 @@ class KeeperAppBar extends StatelessWidget {
   final bool autoLeading;
   final List<PopupMenuEntry<dynamic>> Function(BuildContext)? popupItemBuilder;
   final void Function(dynamic)? popupOnSelected;
+  final Future<void> Function()? onRefresh;
   final double _expandedHeight = 160.0;
   final double _collapsedHeight = 58.4;
-  double _realAppBarHeight = 24.0;
 
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
     return navigator != null &&
         navigator.canPop() &&
-        ModalRoute.of(context)!.settings.name != "/campaigns" &&
         autoLeading;
+  }
+
+  Future<void> _refresh() {
+    return Future.delayed(Duration(seconds: 0));
   }
 
   @override
@@ -108,7 +114,7 @@ class KeeperAppBar extends StatelessWidget {
                 backgroundColor: _bgColor,
                 flexibleSpace: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                    _realAppBarHeight =
+                    double _realAppBarHeight =
                         MediaQuery.of(context).padding.top + _collapsedHeight;
                     double itemBottomPadding =
                         (constraints.biggest.height - _realAppBarHeight) /
@@ -168,18 +174,23 @@ class KeeperAppBar extends StatelessWidget {
             ),
           ];
         },
-        body: Builder(
-          builder: (BuildContext context) {
-            return CustomScrollView(
-              slivers: [
-                SliverOverlapInjector(
-                  handle:
-                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                ),
-                sliver,
-              ],
-            );
-          },
+        body: RefreshIndicator(
+          onRefresh: onRefresh == null ? _refresh : onRefresh!,
+          color: Theme.of(context).colorScheme.onBackground,
+          displacement: onRefresh == null ? 0 : 45,
+          child: Builder(
+            builder: (BuildContext context) {
+              return CustomScrollView(
+                slivers: [
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                  sliver,
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

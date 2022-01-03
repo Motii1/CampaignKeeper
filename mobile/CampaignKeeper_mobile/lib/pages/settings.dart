@@ -1,8 +1,8 @@
 import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
+import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
-import 'package:campaign_keeper_mobile/services/lifecycle_helper.dart';
-import 'package:campaign_keeper_mobile/services/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/main.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +12,7 @@ class Settings extends StatefulWidget {
   _SettingsState createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> with WidgetsBindingObserver {
+class _SettingsState extends KeeperState<Settings> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final debugUrlController = TextEditingController();
   bool isSystemThemeAvailable = false;
@@ -64,20 +64,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        await LifeCycleHelper().loginOnResume(context);
-        break;
-      default:
-        break;
-    }
-  }
-
-  @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
 
     AppPrefs().getSdkVersion().then((ver) {
       if (ver >= 29) {
@@ -88,17 +76,11 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
     });
 
     setState(() {
-      isDebugMode = AppPrefs.debug;
+      isDebugMode = AppPrefs().debug;
       debugUrlController.text = AppPrefs().url;
     });
 
     _theme = MainApp.of(context)!.getTheme();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
-    super.dispose();
   }
 
   @override

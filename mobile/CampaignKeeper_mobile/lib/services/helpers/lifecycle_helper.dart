@@ -1,4 +1,4 @@
-import 'package:campaign_keeper_mobile/services/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:flutter/material.dart';
 

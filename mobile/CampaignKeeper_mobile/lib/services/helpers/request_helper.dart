@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/services/dependencies_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 
 enum ServerStatus {
   Available,
@@ -37,6 +37,7 @@ class RequestHelper {
   static const String _logoutEnd = "/api/auth/logout";
   //TODO: Add debug option for custom timeout
   static const int _timeout = 5;
+  static const int _loginTimeout = 2;
   Cookie? _cookie;
 
   factory RequestHelper() {
@@ -76,7 +77,7 @@ class RequestHelper {
           .post(Uri.parse("${AppPrefs().url}$_loginEnd"), body: {
         "username": name,
         "password": password
-      }).timeout(Duration(seconds: _timeout));
+      }).timeout(Duration(seconds: _loginTimeout));
     } on TimeoutException catch (_) {
       return LoginStatus.ServerError;
     } on SocketException catch (_) {
@@ -149,7 +150,7 @@ class RequestHelper {
       response = await DependenciesHelper()
           .client
           .get(Uri.parse("${AppPrefs().url}$_pingEnd"))
-          .timeout(Duration(seconds: _timeout));
+          .timeout(Duration(seconds: _loginTimeout));
     } on TimeoutException catch (_) {
       return ServerStatus.TimeOut;
     } on SocketException catch (_) {

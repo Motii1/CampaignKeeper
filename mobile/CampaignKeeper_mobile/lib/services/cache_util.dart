@@ -1,4 +1,4 @@
-import 'package:campaign_keeper_mobile/services/dependencies_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheUtil {
