@@ -102,7 +102,7 @@ class _LoginCardState extends State<LoginCard> {
           ScaffoldMessenger.of(context)
               .showSnackBar(KeeperSnackBars().incorrect);
           break;
-        case ResponseStatus.Error:
+        default:
           ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
           break;
       }

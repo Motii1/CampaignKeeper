@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
-import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
-import 'package:flutter/material.dart';
 
 class LoginHelper {
   static final LoginHelper _login = LoginHelper._internal();
