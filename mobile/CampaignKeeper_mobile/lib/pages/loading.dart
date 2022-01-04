@@ -1,7 +1,7 @@
-import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/services/screen_arguments.dart';
 import 'package:flutter/material.dart';
@@ -21,15 +21,13 @@ class _LoadingState extends State<Loading> {
 
     await DataCarrier().refresh<UserLoginEntity>();
 
-    LoginStatus status = await RequestHelper().autoLogin();
-
-    await DataCarrier().refresh<UserDataEntity>();
+    ResponseStatus status = await LoginHelper().autoLogin();
 
     switch (status) {
-      case LoginStatus.Success:
+      case ResponseStatus.Success:
         Navigator.pushReplacementNamed(context, "/campaigns");
         break;
-      case LoginStatus.ServerError:
+      case ResponseStatus.Error:
         Navigator.pushReplacementNamed(context, "/campaigns", arguments: ScreenArguments("connection", "false"));
         break;
       default:

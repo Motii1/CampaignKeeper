@@ -14,7 +14,7 @@ class KeeperPopup extends StatefulWidget {
 }
 
 class _KeeperPopupState extends State<KeeperPopup> {
-  Widget userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
+  Image userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
 
   @override
   void initState() {
@@ -81,9 +81,7 @@ class KeeperAppBar extends StatelessWidget {
 
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
-    return navigator != null &&
-        navigator.canPop() &&
-        autoLeading;
+    return navigator != null && navigator.canPop() && autoLeading;
   }
 
   Future<void> _refresh() {
@@ -92,6 +90,7 @@ class KeeperAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _textScale = MediaQuery.of(context).textScaleFactor;
     Color _bgColor = backgroundColor == null
         ? Theme.of(context).colorScheme.background
         : backgroundColor!;
@@ -119,7 +118,7 @@ class KeeperAppBar extends StatelessWidget {
                     double itemBottomPadding =
                         (constraints.biggest.height - _realAppBarHeight) /
                             (_expandedHeight - _realAppBarHeight) *
-                            3.75;
+                            3.85;
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -127,7 +126,7 @@ class KeeperAppBar extends StatelessWidget {
                           padding: EdgeInsets.only(
                               left: 5,
                               right: 5,
-                              bottom: 7.8 + itemBottomPadding),
+                              bottom: (8 + itemBottomPadding) * _textScale),
                           child: canPop(context)
                               ? IconButton(
                                   onPressed: () {
@@ -135,6 +134,7 @@ class KeeperAppBar extends StatelessWidget {
                                   },
                                   icon: Icon(
                                     Icons.arrow_back,
+                                    size: 24,
                                     color: Theme.of(context)
                                         .appBarTheme
                                         .titleTextStyle!
@@ -159,7 +159,9 @@ class KeeperAppBar extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              left: 0, right: 2, bottom: 8 + itemBottomPadding),
+                              left: 0,
+                              right: 2,
+                              bottom: (10 + itemBottomPadding) * _textScale),
                           child: popupItemBuilder == null
                               ? Container()
                               : KeeperPopup(

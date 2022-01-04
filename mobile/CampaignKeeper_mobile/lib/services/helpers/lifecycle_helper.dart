@@ -1,4 +1,5 @@
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:flutter/material.dart';
 
@@ -14,33 +15,25 @@ class LifeCycleHelper {
   Future<void> testConnectionOnResume(BuildContext context) async {
     var status = await RequestHelper().testConnection();
 
-    switch (status) {
-      case ServerStatus.Available:
-        break;
-      default:
-        ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
-        break;
+    if (status != ResponseStatus.Success) {
+      ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
     }
   }
 
   Future<void> loginOnResume(BuildContext context) async {
-    var status = await RequestHelper().autoLogin();
+    var status = await LoginHelper().autoLogin();
 
     switch (status) {
-      case LoginStatus.ServerError:
+      case ResponseStatus.Error:
         ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
         break;
-      case LoginStatus.IncorrectData:
-        RequestHelper().logout(force: true);
+      case ResponseStatus.IncorrectData:
+        LoginHelper().logout(force: true);
         Navigator.pushNamedAndRemoveUntil(
             context, '/login', (Route<dynamic> route) => false);
         break;
       default:
         break;
     }
-  }
-
-  Future<void> logoutOnPaused() async {
-    await RequestHelper().logout();
   }
 }

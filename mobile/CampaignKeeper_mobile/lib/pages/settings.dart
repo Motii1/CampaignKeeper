@@ -2,7 +2,7 @@ import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
-import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/main.dart';
 import 'package:flutter/services.dart';
@@ -53,7 +53,7 @@ class _SettingsState extends KeeperState<Settings> {
   }
 
   void logout() async {
-    await RequestHelper().logout(force: true);
+    await LoginHelper().logout(force: true);
     Navigator.pushNamedAndRemoveUntil(
         context, '/login', (Route<dynamic> route) => false);
   }

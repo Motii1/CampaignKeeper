@@ -2,6 +2,7 @@ import 'package:campaign_keeper_mobile/components/keeper_logo_card.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -82,11 +83,11 @@ class _LoginCardState extends State<LoginCard> {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
 
     if (_formKey.currentState!.validate()) {
-      LoginStatus status = await RequestHelper()
+      ResponseStatus status = await LoginHelper()
           .login(loginController.text, passwordController.text);
 
       switch (status) {
-        case LoginStatus.Success:
+        case ResponseStatus.Success:
           if (canPop()) {
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/campaigns', (Route<dynamic> route) => false);
@@ -94,14 +95,14 @@ class _LoginCardState extends State<LoginCard> {
             Navigator.pushReplacementNamed(context, "/campaigns");
           }
           break;
-        case LoginStatus.IncorrectData:
+        case ResponseStatus.IncorrectData:
           isLoginCorrect = isPasswordCorrect = false;
 
           _formKey.currentState!.validate();
           ScaffoldMessenger.of(context)
               .showSnackBar(KeeperSnackBars().incorrect);
           break;
-        case LoginStatus.ServerError:
+        case ResponseStatus.Error:
           ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
           break;
       }

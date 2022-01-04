@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:typed_data';
+import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
@@ -38,20 +40,33 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
   @override
   Future<bool> refresh({int groupId = -1}) async {
-    UserDataEntity userData = new UserDataEntity();
     if (_entity == null) {
+      UserDataEntity userData = new UserDataEntity();
       _entity = userData;
-      String? data = await CacheUtil().get(_key);
-      if (data != null) {
-        _entity!.imageData = json.decode(data);
+      String? cache = await CacheUtil().get(_key);
+
+      if (cache != null) {
+        Map data = json.decode(cache);
+        _entity!.imageData =
+            Uint8List.fromList(List<int>.from(data["imageData"]));
+
+        notifyListeners();
       }
     }
 
     Response userResponse = await RequestHelper().get(UserDataEntity.endpoint);
+
     if (userResponse.status == ResponseStatus.Success &&
-        _entity!.imageData != userResponse.dataBytes) {
+        !ListEquality().equals(_entity!.imageData, userResponse.dataBytes)) {
       _entity!.imageData = userResponse.dataBytes;
+
       notifyListeners();
+
+      Map? data = _mapEntity();
+
+      if (data != null) {
+        CacheUtil().add(_key, json.encode(data));
+      }
 
       return true;
     }
@@ -62,7 +77,9 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   Map? _mapEntity() {
     if (_entity != null) {
       Map data = {
-        "imageData": _entity!.imageData,
+        "imageData": _entity!.imageData == null
+            ? []
+            : List<int>.from(_entity!.imageData!),
       };
 
       return data;
