@@ -26,7 +26,7 @@ class LoginHelper {
     UserLoginEntity? loginEntity = DataCarrier().getEntity();
     if (loginEntity != null) {
       String name =
-      loginEntity.name == "" ? loginEntity.email : loginEntity.name;
+          loginEntity.name == "" ? loginEntity.email : loginEntity.name;
       String password = loginEntity.password;
       return await login(name, password);
     }
@@ -36,11 +36,13 @@ class LoginHelper {
 
   Future<ResponseStatus> login(String name, String password) async {
     Map body = {"username": name, "password": password};
-    var response = await RequestHelper().post(endpoint: _loginEnd, body: body, isLogin: true);
+    var response = await RequestHelper()
+        .post(endpoint: _loginEnd, body: body, isLogin: true);
 
     switch (response.status) {
       case ResponseStatus.Success:
-        Response userResponse = await RequestHelper().get(UserLoginEntity.endpoint);
+        Response userResponse =
+            await RequestHelper().get(endpoint: UserLoginEntity.endpoint);
 
         if (userResponse.status == ResponseStatus.Success) {
           Map<String, dynamic> user = jsonDecode(userResponse.data!);

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 
 enum ResponseStatus {
   Success,
@@ -14,9 +15,6 @@ class RequestHelper {
   static final RequestHelper _helper = RequestHelper._internal();
 
   static const String _pingEnd = "/api/ops/ping";
-  //TODO: Add debug option for custom timeout
-  static const int _timeout = 5;
-  static const int _loginTimeout = 2;
   Cookie? _cookie;
 
   factory RequestHelper() {
@@ -26,21 +24,24 @@ class RequestHelper {
   RequestHelper._internal();
 
   Future<ResponseStatus> testConnection() async {
-    var response = await get(_pingEnd);
+    var response = await get(endpoint: _pingEnd);
 
     return response.status;
   }
 
   // Returns pair of a respond status and a string json
-  Future<Response> get(String endpoint) async {
-    Map<String, String> headers = {"cookie": isCookieValid() ? _cookie.toString() : ""};
+  Future<Response> get(
+      {required String endpoint, bool onlyOnce = false}) async {
+    Map<String, String> headers = {
+      "cookie": isCookieValid() ? _cookie.toString() : ""
+    };
     var response;
 
     try {
       response = await DependenciesHelper()
           .client
           .get(Uri.parse("${AppPrefs().url}$endpoint"), headers: headers)
-          .timeout(Duration(seconds: _timeout));
+          .timeout(Duration(seconds: AppPrefs().timeout));
     } on TimeoutException catch (_) {
       return Response(ResponseStatus.TimeOut, null, null);
     } on Exception catch (_) {
@@ -52,8 +53,16 @@ class RequestHelper {
         return Response(
             ResponseStatus.Success, response.body, response.bodyBytes);
       case 400:
-        return Response(ResponseStatus.IncorrectData, null, null);
       case 401:
+      case 402:
+      case 403:
+        if (!onlyOnce && !isCookieValid()) {
+          ResponseStatus loginResponse = await LoginHelper().autoLogin();
+          if (loginResponse == ResponseStatus.Success) {
+            return await get(endpoint: endpoint, onlyOnce: true);
+          }
+        }
+
         return Response(ResponseStatus.IncorrectData, null, null);
       default:
         return Response(ResponseStatus.Error, null, null);
@@ -61,15 +70,22 @@ class RequestHelper {
   }
 
   Future<Response> post(
-      {required String endpoint, Object? body, bool isLogin = false}) async {
+      {required String endpoint,
+      Object? body,
+      bool isLogin = false,
+      bool onlyOnce = false}) async {
     //TODO: maybe headers with cookies here and in get are not needed, it's seems they are automatic
-    Map<String, String> headers = {"cookie": isCookieValid() ? _cookie.toString() : ""};
+    Map<String, String> headers = {
+      "cookie": isCookieValid() ? _cookie.toString() : ""
+    };
     var response;
     try {
       response = await DependenciesHelper()
           .client
-          .post(Uri.parse("${AppPrefs().url}$endpoint"), body: body, headers: headers)
-          .timeout(Duration(seconds: isLogin ? _loginTimeout : _timeout));
+          .post(Uri.parse("${AppPrefs().url}$endpoint"),
+              body: body, headers: headers)
+          .timeout(Duration(
+              seconds: isLogin ? AppPrefs().loginTimeout : AppPrefs().timeout));
     } on TimeoutException catch (_) {
       return Response(ResponseStatus.TimeOut, null, null);
     } on Exception catch (_) {
@@ -85,8 +101,18 @@ class RequestHelper {
         return Response(
             ResponseStatus.Success, response.body, response.bodyBytes);
       case 400:
-        return Response(ResponseStatus.IncorrectData, null, null);
       case 401:
+        if (!onlyOnce && !isCookieValid()) {
+          ResponseStatus loginResponse = await LoginHelper().autoLogin();
+          if (loginResponse == ResponseStatus.Success) {
+            return await post(
+                endpoint: endpoint,
+                body: body,
+                isLogin: isLogin,
+                onlyOnce: true);
+          }
+        }
+
         return Response(ResponseStatus.IncorrectData, null, null);
       default:
         return Response(ResponseStatus.Error, null, null);

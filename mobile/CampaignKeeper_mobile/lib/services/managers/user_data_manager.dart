@@ -54,7 +54,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
       }
     }
 
-    Response userResponse = await RequestHelper().get(UserDataEntity.endpoint);
+    Response userResponse = await RequestHelper().get(endpoint: UserDataEntity.endpoint);
 
     if (userResponse.status == ResponseStatus.Success &&
         !ListEquality().equals(_entity!.imageData, userResponse.dataBytes)) {
