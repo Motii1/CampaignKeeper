@@ -9,7 +9,7 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      if (ModalRoute.of(context)!.isCurrent) {
+      if (ModalRoute.of(context)!.isCurrent && this.mounted) {
         await LifeCycleHelper().loginOnResume(context);
         onResume();
       }
