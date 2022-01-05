@@ -23,8 +23,8 @@ class KeeperCampaignTile extends StatelessWidget {
               children: [
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: 90,
-                    minHeight: 90,
+                    maxHeight: 110,
+                    minHeight: 110,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
@@ -43,7 +43,7 @@ class KeeperCampaignTile extends StatelessWidget {
                   children: [
                     Center(
                         child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
+                      padding: const EdgeInsets.fromLTRB(10.0, 3.0, 10.0, 10.0),
                       child: Text(
                         entity.name,
                         style: Theme.of(context).textTheme.headline6,
