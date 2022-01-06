@@ -30,8 +30,7 @@ class _KeeperPopupState extends State<KeeperPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
+    return ClipOval(
       child: Material(
         color: Colors.transparent,
         child: PopupMenuButton(
@@ -39,10 +38,8 @@ class _KeeperPopupState extends State<KeeperPopup> {
             padding: const EdgeInsets.all(10),
             child: CircleAvatar(
               radius: 14,
-              backgroundColor: Theme.of(context).colorScheme.onBackground,
-              child: ClipOval(
-                child: userImage,
-              ),
+              backgroundColor: Colors.transparent,
+              backgroundImage: userImage.image,
             ),
           ),
           itemBuilder: widget.itemBuilder,
@@ -66,13 +63,15 @@ class KeeperAppBar extends StatelessWidget {
       this.onRefresh,
       required this.title,
       required this.sliver,
-      this.autoLeading = true})
+      this.autoLeading = true,
+      this.changeBgColor = false})
       : super(key: key);
 
   final String title;
   final Widget sliver;
   final Color? backgroundColor;
   final bool autoLeading;
+  final bool changeBgColor;
   final List<PopupMenuEntry<dynamic>> Function(BuildContext)? popupItemBuilder;
   final void Function(dynamic)? popupOnSelected;
   final Future<void> Function()? onRefresh;
@@ -106,6 +105,9 @@ class KeeperAppBar extends StatelessWidget {
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
                 automaticallyImplyLeading: false,
+                elevation: innerBoxIsScrolled ? 6 : 0,
+                shadowColor: Colors.black.withOpacity(0.25),
+                forceElevated: true,
                 pinned: true,
                 collapsedHeight: _collapsedHeight,
                 expandedHeight: _expandedHeight,
@@ -117,63 +119,69 @@ class KeeperAppBar extends StatelessWidget {
                     double increasePercent =
                         (constraints.biggest.height - _realAppBarHeight) /
                             (_expandedHeight - _realAppBarHeight);
-                    return Column(
-                      children: [
-                        Expanded(child: Container()),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: 5,
-                                right: 5,
+                    return AnimatedContainer(
+                      duration: Duration(milliseconds: 100),
+                      color: (innerBoxIsScrolled && changeBgColor)
+                          ? Theme.of(context).colorScheme.surface
+                          : _bgColor,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: 5,
+                                  right: 5,
+                                ),
+                                child: canPop(context)
+                                    ? IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        icon: Icon(
+                                          Icons.arrow_back,
+                                          size: 24,
+                                          color: Theme.of(context)
+                                              .appBarTheme
+                                              .titleTextStyle!
+                                              .color,
+                                        ),
+                                      )
+                                    : Container(width: 7),
                               ),
-                              child: canPop(context)
-                                  ? IconButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_back,
-                                        size: 24,
-                                        color: Theme.of(context)
-                                            .appBarTheme
-                                            .titleTextStyle!
-                                            .color,
-                                      ),
-                                    )
-                                  : Container(width: 7),
-                            ),
-                            Expanded(
-                              child: Text(
-                                title,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .appBarTheme
-                                      .titleTextStyle!
-                                      .color,
-                                  fontSize: 23 + (increasePercent * 6),
-                                  fontWeight: FontWeight.w500,
+                              Expanded(
+                                child: Text(
+                                  title,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .appBarTheme
+                                        .titleTextStyle!
+                                        .color,
+                                    fontSize: 23 + (increasePercent * 6),
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                            ConstrainedBox(
-                                constraints: BoxConstraints(
-                              minHeight: _collapsedHeight,
-                            )),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                right: 2,
+                              ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                minHeight: _collapsedHeight,
+                              )),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  right: 2,
+                                ),
+                                child: popupItemBuilder == null
+                                    ? Container()
+                                    : KeeperPopup(
+                                        itemBuilder: popupItemBuilder!,
+                                        onSelected: popupOnSelected),
                               ),
-                              child: popupItemBuilder == null
-                                  ? Container()
-                                  : KeeperPopup(
-                                      itemBuilder: popupItemBuilder!,
-                                      onSelected: popupOnSelected),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -182,10 +190,10 @@ class KeeperAppBar extends StatelessWidget {
           ];
         },
         body: RefreshIndicator(
-          onRefresh: onRefresh == null ? _refresh : onRefresh!,
+          onRefresh: onRefresh ?? _refresh,
           color: Theme.of(context).colorScheme.onBackground,
           displacement: onRefresh == null ? 0 : 50,
-          strokeWidth: 3,
+          strokeWidth: 2.5,
           child: Builder(
             builder: (BuildContext context) {
               return CustomScrollView(

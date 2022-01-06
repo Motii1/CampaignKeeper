@@ -79,14 +79,9 @@ class AppPrefs {
         CacheUtil().delete(key: _key);
       }
 
-      _debugUrl =
-          decodedPrefs["debugUrl"] == null ? _url : decodedPrefs["debugUrl"];
-      _debugTimeout = decodedPrefs["debugTimeout"] == null
-          ? _timeout
-          : decodedPrefs["debugTimeout"];
-      _debugLoginTimeout = decodedPrefs["debugLoginTimeout"] == null
-          ? _loginTimeout
-          : decodedPrefs["debugLoginTimeout"];
+      _debugUrl = decodedPrefs["debugUrl"] ?? _url;
+      _debugTimeout = decodedPrefs["debugTimeout"] ?? _timeout;
+      _debugLoginTimeout = decodedPrefs["debugLoginTimeout"] ?? _loginTimeout;
       _theme = await _stringToTheme(decodedPrefs["theme"]);
     } else {
       _theme = await _getDefaultTheme();

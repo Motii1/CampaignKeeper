@@ -64,10 +64,10 @@ class _KeeperDebugMenuState extends State<KeeperDebugMenu> {
       AppPrefs().url = debugUrlController.text;
 
       int? newTimeout = int.tryParse(debugTimeoutController.text);
-      AppPrefs().timeout = newTimeout == null ? AppPrefs().timeout : newTimeout;
+      AppPrefs().timeout = newTimeout ?? AppPrefs().timeout;
 
       int? newLoginTimeout = int.tryParse(debugLoginTimeoutController.text);
-      AppPrefs().loginTimeout = newLoginTimeout == null ? AppPrefs().loginTimeout : newLoginTimeout;
+      AppPrefs().loginTimeout = newLoginTimeout ?? AppPrefs().loginTimeout;
 
       ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().debugUrl);
     }
