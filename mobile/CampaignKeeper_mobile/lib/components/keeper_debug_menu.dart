@@ -103,21 +103,18 @@ class _KeeperDebugMenuState extends State<KeeperDebugMenu> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
-                    //initialValue: AppPrefs().url,
                     decoration: InputDecoration(
                         helperText: " ", labelText: "Debug url"),
                     controller: debugUrlController,
                     validator: validateDebugUrl,
                   ),
                   TextFormField(
-                    //initialValue: AppPrefs().url,
                     decoration: InputDecoration(
                         helperText: " ", labelText: "Request timeout"),
                     controller: debugTimeoutController,
                     validator: validateTimeout,
                   ),
                   TextFormField(
-                    //initialValue: AppPrefs().url,
                     decoration: InputDecoration(
                         helperText: " ", labelText: "Login request timeout"),
                     controller: debugLoginTimeoutController,
