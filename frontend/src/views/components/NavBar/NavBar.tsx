@@ -1,23 +1,11 @@
 import { Paper, Stack } from '@mui/material';
-import { AxiosResponse } from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
-import protectedApiClient from '../../../axios/axios';
-import { AppDispatch, RootState } from '../../../store';
-import { AUTH_URL } from '../../LandingView/forms/RegisterForm';
-import { clearDetails } from '../../LandingView/userDetailsSlice';
 import viewsRoutes from '../../viewsRoutes';
-import { Logo, LogoutPanel, PrimaryNavBarButton, SecondaryNavBarButton } from './elements';
-
-const logout = (dispatch: AppDispatch): Promise<AxiosResponse> => {
-  dispatch(clearDetails({}));
-  return protectedApiClient.post(`${AUTH_URL}/logout`, {});
-};
+import { Logo, PrimaryNavBarButton, SecondaryNavBarButton, UserPanel } from './elements';
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const username = useSelector((state: RootState) => state.user.username);
+  //const dispatch = useDispatch();
   const currentView = useLocation().pathname;
 
   const secondaryButtonDisplayableViews = [
@@ -28,12 +16,13 @@ export const NavBar: React.FC = () => {
   ];
   const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(currentView);
 
+  /*
   const handleLogoutButton = async () => {
     const response = await logout(dispatch);
     if (response.status === 200) history.push(viewsRoutes.LANDING);
     else history.push(viewsRoutes.ERROR);
   };
-
+  */
   return (
     <Paper
       elevation={6}
@@ -87,7 +76,7 @@ export const NavBar: React.FC = () => {
             history.push(viewsRoutes.NOTES);
           }}
         />
-        <LogoutPanel username={username} onClick={handleLogoutButton} />
+        <UserPanel />
       </Stack>
     </Paper>
   );

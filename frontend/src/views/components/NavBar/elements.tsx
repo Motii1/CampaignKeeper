@@ -1,7 +1,14 @@
 import { AccountCircle, MoreVert } from '@mui/icons-material';
-import { Container, Paper, Stack, Typography } from '@mui/material';
+import { Box, Container, Menu, MenuItem, Paper, Stack, Typography } from '@mui/material';
+import { AxiosResponse } from 'axios';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import protectedApiClient from '../../../axios/axios';
 import LogoGraphic from '../../../graphics/logo.svg';
+import { AppDispatch, RootState } from '../../../store';
+import { AUTH_URL } from '../../LandingView/forms/RegisterForm';
+import { clearDetails } from '../../LandingView/userDetailsSlice';
 import viewsRoutes from '../../viewsRoutes';
 
 export const Logo: React.FC = () => {
@@ -158,32 +165,83 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
   );
 };
 
-type LogoutProps = {
-  username: null | string;
-  onClick: (event: React.MouseEvent<SVGSVGElement>) => void;
+export const UserPanel: React.FC = () => {
+  const username = useSelector((state: RootState) => state.user.username);
+  const [menuAnchor, setMenuAnchor] = useState<null | Element>(null);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleMoreVertClick = (event: React.MouseEvent<Element>) => {
+    setMenuAnchor(event.currentTarget);
+  };
+  const handleClose = () => {
+    setMenuAnchor(null);
+  };
+
+  const handleSettingsClick = () => {
+    handleClose();
+  };
+
+  const handleAboutClick = () => {
+    handleClose();
+  };
+
+  const handleLogoutClick = async () => {
+    handleClose();
+    const response = await logout(dispatch);
+    if (response.status === 200) history.push(viewsRoutes.LANDING);
+    else history.push(viewsRoutes.ERROR);
+  };
+
+  return (
+    <Box sx={{ marginLeft: 'auto' }}>
+      <Paper
+        elevation={0}
+        sx={{
+          backgroundColor: 'customColors.gold',
+          height: 50,
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          paddingLeft: 1,
+          paddingRight: 1,
+          marginLeft: 'auto',
+        }}
+        square
+      >
+        <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="flex-start">
+          <AccountCircle sx={{ color: 'common.black' }} />
+          <Typography variant="subtitle1" sx={{ color: 'common.black' }}>
+            <b>{username}</b>
+          </Typography>
+          <MoreVert onClick={handleMoreVertClick} sx={{ color: 'common.black' }} />
+        </Stack>
+      </Paper>
+      <Menu
+        id="user-menu"
+        anchorEl={menuAnchor}
+        open={Boolean(menuAnchor)}
+        onClose={handleClose}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        sx={{
+          '& .MuiPaper-root': {
+            backgroundColor: 'customBackgrounds.gray',
+          },
+        }}
+        disableAutoFocusItem
+      >
+        <MenuItem onClick={handleSettingsClick}>Settings</MenuItem>
+        <MenuItem onClick={handleAboutClick}>About</MenuItem>
+        <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+      </Menu>
+    </Box>
+  );
 };
 
-export const LogoutPanel: React.FC<LogoutProps> = props => (
-  <Paper
-    elevation={0}
-    sx={{
-      backgroundColor: 'customColors.gold',
-      height: 50,
-      display: 'flex',
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-      paddingLeft: 1,
-      paddingRight: 1,
-      marginLeft: 'auto',
-    }}
-    square
-  >
-    <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="flex-start">
-      <AccountCircle sx={{ color: 'common.black' }} />
-      <Typography variant="subtitle1" sx={{ color: 'common.black' }}>
-        <b>{props.username}</b>
-      </Typography>
-      <MoreVert onClick={props.onClick} sx={{ color: 'common.black' }} />
-    </Stack>
-  </Paper>
-);
+const logout = (dispatch: AppDispatch): Promise<AxiosResponse> => {
+  dispatch(clearDetails({}));
+  return protectedApiClient.post(`${AUTH_URL}/logout`, {});
+};
