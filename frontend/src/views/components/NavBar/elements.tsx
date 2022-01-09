@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from '../../../store';
 import { AUTH_URL } from '../../LandingView/forms/RegisterForm';
 import { clearDetails } from '../../LandingView/userDetailsSlice';
 import viewsRoutes from '../../viewsRoutes';
+import { CustomDialog } from '../CustomDialog/CustomDialog';
 
 export const Logo: React.FC = () => {
   const history = useHistory();
@@ -168,6 +169,8 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
 export const UserPanel: React.FC = () => {
   const username = useSelector((state: RootState) => state.user.username);
   const [menuAnchor, setMenuAnchor] = useState<null | Element>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentDialogContent, setCurrentDialogContent] = useState<null | string>(null);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -180,10 +183,14 @@ export const UserPanel: React.FC = () => {
 
   const handleSettingsClick = () => {
     handleClose();
+    setCurrentDialogContent('settings');
+    setIsDialogOpen(true);
   };
 
   const handleAboutClick = () => {
     handleClose();
+    setCurrentDialogContent('about');
+    setIsDialogOpen(true);
   };
 
   const handleLogoutClick = async () => {
@@ -237,6 +244,21 @@ export const UserPanel: React.FC = () => {
         <MenuItem onClick={handleAboutClick}>About</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
       </Menu>
+      <CustomDialog
+        title={'SETTINGS'}
+        hasButtons={false}
+        isOpen={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      >
+        {() => {
+          if (currentDialogContent === 'settings')
+            return <Typography variant="subtitle1">{'Here will be settings'}</Typography>;
+          if (currentDialogContent === 'about')
+            return <Typography variant="subtitle1">{'Here will be about'}</Typography>;
+          setIsDialogOpen(false);
+          return <Typography variant="subtitle1">{'Dialog error'}</Typography>;
+        }}
+      </CustomDialog>
     </Box>
   );
 };
@@ -245,3 +267,9 @@ const logout = (dispatch: AppDispatch): Promise<AxiosResponse> => {
   dispatch(clearDetails({}));
   return protectedApiClient.post(`${AUTH_URL}/logout`, {});
 };
+
+/*
+const AboutContent: React.FC = () => {
+
+}
+*/
