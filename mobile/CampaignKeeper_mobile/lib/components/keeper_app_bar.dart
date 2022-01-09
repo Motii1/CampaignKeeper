@@ -14,22 +14,23 @@ class KeeperPopup extends StatefulWidget {
 }
 
 class _KeeperPopupState extends State<KeeperPopup> {
-  Widget userImage = DataCarrier().getEntity<UserDataEntity>()!.avatar;
+  Image userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
 
   @override
   void initState() {
     super.initState();
     DataCarrier().addListener<UserDataEntity>(() {
-      setState(() {
-        userImage = DataCarrier().getEntity<UserDataEntity>()!.avatar;
-      });
+      if (this.mounted) {
+        setState(() {
+          userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
+    return ClipOval(
       child: Material(
         color: Colors.transparent,
         child: PopupMenuButton(
@@ -37,10 +38,8 @@ class _KeeperPopupState extends State<KeeperPopup> {
             padding: const EdgeInsets.all(10),
             child: CircleAvatar(
               radius: 14,
-              backgroundColor: Theme.of(context).colorScheme.onBackground,
-              child: ClipOval(
-                child: userImage,
-              ),
+              backgroundColor: Colors.transparent,
+              backgroundImage: userImage.image,
             ),
           ),
           itemBuilder: widget.itemBuilder,
@@ -61,27 +60,31 @@ class KeeperAppBar extends StatelessWidget {
       this.backgroundColor,
       this.popupItemBuilder,
       this.popupOnSelected,
+      this.onRefresh,
       required this.title,
       required this.sliver,
-      this.autoLeading = true})
+      this.autoLeading = true,
+      this.changeBgColor = false})
       : super(key: key);
 
   final String title;
   final Widget sliver;
   final Color? backgroundColor;
   final bool autoLeading;
+  final bool changeBgColor;
   final List<PopupMenuEntry<dynamic>> Function(BuildContext)? popupItemBuilder;
   final void Function(dynamic)? popupOnSelected;
-  final double _expandedHeight = 160.0;
-  final double _collapsedHeight = 58.4;
-  double _realAppBarHeight = 24.0;
+  final Future<void> Function()? onRefresh;
+  final double _expandedHeight = 180.0;
+  final double _collapsedHeight = 66;
 
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
-    return navigator != null &&
-        navigator.canPop() &&
-        ModalRoute.of(context)!.settings.name != "/campaigns" &&
-        autoLeading;
+    return navigator != null && navigator.canPop() && autoLeading;
+  }
+
+  Future<void> _refresh() {
+    return Future.delayed(Duration(seconds: 0));
   }
 
   @override
@@ -102,65 +105,83 @@ class KeeperAppBar extends StatelessWidget {
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
                 automaticallyImplyLeading: false,
+                elevation: innerBoxIsScrolled ? 6 : 0,
+                shadowColor: Colors.black.withOpacity(0.25),
+                forceElevated: true,
                 pinned: true,
                 collapsedHeight: _collapsedHeight,
                 expandedHeight: _expandedHeight,
                 backgroundColor: _bgColor,
                 flexibleSpace: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                    _realAppBarHeight =
+                    double _realAppBarHeight =
                         MediaQuery.of(context).padding.top + _collapsedHeight;
-                    double itemBottomPadding =
+                    double increasePercent =
                         (constraints.biggest.height - _realAppBarHeight) /
-                            (_expandedHeight - _realAppBarHeight) *
-                            3.75;
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 5,
-                              right: 5,
-                              bottom: 8.5 + itemBottomPadding),
-                          child: canPop(context)
-                              ? IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_back,
+                            (_expandedHeight - _realAppBarHeight);
+                    return AnimatedContainer(
+                      duration: Duration(milliseconds: 100),
+                      color: (innerBoxIsScrolled && changeBgColor)
+                          ? Theme.of(context).colorScheme.surface
+                          : _bgColor,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: 5,
+                                  right: 5,
+                                ),
+                                child: canPop(context)
+                                    ? IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        icon: Icon(
+                                          Icons.arrow_back,
+                                          size: 24,
+                                          color: Theme.of(context)
+                                              .appBarTheme
+                                              .titleTextStyle!
+                                              .color,
+                                        ),
+                                      )
+                                    : Container(width: 7),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  title,
+                                  style: TextStyle(
                                     color: Theme.of(context)
                                         .appBarTheme
                                         .titleTextStyle!
                                         .color,
+                                    fontSize: 23 + (increasePercent * 6),
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                )
-                              : Container(width: 7),
-                        ),
-                        Expanded(
-                          child: FlexibleSpaceBar(
-                            title: Text(
-                              title,
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .appBarTheme
-                                    .titleTextStyle!
-                                    .color,
+                                ),
                               ),
-                            ),
-                            titlePadding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                              ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                minHeight: _collapsedHeight,
+                              )),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  right: 2,
+                                ),
+                                child: popupItemBuilder == null
+                                    ? Container()
+                                    : KeeperPopup(
+                                        itemBuilder: popupItemBuilder!,
+                                        onSelected: popupOnSelected),
+                              ),
+                            ],
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 0, right: 2, bottom: 8 + itemBottomPadding),
-                          child: popupItemBuilder == null
-                              ? Container()
-                              : KeeperPopup(
-                                  itemBuilder: popupItemBuilder!,
-                                  onSelected: popupOnSelected),
-                        ),
-                      ],
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -168,18 +189,24 @@ class KeeperAppBar extends StatelessWidget {
             ),
           ];
         },
-        body: Builder(
-          builder: (BuildContext context) {
-            return CustomScrollView(
-              slivers: [
-                SliverOverlapInjector(
-                  handle:
-                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                ),
-                sliver,
-              ],
-            );
-          },
+        body: RefreshIndicator(
+          onRefresh: onRefresh ?? _refresh,
+          color: Theme.of(context).colorScheme.onBackground,
+          displacement: onRefresh == null ? 0 : 50,
+          strokeWidth: 2.5,
+          child: Builder(
+            builder: (BuildContext context) {
+              return CustomScrollView(
+                slivers: [
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                  sliver,
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

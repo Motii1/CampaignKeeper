@@ -1,8 +1,9 @@
-import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/services/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/screen_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,25 +14,21 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
+  bool _loaded = false;
+
   void autoLogin() async {
     await AppPrefs().refresh(context);
-    precachePicture(
-        ExactAssetPicture(
-            SvgPicture.svgStringDecoderBuilder, 'assets/campaign_logo.svg'),
-        context);
 
     await DataCarrier().refresh<UserLoginEntity>();
 
-    LoginStatus status = await RequestHelper().autoLogin();
-
-    await DataCarrier().refresh<UserDataEntity>();
+    ResponseStatus status = await LoginHelper().autoLogin();
 
     switch (status) {
-      case LoginStatus.Success:
+      case ResponseStatus.Success:
         Navigator.pushReplacementNamed(context, "/campaigns");
         break;
-      case LoginStatus.ServerError:
-        Navigator.pushReplacementNamed(context, "/campaigns");
+      case ResponseStatus.Error:
+        Navigator.pushReplacementNamed(context, "/campaigns", arguments: ScreenArguments("connection", "false"));
         break;
       default:
         Navigator.pushReplacementNamed(context, "/login");
@@ -39,10 +36,29 @@ class _LoadingState extends State<Loading> {
     }
   }
 
+  Future<void> loadAssets() async {
+    precachePicture(
+        ExactAssetPicture(
+            SvgPicture.svgStringDecoderBuilder, 'assets/campaign_logo.svg'),
+        context);
+
+    precacheImage(Image.asset("assets/user.png").image, context);
+    precacheImage(Image.asset("assets/campaign_default.jpg").image, context);
+  }
+
   @override
   void initState() {
     super.initState();
-    autoLogin();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    if (!_loaded) {
+      _loaded = true;
+      super.didChangeDependencies();
+      await loadAssets();
+      autoLogin();
+    }
   }
 
   @override

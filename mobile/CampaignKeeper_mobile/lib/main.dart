@@ -45,9 +45,9 @@ class _MainAppState extends State<MainApp>{
         theme: _theme,
         darkTheme: _themeDark,
         themeMode: _themeMode,
-        initialRoute: "/loading",
+        initialRoute: "/",
         routes: {
-          "/loading": (context) => Loading(),
+          "/": (context) => Loading(),
           "/settings": (context) => Settings(),
           "/settings/about": (context) => About(),
           "/login": (context) => Login(),

@@ -1,7 +1,11 @@
 import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
+import 'package:campaign_keeper_mobile/components/keeper_state.dart';
+import 'package:campaign_keeper_mobile/components/keeper_campaign_title.dart';
+import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
+import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/services/lifecycle_helper.dart';
+import 'package:campaign_keeper_mobile/services/screen_arguments.dart';
 import 'package:flutter/material.dart';
 
 class Campaigns extends StatefulWidget {
@@ -11,26 +15,56 @@ class Campaigns extends StatefulWidget {
   _CampaignsState createState() => _CampaignsState();
 }
 
-class _CampaignsState extends State<Campaigns> with WidgetsBindingObserver {
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        await LifeCycleHelper().loginOnResume(context);
-        // TODO: refresh icon and list
-        await DataCarrier().refresh<UserDataEntity>();
-        break;
-      default:
-        break;
+class _CampaignsState extends KeeperState<Campaigns> {
+  List<CampaignEntity> _entities = [];
+  ScreenArguments? _arguments;
+
+  Future<void> onRefresh() async {
+    DataCarrier().refresh<UserDataEntity>();
+    await DataCarrier().refresh<CampaignEntity>();
+  }
+
+  Future<void> refresh() async {
+    if (this.mounted) {
+      setState(() {
+        _entities = DataCarrier().getEntities<CampaignEntity>();
+      });
     }
+  }
+
+  @override
+  void onResume() async {
+    DataCarrier().refresh<CampaignEntity>();
+  }
+
+  @override
+  void onEveryResume() async {
+    DataCarrier().refresh<UserDataEntity>();
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    DataCarrier().addListener<CampaignEntity>(refresh);
+    DataCarrier().refresh<CampaignEntity>();
+    DataCarrier().refresh<UserDataEntity>();
+  }
 
-    LifeCycleHelper().testConnectionOnResume(context);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_arguments == null) {
+      _arguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments?;
+
+      if (_arguments != null) {
+        if (_arguments!.title == "connection" && _arguments!.message == "false") {
+          Future.delayed(
+              Duration(seconds: 1),
+                  () => ScaffoldMessenger.of(context)
+                  .showSnackBar(KeeperSnackBars().offline));
+        }
+      }
+    }
   }
 
   @override
@@ -52,9 +86,21 @@ class _CampaignsState extends State<Campaigns> with WidgetsBindingObserver {
               break;
           }
         },
-        sliver: SliverToBoxAdapter(
-          child: Container(),
-        ),
+        onRefresh: onRefresh,
+        sliver: _entities.isEmpty
+            ? SliverFillRemaining(
+                child: Center(
+                  child: Text(
+                    "There's nothing here.\nStart new adventures on our website!",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+            : SliverList(
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                return KeeperCampaignTile(entity: _entities[index]);
+              }, childCount: _entities.length)),
       ),
     );
   }

@@ -1,7 +1,8 @@
-import 'package:campaign_keeper_mobile/components/keeper_logo_cart.dart';
+import 'package:campaign_keeper_mobile/components/keeper_logo_card.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
-import 'package:campaign_keeper_mobile/services/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -38,6 +39,11 @@ class _LoginCardState extends State<LoginCard> {
 
   bool isLoginCorrect = true;
   bool isPasswordCorrect = true;
+
+  bool canPop() {
+    final NavigatorState? navigator = Navigator.maybeOf(context);
+    return navigator != null && navigator.canPop();
+  }
 
   String? validateLogin(String? login) {
     if (!isLoginCorrect) {
@@ -77,21 +83,26 @@ class _LoginCardState extends State<LoginCard> {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
 
     if (_formKey.currentState!.validate()) {
-      LoginStatus status = await RequestHelper()
+      ResponseStatus status = await LoginHelper()
           .login(loginController.text, passwordController.text);
 
       switch (status) {
-        case LoginStatus.Success:
-          Navigator.pushReplacementNamed(context, "/campaigns");
+        case ResponseStatus.Success:
+          if (canPop()) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/campaigns', (Route<dynamic> route) => false);
+          } else {
+            Navigator.pushReplacementNamed(context, "/campaigns");
+          }
           break;
-        case LoginStatus.IncorrectData:
+        case ResponseStatus.IncorrectData:
           isLoginCorrect = isPasswordCorrect = false;
 
           _formKey.currentState!.validate();
           ScaffoldMessenger.of(context)
               .showSnackBar(KeeperSnackBars().incorrect);
           break;
-        case LoginStatus.ServerError:
+        default:
           ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
           break;
       }
@@ -135,7 +146,7 @@ class _LoginCardState extends State<LoginCard> {
             ElevatedButton(
               onPressed: loginAttempt,
               onLongPress: () {
-                if (AppPrefs.debug) {
+                if (AppPrefs().debug) {
                   Navigator.pushNamed(context, "/settings");
                 }
               },
