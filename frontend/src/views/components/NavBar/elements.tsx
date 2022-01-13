@@ -1,7 +1,8 @@
-import { AccountCircle, MoreVert } from '@mui/icons-material';
+import { MoreVert } from '@mui/icons-material';
 import { Box, Container, Menu, MenuItem, Paper, Stack, Typography } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 import { AxiosResponse } from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
@@ -171,6 +172,7 @@ export const UserPanel: React.FC = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | Element>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentDialogContent, setCurrentDialogContent] = useState<null | string>(null);
+  const [avatar, setAvatar] = useState<string>();
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -200,6 +202,14 @@ export const UserPanel: React.FC = () => {
     else history.push(viewsRoutes.ERROR);
   };
 
+  useEffect(() => {
+    protectedApiClient
+      .get('/api/user/image', {
+        responseType: 'arraybuffer',
+      })
+      .then(response => setAvatar(Buffer.from(response.data, 'binary').toString('base64')));
+  }, []);
+
   return (
     <Box sx={{ marginLeft: 'auto' }}>
       <Paper
@@ -210,18 +220,54 @@ export const UserPanel: React.FC = () => {
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'center',
-          paddingLeft: 1,
-          paddingRight: 1,
+          paddingLeft: 0.5,
+          paddingRight: 0.5,
           marginLeft: 'auto',
         }}
         square
       >
-        <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="flex-start">
-          <AccountCircle sx={{ color: 'common.black' }} />
-          <Typography variant="subtitle1" sx={{ color: 'common.black' }}>
-            <b>{username}</b>
+        <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="center">
+          <Paper
+            elevation={0}
+            sx={{
+              backgroundColor: 'customBackgrounds.gray',
+              height: 35,
+              width: 35,
+              overflow: 'visible',
+              zIndex: 1,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+              marginLeft: 1,
+              marginRight: 0.5,
+            }}
+          >
+            <Avatar
+              // alt should be set to username, but type of username is null...
+              alt="Avatar"
+              src={`data:;charset=utf-8;base64,${avatar}`}
+              sx={{ width: 30.5, height: 30.5, imageRendering: 'crisp-edges' }}
+            />
+          </Paper>
+          {/* <AccountCircle sx={{ color: 'common.black' }} /> */}
+          <Typography
+            variant="subtitle1"
+            sx={{
+              color: 'common.black',
+              fontWeight: 'bold',
+            }}
+          >
+            {username}
           </Typography>
-          <MoreVert onClick={handleMoreVertClick} sx={{ color: 'common.black' }} />
+          <MoreVert
+            onClick={handleMoreVertClick}
+            sx={{
+              color: 'common.black',
+              paddingLeft: 0.5,
+              paddingRight: 1,
+            }}
+          />
         </Stack>
       </Paper>
       <Menu
