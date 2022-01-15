@@ -18,7 +18,7 @@ export const Sidebar: React.FC = ({ children }) => (
     sm={9}
     xs={12}
     sx={{
-      backgroundColor: 'background.default',
+      backgroundColor: 'customPalette.background',
       display: 'flex',
       alignItems: 'center',
     }}

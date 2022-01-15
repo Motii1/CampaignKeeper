@@ -46,7 +46,7 @@ export const PrimaryNavBarButton: React.FC<PrimaryNavBarButtonProps> = props => 
       <Paper
         elevation={0}
         sx={{
-          backgroundColor: 'customColors.gold',
+          backgroundColor: 'customPalette.accent',
           height: 60,
           overflow: 'visible',
           zIndex: 1,
@@ -61,7 +61,7 @@ export const PrimaryNavBarButton: React.FC<PrimaryNavBarButtonProps> = props => 
           variant="h6"
           sx={{
             cursor: 'pointer',
-            color: 'common.black',
+            color: 'customPalette.onAccent',
             paddingLeft: 2,
             paddingRight: 2,
             fontWeight: 'bold',
@@ -75,7 +75,7 @@ export const PrimaryNavBarButton: React.FC<PrimaryNavBarButtonProps> = props => 
     <Paper
       elevation={0}
       sx={{
-        backgroundColor: 'customBackgrounds.gray',
+        backgroundColor: 'customPalette.surface',
         height: 50,
         display: 'flex',
         justifyContent: 'center',
@@ -88,7 +88,7 @@ export const PrimaryNavBarButton: React.FC<PrimaryNavBarButtonProps> = props => 
         variant="h6"
         sx={{
           cursor: 'pointer',
-          color: 'common.white',
+          color: 'customPalette.onSurface',
           paddingLeft: 2,
           paddingRight: 2,
           letterSpacing: 0.21,
@@ -110,7 +110,7 @@ type SecondaryNavBarButtonProps = {
 
 export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props => {
   const outerPaperStyle = {
-    backgroundColor: 'customBackgrounds.lightGray',
+    backgroundColor: 'customPalette.primary',
     height: 50,
     display: props.isDisplayed ? 'flex' : 'none',
     justifyContent: 'center',
@@ -121,7 +121,7 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
       <Paper elevation={0} sx={outerPaperStyle} onClick={props.onClick} square>
         <Paper
           sx={{
-            backgroundColor: 'customColors.gold',
+            backgroundColor: 'customPalette.accent',
             borderRadius: 5,
             height: 35,
             marginLeft: 1,
@@ -137,7 +137,7 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
             variant="h6"
             sx={{
               cursor: 'pointer',
-              color: 'common.black',
+              color: 'customPalette.onAccent',
               letterSpacing: -0.15,
               fontWeight: 'bold',
               fontSize: 17,
@@ -154,7 +154,7 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
         variant="h6"
         sx={{
           cursor: 'pointer',
-          color: 'common.white',
+          color: 'customPalette.onPrimary',
           paddingLeft: 2.5,
           paddingRight: 2.5,
           fontWeight: 'medium',
@@ -215,7 +215,7 @@ export const UserPanel: React.FC = () => {
       <Paper
         elevation={0}
         sx={{
-          backgroundColor: 'customColors.gold',
+          backgroundColor: 'customPalette.accent',
           height: 50,
           display: 'flex',
           justifyContent: 'flex-end',
@@ -230,7 +230,7 @@ export const UserPanel: React.FC = () => {
           <Paper
             elevation={0}
             sx={{
-              backgroundColor: 'customBackgrounds.gray',
+              backgroundColor: 'customPalette.surface',
               height: 35,
               width: 35,
               overflow: 'visible',
@@ -247,14 +247,13 @@ export const UserPanel: React.FC = () => {
               // alt should be set to username, but type of username is null...
               alt="Avatar"
               src={`data:;charset=utf-8;base64,${avatar}`}
-              sx={{ width: 30.5, height: 30.5, imageRendering: 'crisp-edges' }}
+              sx={{ width: 30.5, height: 30.5, imageRendering: 'pixelated' }}
             />
           </Paper>
-          {/* <AccountCircle sx={{ color: 'common.black' }} /> */}
           <Typography
             variant="subtitle1"
             sx={{
-              color: 'common.black',
+              color: 'customPalette.onAccent',
               fontWeight: 'bold',
             }}
           >
@@ -263,7 +262,7 @@ export const UserPanel: React.FC = () => {
           <MoreVert
             onClick={handleMoreVertClick}
             sx={{
-              color: 'common.black',
+              color: 'customPalette.onAccent',
               paddingLeft: 0.5,
               paddingRight: 1,
             }}
@@ -281,7 +280,8 @@ export const UserPanel: React.FC = () => {
         }}
         sx={{
           '& .MuiPaper-root': {
-            backgroundColor: 'customBackgrounds.gray',
+            backgroundColor: 'customPalette.primary',
+            borderRadius: 4,
           },
         }}
         disableAutoFocusItem

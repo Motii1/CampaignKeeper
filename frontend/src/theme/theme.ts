@@ -2,14 +2,6 @@ import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   palette: {
-    customColors: {
-      gold: '#FFE082',
-    },
-    customBackgrounds: {
-      lightGray: '#3B5163',
-      gray: '#2B3D49',
-      textField: '#3C4C57',
-    },
     customPalette: {
       background: '#262E38',
       surface: '#2B3D49',
@@ -52,14 +44,6 @@ declare module '@mui/material/styles' {
     };
   }
   interface PaletteOptions {
-    customColors?: {
-      gold?: string;
-    };
-    customBackgrounds?: {
-      lightGray?: string;
-      gray?: string;
-      textField?: string;
-    };
     customPalette?: {
       background?: string;
       surface?: string;

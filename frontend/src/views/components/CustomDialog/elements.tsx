@@ -13,8 +13,13 @@ export const ReturnBar: React.FC<ReturnBarProps> = props => (
     spacing={2}
     onClick={() => props.setOpen(false)}
   >
-    <ArrowBack />
-    <Typography variant="h6">{'BACK'}</Typography>
+    <ArrowBack sx={{ color: 'customPalette.onSurface', opacity: 0.8 }} />
+    <Typography
+      variant="h6"
+      sx={{ fontWeight: 'regular', color: 'customPalette.onSurface', opacity: 0.8 }}
+    >
+      {'BACK'}
+    </Typography>
   </Stack>
 );
 
@@ -23,7 +28,15 @@ type CustomDialogTitleProps = {
 };
 
 export const CustomDialogTitle: React.FC<CustomDialogTitleProps> = props => (
-  <Typography variant="h4" sx={{ color: 'customColors.gold', fontWeight: 'bold' }}>
+  <Typography
+    variant="h4"
+    sx={{
+      color: 'customPalette.accent',
+      fontWeight: 'bold',
+      letterSpacing: 0.5,
+      paddingTop: 1,
+    }}
+  >
     {props.title}
   </Typography>
 );

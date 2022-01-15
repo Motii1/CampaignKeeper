@@ -26,7 +26,7 @@ export const NavBar: React.FC = () => {
   return (
     <Paper
       elevation={6}
-      sx={{ backgroundColor: 'customBackgrounds.gray', height: 50, overflow: 'visible' }}
+      sx={{ backgroundColor: 'customPalette.surface', height: 50, overflow: 'visible' }}
       square
     >
       <Stack direction="row" spacing={0} justifyContent="flex-start" alignItems="flex-start">

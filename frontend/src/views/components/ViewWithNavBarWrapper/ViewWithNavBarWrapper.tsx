@@ -2,10 +2,26 @@ import { Paper, Stack } from '@mui/material';
 import { NavBar } from '../NavBar/NavBar';
 
 export const ViewWithNavBarWrapper: React.FC = props => (
-  <Stack>
-    <NavBar />
-    <Paper elevation={0} sx={{ backgroundColor: 'background.default', minHeight: '100vh' }} square>
+  <Paper
+    square
+    sx={{
+      height: '100vh',
+      width: '100%',
+      backgroundColor: 'customPalette.background',
+    }}
+  >
+    <Stack
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="stretch"
+      spacing={0}
+      sx={{
+        height: '100%',
+        width: '100%',
+      }}
+    >
+      <NavBar />
       {props.children}
-    </Paper>
-  </Stack>
+    </Stack>
+  </Paper>
 );

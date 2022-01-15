@@ -36,6 +36,7 @@ export const LabeledTextInput: React.FC<InputProps> = props => (
             opacity: 0.5,
           },
           '&': {
+            borderRadius: 2,
             height: 7,
             fontSize: 16,
             fontWeight: 'light',
