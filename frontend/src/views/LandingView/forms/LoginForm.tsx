@@ -69,30 +69,61 @@ export const LoginForm: React.FC<FormProps> = props => {
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    validationFn: (value: string) => boolean,
-    setStateFn: (newState: TextFieldState) => void,
-    helperText: string
+    setStateFn: (newState: TextFieldState) => void
   ): void => {
-    const newValue = event.target.value;
-    let newHelperText = null;
-    if (!validationFn(newValue)) newHelperText = helperText;
     setStateFn({
       value: event.target.value,
-      helperText: newHelperText,
+      helperText: null,
     });
   };
 
-  const validateUsername = (value: string) =>
-    value.includes('@') || (value.length > 7 && value.length < 13);
+  const handleTextFieldLeave = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setStateFn: (newState: TextFieldState) => void,
+    validateFn: (value: string) => string | null
+  ): void => {
+    const newValue = event.target.value;
+    setStateFn({
+      value: newValue,
+      helperText: validateFn(newValue),
+    });
+  };
 
-  const validatePassword = (value: string) => value.length > 7 && value.length < 256;
+  const validateUsername = (value: string): null | string => {
+    if (value.length > 6 && value.length < 42) {
+      return null;
+    }
+
+    return 'Login length must be between 7 and 42';
+  };
+
+  const validatePassword = (value: string): null | string => {
+    if (value.length > 7 && value.length < 255) {
+      return null;
+    }
+
+    return 'Password length must be between 7 and 255';
+  };
 
   const handleLoginButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
-    if (validateUsername(username.value) && validatePassword(password.value)) {
+
+    const usernameValidation = validateUsername(username.value);
+    const passwordValidation = validatePassword(password.value);
+
+    if (usernameValidation === null && passwordValidation === null) {
       runQuery({
         username: username.value,
         password: password.value,
+      });
+    } else {
+      setUsername({
+        value: username.value,
+        helperText: usernameValidation,
+      });
+      setPassword({
+        value: password.value,
+        helperText: passwordValidation,
       });
     }
   };
@@ -100,46 +131,43 @@ export const LoginForm: React.FC<FormProps> = props => {
   return (
     <Stack
       direction="column"
+      spacing={1}
       justifyContent="flex-start"
       alignItems="flex-start"
-      spacing={1}
-      sx={{ marginLeft: '20px', marginRight: '20px', marginBottom: '20px' }}
+      sx={{ marginLeft: '20px', marginRight: '20px', marginBottom: '10px' }}
     >
       <Stack
         direction="column"
         spacing={1}
         component="form"
-        sx={{ width: '100%' }}
+        justifyContent="flex-start"
+        alignItems="flex-start"
         onSubmit={handleLoginButton}
+        sx={{ width: '100%' }}
       >
-        <LabeledTextInput
-          text="Email or username"
-          id="login-username"
-          placeholder="Thou name, brave hero"
-          helperText={username.helperText}
-          onChange={event =>
-            handleTextFieldChange(
-              event,
-              validateUsername,
-              setUsername,
-              'Username is 8-12 characters long'
-            )
-          }
-        />
-        <LabeledPasswordInput
-          text="Password"
-          id="login-password"
-          placeholder="Phrase that must not be spoken"
-          helperText={password.helperText}
-          onChange={event =>
-            handleTextFieldChange(
-              event,
-              validatePassword,
-              setPassword,
-              'Password is 8-255 characters long'
-            )
-          }
-        />
+        <Stack
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="stretch"
+          sx={{ width: '100%' }}
+        >
+          <LabeledTextInput
+            text="Email or username"
+            id="login-username"
+            placeholder="Thou name, brave hero"
+            helperText={username.helperText}
+            onChange={event => handleTextFieldChange(event, setUsername)}
+            onBlur={event => handleTextFieldLeave(event, setUsername, validateUsername)}
+          />
+          <LabeledPasswordInput
+            text="Password"
+            id="login-password"
+            placeholder="Phrase that must not be spoken"
+            helperText={password.helperText}
+            onChange={event => handleTextFieldChange(event, setPassword)}
+            onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
+          />
+        </Stack>
         <StandardButton text="Login" />
       </Stack>
       <ChangeFormComponent

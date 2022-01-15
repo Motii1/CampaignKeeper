@@ -1,15 +1,12 @@
 import { Button, Stack, TextField, Typography } from '@mui/material';
 
-type HeaderProps = {
-  text: string;
-};
-
 type InputProps = {
   text: string;
   id: string;
   placeholder: string;
   helperText: null | string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
 };
 
 type ButtonProps = {
@@ -23,73 +20,134 @@ type ChangeProps = {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
-export const FormHeader: React.FC<HeaderProps> = props => (
-  <Typography variant="h4" sx={{ color: 'customColors.gold' }}>
-    <b>{props.text}</b>
-  </Typography>
-);
-
 export const LabeledTextInput: React.FC<InputProps> = props => (
-  <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={0.5}>
-    <Typography variant="subtitle1" sx={{ color: 'common.white' }}>
-      <b>{props.text}</b>
+  <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={0}>
+    <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface', paddingLeft: 1 }}>
+      {props.text}
     </Typography>
     <TextField
       required
       id={props.id}
       placeholder={props.placeholder}
+      inputProps={{
+        sx: {
+          '&::placeholder': {
+            color: 'customPalette.onBackground',
+            opacity: 0.5,
+          },
+          '&': {
+            height: 7,
+            fontSize: 16,
+            fontWeight: 'light',
+          },
+        },
+      }}
       variant="outlined"
       fullWidth
       onChange={props.onChange}
+      onBlur={props.onBlur}
       sx={{
-        backgroundColor: 'customBackgrounds.textField',
+        backgroundColor: props.helperText ? 'customPalette.error' : 'customPalette.background',
+        borderRadius: 2,
         '& .MuiInputBase-root': {
-          color: 'common.white',
+          color: props.helperText ? 'customPalette.onError' : 'customPalette.onBackground',
+          opacity: 1,
+        },
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: 'transparent',
+          },
+          '&:hover fieldset': {
+            borderColor: 'transparent',
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: 'transparent',
+          },
         },
       }}
     />
     <Typography
       variant="subtitle2"
       sx={{
-        color: 'common.white',
-        marginLeft: '10px',
-        display: `${props.helperText ? 'block' : 'none'}`,
+        color: 'customPalette.onError',
+        paddingLeft: 1,
+        paddingBottom: 0.5,
+        paddingTop: 0.5,
+        display: 'block',
+        fontStyle: 'italic',
+        height: 18,
       }}
     >
-      <i>{props.helperText}</i>
+      {props.helperText ?? ''}
     </Typography>
   </Stack>
 );
 
 export const LabeledPasswordInput: React.FC<InputProps> = props => (
-  <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={0.5}>
-    <Typography variant="subtitle1" sx={{ color: 'common.white' }}>
-      <b>{props.text}</b>
+  <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={0}>
+    <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface', paddingLeft: 1 }}>
+      {props.text}
     </Typography>
     <TextField
       required
       id={props.id}
       placeholder={props.placeholder}
+      fullWidth
+      inputProps={{
+        sx: {
+          '&::placeholder': {
+            color: 'customPalette.onBackground',
+            opacity: 0.5,
+          },
+          '&::-ms-reveal': {
+            filter: 'invert(100%)',
+          },
+          '&': {
+            height: 7,
+            fontSize: 16,
+            fontWeight: 'light',
+          },
+        },
+      }}
       type="password"
       variant="outlined"
-      fullWidth
       onChange={props.onChange}
+      onBlur={props.onBlur}
       sx={{
-        backgroundColor: 'customBackgrounds.textField',
+        backgroundColor: 'customPalette.background',
+        borderRadius: 2,
         '& .MuiInputBase-root': {
-          color: 'common.white',
+          color: 'customPalette.onBackground',
+        },
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: 'transparent',
+          },
+          '&:hover fieldset': {
+            borderColor: 'transparent',
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: 'transparent',
+          },
+        },
+        '& .MuiOutlinedInput-input': {
+          color: 'customPalette.onBackground',
         },
       }}
     />
     <Typography
       variant="subtitle2"
       sx={{
-        color: 'common.white',
-        marginLeft: '10px',
-        display: `${props.helperText ? 'block' : 'none'}`,
+        color: 'customPalette.onError',
+        paddingLeft: 1,
+        paddingBottom: 0.5,
+        paddingTop: 0.5,
+        display: 'block',
+        fontStyle: 'italic',
+        height: 18,
       }}
     >
-      <i>{props.helperText}</i>
+      {props.helperText ?? ''}
     </Typography>
   </Stack>
 );
@@ -99,13 +157,15 @@ export const StandardButton: React.FC<ButtonProps> = props => (
     variant="contained"
     type="submit"
     sx={{
-      marginTop: '10px',
-      width: '30%',
-      minWidth: '100px',
-      color: 'common.black',
-      backgroundColor: 'customColors.gold',
+      color: 'customPalette.onAccent',
+      paddingLeft: 1.2,
+      paddingRight: 1.2,
+      paddingTop: 0.5,
+      paddingBottom: 0.3,
+      fontWeight: 'bold',
+      backgroundColor: 'customPalette.accent',
       '&.MuiButtonBase-root:hover': {
-        bgcolor: 'customColors.gold',
+        bgcolor: 'customPalette.accent',
       },
     }}
   >
@@ -123,7 +183,14 @@ export const ChangeFormComponent: React.FC<ChangeProps> = props => (
     component="form"
     sx={{ width: '100%' }}
   >
-    <Typography variant="subtitle2" sx={{ color: 'common.white', textAlign: 'right' }}>
+    <Typography
+      variant="subtitle2"
+      sx={{
+        color: 'customPalette.onSurface',
+        textAlign: 'right',
+        fontWeight: 'regular',
+      }}
+    >
       {props.firstLineText}
       <br />
       {props.secondLineText}
@@ -132,14 +199,19 @@ export const ChangeFormComponent: React.FC<ChangeProps> = props => (
       variant="contained"
       type="submit"
       sx={{
-        color: 'common.black',
-        backgroundColor: 'customColors.gold',
+        color: 'customPalette.onAccent',
+        paddingLeft: 1.2,
+        paddingRight: 1.2,
+        paddingTop: 0.5,
+        paddingBottom: 0.3,
+        fontWeight: 'bold',
+        backgroundColor: 'customPalette.accent',
         '&.MuiButtonBase-root:hover': {
-          bgcolor: 'customColors.gold',
+          bgcolor: 'customPalette.accent',
         },
       }}
     >
-      <b>{props.buttonText}</b>
+      {props.buttonText}
     </Button>
   </Stack>
 );

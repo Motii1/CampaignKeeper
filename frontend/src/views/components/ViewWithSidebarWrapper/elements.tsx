@@ -30,12 +30,13 @@ export const Sidebar: React.FC = ({ children }) => (
 export const SidebarPaper: React.FC = ({ children }) => {
   const history = useHistory();
   return (
-    <Container sx={{ width: '80%' }}>
+    <Container sx={{ width: '72%' }}>
       <Paper
         elevation={6}
         sx={{
           borderRadius: '20px',
-          backgroundColor: 'customBackgrounds.gray',
+          marginTop: '75px',
+          backgroundColor: 'customPalette.surface',
           paddingBottom: '10px',
         }}
       >
@@ -55,6 +56,7 @@ export const SidebarPaper: React.FC = ({ children }) => {
             marginBottom: '-75px',
           }}
         />
+        <Container sx={{ height: 10 }} />
         {children}
       </Paper>
     </Container>
