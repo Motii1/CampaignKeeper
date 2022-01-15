@@ -116,6 +116,9 @@ export const RegisterForm: React.FC<FormProps> = props => {
   }, [handleUseQueryRegister]);
 
   const validateUsername = (value: string): null | string => {
+    if (value.length === 0) {
+      return "Login can't be empty";
+    }
     if (value.length < 7 || value.length >= 42) {
       return 'Username length must be between 7 and 42';
     }
@@ -127,6 +130,9 @@ export const RegisterForm: React.FC<FormProps> = props => {
   };
 
   const validateEmail = (value: string): null | string => {
+    if (value.length === 0) {
+      return "Email can't be empty";
+    }
     if (value.length <= 7 || value.length >= 42) {
       return 'Email length must be between 7 and 42';
     }
@@ -146,6 +152,9 @@ export const RegisterForm: React.FC<FormProps> = props => {
   };
 
   const validatePassword = (value: string): null | string => {
+    if (value.length === 0) {
+      return "Password can't be empty";
+    }
     if (value.length <= 7 || value.length >= 255) {
       return 'Password length must be between 7 and 255';
     }

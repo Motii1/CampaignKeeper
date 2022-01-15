@@ -90,19 +90,25 @@ export const LoginForm: React.FC<FormProps> = props => {
   };
 
   const validateUsername = (value: string): null | string => {
-    if (value.length > 6 && value.length < 42) {
-      return null;
+    if (value.length === 0) {
+      return "Login can't be empty";
+    }
+    if (value.length < 7 || value.length > 42) {
+      return 'Login length must be between 7 and 42';
     }
 
-    return 'Login length must be between 7 and 42';
+    return null;
   };
 
   const validatePassword = (value: string): null | string => {
-    if (value.length > 7 && value.length < 255) {
-      return null;
+    if (value.length === 0) {
+      return "Password can't be empty";
+    }
+    if (value.length < 7 || value.length > 255) {
+      return 'Password length must be between 7 and 255';
     }
 
-    return 'Password length must be between 7 and 255';
+    return null;
   };
 
   const handleLoginButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {

@@ -1,4 +1,4 @@
-import { Container, Grid, Paper } from '@mui/material';
+import { Box, Container, Grid, Paper } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import Logo from '../../../graphics/logo.svg';
 import WorldImage from '../../../graphics/world.jpg';
@@ -30,7 +30,7 @@ export const Sidebar: React.FC = ({ children }) => (
 export const SidebarPaper: React.FC = ({ children }) => {
   const history = useHistory();
   return (
-    <Container sx={{ width: '72%' }}>
+    <Container sx={{ width: 380 }}>
       <Paper
         elevation={6}
         sx={{
@@ -40,23 +40,20 @@ export const SidebarPaper: React.FC = ({ children }) => {
           paddingBottom: '10px',
         }}
       >
-        <Container
+        <Box
+          component="img"
           onClick={() => {
             history.push(viewsRoutes.LANDING);
           }}
           sx={{
-            cursor: 'pointer',
-            backgroundImage: `url(${Logo})`,
-            backgroundSize: 'contain',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            position: 'relative',
-            top: '-75px',
-            height: '150px',
-            marginBottom: '-75px',
+            height: 120,
+            marginTop: -8,
+            width: '100%',
           }}
+          alt="Logo"
+          src={Logo}
         />
-        <Container sx={{ height: 10 }} />
+        <Container sx={{ height: 15 }} />
         {children}
       </Paper>
     </Container>

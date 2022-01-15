@@ -26,14 +26,13 @@ export const LabeledTextInput: React.FC<InputProps> = props => (
       {props.text}
     </Typography>
     <TextField
-      required
       id={props.id}
       placeholder={props.placeholder}
       inputProps={{
         sx: {
           '&::placeholder': {
             color: 'customPalette.onBackground',
-            opacity: 0.5,
+            opacity: 0.6,
           },
           '&': {
             borderRadius: 2,
@@ -90,7 +89,6 @@ export const LabeledPasswordInput: React.FC<InputProps> = props => (
       {props.text}
     </Typography>
     <TextField
-      required
       id={props.id}
       placeholder={props.placeholder}
       fullWidth
@@ -98,7 +96,7 @@ export const LabeledPasswordInput: React.FC<InputProps> = props => (
         sx: {
           '&::placeholder': {
             color: 'customPalette.onBackground',
-            opacity: 0.5,
+            opacity: 0.6,
           },
           '&::-ms-reveal': {
             filter: 'invert(100%)',
@@ -115,7 +113,7 @@ export const LabeledPasswordInput: React.FC<InputProps> = props => (
       onChange={props.onChange}
       onBlur={props.onBlur}
       sx={{
-        backgroundColor: 'customPalette.background',
+        backgroundColor: props.helperText ? 'customPalette.error' : 'customPalette.background',
         borderRadius: 2,
         '& .MuiInputBase-root': {
           color: 'customPalette.onBackground',
