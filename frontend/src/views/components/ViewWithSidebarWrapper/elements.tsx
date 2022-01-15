@@ -5,7 +5,7 @@ import WorldImage from '../../../graphics/world.jpg';
 import viewsRoutes from '../../viewsRoutes';
 
 export const SidebarViewGrid: React.FC = ({ children }) => (
-  <Grid container sx={{ minHeight: '100vh' }}>
+  <Grid container wrap="nowrap" sx={{ minHeight: '100vh' }}>
     {children}
   </Grid>
 );
@@ -13,14 +13,15 @@ export const SidebarViewGrid: React.FC = ({ children }) => (
 export const Sidebar: React.FC = ({ children }) => (
   <Grid
     item
-    lg={4}
-    md={6}
-    sm={9}
+    lg={3}
+    md={4}
+    sm={6}
     xs={12}
     sx={{
       backgroundColor: 'customPalette.background',
       display: 'flex',
       alignItems: 'center',
+      minWidth: 400,
     }}
   >
     {children}
@@ -63,9 +64,9 @@ export const SidebarPaper: React.FC = ({ children }) => {
 export const BackgroundGraphic: React.FC = () => (
   <Grid
     item
-    lg={8}
-    md={6}
-    sm={3}
+    lg={9}
+    md={8}
+    sm={6}
     xs={false}
     sx={{
       backgroundImage: `url(${WorldImage})`,
