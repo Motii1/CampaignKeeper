@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import { StandardButton } from '../StandardButton/StandardButton';
+import { StandardButton } from '../../../../components/StandardButton/StandardButton';
 
 type ChangeFormComponentProps = {
   firstLineText: string;

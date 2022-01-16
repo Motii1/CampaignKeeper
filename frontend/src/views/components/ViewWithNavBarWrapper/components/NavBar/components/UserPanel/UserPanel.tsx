@@ -10,7 +10,8 @@ import { AUTH_URL } from '../../../../../../LandingView/forms/RegisterForm';
 import { clearDetails } from '../../../../../../LandingView/userDetailsSlice';
 import viewsRoutes from '../../../../../../viewsRoutes';
 import { CustomDialog } from '../../../../../CustomDialog/CustomDialog';
-import { AboutDialogContent } from './components/AboutDialogContent';
+import { AboutDialogContent } from './components/AboutDialogContent/AboutDialogContent';
+import { SettingsDialogContent } from './components/SettingsDialogContent/SettingsDialogContent';
 
 export const UserPanel: React.FC = () => {
   const { username, avatar } = useSelector((state: RootState) => state.user);
@@ -131,11 +132,7 @@ export const UserPanel: React.FC = () => {
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       >
-        {currentDialogContent === 'settings' ? (
-          <Typography variant="subtitle1">{'Here will be settings'}</Typography>
-        ) : (
-          <AboutDialogContent />
-        )}
+        {currentDialogContent === 'settings' ? <SettingsDialogContent /> : <AboutDialogContent />}
       </CustomDialog>
     </Box>
   );

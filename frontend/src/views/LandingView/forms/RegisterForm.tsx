@@ -4,12 +4,12 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
+import { StandardButton } from '../../components/StandardButton/StandardButton';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
 import { LabeledPasswordInput } from './components/LabeledPasswordInput/LabeledPasswordInput';
 import { LabeledTextInput } from './components/LabeledTextInput/LabeledTextInput';
-import { StandardButton } from './components/StandardButton/StandardButton';
 import { UserData } from './LoginForm';
 
 type RegisterData = {
@@ -313,7 +313,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
           <LabeledPasswordInput
             text="Password"
             id="register-password-1"
-            placeholder="Melon"
+            placeholder="Mellon"
             helperText={password.helperText}
             defaultHelperText="Must contain one big letter and symbol"
             onChange={event => handleTextFieldChange(event, setPassword)}
