@@ -6,24 +6,36 @@ export const fetchUserDetails = createAsyncThunk('userDetails/fetchDetails', asy
   return response;
 });
 
+interface UserState {
+  isDownloaded: boolean;
+  username: null | string;
+  email: null | string;
+  avatar: null | string;
+}
+
+const initialState: UserState = {
+  isDownloaded: false,
+  username: null,
+  email: null,
+  avatar: null,
+};
+
 const userDetailsSlice = createSlice({
   name: 'userDetails',
-  initialState: {
-    isDownloaded: false,
-    username: null,
-    email: null,
-  },
+  initialState,
   reducers: {
     updateDetails: (state, action) => {
       state.isDownloaded = true;
       state.username = action.payload.username;
       state.email = action.payload.email;
+      if (action.payload.avatar) state.avatar = action.payload.avatar;
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     clearDetails: (state, _action) => {
       state.isDownloaded = false;
       state.username = null;
       state.email = null;
+      state.avatar = null;
     },
   },
   extraReducers: builder => {
@@ -32,6 +44,7 @@ const userDetailsSlice = createSlice({
         state.isDownloaded = true;
         state.username = action.payload.data.username;
         state.email = action.payload.data.email;
+        state.avatar = action.payload.data.image;
       }
     });
   },

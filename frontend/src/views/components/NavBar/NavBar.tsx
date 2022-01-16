@@ -5,7 +5,6 @@ import { Logo, PrimaryNavBarButton, SecondaryNavBarButton, UserPanel } from './e
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
-  //const dispatch = useDispatch();
   const currentView = useLocation().pathname;
 
   const secondaryButtonDisplayableViews = [
@@ -16,13 +15,6 @@ export const NavBar: React.FC = () => {
   ];
   const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(currentView);
 
-  /*
-  const handleLogoutButton = async () => {
-    const response = await logout(dispatch);
-    if (response.status === 200) history.push(viewsRoutes.LANDING);
-    else history.push(viewsRoutes.ERROR);
-  };
-  */
   return (
     <Paper
       elevation={6}

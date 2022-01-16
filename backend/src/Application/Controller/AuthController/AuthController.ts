@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
+import * as path from 'path';
 import { logger } from '../../../Common/Logger/Logger';
 import { NodeEnv } from '../../../Common/Type/NodeEnv';
 import { UserLoginData } from '../../../Domain/User/Dto/UserLoginData';
@@ -13,12 +14,17 @@ import { TOKEN_COOKIE_NAME } from '../../AppConstants';
 import { config } from '../../Config/Config';
 import { authorization } from '../../Middleware/Auth/Authorization';
 import { JwtPayload } from '../../Type/JwtPayload';
+import { loadImage } from '../../Util/Image';
 import { IController } from '../IController';
 import { UserInfo } from './Dto/UserInfo';
 import { userLoginDataSchema } from './Dto/UserLoginData';
 import { userRegisterDataSchema } from './Dto/UserRegisterData';
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000; // 24 hours
+const USER_IMAGE_DEFAULT_PATH = path.resolve(
+  __dirname,
+  path.join('..', '..', '..', 'Common', 'Image', 'User.png')
+);
 
 enum AuthRoutes {
   Login = '/login',
@@ -64,9 +70,11 @@ export class AuthController implements IController {
         secure: config.nodeEnv === NodeEnv.Production,
         maxAge: DAY_IN_MS,
       };
+      const image = userWithLoginPermission.image ?? (await loadImage(USER_IMAGE_DEFAULT_PATH));
       const userInfo: UserInfo = {
         username: userWithLoginPermission.username,
         email: userWithLoginPermission.email,
+        image: image.toString('base64'),
       };
       res.cookie(TOKEN_COOKIE_NAME, token, tokenOptions).status(200).json(userInfo);
       return;

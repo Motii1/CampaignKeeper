@@ -2,7 +2,7 @@ import { MoreVert } from '@mui/icons-material';
 import { Box, Container, Menu, MenuItem, Paper, Stack, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { AxiosResponse } from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
@@ -168,11 +168,10 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
 };
 
 export const UserPanel: React.FC = () => {
-  const username = useSelector((state: RootState) => state.user.username);
+  const { username, avatar } = useSelector((state: RootState) => state.user);
   const [menuAnchor, setMenuAnchor] = useState<null | Element>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentDialogContent, setCurrentDialogContent] = useState<null | string>(null);
-  const [avatar, setAvatar] = useState<string>();
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -201,14 +200,6 @@ export const UserPanel: React.FC = () => {
     if (response.status === 200) history.push(viewsRoutes.LANDING);
     else history.push(viewsRoutes.ERROR);
   };
-
-  useEffect(() => {
-    protectedApiClient
-      .get('/api/user/image', {
-        responseType: 'arraybuffer',
-      })
-      .then(response => setAvatar(Buffer.from(response.data, 'binary').toString('base64')));
-  }, []);
 
   return (
     <Box sx={{ marginLeft: 'auto' }}>

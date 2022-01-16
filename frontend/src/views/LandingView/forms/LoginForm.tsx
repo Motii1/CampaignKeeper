@@ -25,6 +25,7 @@ export const login = (username: string, password: string): Promise<AxiosResponse
 export type UserData = {
   username: string;
   email: string;
+  image: string;
 };
 
 export const LoginForm: React.FC<FormProps> = props => {
@@ -48,7 +49,7 @@ export const LoginForm: React.FC<FormProps> = props => {
   const handleRunQuery = useCallback(() => {
     if (!isLoading && data && status) {
       if (status === 200) {
-        dispatch(updateDetails({ username: data.username, email: data.email }));
+        dispatch(updateDetails({ username: data.username, email: data.email, avatar: data.image }));
         history.push(viewsRoutes.START);
       } else if (status === 401) {
         setUsername({
