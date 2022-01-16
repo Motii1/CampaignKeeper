@@ -17,7 +17,7 @@ export const UserPanel: React.FC = () => {
   const { username, avatar } = useSelector((state: RootState) => state.user);
   const [menuAnchor, setMenuAnchor] = useState<null | Element>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [currentDialogContent, setCurrentDialogContent] = useState<null | string>(null);
+  const [currentDialogTitle, setcurrentDialogTitle] = useState<string>('About');
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -30,13 +30,13 @@ export const UserPanel: React.FC = () => {
 
   const handleSettingsClick = () => {
     handleClose();
-    setCurrentDialogContent('settings');
+    setcurrentDialogTitle('Settings');
     setIsDialogOpen(true);
   };
 
   const handleAboutClick = () => {
     handleClose();
-    setCurrentDialogContent('about');
+    setcurrentDialogTitle('About');
     setIsDialogOpen(true);
   };
 
@@ -127,12 +127,12 @@ export const UserPanel: React.FC = () => {
         <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
       </Menu>
       <CustomDialog
-        title={'SETTINGS'}
+        title={currentDialogTitle}
         hasButtons={false}
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       >
-        {currentDialogContent === 'settings' ? <SettingsDialogContent /> : <AboutDialogContent />}
+        {currentDialogTitle === 'About' ? <AboutDialogContent /> : <SettingsDialogContent />}
       </CustomDialog>
     </Box>
   );
@@ -143,9 +143,3 @@ const logout = (dispatch: AppDispatch): Promise<AxiosResponse> => {
   dispatch(clearDetails({}));
   return protectedApiClient.post(`${AUTH_URL}/logout`, {});
 };
-
-/*
-const AboutContent: React.FC = () => {
-
-}
-*/
