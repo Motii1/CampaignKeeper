@@ -39,7 +39,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
 
   const initalState = {
     value: '',
-    helperText: '',
+    helperText: null,
   };
 
   const [username, setUsername] = useState<TextFieldState>(initalState);
@@ -116,28 +116,22 @@ export const RegisterForm: React.FC<FormProps> = props => {
   }, [handleUseQueryRegister]);
 
   const validateUsername = (value: string): null | string => {
-    if (value.length === 0) {
-      return "Login can't be empty";
-    }
     if (value.length < 7 || value.length > 32) {
-      return 'Username length must be between 7 and 32';
+      return 'Must be between 7 and 32 characters';
     }
     if (!usernameRegex.test(value)) {
-      return 'Username contains illegal characters';
+      return 'Contains illegal characters';
     }
 
     return null;
   };
 
   const validateEmail = (value: string): null | string => {
-    if (value.length === 0) {
-      return "Email can't be empty";
-    }
     if (value.length <= 7 || value.length >= 42) {
-      return 'Email length must be between 7 and 42';
+      return 'Must be between 7 and 42 characters';
     }
     if (!emailRegex.test(value)) {
-      return 'Email contains illegal characters';
+      return 'Contains illegal characters';
     }
 
     return null;
@@ -152,14 +146,11 @@ export const RegisterForm: React.FC<FormProps> = props => {
   };
 
   const validatePassword = (value: string): null | string => {
-    if (value.length === 0) {
-      return "Password can't be empty";
-    }
     if (value.length <= 7 || value.length >= 255) {
-      return 'Password length must be between 7 and 255';
+      return 'Must be between 7 and 255 characters';
     }
     if (!passwordRegex.test(value)) {
-      return 'Password is too weak';
+      return 'It is too weak';
     }
 
     return null;
@@ -297,6 +288,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
             id="register-username"
             placeholder="Pick unique one"
             helperText={username.helperText}
+            defaultHelperText="Must be between 7 and 32 characters"
             onChange={event => handleTextFieldChange(event, setUsername)}
             onBlur={event => handleTextFieldLeave(event, setUsername, validateUsername)}
           />
@@ -305,6 +297,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
             id="register-email-1"
             placeholder="So your password won't be forgotten"
             helperText={email.helperText}
+            defaultHelperText="Must be real email"
             onChange={event => handleTextFieldChange(event, setEmail)}
             onBlur={event => handleTextFieldLeave(event, setEmail, validateEmail)}
           />
@@ -313,6 +306,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
             id="register-email-2"
             placeholder="Make sure it's right"
             helperText={emailRepeat.helperText}
+            defaultHelperText="Must be same as email above"
             onChange={event => handleTextFieldChange(event, setEmailRepeat)}
             onBlur={event =>
               handleTextFieldLeaveTwin(event, email.value, setEmailRepeat, validateEmailsMatch)
@@ -323,6 +317,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
             id="register-password-1"
             placeholder="Melon"
             helperText={password.helperText}
+            defaultHelperText="Must contain one big letter and symbol"
             onChange={event => handleTextFieldChange(event, setPassword)}
             onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
           />
@@ -331,6 +326,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
             id="register-password-2"
             placeholder="Repeat every letter"
             helperText={passwordRepeat.helperText}
+            defaultHelperText="Must be same as password above"
             onChange={event => handleTextFieldChange(event, setPasswordRepeat)}
             onBlur={event =>
               handleTextFieldLeaveTwin(
