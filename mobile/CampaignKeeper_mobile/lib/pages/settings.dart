@@ -57,10 +57,8 @@ class _SettingsState extends KeeperState<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
       body: KeeperAppBar(
         title: "Settings",
-        backgroundColor: Theme.of(context).colorScheme.surface,
         sliver: SliverList(
           delegate: SliverChildListDelegate(
             [

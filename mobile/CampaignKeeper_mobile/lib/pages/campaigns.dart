@@ -47,7 +47,7 @@ class _CampaignsState extends KeeperState<Campaigns> {
     super.initState();
     DataCarrier().addListener<CampaignEntity>(refresh);
     DataCarrier().refresh<CampaignEntity>();
-    DataCarrier().refresh<UserDataEntity>();
+    //DataCarrier().refresh<UserDataEntity>();
   }
 
   @override

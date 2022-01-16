@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 
 class LoginHelper {
   static final LoginHelper _login = LoginHelper._internal();
@@ -23,12 +23,9 @@ class LoginHelper {
       return status;
     }
 
-    UserLoginEntity? loginEntity = DataCarrier().getEntity();
-    if (loginEntity != null) {
-      String name =
-          loginEntity.name == "" ? loginEntity.email : loginEntity.name;
-      String password = loginEntity.password;
-      return await login(name, password);
+    UserDataEntity? userEntity = DataCarrier().getEntity();
+    if (userEntity != null && userEntity.password != null) {
+      return await login(userEntity.username, userEntity.password!);
     }
 
     return ResponseStatus.IncorrectData;
@@ -41,21 +38,17 @@ class LoginHelper {
 
     switch (response.status) {
       case ResponseStatus.Success:
-        Response userResponse =
-            await RequestHelper().get(endpoint: UserLoginEntity.endpoint);
+        Map user = jsonDecode(response.data!);
 
-        if (userResponse.status == ResponseStatus.Success) {
-          Map<String, dynamic> user = jsonDecode(userResponse.data!);
+        UserDataEntity userEntity = UserDataEntity(
+            username: user["username"],
+            email: user["email"],
+            password: password,
+            imageData: user["image"]);
 
-          UserLoginEntity loginEntity = new UserLoginEntity(
-              name: user["username"], email: user["email"], password: password);
+        DataCarrier().attach<UserDataEntity>(userEntity);
 
-          DataCarrier().attach(loginEntity);
-
-          return ResponseStatus.Success;
-        }
-
-        return ResponseStatus.Error;
+        return ResponseStatus.Success;
       case ResponseStatus.IncorrectData:
         return ResponseStatus.IncorrectData;
       default:

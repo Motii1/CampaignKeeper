@@ -14,7 +14,7 @@ class MainThemes {
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  static const Color _light = Color(0xffd8eafa);
+  static const Color _light = Color(0xffd0e6fc);
   static const Color _lighterLight = Color(0xffecf8ff);
 
   static final MaterialColor _swatchLight =
@@ -48,7 +48,7 @@ class MainThemes {
   static const Color _onErrorDark = Color(0xff242424);
 
   static const Color _dark = Color(0xff262E38);
-  static const Color _lighterDark = Color(0xff323b49);
+  static const Color _lighterDark = Color(0xff303d50);
   static final MaterialColor _swatchDark =
       MaterialColor(_primaryDark.value, const <int, Color>{
     50: _primaryDark,
@@ -74,7 +74,7 @@ class MainThemes {
     appBarTheme: AppBarTheme(
       elevation: 0.0,
       centerTitle: true,
-      backgroundColor: _light,
+      backgroundColor: _lighterLight,
       titleTextStyle: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w500,
@@ -86,31 +86,31 @@ class MainThemes {
     ),
     backgroundColor: _lighterLight,
     colorScheme: ColorScheme(
-      background: _light,
+      background: _lighterLight,
       brightness: Brightness.light,
       error: _errorLight,
-      onBackground: _dark,
+      onBackground: _lighterDark,
       onError: _onErrorLight,
       onPrimary: _onPrimaryLight,
       onSecondary: _onSecondaryLight,
-      onSurface: _lighterDark,
+      onSurface: _dark,
       primary: _primaryLight,
       primaryVariant: _primaryDark,
       secondary: _secondaryLight,
       secondaryVariant: _secondaryDark,
-      surface: _lighterLight,
+      surface: _light,
     ),
     primaryColor: _primaryLight,
     primaryColorLight: _primaryLight,
     primaryColorDark: _primaryDark,
     primarySwatch: _swatchLight,
-    scaffoldBackgroundColor: _light,
+    scaffoldBackgroundColor: _lighterLight,
     toggleableActiveColor: _primaryLight,
-    cardColor: _lighterLight,
+    cardColor: _light,
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
       filled: true,
-      fillColor: _light,
+      fillColor: _lighterLight,
       labelStyle: TextStyle(
         color: _lighterDark.withOpacity(0.7),
       ),

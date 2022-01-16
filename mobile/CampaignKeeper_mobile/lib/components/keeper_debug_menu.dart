@@ -86,48 +86,53 @@ class _KeeperDebugMenuState extends State<KeeperDebugMenu> {
     return Visibility(
       visible: widget.isDebugMode,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 15, 18, 8),
-              child: Text(
-                "DEBUG",
-                style: Theme.of(context).textTheme.subtitle2,
-              ),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 18, 8),
+                  child: Text(
+                    "DEBUG",
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                ),
+                Form(
+                  key: _formDebug,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextFormField(
+                        decoration: InputDecoration(
+                            helperText: " ", labelText: "Debug url"),
+                        controller: debugUrlController,
+                        validator: validateDebugUrl,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                            helperText: " ", labelText: "Request timeout"),
+                        controller: debugTimeoutController,
+                        validator: validateTimeout,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                            helperText: " ", labelText: "Login request timeout"),
+                        controller: debugLoginTimeoutController,
+                        validator: validateTimeout,
+                      ),
+                      ElevatedButton(
+                        onPressed: setDebug,
+                        child: const Text('SET DEBUG'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Form(
-              key: _formDebug,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(
-                        helperText: " ", labelText: "Debug url"),
-                    controller: debugUrlController,
-                    validator: validateDebugUrl,
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                        helperText: " ", labelText: "Request timeout"),
-                    controller: debugTimeoutController,
-                    validator: validateTimeout,
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                        helperText: " ", labelText: "Login request timeout"),
-                    controller: debugLoginTimeoutController,
-                    validator: validateTimeout,
-                  ),
-                  ElevatedButton(
-                    onPressed: setDebug,
-                    child: const Text('SET DEBUG'),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

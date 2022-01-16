@@ -38,7 +38,7 @@ class _KeeperPopupState extends State<KeeperPopup> {
             padding: const EdgeInsets.all(10),
             child: CircleAvatar(
               radius: 14,
-              backgroundColor: Colors.transparent,
+              backgroundColor: Theme.of(context).colorScheme.onBackground,
               backgroundImage: userImage.image,
             ),
           ),
@@ -89,9 +89,8 @@ class KeeperAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color _bgColor = backgroundColor == null
-        ? Theme.of(context).colorScheme.background
-        : backgroundColor!;
+    Color _bgColor =
+        backgroundColor ?? Theme.of(context).colorScheme.background;
 
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (overScroll) {

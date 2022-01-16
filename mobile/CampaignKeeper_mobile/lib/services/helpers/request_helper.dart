@@ -31,7 +31,7 @@ class RequestHelper {
 
   // Returns pair of a respond status and a string json
   Future<Response> get(
-      {required String endpoint, bool onlyOnce = false}) async {
+      {required String endpoint, bool autoLogin = false}) async {
     Map<String, String> headers = {
       "cookie": isCookieValid() ? _cookie.toString() : ""
     };
@@ -56,10 +56,10 @@ class RequestHelper {
       case 401:
       case 402:
       case 403:
-        if (!onlyOnce && !isCookieValid()) {
+        if (!autoLogin && !isCookieValid()) {
           ResponseStatus loginResponse = await LoginHelper().autoLogin();
           if (loginResponse == ResponseStatus.Success) {
-            return await get(endpoint: endpoint, onlyOnce: true);
+            return await get(endpoint: endpoint, autoLogin: true);
           }
         }
 
@@ -73,7 +73,7 @@ class RequestHelper {
       {required String endpoint,
       Object? body,
       bool isLogin = false,
-      bool onlyOnce = false}) async {
+      bool autoLogin = false}) async {
     //TODO: maybe headers with cookies here and in get are not needed, it's seems they are automatic
     Map<String, String> headers = {
       "cookie": isCookieValid() ? _cookie.toString() : ""
@@ -102,14 +102,14 @@ class RequestHelper {
             ResponseStatus.Success, response.body, response.bodyBytes);
       case 400:
       case 401:
-        if (!onlyOnce && !isCookieValid()) {
+        if (!autoLogin && !isCookieValid()) {
           ResponseStatus loginResponse = await LoginHelper().autoLogin();
           if (loginResponse == ResponseStatus.Success) {
             return await post(
                 endpoint: endpoint,
                 body: body,
                 isLogin: isLogin,
-                onlyOnce: true);
+                autoLogin: true);
           }
         }
 

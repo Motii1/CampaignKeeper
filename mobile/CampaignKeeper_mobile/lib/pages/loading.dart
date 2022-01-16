@@ -1,4 +1,4 @@
-import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
+import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
@@ -19,7 +19,7 @@ class _LoadingState extends State<Loading> {
   void autoLogin() async {
     await AppPrefs().refresh(context);
 
-    await DataCarrier().refresh<UserLoginEntity>();
+    await DataCarrier().refresh<UserDataEntity>();
 
     ResponseStatus status = await LoginHelper().autoLogin();
 

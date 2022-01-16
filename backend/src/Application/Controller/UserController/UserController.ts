@@ -1,7 +1,6 @@
 import { Request, Response, Router } from 'express';
 import asyncHandler from 'express-async-handler';
 import * as path from 'path';
-import { logger } from '../../../Common/Logger/Logger';
 import { handleUserImagePersistance } from '../../../Domain/User/Service/Image';
 import { authorization } from '../../Middleware/Auth/Authorization';
 import { buildSingleImageUploader } from '../../Middleware/Upload/Image';
