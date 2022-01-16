@@ -5,6 +5,7 @@ type InputProps = {
   id: string;
   placeholder: string;
   helperText: null | string;
+  defaultHelperText: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
 };
@@ -69,7 +70,7 @@ export const LabeledTextInput: React.FC<InputProps> = props => (
     <Typography
       variant="subtitle2"
       sx={{
-        color: 'customPalette.onError',
+        color: props.helperText ? 'customPalette.onError' : 'customPalette.onBackground',
         paddingLeft: 1,
         paddingBottom: 0.5,
         paddingTop: 0.5,
@@ -78,7 +79,7 @@ export const LabeledTextInput: React.FC<InputProps> = props => (
         height: 18,
       }}
     >
-      {props.helperText ?? ''}
+      {props.helperText ?? props.defaultHelperText}
     </Typography>
   </Stack>
 );
@@ -137,7 +138,7 @@ export const LabeledPasswordInput: React.FC<InputProps> = props => (
     <Typography
       variant="subtitle2"
       sx={{
-        color: 'customPalette.onError',
+        color: props.helperText ? 'customPalette.onError' : 'customPalette.onBackground',
         paddingLeft: 1,
         paddingBottom: 0.5,
         paddingTop: 0.5,
@@ -146,7 +147,7 @@ export const LabeledPasswordInput: React.FC<InputProps> = props => (
         height: 18,
       }}
     >
-      {props.helperText ?? ''}
+      {props.helperText ?? props.defaultHelperText}
     </Typography>
   </Stack>
 );

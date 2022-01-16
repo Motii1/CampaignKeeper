@@ -33,7 +33,7 @@ export const LoginForm: React.FC<FormProps> = props => {
 
   const initalState = {
     value: '',
-    helperText: '',
+    helperText: null,
   };
 
   const [username, setUsername] = useState<TextFieldState>(initalState);
@@ -162,6 +162,7 @@ export const LoginForm: React.FC<FormProps> = props => {
             id="login-username"
             placeholder="Thou name, brave hero"
             helperText={username.helperText}
+            defaultHelperText=""
             onChange={event => handleTextFieldChange(event, setUsername)}
             onBlur={event => handleTextFieldLeave(event, setUsername, validateUsername)}
           />
@@ -170,6 +171,7 @@ export const LoginForm: React.FC<FormProps> = props => {
             id="login-password"
             placeholder="Phrase that must not be spoken"
             helperText={password.helperText}
+            defaultHelperText=""
             onChange={event => handleTextFieldChange(event, setPassword)}
             onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
           />
