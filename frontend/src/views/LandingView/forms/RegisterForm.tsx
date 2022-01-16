@@ -119,8 +119,8 @@ export const RegisterForm: React.FC<FormProps> = props => {
     if (value.length === 0) {
       return "Login can't be empty";
     }
-    if (value.length < 7 || value.length >= 42) {
-      return 'Username length must be between 7 and 42';
+    if (value.length < 7 || value.length > 32) {
+      return 'Username length must be between 7 and 32';
     }
     if (!usernameRegex.test(value)) {
       return 'Username contains illegal characters';
@@ -217,28 +217,28 @@ export const RegisterForm: React.FC<FormProps> = props => {
     const passRes = validatePassword(password.value);
     const passRepeatRes = validatePasswordsMatch(password.value, passwordRepeat.value);
 
-    if (userRes !== null) {
+    if (userRes) {
       setUsername({
         value: username.value,
         helperText: userRes,
       });
     }
 
-    if (emailRes !== null) {
+    if (emailRes) {
       setEmail({
         value: email.value,
         helperText: emailRes,
       });
     }
 
-    if (emailRepeatRes !== null) {
+    if (emailRepeatRes) {
       setEmailRepeat({
         value: emailRepeat.value,
         helperText: emailRepeatRes,
       });
     }
 
-    if (passRes !== null) {
+    if (passRes) {
       setPassword({
         value: password.value,
         helperText: passRes,

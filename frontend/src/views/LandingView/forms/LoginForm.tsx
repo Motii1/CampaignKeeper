@@ -93,8 +93,8 @@ export const LoginForm: React.FC<FormProps> = props => {
     if (value.length === 0) {
       return "Login can't be empty";
     }
-    if (value.length < 7 || value.length > 42) {
-      return 'Login length must be between 7 and 42';
+    if (value.length < 7 || value.length > 32) {
+      return 'Login length must be between 7 and 32';
     }
 
     return null;
