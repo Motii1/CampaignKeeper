@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, Stack } from '@mui/material';
-import { CustomDialogTitle, ReturnBar } from './elements';
+import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
+import { ReturnBar } from './components/ReturnBar/ReturnBar';
 
 type CustomDialogProps = {
   title: string;
