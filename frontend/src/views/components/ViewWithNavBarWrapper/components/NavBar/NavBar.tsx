@@ -1,11 +1,13 @@
 import { Paper, Stack } from '@mui/material';
 import { useHistory, useLocation } from 'react-router';
-import viewsRoutes from '../../viewsRoutes';
-import { Logo, PrimaryNavBarButton, SecondaryNavBarButton, UserPanel } from './elements';
+import viewsRoutes from '../../../../viewsRoutes';
+import { NavBarLogo } from './components/NavBarLogo/NavBarLogo';
+import { PrimaryNavBarButton } from './components/PrimaryNavBarButton/PrimaryNavBarButton';
+import { SecondaryNavBarButton } from './components/SecondaryNavBarButton/SecondaryNavBarButton';
+import { UserPanel } from './components/UserPanel/UserPanel';
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
-  //const dispatch = useDispatch();
   const currentView = useLocation().pathname;
 
   const secondaryButtonDisplayableViews = [
@@ -16,13 +18,6 @@ export const NavBar: React.FC = () => {
   ];
   const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(currentView);
 
-  /*
-  const handleLogoutButton = async () => {
-    const response = await logout(dispatch);
-    if (response.status === 200) history.push(viewsRoutes.LANDING);
-    else history.push(viewsRoutes.ERROR);
-  };
-  */
   return (
     <Paper
       elevation={6}
@@ -30,7 +25,7 @@ export const NavBar: React.FC = () => {
       square
     >
       <Stack direction="row" spacing={0} justifyContent="flex-start" alignItems="flex-start">
-        <Logo />
+        <NavBarLogo />
         <PrimaryNavBarButton
           text="START"
           isChosen={currentView === viewsRoutes.START}

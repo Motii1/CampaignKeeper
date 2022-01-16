@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import asyncHandler from 'express-async-handler';
 import * as path from 'path';
+import { logger } from '../../../Common/Logger/Logger';
 import { handleUserImagePersistance } from '../../../Domain/User/Service/Image';
 import { authorization } from '../../Middleware/Auth/Authorization';
 import { buildSingleImageUploader } from '../../Middleware/Upload/Image';
@@ -80,7 +81,12 @@ export class UserController implements IController {
    */
   private detailsHandler = async (req: Request, res: Response): Promise<void> => {
     const user = await extractUserFromCookies(req.cookies);
-    res.status(200).json({ username: user!.username, email: user!.email });
+    const image = user.image ?? (await loadImage(USER_IMAGE_DEFAULT_PATH));
+    res.status(200).json({
+      username: user!.username,
+      email: user!.email,
+      image: image.toString('base64'),
+    });
   };
 
   /**

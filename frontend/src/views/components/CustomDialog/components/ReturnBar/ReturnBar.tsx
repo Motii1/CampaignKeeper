@@ -22,21 +22,3 @@ export const ReturnBar: React.FC<ReturnBarProps> = props => (
     </Typography>
   </Stack>
 );
-
-type CustomDialogTitleProps = {
-  title: string;
-};
-
-export const CustomDialogTitle: React.FC<CustomDialogTitleProps> = props => (
-  <Typography
-    variant="h4"
-    sx={{
-      color: 'customPalette.accent',
-      fontWeight: 'bold',
-      letterSpacing: 0.5,
-      paddingTop: 1,
-    }}
-  >
-    {props.title}
-  </Typography>
-);

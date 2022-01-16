@@ -8,12 +8,10 @@ import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
-import {
-  ChangeFormComponent,
-  LabeledPasswordInput,
-  LabeledTextInput,
-  StandardButton,
-} from './elements';
+import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
+import { LabeledPasswordInput } from './components/LabeledPasswordInput/LabeledPasswordInput';
+import { LabeledTextInput } from './components/LabeledTextInput/LabeledTextInput';
+import { StandardButton } from './components/StandardButton/StandardButton';
 import { AUTH_URL, FormProps, TextFieldState } from './RegisterForm';
 
 export const login = (username: string, password: string): Promise<AxiosResponse> =>
@@ -25,6 +23,7 @@ export const login = (username: string, password: string): Promise<AxiosResponse
 export type UserData = {
   username: string;
   email: string;
+  image: string;
 };
 
 export const LoginForm: React.FC<FormProps> = props => {
@@ -48,7 +47,7 @@ export const LoginForm: React.FC<FormProps> = props => {
   const handleRunQuery = useCallback(() => {
     if (!isLoading && data && status) {
       if (status === 200) {
-        dispatch(updateDetails({ username: data.username, email: data.email }));
+        dispatch(updateDetails({ username: data.username, email: data.email, avatar: data.image }));
         history.push(viewsRoutes.START);
       } else if (status === 401) {
         setUsername({
