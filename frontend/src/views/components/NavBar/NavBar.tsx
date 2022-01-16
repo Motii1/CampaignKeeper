@@ -1,7 +1,10 @@
 import { Paper, Stack } from '@mui/material';
 import { useHistory, useLocation } from 'react-router';
 import viewsRoutes from '../../viewsRoutes';
-import { Logo, PrimaryNavBarButton, SecondaryNavBarButton, UserPanel } from './elements';
+import { Logo } from './components/Logo/Logo';
+import { PrimaryNavBarButton } from './components/PrimaryNavBarButton/PrimaryNavBarButton';
+import { SecondaryNavBarButton } from './components/SecondaryNavBarButton/SecondaryNavBarButton';
+import { UserPanel } from './components/UserPanel/UserPanel';
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
