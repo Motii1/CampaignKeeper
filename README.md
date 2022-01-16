@@ -24,6 +24,8 @@ docker-compose up -d
 
 Due to some problems with SQL Server container start could failed. To fix the issue you need to grant appropriate permissions to `storage/database` directory. The easiest way to do it is to execute `chmod -R 777 storage/` and run `docker-compose` again.
 
+Also right now after first run of the backend remember to change variable `synchronize` inside `backend/ormconfig.js` to `false` if you don't want to loose your images store inside database.
+
 #### Web (frontend and backend)
 
 Firstly you need to install all required packages. To achieve that you should run `npm install` command inside `frontend` and `backend` directories. Then you should start client and server:

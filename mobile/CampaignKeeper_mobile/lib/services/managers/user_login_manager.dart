@@ -21,12 +21,12 @@ class UserLoginManager extends BaseManager<UserLoginEntity> {
   }
 
   @override
-  UserLoginEntity? getEntity({int groupId = -1, int entId = -1}) {
+  UserLoginEntity? getEntity({int entId = -1}) {
     return _entity;
   }
 
   @override
-  List<UserLoginEntity> getEntities({int groupId = -1}) {
+  List<UserLoginEntity> getEntities() {
     List<UserLoginEntity> entities = [];
 
     if (_entity != null) {

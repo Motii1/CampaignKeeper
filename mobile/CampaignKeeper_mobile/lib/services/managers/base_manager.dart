@@ -9,11 +9,11 @@ class BaseManager<T> extends ChangeNotifier{
     throw new UnimplementedError();
   }
 
-  T? getEntity({int groupId= -1, int entId= -1}) {
+  T? getEntity({int entId= -1}) {
     throw new UnimplementedError();
   }
 
-  List<T> getEntities({int groupId= -1}) {
+  List<T> getEntities() {
     throw new UnimplementedError();
   }
 

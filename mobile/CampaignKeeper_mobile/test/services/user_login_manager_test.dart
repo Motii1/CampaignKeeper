@@ -1,4 +1,4 @@
-import 'package:campaign_keeper_mobile/services/dependencies_helper.dart';
+import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';

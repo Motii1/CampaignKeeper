@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MainThemes {
@@ -6,7 +5,7 @@ class MainThemes {
   static const double _textColorOpacityPrimary = 0.9;
   static const double _radius = 10.0;
 
-  static const Color _primaryLight = Color(0xfffabe02);
+  static const Color _primaryLight = Color(0xfff8bc02);
   static const Color _onPrimaryLight = Color(0xff242424);
 
   static final Color _secondaryLight = Color(0xff09efc9);
@@ -15,8 +14,9 @@ class MainThemes {
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  static const Color _light = Color(0xffe0ecfc);
-  static const Color _lighterLight = Color(0xfff7f9ff);
+  static const Color _light = Color(0xffd8eafa);
+  static const Color _lighterLight = Color(0xffecf8ff);
+
   static final MaterialColor _swatchLight =
       MaterialColor(_primaryLight.value, const <int, Color>{
     50: _primaryLight,

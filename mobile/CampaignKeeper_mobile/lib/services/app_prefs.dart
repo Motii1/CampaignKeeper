@@ -8,12 +8,16 @@ import 'package:campaign_keeper_mobile/main.dart';
 
 class AppPrefs {
   static final AppPrefs _app = AppPrefs._internal();
-  static const String milestone = "Eden Prime";
-  static const String _key = "app_prefs";
-  static const String _url = "http://10.0.2.2:4000";
-  static const bool debug = true;
+  final String milestone = "Eden Prime";
+  final String _key = "app_prefs";
+  final String _url = "http://10.0.2.2:4000";
+  final bool debug = true;
+  final int _timeout = 5;
+  final int _loginTimeout = 2;
 
-  String _debugUrl = _url;
+  String _debugUrl = "";
+  int _debugTimeout = 0;
+  int _debugLoginTimeout = 0;
   ThemeMode _theme = ThemeMode.dark;
 
   String get url {
@@ -29,9 +33,39 @@ class AppPrefs {
     _cachePrefs();
   }
 
+  int get timeout {
+    if (debug) {
+      return _debugTimeout;
+    } else {
+      return _timeout;
+    }
+  }
+
+  set timeout(int value) {
+    _debugTimeout = value;
+    _cachePrefs();
+  }
+
+  int get loginTimeout {
+    if (debug) {
+      return _debugLoginTimeout;
+    } else {
+      return _loginTimeout;
+    }
+  }
+
+  set loginTimeout(int value) {
+    _debugLoginTimeout = value;
+    _cachePrefs();
+  }
+
   factory AppPrefs() => _app;
 
-  AppPrefs._internal();
+  AppPrefs._internal() {
+    _debugUrl = _url;
+    _debugTimeout = _timeout;
+    _debugLoginTimeout = _loginTimeout;
+  }
 
   Future<void> refresh(BuildContext context) async {
     var val = await CacheUtil().get(_key);
@@ -41,11 +75,13 @@ class AppPrefs {
 
       try {
         decodedPrefs = json.decode(val);
-      } catch(e) {
+      } catch (e) {
         CacheUtil().delete(key: _key);
       }
 
-      _debugUrl = decodedPrefs["debugUrl"] == null ? "" : decodedPrefs["debugUrl"];
+      _debugUrl = decodedPrefs["debugUrl"] ?? _url;
+      _debugTimeout = decodedPrefs["debugTimeout"] ?? _timeout;
+      _debugLoginTimeout = decodedPrefs["debugLoginTimeout"] ?? _loginTimeout;
       _theme = await _stringToTheme(decodedPrefs["theme"]);
     } else {
       _theme = await _getDefaultTheme();
@@ -79,6 +115,12 @@ class AppPrefs {
 
   void resetDebugUrl() {
     _debugUrl = _url;
+    _cachePrefs();
+  }
+
+  void resetDebugTimeout() {
+    _debugTimeout = _timeout;
+    _debugLoginTimeout = _loginTimeout;
     _cachePrefs();
   }
 
@@ -119,7 +161,12 @@ class AppPrefs {
   }
 
   void _cachePrefs() {
-    Map prefs = {"theme": _themeToString(_theme), "debugUrl": _debugUrl};
+    Map prefs = {
+      "theme": _themeToString(_theme),
+      "debugUrl": _debugUrl,
+      "debugTimeout": _debugTimeout,
+      "debugLoginTimeout": _debugLoginTimeout,
+    };
     CacheUtil().add(_key, json.encode(prefs));
   }
 }

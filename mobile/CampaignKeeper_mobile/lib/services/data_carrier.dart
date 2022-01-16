@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/services/managers/campaign_manager.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/managers/user_login_manager.dart';
 import 'package:campaign_keeper_mobile/services/managers/user_data_manager.dart';
+import 'package:flutter/material.dart';
 
 class DataCarrier {
   static final DataCarrier _dc = DataCarrier._internal();
@@ -19,6 +21,7 @@ class DataCarrier {
   DataCarrier._internal() {
     _managers[UserLoginEntity] = new UserLoginManager();
     _managers[UserDataEntity] = new UserDataManager();
+    _managers[CampaignEntity] = new CampaignManager();
   }
 
   void addListener<T>(VoidCallback listener) {
@@ -27,23 +30,22 @@ class DataCarrier {
     }
   }
 
-  void attach<T>(T entity)
-  {
+  void attach<T>(T entity) {
     if (_managers.containsKey(T)) {
       _managers[T]!.attach(entity);
     }
   }
 
-  T? getEntity<T>({int groupId = -1, int entId = -1}) {
+  T? getEntity<T>({int entId = -1}) {
     if (_managers.containsKey(T)) {
-      return _managers[T]!.getEntity(groupId: groupId, entId: entId);
+      return _managers[T]!.getEntity(entId: entId);
     }
     return null;
   }
 
-  List getEntities<T>({int groupId = -1}) {
+  List<T> getEntities<T>() {
     if (_managers.containsKey(T)) {
-      return _managers[T]!.getEntities(groupId: groupId);
+      return _managers[T]!.getEntities() as List<T>;
     }
     return [];
   }

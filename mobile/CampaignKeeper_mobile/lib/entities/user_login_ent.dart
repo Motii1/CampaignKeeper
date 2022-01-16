@@ -1,5 +1,5 @@
 class UserLoginEntity {
-  static const String loginEndpoint = "/api/user/details";
+  static const String endpoint = "/api/user/details";
 
   String name;
   String email;
