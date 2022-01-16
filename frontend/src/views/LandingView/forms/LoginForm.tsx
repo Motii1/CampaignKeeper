@@ -6,12 +6,12 @@ import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
+import { StandardButton } from '../../components/StandardButton/StandardButton';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
 import { LabeledPasswordInput } from './components/LabeledPasswordInput/LabeledPasswordInput';
 import { LabeledTextInput } from './components/LabeledTextInput/LabeledTextInput';
-import { StandardButton } from './components/StandardButton/StandardButton';
 import { AUTH_URL, FormProps, TextFieldState } from './RegisterForm';
 
 export const login = (username: string, password: string): Promise<AxiosResponse> =>
