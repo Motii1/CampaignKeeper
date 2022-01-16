@@ -6,12 +6,10 @@ import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
-import {
-  ChangeFormComponent,
-  LabeledPasswordInput,
-  LabeledTextInput,
-  StandardButton,
-} from './elements';
+import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
+import { LabeledPasswordInput } from './components/LabeledPasswordInput/LabeledPasswordInput';
+import { LabeledTextInput } from './components/LabeledTextInput/LabeledTextInput';
+import { StandardButton } from './components/StandardButton/StandardButton';
 import { UserData } from './LoginForm';
 
 type RegisterData = {
