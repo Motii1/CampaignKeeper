@@ -10,13 +10,19 @@ export const ReturnBar: React.FC<ReturnBarProps> = props => (
     direction="row"
     justifyContent="flex-start"
     alignItems="center"
-    spacing={2}
+    spacing={1.8}
     onClick={() => props.setOpen(false)}
   >
     <ArrowBack sx={{ color: 'customPalette.onSurface', opacity: 0.8 }} />
     <Typography
       variant="h6"
-      sx={{ fontWeight: 'regular', color: 'customPalette.onSurface', opacity: 0.8 }}
+      sx={{
+        paddingTop: 0.2,
+        fontSize: 18,
+        fontWeight: 'regular',
+        color: 'customPalette.onSurface',
+        opacity: 0.8,
+      }}
     >
       {'BACK'}
     </Typography>

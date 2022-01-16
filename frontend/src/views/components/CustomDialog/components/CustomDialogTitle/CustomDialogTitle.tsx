@@ -9,9 +9,10 @@ export const CustomDialogTitle: React.FC<CustomDialogTitleProps> = props => (
     variant="h4"
     sx={{
       color: 'customPalette.accent',
-      fontWeight: 'bold',
+      fontWeight: 'medium',
       letterSpacing: 0.5,
-      paddingTop: 1,
+      paddingTop: 0.6,
+      paddingBottom: 1,
     }}
   >
     {props.title}
