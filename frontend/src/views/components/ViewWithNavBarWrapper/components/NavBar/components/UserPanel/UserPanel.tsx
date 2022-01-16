@@ -4,12 +4,12 @@ import { AxiosResponse } from 'axios';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import protectedApiClient from '../../../../../axios/axios';
-import { AppDispatch, RootState } from '../../../../../store';
-import { AUTH_URL } from '../../../../LandingView/forms/RegisterForm';
-import { clearDetails } from '../../../../LandingView/userDetailsSlice';
-import viewsRoutes from '../../../../viewsRoutes';
-import { CustomDialog } from '../../../CustomDialog/CustomDialog';
+import protectedApiClient from '../../../../../../../axios/axios';
+import { AppDispatch, RootState } from '../../../../../../../store';
+import { AUTH_URL } from '../../../../../../LandingView/forms/RegisterForm';
+import { clearDetails } from '../../../../../../LandingView/userDetailsSlice';
+import viewsRoutes from '../../../../../../viewsRoutes';
+import { CustomDialog } from '../../../../../CustomDialog/CustomDialog';
 
 export const UserPanel: React.FC = () => {
   const { username, avatar } = useSelector((state: RootState) => state.user);

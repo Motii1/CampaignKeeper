@@ -1,9 +1,9 @@
 import { Container } from '@mui/material';
 import { useHistory } from 'react-router-dom';
-import LogoGraphic from '../../../../../graphics/logo.svg';
-import viewsRoutes from '../../../../viewsRoutes';
+import LogoGraphic from '../../../../../../../graphics/logo.svg';
+import viewsRoutes from '../../../../../../viewsRoutes';
 
-export const Logo: React.FC = () => {
+export const NavBarLogo: React.FC = () => {
   const history = useHistory();
   return (
     <Container

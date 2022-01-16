@@ -1,7 +1,7 @@
 import { Paper, Stack } from '@mui/material';
 import { useHistory, useLocation } from 'react-router';
-import viewsRoutes from '../../viewsRoutes';
-import { Logo } from './components/Logo/Logo';
+import viewsRoutes from '../../../../viewsRoutes';
+import { NavBarLogo } from './components/NavBarLogo/NavBarLogo';
 import { PrimaryNavBarButton } from './components/PrimaryNavBarButton/PrimaryNavBarButton';
 import { SecondaryNavBarButton } from './components/SecondaryNavBarButton/SecondaryNavBarButton';
 import { UserPanel } from './components/UserPanel/UserPanel';
@@ -25,7 +25,7 @@ export const NavBar: React.FC = () => {
       square
     >
       <Stack direction="row" spacing={0} justifyContent="flex-start" alignItems="flex-start">
-        <Logo />
+        <NavBarLogo />
         <PrimaryNavBarButton
           text="START"
           isChosen={currentView === viewsRoutes.START}
