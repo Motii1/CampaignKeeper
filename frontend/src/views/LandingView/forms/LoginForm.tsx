@@ -10,7 +10,6 @@ import { StandardButton } from '../../components/StandardButton/StandardButton';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
-import { LabeledPasswordInput } from './components/LabeledPasswordInput/LabeledPasswordInput';
 import { LabeledTextInput } from './components/LabeledTextInput/LabeledTextInput';
 import { AUTH_URL, FormProps, TextFieldState } from './RegisterForm';
 
@@ -165,12 +164,13 @@ export const LoginForm: React.FC<FormProps> = props => {
             onChange={event => handleTextFieldChange(event, setUsername)}
             onBlur={event => handleTextFieldLeave(event, setUsername, validateUsername)}
           />
-          <LabeledPasswordInput
+          <LabeledTextInput
             text="Password"
             id="login-password"
             placeholder="Phrase that must not be spoken"
             helperText={password.helperText}
             defaultHelperText=""
+            isPassword={true}
             onChange={event => handleTextFieldChange(event, setPassword)}
             onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
           />

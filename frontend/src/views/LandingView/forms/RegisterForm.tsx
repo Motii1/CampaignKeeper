@@ -8,7 +8,6 @@ import { StandardButton } from '../../components/StandardButton/StandardButton';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
-import { LabeledPasswordInput } from './components/LabeledPasswordInput/LabeledPasswordInput';
 import { LabeledTextInput } from './components/LabeledTextInput/LabeledTextInput';
 import { UserData } from './LoginForm';
 
@@ -310,21 +309,23 @@ export const RegisterForm: React.FC<FormProps> = props => {
               handleTextFieldLeaveTwin(event, email.value, setEmailRepeat, validateEmailsMatch)
             }
           />
-          <LabeledPasswordInput
+          <LabeledTextInput
             text="Password"
             id="register-password-1"
             placeholder="Mellon"
             helperText={password.helperText}
             defaultHelperText="Must contain one big letter and symbol"
+            isPassword={true}
             onChange={event => handleTextFieldChange(event, setPassword)}
             onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
           />
-          <LabeledPasswordInput
+          <LabeledTextInput
             text="Repeat password"
             id="register-password-2"
             placeholder="Repeat every letter"
             helperText={passwordRepeat.helperText}
             defaultHelperText="Must be same as password above"
+            isPassword={true}
             onChange={event => handleTextFieldChange(event, setPasswordRepeat)}
             onBlur={event =>
               handleTextFieldLeaveTwin(
