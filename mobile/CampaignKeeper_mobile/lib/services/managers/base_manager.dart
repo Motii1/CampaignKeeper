@@ -24,4 +24,8 @@ class BaseManager<T> extends ChangeNotifier{
   Future<bool> refresh({int groupId = -1}) {
     throw new UnimplementedError();
   }
+
+  void clear() {
+    throw new UnimplementedError();
+  }
 }

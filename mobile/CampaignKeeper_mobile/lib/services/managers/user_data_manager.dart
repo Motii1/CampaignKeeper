@@ -15,7 +15,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
     _entity = entity;
     Map data = _encodeEntity(_entity!);
 
-    CacheUtil().add(_key, json.encode(data));
+    CacheUtil().addSecure(_key, json.encode(data));
   }
 
   @override
@@ -39,7 +39,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
     UserDataEntity? newEntity;
 
     if (_entity == null) {
-      String? cache = await CacheUtil().get(_key);
+      String? cache = await CacheUtil().getSecure(_key);
 
       if (cache != null) {
         newEntity = _decodeEntity(json.decode(cache));
@@ -82,12 +82,17 @@ class UserDataManager extends BaseManager<UserDataEntity> {
       notifyListeners();
 
       Map data = _encodeEntity(_entity!);
-      CacheUtil().add(_key, json.encode(data));
+      CacheUtil().addSecure(_key, json.encode(data));
 
       return true;
     }
 
     return false;
+  }
+
+  @override
+  void clear() {
+    _entity = null;
   }
 
   UserDataEntity? _decodeEntity(Map data) {

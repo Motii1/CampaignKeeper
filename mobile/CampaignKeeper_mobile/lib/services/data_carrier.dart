@@ -55,7 +55,11 @@ class DataCarrier {
     return false;
   }
 
-  Future<void> deleteCache() async {
+  Future<void> clear() async {
+    _managers.forEach((key, value) {
+      value.clear();
+    });
+
     await CacheUtil().deleteSecure();
     await CacheUtil().delete();
   }

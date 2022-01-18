@@ -90,7 +90,7 @@ class KeeperAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color _bgColor =
-        backgroundColor ?? Theme.of(context).colorScheme.background;
+        backgroundColor ?? Theme.of(context).appBarTheme.backgroundColor!;
 
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (overScroll) {
@@ -122,7 +122,7 @@ class KeeperAppBar extends StatelessWidget {
                       duration: Duration(milliseconds: 100),
                       color: (innerBoxIsScrolled && changeBgColor)
                           ? Theme.of(context).colorScheme.surface
-                          : _bgColor,
+                          : Colors.transparent,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [

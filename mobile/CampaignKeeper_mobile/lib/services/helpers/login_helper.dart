@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
@@ -25,7 +23,9 @@ class LoginHelper {
 
     UserDataEntity? userEntity = DataCarrier().getEntity();
     if (userEntity != null && userEntity.password != null) {
-      return await login(userEntity.username, userEntity.password!);
+      ResponseStatus status = await login(userEntity.username, userEntity.password!);
+
+      return status;
     }
 
     return ResponseStatus.IncorrectData;
@@ -36,29 +36,22 @@ class LoginHelper {
     var response = await RequestHelper()
         .post(endpoint: _loginEnd, body: body, isLogin: true);
 
-    switch (response.status) {
-      case ResponseStatus.Success:
-        Map user = jsonDecode(response.data!);
+    if (response.status == ResponseStatus.Success) {
+      UserDataEntity? ent = DataCarrier().getEntity<UserDataEntity>();
 
-        UserDataEntity userEntity = UserDataEntity(
-            username: user["username"],
-            email: user["email"],
-            password: password,
-            imageData: user["image"]);
-
-        DataCarrier().attach<UserDataEntity>(userEntity);
-
-        return ResponseStatus.Success;
-      case ResponseStatus.IncorrectData:
-        return ResponseStatus.IncorrectData;
-      default:
-        return ResponseStatus.Error;
+      if (ent == null) {
+        ent = UserDataEntity(username: name, email: name, password: password);
+        DataCarrier().attach(ent);
+        await DataCarrier().refresh<UserDataEntity>();
+      }
     }
+
+    return response.status;
   }
 
   Future<ResponseStatus> logout({bool force = false}) async {
     if (force) {
-      DataCarrier().deleteCache();
+      DataCarrier().clear();
     }
 
     if (RequestHelper().isCookieValid()) {
