@@ -4,6 +4,7 @@ import { ReturnBar } from './components/ReturnBar/ReturnBar';
 
 type CustomDialogProps = {
   title: string;
+  isTitleRed?: boolean;
   hasButtons: boolean;
   cancelButtonCallback?: () => void;
   okButtonCallback?: () => void;
@@ -12,7 +13,6 @@ type CustomDialogProps = {
 };
 
 //TO-DO: add buttons (and create them in elements)
-//TO-DO: add variable width
 export const CustomDialog: React.FC<CustomDialogProps> = props => (
   <Dialog
     open={props.isOpen}
@@ -34,19 +34,15 @@ export const CustomDialog: React.FC<CustomDialogProps> = props => (
         paddingRight: 2.4,
       }}
     >
-      <Stack
-        direction="column"
-        justifyContent="center"
-        alignItems="flex-start"
-        spacing={0}
-        // sx={{
-        //   backgroundColor: 'common.black',
-        // }}
-      >
+      <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0}>
         <ReturnBar setOpen={props.setIsOpen} />
-        <CustomDialogTitle title={props.title} />
+        <CustomDialogTitle title={props.title} isTitleRed={props.isTitleRed} />
         {props.children}
       </Stack>
     </DialogContent>
   </Dialog>
 );
+
+CustomDialog.defaultProps = {
+  isTitleRed: false,
+} as Partial<CustomDialogProps>;
