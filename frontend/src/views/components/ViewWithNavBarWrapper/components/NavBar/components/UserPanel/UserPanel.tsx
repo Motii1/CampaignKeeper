@@ -83,7 +83,13 @@ export const UserPanel: React.FC = () => {
             <Avatar
               alt={String(username)}
               src={`data:;charset=utf-8;base64,${avatar}`}
-              sx={{ width: 30.5, height: 30.5, imageRendering: 'pixelated' }}
+              sx={{
+                width: 30.5,
+                height: 30.5,
+                imageRendering: 'pixelated',
+                marginRight: 0.06,
+                marginTop: 0.08,
+              }}
             />
           </Paper>
           <Typography

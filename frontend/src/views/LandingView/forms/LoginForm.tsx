@@ -87,12 +87,12 @@ export const LoginForm: React.FC<FormProps> = props => {
     });
   };
 
-  const validateUsername = (value: string): null | string => {
+  const validateLogin = (value: string): null | string => {
     if (value.length === 0) {
       return "Login can't be empty";
     }
-    if (value.length < 7 || value.length > 32) {
-      return 'Login length must be between 7 and 32';
+    if (value.length < 7 || value.length > 42) {
+      return 'Login length must be between 7 and 42';
     }
 
     return null;
@@ -112,7 +112,7 @@ export const LoginForm: React.FC<FormProps> = props => {
   const handleLoginButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 
-    const usernameValidation = validateUsername(username.value);
+    const usernameValidation = validateLogin(username.value);
     const passwordValidation = validatePassword(password.value);
 
     if (usernameValidation === null && passwordValidation === null) {
@@ -162,7 +162,7 @@ export const LoginForm: React.FC<FormProps> = props => {
             helperText={username.helperText}
             defaultHelperText=""
             onChange={event => handleTextFieldChange(event, setUsername)}
-            onBlur={event => handleTextFieldLeave(event, setUsername, validateUsername)}
+            onBlur={event => handleTextFieldLeave(event, setUsername, validateLogin)}
           />
           <LabeledTextInput
             text="Password"

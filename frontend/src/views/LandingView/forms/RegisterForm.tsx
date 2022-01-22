@@ -54,7 +54,11 @@ export const RegisterForm: React.FC<FormProps> = props => {
   } = useQuery<UserData>(`${AUTH_URL}/login`, requestMethods.POST);
 
   const handleRunQueryLogin = useCallback(() => {
+    /* eslint no-console: ["error", { allow: ["log"] }] */
+    console.log('Loging?');
     if (!isLoadingLogin && dataLogin && statusLogin) {
+      /* eslint no-console: ["error", { allow: ["log"] }] */
+      console.log('Loging!');
       if (statusLogin === 200) {
         dispatch(updateDetails({ username: dataLogin.username, email: dataLogin.email }));
         history.push(viewsRoutes.START);
@@ -75,22 +79,24 @@ export const RegisterForm: React.FC<FormProps> = props => {
   } = useQuery<RegisterData>(`${AUTH_URL}/register`, requestMethods.POST);
 
   const handleUseQueryRegister = useCallback(() => {
-    if (!isLoadingRegister && dataRegister?.message && statusRegister === 200) {
-      const message = dataRegister.message;
-      if (message === 'User with given username already exists')
-        setUsername({
-          value: username.value,
-          helperText: 'Sorry, this username is already used.',
-        });
-      else if (message === 'User with given email already exists') {
-        setEmail({
-          value: email.value,
-          helperText: 'Sorry, this email is already used.',
-        });
-        setEmailRepeat({
-          value: email.value,
-          helperText: 'Sorry, this email is already used.',
-        });
+    if (!isLoadingRegister && statusRegister === 200) {
+      if (dataRegister?.message) {
+        const message = dataRegister.message;
+        if (message === 'User with given username already exists') {
+          setUsername({
+            value: username.value,
+            helperText: 'Sorry, this username is already used.',
+          });
+        } else if (message === 'User with given email already exists') {
+          setEmail({
+            value: email.value,
+            helperText: 'Sorry, this email is already used.',
+          });
+          setEmailRepeat({
+            value: email.value,
+            helperText: 'Sorry, this email is already used.',
+          });
+        }
       } else {
         runQueryLogin({
           username: username.value,
@@ -98,15 +104,8 @@ export const RegisterForm: React.FC<FormProps> = props => {
         });
       }
     }
-  }, [
-    dataRegister,
-    email.value,
-    isLoadingRegister,
-    password.value,
-    runQueryLogin,
-    statusRegister,
-    username.value,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataRegister, isLoadingRegister, runQueryLogin, statusRegister]);
 
   useEffect(() => {
     handleUseQueryRegister();
@@ -115,8 +114,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
   const validateUsername = (value: string): null | string => {
     if (value.length < 7 || value.length > 32) {
       return 'Must be between 7 and 32 characters';
-    }
-    if (!usernameRegex.test(value)) {
+    } else if (!usernameRegex.test(value)) {
       return 'Contains illegal characters';
     }
 
@@ -124,10 +122,9 @@ export const RegisterForm: React.FC<FormProps> = props => {
   };
 
   const validateEmail = (value: string): null | string => {
-    if (value.length <= 7 || value.length >= 42) {
+    if (value.length < 7 || value.length > 42) {
       return 'Must be between 7 and 42 characters';
-    }
-    if (!emailRegex.test(value)) {
+    } else if (!emailRegex.test(value)) {
       return 'Contains illegal characters';
     }
 
@@ -135,7 +132,9 @@ export const RegisterForm: React.FC<FormProps> = props => {
   };
 
   const validateEmailsMatch = (value1: string, value2: string): null | string => {
-    if (validateEmail(value1) === null && value1 !== value2) {
+    if (value1.length === 0 || value2.length === 0) {
+      return "Email can't be empty";
+    } else if (value1 !== value2) {
       return 'Emails dont match';
     }
 
@@ -143,10 +142,9 @@ export const RegisterForm: React.FC<FormProps> = props => {
   };
 
   const validatePassword = (value: string): null | string => {
-    if (value.length <= 7 || value.length >= 255) {
+    if (value.length < 7 || value.length > 255) {
       return 'Must be between 7 and 255 characters';
-    }
-    if (!passwordRegex.test(value)) {
+    } else if (!passwordRegex.test(value)) {
       return 'It is too weak';
     }
 
@@ -154,7 +152,9 @@ export const RegisterForm: React.FC<FormProps> = props => {
   };
 
   const validatePasswordsMatch = (value1: string, value2: string): null | string => {
-    if (validatePassword(value1) === null && value1 !== value2) {
+    if (value1.length === 0 || value2.length === 0) {
+      return "Password can't be empty";
+    } else if (value1 !== value2) {
       return "Passwords don't match";
     }
 
@@ -164,13 +164,18 @@ export const RegisterForm: React.FC<FormProps> = props => {
   const handleTextFieldLeave = (
     event: React.ChangeEvent<HTMLInputElement>,
     setStateFn: (newState: TextFieldState) => void,
-    validateFn: (value: string) => string | null
+    validateFn: (value: string) => string | null,
+    optionalFn?: () => void
   ): void => {
     const newValue = event.target.value;
     setStateFn({
       value: newValue,
       helperText: validateFn(newValue),
     });
+
+    if (optionalFn) {
+      optionalFn();
+    }
   };
 
   const handleTextFieldLeaveTwin = (
@@ -233,7 +238,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
       });
     }
 
-    if (passRepeatRes !== null) {
+    if (passRepeatRes) {
       setPasswordRepeat({
         value: passwordRepeat.value,
         helperText: passRepeatRes,
@@ -247,7 +252,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
       passRes === null &&
       passRepeatRes === null
     ) {
-      runQueryRegister({
+      await runQueryRegister({
         username: username.value,
         email: email.value,
         repeatedEmail: emailRepeat.value,
