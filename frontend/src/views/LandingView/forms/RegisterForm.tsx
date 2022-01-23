@@ -54,11 +54,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
   } = useQuery<UserData>(`${AUTH_URL}/login`, requestMethods.POST);
 
   const handleRunQueryLogin = useCallback(() => {
-    /* eslint no-console: ["error", { allow: ["log"] }] */
-    console.log('Loging?');
     if (!isLoadingLogin && dataLogin && statusLogin) {
-      /* eslint no-console: ["error", { allow: ["log"] }] */
-      console.log('Loging!');
       if (statusLogin === 200) {
         dispatch(updateDetails({ username: dataLogin.username, email: dataLogin.email }));
         history.push(viewsRoutes.START);
