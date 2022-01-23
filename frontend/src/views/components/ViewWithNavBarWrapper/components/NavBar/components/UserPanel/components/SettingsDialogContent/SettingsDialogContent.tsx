@@ -49,13 +49,13 @@ export const SettingsDialogContent: React.FC = () => {
     if (!isLoading && status) {
       if (status === 200) {
         setChangeFeedbackContent({
-          title: 'Sucess!',
+          title: 'Sucess',
           text: 'Avatar successfully changed',
           isTitleRed: false,
         });
       } else if (status === 400 && data) {
         setChangeFeedbackContent({
-          title: 'Fail!',
+          title: 'Error',
           text: data.message ? data.message : 'Failure during avatar change',
           isTitleRed: true,
         });

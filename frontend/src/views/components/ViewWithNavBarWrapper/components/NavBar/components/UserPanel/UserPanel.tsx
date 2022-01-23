@@ -88,6 +88,7 @@ export const UserPanel: React.FC = () => {
                 height: 30.5,
                 imageRendering: 'pixelated',
                 marginRight: 0.06,
+                marginLeft: 0.06,
                 marginTop: 0.08,
               }}
             />

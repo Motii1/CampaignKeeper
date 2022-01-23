@@ -85,16 +85,16 @@ export const RegisterForm: React.FC<FormProps> = props => {
         if (message === 'User with given username already exists') {
           setUsername({
             value: username.value,
-            helperText: 'Sorry, this username is already used.',
+            helperText: 'Sorry, this username is already used',
           });
         } else if (message === 'User with given email already exists') {
           setEmail({
             value: email.value,
-            helperText: 'Sorry, this email is already used.',
+            helperText: 'Sorry, this email is already used',
           });
           setEmailRepeat({
             value: email.value,
-            helperText: 'Sorry, this email is already used.',
+            helperText: 'Sorry, this email is already used',
           });
         }
       } else {
@@ -125,7 +125,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
     if (value.length < 7 || value.length > 42) {
       return 'Must be between 7 and 42 characters';
     } else if (!emailRegex.test(value)) {
-      return 'Contains illegal characters';
+      return 'This is not proper email';
     }
 
     return null;

@@ -21,7 +21,16 @@ export const ViewWithNavBarWrapper: React.FC = props => (
       }}
     >
       <NavBar />
-      {props.children}
+      <Paper
+        square
+        sx={{
+          height: '100%',
+          width: '100%',
+          backgroundColor: 'transparent',
+        }}
+      >
+        {props.children}
+      </Paper>
     </Stack>
   </Paper>
 );
