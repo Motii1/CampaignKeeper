@@ -1,8 +1,12 @@
 import * as Joi from 'joi';
-import { UserRegisterData } from '../../../../Domain/User/Dto/UserRegisterData';
 
-const passwordValidationPattern =
+export const passwordValidationPattern =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,255}$/;
+
+export const passwordValidationSchema = Joi.object().keys({
+  password: Joi.string().max(255).pattern(passwordValidationPattern).required(),
+  repeatedPassword: Joi.string().required().equal(Joi.ref('password')),
+});
 
 /**
  * @typedef UserRegisterData
@@ -13,10 +17,8 @@ const passwordValidationPattern =
  * @property {string} repeatedEmail - username or password
  */
 
-export const userRegisterDataSchema = Joi.object<UserRegisterData>({
+export const userRegisterDataSchema = passwordValidationSchema.keys({
   username: Joi.string().min(3).max(32).required(),
-  password: Joi.string().max(255).pattern(passwordValidationPattern).required(),
-  repeatedPassword: Joi.string().required().equal(Joi.ref('password')),
   email: Joi.string().email().required(),
   repeatedEmail: Joi.string().email().required().equal(Joi.ref('email')),
 });
