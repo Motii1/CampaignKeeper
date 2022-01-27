@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import { StandardButton } from '../../../../components/StandardButton/StandardButton';
+import { CustomButton } from '../../../../components/CustomButton/CustomButton';
 
 type ChangeFormComponentProps = {
   firstLineText: string;
@@ -30,6 +30,6 @@ export const ChangeFormComponent: React.FC<ChangeFormComponentProps> = props => 
       <br />
       {props.secondLineText}
     </Typography>
-    <StandardButton text={props.buttonText} />
+    <CustomButton text={props.buttonText} />
   </Stack>
 );

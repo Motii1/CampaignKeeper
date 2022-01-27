@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
-import { StandardButton } from '../../components/StandardButton/StandardButton';
+import { CustomButton } from '../../components/CustomButton/CustomButton';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
@@ -338,7 +338,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
             }
           />
         </Stack>
-        <StandardButton text="Register" />
+        <CustomButton text="Register" />
       </Stack>
       <ChangeFormComponent
         onSubmit={props.onChangeForm}

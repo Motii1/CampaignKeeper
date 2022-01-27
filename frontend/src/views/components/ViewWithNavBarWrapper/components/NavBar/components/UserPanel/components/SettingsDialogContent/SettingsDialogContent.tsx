@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux';
 import requestMethods from '../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../axios/useQuery';
 import { RootState } from '../../../../../../../../../store';
+import { CustomButton } from '../../../../../../../CustomButton/CustomButton';
+import { CustomButtonType } from '../../../../../../../CustomButton/CustomButtonTypes';
 import { CustomDialog } from '../../../../../../../CustomDialog/CustomDialog';
-import { StandardButton } from '../../../../../../../StandardButton/StandardButton';
 
 type ImageResponseData = {
   message?: string;
@@ -29,7 +30,7 @@ export const SettingsDialogContent: React.FC = () => {
 
   // handles change avatar query
   const { isLoading, data, status, runQuery } = useQuery<ImageResponseData>(
-    `api/user/image`,
+    `/api/user/image`,
     requestMethods.PUT,
     { 'Content-Type': 'multipart/form-data' }
   );
@@ -88,7 +89,7 @@ export const SettingsDialogContent: React.FC = () => {
             }}
           />
           <label htmlFor="avatar-button-file">
-            <StandardButton text={'Change'} isUsedForUpload={true} />
+            <CustomButton text={'Change'} type={CustomButtonType.Upload} />
           </label>
         </Stack>
       </Stack>

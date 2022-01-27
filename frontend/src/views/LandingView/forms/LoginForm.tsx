@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
-import { StandardButton } from '../../components/StandardButton/StandardButton';
+import { CustomButton } from '../../components/CustomButton/CustomButton';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
@@ -175,7 +175,7 @@ export const LoginForm: React.FC<FormProps> = props => {
             onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
           />
         </Stack>
-        <StandardButton text="Login" />
+        <CustomButton text="Login" />
       </Stack>
       <ChangeFormComponent
         onSubmit={props.onChangeForm}
