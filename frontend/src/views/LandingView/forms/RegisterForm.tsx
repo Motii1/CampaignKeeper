@@ -56,7 +56,13 @@ export const RegisterForm: React.FC<FormProps> = props => {
   const handleRunQueryLogin = useCallback(() => {
     if (!isLoadingLogin && dataLogin && statusLogin) {
       if (statusLogin === 200) {
-        dispatch(updateDetails({ username: dataLogin.username, email: dataLogin.email }));
+        dispatch(
+          updateDetails({
+            username: dataLogin.username,
+            email: dataLogin.email,
+            avatar: dataLogin.image,
+          })
+        );
         history.push(viewsRoutes.START);
       } else history.push(viewsRoutes.ERROR);
     }
@@ -172,7 +178,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
     });
   };
 
-  const handleRegisterButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleRegisterButton = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
     const userRes = validateUsername(username.value);
@@ -223,7 +229,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
       passRes === null &&
       passRepeatRes === null
     ) {
-      await runQueryRegister({
+      runQueryRegister({
         username: username.value,
         email: email.value,
         repeatedEmail: emailRepeat.value,
