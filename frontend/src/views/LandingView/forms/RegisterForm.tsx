@@ -108,53 +108,28 @@ export const RegisterForm: React.FC<FormProps> = props => {
   }, [handleUseQueryRegister]);
 
   const validateUsername = (value: string): null | string => {
-    if (value.length < 7 || value.length > 32) {
-      return 'Must be between 7 and 32 characters';
-    } else if (!usernameRegex.test(value)) {
-      return 'Contains illegal characters';
-    }
-
-    return null;
+    if (value.length < 7 || value.length > 32) return 'Must be between 7 and 32 characters';
+    return !usernameRegex.test(value) ? 'Contains illegal characters' : null;
   };
 
   const validateEmail = (value: string): null | string => {
-    if (value.length < 7 || value.length > 32) {
-      return 'Must be between 7 and 32 characters';
-    } else if (!emailRegex.test(value)) {
-      return 'This is not proper email';
-    }
-
-    return null;
+    if (value.length < 7 || value.length > 32) return 'Must be between 7 and 32 characters';
+    return !emailRegex.test(value) ? 'This is not proper email' : null;
   };
 
   const validateEmailsMatch = (value1: string, value2: string): null | string => {
-    if (value1.length === 0 || value2.length === 0) {
-      return "Email can't be empty";
-    } else if (value1 !== value2) {
-      return 'Emails dont match';
-    }
-
-    return null;
+    if (value1.length === 0 || value2.length === 0) return "Email can't be empty";
+    return value1 !== value2 ? 'Emails dont match' : null;
   };
 
   const validatePassword = (value: string): null | string => {
-    if (value.length < 7 || value.length > 255) {
-      return 'Must be between 7 and 255 characters';
-    } else if (!passwordRegex.test(value)) {
-      return 'It is too weak';
-    }
-
-    return null;
+    if (value.length < 7 || value.length > 255) return 'Must be between 7 and 255 characters';
+    return !passwordRegex.test(value) ? 'It is too weak' : null;
   };
 
   const validatePasswordsMatch = (value1: string, value2: string): null | string => {
-    if (value1.length === 0 || value2.length === 0) {
-      return "Password can't be empty";
-    } else if (value1 !== value2) {
-      return "Passwords don't match";
-    }
-
-    return null;
+    if (value1.length === 0 || value2.length === 0) return "Password can't be empty";
+    return value1 !== value2 ? "Passwords don't match" : null;
   };
 
   const handleTextFieldLeave = (
