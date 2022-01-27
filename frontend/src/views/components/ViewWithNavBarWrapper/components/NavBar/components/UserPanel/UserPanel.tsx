@@ -1,11 +1,12 @@
 import { MoreVert } from '@mui/icons-material';
 import { Avatar, Box, Menu, MenuItem, Paper, Stack, Typography } from '@mui/material';
-import { AxiosResponse } from 'axios';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import protectedApiClient from '../../../../../../../axios/axios';
-import { AppDispatch, RootState } from '../../../../../../../store';
+import requestMethods from '../../../../../../../axios/requestMethods';
+import { useQuery } from '../../../../../../../axios/useQuery';
+import { RootState } from '../../../../../../../store';
+import { setError } from '../../../../../../ErrorView/errorSlice';
 import { AUTH_URL } from '../../../../../../LandingView/forms/RegisterForm';
 import { clearDetails } from '../../../../../../LandingView/userDetailsSlice';
 import viewsRoutes from '../../../../../../viewsRoutes';
@@ -20,6 +21,21 @@ export const UserPanel: React.FC = () => {
   const [currentDialogTitle, setcurrentDialogTitle] = useState<string>('About');
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const { isLoading, status, runQuery } = useQuery(`${AUTH_URL}/logout`, requestMethods.POST);
+
+  const handleRunQuery = useCallback(() => {
+    if (!isLoading && status) {
+      if (status === 200) {
+        dispatch(clearDetails({}));
+        history.push(viewsRoutes.LANDING);
+      } else dispatch(setError({ isError: true, message: 'Error during logout' }));
+    }
+  }, [dispatch, history, isLoading, status]);
+
+  useEffect(() => {
+    handleRunQuery();
+  }, [handleRunQuery]);
 
   const handleMoreVertClick = (event: React.MouseEvent<Element>) => {
     setMenuAnchor(event.currentTarget);
@@ -42,9 +58,7 @@ export const UserPanel: React.FC = () => {
 
   const handleLogoutClick = async () => {
     handleClose();
-    const response = await logout(dispatch);
-    if (response.status === 200) history.push(viewsRoutes.LANDING);
-    else history.push(viewsRoutes.ERROR);
+    runQuery();
   };
 
   return (
@@ -143,10 +157,4 @@ export const UserPanel: React.FC = () => {
       </CustomDialog>
     </Box>
   );
-};
-
-//TO-DO incorporate into UserPanel as runQuery
-const logout = (dispatch: AppDispatch): Promise<AxiosResponse> => {
-  dispatch(clearDetails({}));
-  return protectedApiClient.post(`${AUTH_URL}/logout`, {});
 };
