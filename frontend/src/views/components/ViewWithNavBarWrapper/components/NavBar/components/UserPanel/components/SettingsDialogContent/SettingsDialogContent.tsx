@@ -96,7 +96,6 @@ export const SettingsDialogContent: React.FC = () => {
       <CustomDialog
         title={changeFeedbackContent.title}
         isTitleRed={changeFeedbackContent.isTitleRed}
-        hasButtons={false}
         isOpen={isChangeFeedbackOpen}
         setIsOpen={setIsChangeFeedbackOpen}
       >

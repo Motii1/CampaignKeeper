@@ -147,12 +147,7 @@ export const UserPanel: React.FC = () => {
         <MenuItem onClick={handleAboutClick}>About</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
       </Menu>
-      <CustomDialog
-        title={currentDialogTitle}
-        hasButtons={false}
-        isOpen={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      >
+      <CustomDialog title={currentDialogTitle} isOpen={isDialogOpen} setIsOpen={setIsDialogOpen}>
         {currentDialogTitle === 'About' ? <AboutDialogContent /> : <SettingsDialogContent />}
       </CustomDialog>
     </Box>

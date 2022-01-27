@@ -2,21 +2,22 @@ import { Dialog, DialogContent, Stack } from '@mui/material';
 import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
 
+//TO-DO: add type of dialog (no/two/three buttons), info about buttons and their functions (if needed)
 type CustomDialogProps = {
   title: string;
   isTitleRed?: boolean;
-  hasButtons: boolean;
-  cancelButtonCallback?: () => void;
-  okButtonCallback?: () => void;
   isOpen: boolean;
   setIsOpen: (newState: boolean) => void;
 };
 
-//TO-DO: add buttons (and create them in elements)
-export const CustomDialog: React.FC<CustomDialogProps> = props => (
+//TO-DO: add buttons as another component (e.g. ButtonPanel)
+export const CustomDialog: React.FC<CustomDialogProps> = ({
+  isTitleRed = false,
+  ...otherProps
+}) => (
   <Dialog
-    open={props.isOpen}
-    onClose={() => props.setIsOpen(false)}
+    open={otherProps.isOpen}
+    onClose={() => otherProps.setIsOpen(false)}
     sx={{
       '& .MuiDialog-paper': {
         backgroundColor: 'customPalette.surface',
@@ -35,14 +36,10 @@ export const CustomDialog: React.FC<CustomDialogProps> = props => (
       }}
     >
       <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0}>
-        <ReturnBar setOpen={props.setIsOpen} />
-        <CustomDialogTitle title={props.title} isTitleRed={props.isTitleRed} />
-        {props.children}
+        <ReturnBar setOpen={otherProps.setIsOpen} />
+        <CustomDialogTitle title={otherProps.title} isTitleRed={isTitleRed} />
+        {otherProps.children}
       </Stack>
     </DialogContent>
   </Dialog>
 );
-
-CustomDialog.defaultProps = {
-  isTitleRed: false,
-} as Partial<CustomDialogProps>;
