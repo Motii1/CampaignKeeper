@@ -30,7 +30,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const usernameRegex = /^(?=.{7,42}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9]+(?<![_.])$/;
+  const usernameRegex = /^(?=.{7,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9]+(?<![_.])$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{7,255}$/;
 
@@ -118,8 +118,8 @@ export const RegisterForm: React.FC<FormProps> = props => {
   };
 
   const validateEmail = (value: string): null | string => {
-    if (value.length < 7 || value.length > 42) {
-      return 'Must be between 7 and 42 characters';
+    if (value.length < 7 || value.length > 32) {
+      return 'Must be between 7 and 32 characters';
     } else if (!emailRegex.test(value)) {
       return 'This is not proper email';
     }
