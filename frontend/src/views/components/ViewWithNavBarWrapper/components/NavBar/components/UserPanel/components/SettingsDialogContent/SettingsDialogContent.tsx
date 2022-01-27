@@ -1,15 +1,22 @@
 import { Avatar, Box, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import requestMethods from '../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../axios/useQuery';
 import { RootState } from '../../../../../../../../../store';
+import { updateDetails } from '../../../../../../../../LandingView/userDetailsSlice';
 import { CustomButton } from '../../../../../../../CustomButton/CustomButton';
 import { CustomButtonType } from '../../../../../../../CustomButton/CustomButtonTypes';
 import { CustomDialog } from '../../../../../../../CustomDialog/CustomDialog';
 
 type ImageResponseData = {
   message?: string;
+};
+
+type DetailsResponseData = {
+  username: string;
+  email: string;
+  image: string;
 };
 
 type ChangeFeedbackContentState = {
@@ -20,6 +27,7 @@ type ChangeFeedbackContentState = {
 
 // TO-DO: add change username, change email, change password
 export const SettingsDialogContent: React.FC = () => {
+  const dispatch = useDispatch();
   const { username, avatar } = useSelector((state: RootState) => state.user);
   const [changeFeedbackContent, setChangeFeedbackContent] = useState<ChangeFeedbackContentState>({
     title: '',
@@ -28,12 +36,41 @@ export const SettingsDialogContent: React.FC = () => {
   });
   const [isChangeFeedbackOpen, setIsChangeFeedbackOpen] = useState(false);
 
-  // handles change avatar query
-  const { isLoading, data, status, runQuery } = useQuery<ImageResponseData>(
-    `/api/user/image`,
-    requestMethods.PUT,
-    { 'Content-Type': 'multipart/form-data' }
-  );
+  //handles fetching new user details and updating them in store
+  const {
+    isLoading: isLoadingDetails,
+    data: dataDetails,
+    status: statusDetails,
+    runQuery: runQueryDetails,
+  } = useQuery<DetailsResponseData>(`/api/user/details`, requestMethods.GET);
+
+  const handleRunQueryDetails = useCallback(() => {
+    if (!isLoadingDetails && statusDetails) {
+      if (statusDetails === 200 && dataDetails) {
+        dispatch(
+          updateDetails({
+            username: dataDetails.username,
+            email: dataDetails.email,
+            avatar: dataDetails.image,
+          })
+        );
+      }
+    }
+  }, [dataDetails, dispatch, isLoadingDetails, statusDetails]);
+
+  useEffect(() => {
+    handleRunQueryDetails();
+  }, [handleRunQueryDetails]);
+
+  // handles change user details query
+  const {
+    isLoading: isLoadingImg,
+    data: dataImg,
+    status: statusImg,
+    runQuery: runQueryImg,
+  } = useQuery<ImageResponseData>(`/api/user/image`, requestMethods.PUT, {
+    'Content-Type': 'multipart/form-dataImg',
+  });
 
   const handleChange = (files: null | FileList) => {
     if (files) {
@@ -41,33 +78,34 @@ export const SettingsDialogContent: React.FC = () => {
       if (file) {
         const payload = new FormData();
         payload.append('image-file', file);
-        runQuery(payload);
+        runQueryImg(payload);
       }
     }
   };
 
-  const handleRunQuery = useCallback(() => {
-    if (!isLoading && status) {
-      if (status === 200) {
+  const handleRunQueryImg = useCallback(() => {
+    if (!isLoadingImg && statusImg) {
+      if (statusImg === 200) {
         setChangeFeedbackContent({
           title: 'Sucess',
           text: 'Avatar successfully changed',
           isTitleRed: false,
         });
-      } else if (status === 400 && data) {
+        runQueryDetails();
+      } else if (statusImg === 400 && dataImg) {
         setChangeFeedbackContent({
           title: 'Error',
-          text: data.message ? data.message : 'Failure during avatar change',
+          text: dataImg.message ? dataImg.message : 'Failure during avatar change',
           isTitleRed: true,
         });
       }
       setIsChangeFeedbackOpen(true);
     }
-  }, [data, isLoading, setChangeFeedbackContent, setIsChangeFeedbackOpen, status]);
+  }, [dataImg, isLoadingImg, runQueryDetails, statusImg]);
 
   useEffect(() => {
-    handleRunQuery();
-  }, [handleRunQuery]);
+    handleRunQueryImg();
+  }, [handleRunQueryImg]);
 
   return (
     <Box>
