@@ -9,6 +9,7 @@ type useQueryArgs<T> = {
   status: undefined | number;
   error?: AxiosError;
   runQuery: (data?: unknown) => void;
+  resetQuery: () => void;
 };
 
 export const useQuery = <T>(
@@ -47,5 +48,12 @@ export const useQuery = <T>(
     [method, url, headers, setIsLoading, setData, setStatus, setError]
   );
 
-  return { isLoading, data, status, error, runQuery };
+  const resetQuery = () => {
+    setIsLoading(false);
+    setData(undefined);
+    setStatus(-1);
+    setError(undefined);
+  };
+
+  return { isLoading, data, status, error, runQuery, resetQuery };
 };

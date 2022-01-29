@@ -78,6 +78,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
     data: dataRegister,
     status: statusRegister,
     runQuery: runQueryRegister,
+    resetQuery: resetQueryRegister,
   } = useQuery<RegisterData>(`${AUTH_URL}/register`, requestMethods.POST);
 
   const handleUseQueryRegister = useCallback(() => {
@@ -99,6 +100,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
             helperText: 'Sorry, this email is already used',
           });
         }
+        resetQueryRegister();
       } else {
         runQueryLogin({
           username: username.value,
@@ -106,8 +108,16 @@ export const RegisterForm: React.FC<FormProps> = props => {
         });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataRegister, isLoadingRegister, runQueryLogin, statusRegister]);
+  }, [
+    dataRegister,
+    email.value,
+    isLoadingRegister,
+    password.value,
+    resetQueryRegister,
+    runQueryLogin,
+    statusRegister,
+    username.value,
+  ]);
 
   useEffect(() => {
     handleUseQueryRegister();

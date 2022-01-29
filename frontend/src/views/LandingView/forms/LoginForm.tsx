@@ -38,7 +38,7 @@ export const LoginForm: React.FC<FormProps> = props => {
   const [password, setPassword] = useState<TextFieldState>(initalState);
 
   // handles login query
-  const { isLoading, data, status, runQuery } = useQuery<UserData>(
+  const { isLoading, data, status, runQuery, resetQuery } = useQuery<UserData>(
     `${AUTH_URL}/login`,
     requestMethods.POST
   );
@@ -58,8 +58,9 @@ export const LoginForm: React.FC<FormProps> = props => {
           helperText: 'Invalid username/email or password',
         });
       }
+      resetQuery();
     }
-  }, [data, dispatch, history, isLoading, password.value, status, username.value]);
+  }, [data, dispatch, history, isLoading, password.value, resetQuery, status, username.value]);
 
   useEffect(() => {
     handleRunQuery();

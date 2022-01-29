@@ -42,6 +42,7 @@ export const SettingsDialogContent: React.FC = () => {
     data: dataDetails,
     status: statusDetails,
     runQuery: runQueryDetails,
+    resetQuery: resetQueryDetails,
   } = useQuery<DetailsResponseData>(`/api/user/details`, requestMethods.GET);
 
   const handleRunQueryDetails = useCallback(() => {
@@ -54,9 +55,10 @@ export const SettingsDialogContent: React.FC = () => {
             avatar: dataDetails.image,
           })
         );
+        resetQueryDetails();
       }
     }
-  }, [dataDetails, dispatch, isLoadingDetails, statusDetails]);
+  }, [dataDetails, dispatch, isLoadingDetails, resetQueryDetails, statusDetails]);
 
   useEffect(() => {
     handleRunQueryDetails();
@@ -68,6 +70,7 @@ export const SettingsDialogContent: React.FC = () => {
     data: dataImg,
     status: statusImg,
     runQuery: runQueryImg,
+    resetQuery: resetQueryImg,
   } = useQuery<ImageResponseData>(`/api/user/image`, requestMethods.PUT, {
     'Content-Type': 'multipart/form-dataImg',
   });
@@ -100,8 +103,9 @@ export const SettingsDialogContent: React.FC = () => {
         });
       }
       setIsChangeFeedbackOpen(true);
+      resetQueryImg();
     }
-  }, [dataImg, isLoadingImg, runQueryDetails, statusImg]);
+  }, [dataImg, isLoadingImg, resetQueryImg, runQueryDetails, statusImg]);
 
   useEffect(() => {
     handleRunQueryImg();
