@@ -29,19 +29,19 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
     case CustomButtonType.Upload:
       return (
         <Button variant="contained" component="span" sx={standardButtonSx}>
-          <b>{otherProps.text}</b>
+          {otherProps.text}
         </Button>
       );
     case CustomButtonType.Func:
       return (
         <Button variant="contained" onClick={otherProps.onClick} sx={standardButtonSx}>
-          <b>{otherProps.text}</b>
+          {otherProps.text}
         </Button>
       );
     case CustomButtonType.Submit:
       return (
         <Button variant="contained" type="submit" sx={standardButtonSx}>
-          <b>{otherProps.text}</b>
+          {otherProps.text}
         </Button>
       );
   }
