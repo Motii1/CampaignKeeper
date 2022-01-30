@@ -27,6 +27,7 @@ export const ViewWithNavBarWrapper: React.FC = props => (
           height: '100%',
           width: '100%',
           backgroundColor: 'transparent',
+          margin: 'auto',
         }}
       >
         {props.children}
