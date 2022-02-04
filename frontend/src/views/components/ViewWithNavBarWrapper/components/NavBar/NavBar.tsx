@@ -1,14 +1,17 @@
 import { Paper, Stack } from '@mui/material';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory } from 'react-router';
 import viewsRoutes from '../../../../viewsRoutes';
 import { NavBarLogo } from './components/NavBarLogo/NavBarLogo';
 import { PrimaryNavBarButton } from './components/PrimaryNavBarButton/PrimaryNavBarButton';
 import { SecondaryNavBarButton } from './components/SecondaryNavBarButton/SecondaryNavBarButton';
 import { UserPanel } from './components/UserPanel/UserPanel';
 
-export const NavBar: React.FC = () => {
+type NavBarProps = {
+  currentView: string;
+};
+
+export const NavBar: React.FC<NavBarProps> = props => {
   const history = useHistory();
-  const currentView = useLocation().pathname;
 
   const secondaryButtonDisplayableViews = [
     viewsRoutes.CAMPAIGN,
@@ -16,7 +19,7 @@ export const NavBar: React.FC = () => {
     viewsRoutes.SESSIONS,
     viewsRoutes.CODEX,
   ];
-  const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(currentView);
+  const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(props.currentView);
 
   return (
     <Paper
@@ -28,7 +31,7 @@ export const NavBar: React.FC = () => {
         <NavBarLogo />
         <PrimaryNavBarButton
           text="START"
-          isChosen={currentView === viewsRoutes.START}
+          isChosen={props.currentView === viewsRoutes.START}
           onClick={() => {
             history.push(viewsRoutes.START);
           }}
@@ -42,7 +45,7 @@ export const NavBar: React.FC = () => {
         />
         <SecondaryNavBarButton
           text="MAP"
-          isChosen={currentView === viewsRoutes.MAP}
+          isChosen={props.currentView === viewsRoutes.MAP}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {
             history.push(viewsRoutes.MAP);
@@ -50,7 +53,7 @@ export const NavBar: React.FC = () => {
         />
         <SecondaryNavBarButton
           text="SESSIONS"
-          isChosen={currentView === viewsRoutes.SESSIONS}
+          isChosen={props.currentView === viewsRoutes.SESSIONS}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {
             history.push(viewsRoutes.SESSIONS);
@@ -58,7 +61,7 @@ export const NavBar: React.FC = () => {
         />
         <SecondaryNavBarButton
           text="CODEX"
-          isChosen={currentView === viewsRoutes.CODEX}
+          isChosen={props.currentView === viewsRoutes.CODEX}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {
             history.push(viewsRoutes.CODEX);
@@ -66,7 +69,7 @@ export const NavBar: React.FC = () => {
         />
         <PrimaryNavBarButton
           text="NOTES"
-          isChosen={currentView === viewsRoutes.NOTES}
+          isChosen={props.currentView === viewsRoutes.NOTES}
           onClick={() => {
             history.push(viewsRoutes.NOTES);
           }}
