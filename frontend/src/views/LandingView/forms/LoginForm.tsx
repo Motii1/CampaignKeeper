@@ -7,10 +7,10 @@ import protectedApiClient from '../../../axios/axios';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { CustomButton } from '../../components/CustomButton/CustomButton';
+import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
-import { LabeledTextInput } from './components/LabeledTextInput/LabeledTextInput';
 import { AUTH_URL, FormProps, TextFieldState } from './RegisterForm';
 
 export const login = (username: string, password: string): Promise<AxiosResponse> =>
@@ -158,7 +158,6 @@ export const LoginForm: React.FC<FormProps> = props => {
         >
           <LabeledTextInput
             text="Email or username"
-            id="login-username"
             placeholder="Thou name, brave hero"
             helperText={username.helperText}
             defaultHelperText=""
@@ -167,7 +166,6 @@ export const LoginForm: React.FC<FormProps> = props => {
           />
           <LabeledTextInput
             text="Password"
-            id="login-password"
             placeholder="Phrase that must not be spoken"
             helperText={password.helperText}
             defaultHelperText=""

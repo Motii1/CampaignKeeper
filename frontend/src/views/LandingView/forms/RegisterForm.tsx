@@ -5,10 +5,10 @@ import { useHistory } from 'react-router-dom';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { CustomButton } from '../../components/CustomButton/CustomButton';
+import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
-import { LabeledTextInput } from './components/LabeledTextInput/LabeledTextInput';
 import { UserData } from './LoginForm';
 
 type RegisterData = {
@@ -274,7 +274,6 @@ export const RegisterForm: React.FC<FormProps> = props => {
         >
           <LabeledTextInput
             text="Username"
-            id="register-username"
             placeholder="Pick unique one"
             helperText={username.helperText}
             defaultHelperText="Must be between 7 and 32 characters"
@@ -283,7 +282,6 @@ export const RegisterForm: React.FC<FormProps> = props => {
           />
           <LabeledTextInput
             text="Email"
-            id="register-email-1"
             placeholder="So your password won't be forgotten"
             helperText={email.helperText}
             defaultHelperText="Must be real email"
@@ -292,7 +290,6 @@ export const RegisterForm: React.FC<FormProps> = props => {
           />
           <LabeledTextInput
             text="Repeat email"
-            id="register-email-2"
             placeholder="Make sure it's right"
             helperText={emailRepeat.helperText}
             defaultHelperText="Must be same as email above"
@@ -303,7 +300,6 @@ export const RegisterForm: React.FC<FormProps> = props => {
           />
           <LabeledTextInput
             text="Password"
-            id="register-password-1"
             placeholder="Mellon"
             helperText={password.helperText}
             defaultHelperText="Must contain one big letter and symbol"
@@ -313,7 +309,6 @@ export const RegisterForm: React.FC<FormProps> = props => {
           />
           <LabeledTextInput
             text="Repeat password"
-            id="register-password-2"
             placeholder="Repeat every letter"
             helperText={passwordRepeat.helperText}
             defaultHelperText="Must be same as password above"

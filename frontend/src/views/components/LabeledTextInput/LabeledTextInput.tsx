@@ -2,7 +2,6 @@ import { Stack, TextField, Typography } from '@mui/material';
 
 export type LabeledInputProps = {
   text: string;
-  id: string;
   placeholder: string;
   helperText: null | string;
   defaultHelperText: string;
@@ -17,7 +16,6 @@ export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
       {props.text}
     </Typography>
     <TextField
-      id={props.id}
       placeholder={props.placeholder}
       inputProps={{
         sx: {
