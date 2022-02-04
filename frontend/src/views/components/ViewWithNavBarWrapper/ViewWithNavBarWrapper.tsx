@@ -1,10 +1,13 @@
 import { Paper, Stack } from '@mui/material';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { CustomDialogWrapper } from './components/CustomDialogWrapper/CustomDialogWrapper';
 import { CustomFab } from './components/CustomFab/CustomFab';
 import { NavBar } from './components/NavBar/NavBar';
 
 export const ViewWithNavBarWrapper: React.FC = props => {
   const currentView = useLocation().pathname;
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   return (
     <Paper
       square
@@ -37,7 +40,12 @@ export const ViewWithNavBarWrapper: React.FC = props => {
           {props.children}
         </Paper>
       </Stack>
-      <CustomFab currentView={currentView} />
+      <CustomFab currentView={currentView} setIsOpen={setIsDialogOpen} />
+      <CustomDialogWrapper
+        currentView={currentView}
+        isOpen={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
     </Paper>
   );
 };
