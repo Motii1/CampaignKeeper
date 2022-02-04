@@ -19,7 +19,7 @@ export const useQuery = <T>(
 ): useQueryArgs<T> => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<undefined | T>();
-  const [status, setStatus] = useState<number>();
+  const [status, setStatus] = useState<undefined | number>();
   const [error, setError] = useState<undefined | AxiosError>();
 
   const runQuery = useCallback(
@@ -51,7 +51,7 @@ export const useQuery = <T>(
   const resetQuery = () => {
     setIsLoading(false);
     setData(undefined);
-    setStatus(-1);
+    setStatus(undefined);
     setError(undefined);
   };
 
