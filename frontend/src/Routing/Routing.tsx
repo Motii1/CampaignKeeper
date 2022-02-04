@@ -6,15 +6,15 @@ import { LandingView } from '../views/LandingView/LandingView';
 import { MapView } from '../views/MapView/MapView';
 import { NotesView } from '../views/NotesView/NotesView';
 import { SessionsView } from '../views/SessionsView/SessionsView';
+import { StartView } from '../views/StartView/StartView';
 import viewsRoutes from '../views/viewsRoutes';
-import { WelcomeView } from '../views/WelcomeView/WelcomeView';
 import { ProtectedRouteWrapper } from './ProtectedRouteWrapper/ProtectedRouteWrapper';
 import { RouteWrapper } from './RouteWrapper/RouteWrapper';
 
 export const Routing: React.FC = () => (
   <Switch>
     <ProtectedRouteWrapper path={viewsRoutes.START}>
-      <WelcomeView />
+      <StartView />
     </ProtectedRouteWrapper>
     <ProtectedRouteWrapper path={viewsRoutes.CAMPAIGN}>
       <CampaignView />

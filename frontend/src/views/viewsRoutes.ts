@@ -1,6 +1,6 @@
 const LANDING = '/';
 
-const START = '/welcome';
+const START = '/start';
 
 const CAMPAIGN = '/campaign';
 

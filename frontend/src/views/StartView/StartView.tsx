@@ -3,7 +3,7 @@ import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewW
 import { CampaignTile } from './components/CampaignTitle/CampaignTile';
 import { QuoteLine } from './components/QuoteLine/QuoteLine';
 
-export const WelcomeView: React.FC = () => {
+export const StartView: React.FC = () => {
   const exampleQuote = '"On the Honor of the Greyskull!" ~ She-Ra';
   const exampleTitles = [
     'Rime of the Frostmaiden',

@@ -36,8 +36,8 @@ export const ViewWithNavBarWrapper: React.FC = props => {
         >
           {props.children}
         </Paper>
-        <CustomFab>{'Lorem ipsum'}</CustomFab>
       </Stack>
+      <CustomFab currentView={currentView} />
     </Paper>
   );
 };
