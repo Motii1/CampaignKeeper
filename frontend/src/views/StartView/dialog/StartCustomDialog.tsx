@@ -50,13 +50,21 @@ export const StartCustomDialog: React.FC<StartCustomDialogProps> = props => {
     props.setIsOpen(false);
   };
 
+  const handleDelete = () => {
+    //here will go handling campaign deletion with useQuery
+    //and history.push('/campaign') redirecting user to new campaign
+    resetFields();
+    props.setIsOpen(false);
+  };
+
   return (
     <CustomDialog
-      title={'New Campaign'}
+      title={'New / Edit Campaign'}
       isOpen={props.isOpen}
       setIsOpen={props.setIsOpen}
       onOk={handleOk}
       onCancel={handleCancel}
+      onDelete={handleDelete}
     >
       <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
         <LabeledTextInput

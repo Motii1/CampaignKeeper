@@ -15,10 +15,18 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   type = CustomButtonType.Accent,
   ...otherProps
 }) => {
-  const backgroundColor =
-    type === CustomButtonType.Accent ? 'customPalette.accent' : 'customPalette.primary';
-  const color =
-    type === CustomButtonType.Accent ? 'customPalette.onAccent' : 'customPalette.onPrimary';
+  let backgroundColor: string;
+  let color: string;
+  if (type === CustomButtonType.Accent) {
+    backgroundColor = 'customPalette.accent';
+    color = 'customPalette.onAccent';
+  } else if (type === CustomButtonType.Primary) {
+    backgroundColor = 'customPalette.primary';
+    color = 'customPalette.onPrimary';
+  } else {
+    backgroundColor = 'customPalette.red';
+    color = 'customPalette.onRed';
+  }
 
   const standardButtonSx = {
     color: color,

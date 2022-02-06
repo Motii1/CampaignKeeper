@@ -12,6 +12,7 @@ type CustomDialogProps = {
   setIsOpen: (newState: boolean) => void;
   onOk?: () => void;
   onCancel?: () => void;
+  onDelete?: () => void;
 };
 
 //TO-DO: add buttons as another component (e.g. ButtonPanel)
@@ -21,9 +22,15 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
 }) => {
   //TO-DO: add option with Delete button
   const renderButtons = () => {
-    if (otherProps.onOk && otherProps.onCancel)
+    if (otherProps.onOk && otherProps.onCancel && otherProps.onDelete)
       return (
         <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={1}>
+          <CustomButton
+            text="DELETE"
+            behavior={CustomButtonBehavior.Func}
+            type={CustomButtonType.Delete}
+            onClick={otherProps.onCancel}
+          />
           <CustomButton
             text="CANCEL"
             behavior={CustomButtonBehavior.Func}
