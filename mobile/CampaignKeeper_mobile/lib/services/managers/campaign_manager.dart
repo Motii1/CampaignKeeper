@@ -47,6 +47,11 @@ class CampaignManager extends BaseManager<CampaignEntity> {
     return true;
   }
 
+  @override
+  void clear() {
+    _entities = [];
+  }
+
   void _cacheAll() {
     var data = _entities.map((e) => _mapEntity(e));
     CacheUtil().add(_key, json.encode(data));

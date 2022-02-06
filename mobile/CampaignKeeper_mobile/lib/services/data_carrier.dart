@@ -1,10 +1,8 @@
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/services/managers/campaign_manager.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
-import 'package:campaign_keeper_mobile/entities/user_login_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
-import 'package:campaign_keeper_mobile/services/managers/user_login_manager.dart';
 import 'package:campaign_keeper_mobile/services/managers/user_data_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +17,6 @@ class DataCarrier {
 
   // Adding managers
   DataCarrier._internal() {
-    _managers[UserLoginEntity] = new UserLoginManager();
     _managers[UserDataEntity] = new UserDataManager();
     _managers[CampaignEntity] = new CampaignManager();
   }
@@ -58,7 +55,11 @@ class DataCarrier {
     return false;
   }
 
-  Future<void> deleteCache() async {
+  Future<void> clear() async {
+    _managers.forEach((key, value) {
+      value.clear();
+    });
+
     await CacheUtil().deleteSecure();
     await CacheUtil().delete();
   }

@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { store } from '../../store';
@@ -15,12 +15,26 @@ export const ErrorView: React.FC = () => {
 
   return (
     <ViewWithSidebarWrapper>
-      <Typography
-        variant="h4"
-        sx={{ color: 'common.white', fontWeight: 'medium', textAlign: 'center', paddingY: 1 }}
+      <Paper
+        sx={{
+          mx: 2,
+          my: 1,
+          borderRadius: 3,
+          backgroundColor: 'customPalette.error',
+        }}
       >
-        {`Error: ${isError ? message : 'Unexpected error'}`}
-      </Typography>
+        <Typography
+          variant="h5"
+          sx={{
+            color: 'customPalette.onError',
+            fontWeight: 'regular',
+            textAlign: 'center',
+            paddingY: 1,
+          }}
+        >
+          {isError ? message : 'Unexpected error'}
+        </Typography>
+      </Paper>
     </ViewWithSidebarWrapper>
   );
 };

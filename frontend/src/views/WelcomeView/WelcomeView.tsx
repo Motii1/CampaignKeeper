@@ -1,13 +1,3 @@
-import { Paper, Stack } from '@mui/material';
-import { NavBar } from '../components/NavBar/NavBar';
+import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 
-export const WelcomeView: React.FC = () => (
-  <Stack>
-    <NavBar />
-    <Paper
-      elevation={0}
-      sx={{ backgroundColor: 'background.default', minHeight: '100vh' }}
-      square
-    />
-  </Stack>
-);
+export const WelcomeView: React.FC = () => <ViewWithNavBarWrapper />;

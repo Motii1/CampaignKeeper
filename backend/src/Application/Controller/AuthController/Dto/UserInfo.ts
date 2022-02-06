@@ -2,6 +2,7 @@
  * @typedef UserInformation
  * @property {string} username - username
  * @property {string} email - email
+ * @property {string} image - image
  */
 
 /**
@@ -24,6 +25,7 @@ import { passwordValidationSchema } from './UserRegisterData';
 export type UserInfo = {
   username: string;
   email: string;
+  image: string;
 };
 
 export type UserInfoWithHashedImage = {

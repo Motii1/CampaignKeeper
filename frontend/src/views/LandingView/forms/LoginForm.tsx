@@ -6,14 +6,11 @@ import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
+import { CustomButton } from '../../components/CustomButton/CustomButton';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
-import {
-  ChangeFormComponent,
-  LabeledPasswordInput,
-  LabeledTextInput,
-  StandardButton,
-} from './elements';
+import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
+import { LabeledTextInput } from './components/LabeledTextInput/LabeledTextInput';
 import { AUTH_URL, FormProps, TextFieldState } from './RegisterForm';
 
 export const login = (username: string, password: string): Promise<AxiosResponse> =>
@@ -25,6 +22,7 @@ export const login = (username: string, password: string): Promise<AxiosResponse
 export type UserData = {
   username: string;
   email: string;
+  image: string;
 };
 
 export const LoginForm: React.FC<FormProps> = props => {
@@ -33,14 +31,14 @@ export const LoginForm: React.FC<FormProps> = props => {
 
   const initalState = {
     value: '',
-    helperText: '',
+    helperText: null,
   };
 
   const [username, setUsername] = useState<TextFieldState>(initalState);
   const [password, setPassword] = useState<TextFieldState>(initalState);
 
   // handles login query
-  const { isLoading, data, status, runQuery } = useQuery<UserData>(
+  const { isLoading, data, status, runQuery, resetQuery } = useQuery<UserData>(
     `${AUTH_URL}/login`,
     requestMethods.POST
   );
@@ -48,7 +46,7 @@ export const LoginForm: React.FC<FormProps> = props => {
   const handleRunQuery = useCallback(() => {
     if (!isLoading && data && status) {
       if (status === 200) {
-        dispatch(updateDetails({ username: data.username, email: data.email }));
+        dispatch(updateDetails({ username: data.username, email: data.email, avatar: data.image }));
         history.push(viewsRoutes.START);
       } else if (status === 401) {
         setUsername({
@@ -60,8 +58,9 @@ export const LoginForm: React.FC<FormProps> = props => {
           helperText: 'Invalid username/email or password',
         });
       }
+      resetQuery();
     }
-  }, [data, dispatch, history, isLoading, password.value, status, username.value]);
+  }, [data, dispatch, history, isLoading, password.value, resetQuery, status, username.value]);
 
   useEffect(() => {
     handleRunQuery();
@@ -69,30 +68,67 @@ export const LoginForm: React.FC<FormProps> = props => {
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    validationFn: (value: string) => boolean,
-    setStateFn: (newState: TextFieldState) => void,
-    helperText: string
+    setStateFn: (newState: TextFieldState) => void
   ): void => {
-    const newValue = event.target.value;
-    let newHelperText = null;
-    if (!validationFn(newValue)) newHelperText = helperText;
     setStateFn({
       value: event.target.value,
-      helperText: newHelperText,
+      helperText: null,
     });
   };
 
-  const validateUsername = (value: string) =>
-    value.includes('@') || (value.length > 7 && value.length < 13);
+  const handleTextFieldLeave = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setStateFn: (newState: TextFieldState) => void,
+    validateFn: (value: string) => string | null
+  ): void => {
+    const newValue = event.target.value;
+    setStateFn({
+      value: newValue,
+      helperText: validateFn(newValue),
+    });
+  };
 
-  const validatePassword = (value: string) => value.length > 7 && value.length < 256;
+  const validateLogin = (value: string): null | string => {
+    if (value.length === 0) {
+      return "Login can't be empty";
+    }
+    if (value.length < 3 || value.length > 32) {
+      return 'Login length must be between 3 and 32';
+    }
+
+    return null;
+  };
+
+  const validatePassword = (value: string): null | string => {
+    if (value.length === 0) {
+      return "Password can't be empty";
+    }
+    if (value.length < 7 || value.length > 255) {
+      return 'Password length must be between 7 and 255';
+    }
+
+    return null;
+  };
 
   const handleLoginButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
-    if (validateUsername(username.value) && validatePassword(password.value)) {
+
+    const usernameValidation = validateLogin(username.value);
+    const passwordValidation = validatePassword(password.value);
+
+    if (usernameValidation === null && passwordValidation === null) {
       runQuery({
         username: username.value,
         password: password.value,
+      });
+    } else {
+      setUsername({
+        value: username.value,
+        helperText: usernameValidation,
+      });
+      setPassword({
+        value: password.value,
+        helperText: passwordValidation,
       });
     }
   };
@@ -100,47 +136,47 @@ export const LoginForm: React.FC<FormProps> = props => {
   return (
     <Stack
       direction="column"
+      spacing={1}
       justifyContent="flex-start"
       alignItems="flex-start"
-      spacing={1}
-      sx={{ marginLeft: '20px', marginRight: '20px', marginBottom: '20px' }}
+      sx={{ marginLeft: '20px', marginRight: '20px', marginBottom: '10px' }}
     >
       <Stack
         direction="column"
         spacing={1}
         component="form"
-        sx={{ width: '100%' }}
+        justifyContent="flex-start"
+        alignItems="flex-start"
         onSubmit={handleLoginButton}
+        sx={{ width: '100%' }}
       >
-        <LabeledTextInput
-          text="Email or username"
-          id="login-username"
-          placeholder="Thou name, brave hero"
-          helperText={username.helperText}
-          onChange={event =>
-            handleTextFieldChange(
-              event,
-              validateUsername,
-              setUsername,
-              'Username is 8-12 characters long'
-            )
-          }
-        />
-        <LabeledPasswordInput
-          text="Password"
-          id="login-password"
-          placeholder="Phrase that must not be spoken"
-          helperText={password.helperText}
-          onChange={event =>
-            handleTextFieldChange(
-              event,
-              validatePassword,
-              setPassword,
-              'Password is 8-255 characters long'
-            )
-          }
-        />
-        <StandardButton text="Login" />
+        <Stack
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="stretch"
+          sx={{ width: '100%' }}
+        >
+          <LabeledTextInput
+            text="Email or username"
+            id="login-username"
+            placeholder="Thou name, brave hero"
+            helperText={username.helperText}
+            defaultHelperText=""
+            onChange={event => handleTextFieldChange(event, setUsername)}
+            onBlur={event => handleTextFieldLeave(event, setUsername, validateLogin)}
+          />
+          <LabeledTextInput
+            text="Password"
+            id="login-password"
+            placeholder="Phrase that must not be spoken"
+            helperText={password.helperText}
+            defaultHelperText=""
+            isPassword={true}
+            onChange={event => handleTextFieldChange(event, setPassword)}
+            onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
+          />
+        </Stack>
+        <CustomButton text="Login" />
       </Stack>
       <ChangeFormComponent
         onSubmit={props.onChangeForm}

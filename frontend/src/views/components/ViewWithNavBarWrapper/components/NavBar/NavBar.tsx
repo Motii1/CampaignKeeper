@@ -1,23 +1,13 @@
 import { Paper, Stack } from '@mui/material';
-import { AxiosResponse } from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
-import protectedApiClient from '../../../axios/axios';
-import { AppDispatch, RootState } from '../../../store';
-import { AUTH_URL } from '../../LandingView/forms/RegisterForm';
-import { clearDetails } from '../../LandingView/userDetailsSlice';
-import viewsRoutes from '../../viewsRoutes';
-import { Logo, LogoutPanel, PrimaryNavBarButton, SecondaryNavBarButton } from './elements';
-
-const logout = (dispatch: AppDispatch): Promise<AxiosResponse> => {
-  dispatch(clearDetails({}));
-  return protectedApiClient.post(`${AUTH_URL}/logout`, {});
-};
+import viewsRoutes from '../../../../viewsRoutes';
+import { NavBarLogo } from './components/NavBarLogo/NavBarLogo';
+import { PrimaryNavBarButton } from './components/PrimaryNavBarButton/PrimaryNavBarButton';
+import { SecondaryNavBarButton } from './components/SecondaryNavBarButton/SecondaryNavBarButton';
+import { UserPanel } from './components/UserPanel/UserPanel';
 
 export const NavBar: React.FC = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const username = useSelector((state: RootState) => state.user.username);
   const currentView = useLocation().pathname;
 
   const secondaryButtonDisplayableViews = [
@@ -28,20 +18,14 @@ export const NavBar: React.FC = () => {
   ];
   const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(currentView);
 
-  const handleLogoutButton = async () => {
-    const response = await logout(dispatch);
-    if (response.status === 200) history.push(viewsRoutes.LANDING);
-    else history.push(viewsRoutes.ERROR);
-  };
-
   return (
     <Paper
       elevation={6}
-      sx={{ backgroundColor: 'customBackgrounds.gray', height: 50, overflow: 'visible' }}
+      sx={{ backgroundColor: 'customPalette.surface', height: 50, overflow: 'visible' }}
       square
     >
       <Stack direction="row" spacing={0} justifyContent="flex-start" alignItems="flex-start">
-        <Logo />
+        <NavBarLogo />
         <PrimaryNavBarButton
           text="START"
           isChosen={currentView === viewsRoutes.START}
@@ -87,7 +71,7 @@ export const NavBar: React.FC = () => {
             history.push(viewsRoutes.NOTES);
           }}
         />
-        <LogoutPanel username={username} onClick={handleLogoutButton} />
+        <UserPanel />
       </Stack>
     </Paper>
   );

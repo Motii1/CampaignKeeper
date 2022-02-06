@@ -1,4 +1,4 @@
-import { AxiosError, AxiosResponse, Method } from 'axios';
+import { AxiosError, AxiosRequestHeaders, AxiosResponse, Method } from 'axios';
 import { useCallback, useState } from 'react';
 import protectedApiClient from './axios';
 import requestMethods from './requestMethods';
@@ -9,12 +9,17 @@ type useQueryArgs<T> = {
   status: undefined | number;
   error?: AxiosError;
   runQuery: (data?: unknown) => void;
+  resetQuery: () => void;
 };
 
-export const useQuery = <T>(url: string, method: Method = requestMethods.GET): useQueryArgs<T> => {
+export const useQuery = <T>(
+  url: string,
+  method: Method = requestMethods.GET,
+  headers: null | AxiosRequestHeaders = null
+): useQueryArgs<T> => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<undefined | T>();
-  const [status, setStatus] = useState<number>();
+  const [status, setStatus] = useState<undefined | number>();
   const [error, setError] = useState<undefined | AxiosError>();
 
   const runQuery = useCallback(
@@ -35,12 +40,20 @@ export const useQuery = <T>(url: string, method: Method = requestMethods.GET): u
         method: method,
         url: url,
         data: payload,
+        headers: headers ? headers : undefined,
       })
         .then(handleSuccess)
         .catch(handleError);
     },
-    [method, url, setIsLoading, setData, setStatus, setError]
+    [method, url, headers, setIsLoading, setData, setStatus, setError]
   );
 
-  return { isLoading, data, status, error, runQuery };
+  const resetQuery = () => {
+    setIsLoading(false);
+    setData(undefined);
+    setStatus(undefined);
+    setError(undefined);
+  };
+
+  return { isLoading, data, status, error, runQuery, resetQuery };
 };
