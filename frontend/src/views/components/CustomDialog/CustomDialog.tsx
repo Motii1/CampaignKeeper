@@ -19,17 +19,22 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
   isTitleRed = false,
   ...otherProps
 }) => {
-  const renderButtons = () => (
-    <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={1}>
-      <CustomButton
-        text="CANCEL"
-        behavior={CustomButtonBehavior.Func}
-        type={CustomButtonType.Primary}
-        onClick={otherProps.onCancel}
-      />
-      <CustomButton text="OK" behavior={CustomButtonBehavior.Func} onClick={otherProps.onOk} />
-    </Stack>
-  );
+  //TO-DO: add option with Delete button
+  const renderButtons = () => {
+    if (otherProps.onOk && otherProps.onCancel)
+      return (
+        <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={1}>
+          <CustomButton
+            text="CANCEL"
+            behavior={CustomButtonBehavior.Func}
+            type={CustomButtonType.Primary}
+            onClick={otherProps.onCancel}
+          />
+          <CustomButton text="OK" behavior={CustomButtonBehavior.Func} onClick={otherProps.onOk} />
+        </Stack>
+      );
+    return null;
+  };
 
   return (
     <Dialog

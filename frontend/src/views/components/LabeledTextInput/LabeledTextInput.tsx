@@ -3,6 +3,7 @@ import { Stack, TextField, Typography } from '@mui/material';
 export type LabeledInputProps = {
   text: string;
   placeholder: string;
+  defaultValue?: string;
   helperText: null | string;
   defaultHelperText: string;
   isPassword?: boolean;
@@ -17,6 +18,7 @@ export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
     </Typography>
     <TextField
       placeholder={props.placeholder}
+      defaultValue={props.defaultValue}
       inputProps={{
         sx: {
           '&::placeholder': {

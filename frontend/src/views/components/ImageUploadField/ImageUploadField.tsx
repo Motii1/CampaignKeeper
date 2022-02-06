@@ -9,6 +9,7 @@ type GraphicUploadFieldProps = {
 
 //TO-DO: create type - horizontal for campaign creation, vertical for codex entries
 //TO-DO: improve showing of uploaded graphic (should accept other formats)
+//TO-DO: create wrapper on Paper with Add icon/Container with uploaded image
 export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
   const handleChange = (files: null | FileList) => {
     if (files) {

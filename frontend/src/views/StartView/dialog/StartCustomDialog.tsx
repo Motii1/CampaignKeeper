@@ -10,6 +10,7 @@ type StartCustomDialogProps = {
 };
 
 //TO-DO: think about adding wrapper (for all NavBarViews) on stack inside CustomDialog
+//TO-DO: make sure that campaign name is not lost after closing dialog
 export const StartCustomDialog: React.FC<StartCustomDialogProps> = props => {
   const [name, setName] = useState('');
   const [helperText, setHelperText] = useState<null | string>('');
@@ -31,12 +32,37 @@ export const StartCustomDialog: React.FC<StartCustomDialogProps> = props => {
     setHelperText(validateName(newName));
   };
 
+  const resetFields = () => {
+    setName('');
+    setHelperText('');
+    setImage(null);
+  };
+
+  const handleOk = () => {
+    //here will go handling new campaign creation with useQuery
+    //and history.push('/campaign') redirecting user to new campaign
+    resetFields();
+    props.setIsOpen(false);
+  };
+
+  const handleCancel = () => {
+    setImage(null);
+    props.setIsOpen(false);
+  };
+
   return (
-    <CustomDialog title={'New Campaign'} isOpen={props.isOpen} setIsOpen={props.setIsOpen}>
+    <CustomDialog
+      title={'New Campaign'}
+      isOpen={props.isOpen}
+      setIsOpen={props.setIsOpen}
+      onOk={handleOk}
+      onCancel={handleCancel}
+    >
       <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
         <LabeledTextInput
           text={'NAME'}
           placeholder={'Type here'}
+          defaultValue={name}
           helperText={helperText}
           defaultHelperText={''}
           onChange={event => handleTextInputChange(event)}
