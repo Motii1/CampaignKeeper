@@ -1,6 +1,6 @@
 import { Add, Delete, QuestionMark, Save } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
-import { FabIcon } from './FabIcon';
+import { FabIcon } from '../../../types/types';
 
 type FabContentWrapperProps = {
   text: string;

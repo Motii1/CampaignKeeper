@@ -52,7 +52,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           paddingRight: 2.4,
         }}
       >
-        <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0}>
+        <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
           <ReturnBar setOpen={otherProps.setIsOpen} />
           <CustomDialogTitle title={otherProps.title} isTitleRed={isTitleRed} />
           {otherProps.children}

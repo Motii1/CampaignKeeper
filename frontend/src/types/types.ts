@@ -9,3 +9,9 @@ export enum CustomButtonType {
   Primary,
   Delete,
 }
+
+export enum FabIcon {
+  Add,
+  Save,
+  Delete,
+}
