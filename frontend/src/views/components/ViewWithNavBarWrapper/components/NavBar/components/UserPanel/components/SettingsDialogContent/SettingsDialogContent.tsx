@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import requestMethods from '../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../axios/useQuery';
 import { RootState } from '../../../../../../../../../store';
+import { CustomButtonBehavior } from '../../../../../../../../../types/types';
 import { updateDetails } from '../../../../../../../../LandingView/userDetailsSlice';
 import { CustomButton } from '../../../../../../../CustomButton/CustomButton';
-import { CustomButtonType } from '../../../../../../../CustomButton/CustomButtonTypes';
 import { CustomDialog } from '../../../../../../../CustomDialog/CustomDialog';
 
 type ImageResponseData = {
@@ -131,7 +131,7 @@ export const SettingsDialogContent: React.FC = () => {
             }}
           />
           <label htmlFor="avatar-button-file">
-            <CustomButton text={'Change'} type={CustomButtonType.Upload} />
+            <CustomButton text={'Change'} behavior={CustomButtonBehavior.Upload} />
           </label>
         </Stack>
       </Stack>

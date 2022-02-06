@@ -1,4 +1,6 @@
 import { Dialog, DialogContent, Stack } from '@mui/material';
+import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
+import { CustomButton } from '../CustomButton/CustomButton';
 import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
 
@@ -8,38 +10,55 @@ type CustomDialogProps = {
   isTitleRed?: boolean;
   isOpen: boolean;
   setIsOpen: (newState: boolean) => void;
+  onOk?: () => void;
+  onCancel?: () => void;
 };
 
 //TO-DO: add buttons as another component (e.g. ButtonPanel)
 export const CustomDialog: React.FC<CustomDialogProps> = ({
   isTitleRed = false,
   ...otherProps
-}) => (
-  <Dialog
-    open={otherProps.isOpen}
-    onClose={() => otherProps.setIsOpen(false)}
-    sx={{
-      '& .MuiDialog-paper': {
-        backgroundColor: 'customPalette.surface',
-        borderRadius: 3,
-      },
-    }}
-  >
-    <DialogContent
+}) => {
+  const renderButtons = () => (
+    <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={1}>
+      <CustomButton
+        text="CANCEL"
+        behavior={CustomButtonBehavior.Func}
+        type={CustomButtonType.Primary}
+        onClick={otherProps.onCancel}
+      />
+      <CustomButton text="OK" behavior={CustomButtonBehavior.Func} onClick={otherProps.onOk} />
+    </Stack>
+  );
+
+  return (
+    <Dialog
+      open={otherProps.isOpen}
+      onClose={() => otherProps.setIsOpen(false)}
       sx={{
-        minWidth: '20vw',
-        maxHeight: '90wh',
-        paddingTop: 1.6,
-        paddingBottom: 1.7,
-        paddingLeft: 2.4,
-        paddingRight: 2.4,
+        '& .MuiDialog-paper': {
+          backgroundColor: 'customPalette.surface',
+          borderRadius: 3,
+        },
       }}
     >
-      <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0}>
-        <ReturnBar setOpen={otherProps.setIsOpen} />
-        <CustomDialogTitle title={otherProps.title} isTitleRed={isTitleRed} />
-        {otherProps.children}
-      </Stack>
-    </DialogContent>
-  </Dialog>
-);
+      <DialogContent
+        sx={{
+          minWidth: '20vw',
+          maxHeight: '90wh',
+          paddingTop: 1.6,
+          paddingBottom: 1.7,
+          paddingLeft: 2.4,
+          paddingRight: 2.4,
+        }}
+      >
+        <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0}>
+          <ReturnBar setOpen={otherProps.setIsOpen} />
+          <CustomDialogTitle title={otherProps.title} isTitleRed={isTitleRed} />
+          {otherProps.children}
+          {renderButtons()}
+        </Stack>
+      </DialogContent>
+    </Dialog>
+  );
+};
