@@ -11,9 +11,11 @@ export const ViewWithNavBarWrapper: React.FC = props => {
   return (
     <Paper
       square
+      elevation={0}
       sx={{
         height: '100vh',
         width: '100%',
+        minWidth: 800,
         backgroundColor: 'customPalette.background',
       }}
     >
@@ -28,17 +30,7 @@ export const ViewWithNavBarWrapper: React.FC = props => {
         }}
       >
         <NavBar currentView={currentView} />
-        <Paper
-          square
-          sx={{
-            height: '100%',
-            width: '100%',
-            backgroundColor: 'transparent',
-            margin: 'auto',
-          }}
-        >
-          {props.children}
-        </Paper>
+        {props.children}
       </Stack>
       <CustomFab currentView={currentView} setIsOpen={setIsDialogOpen} />
       <CustomDialogWrapper

@@ -9,10 +9,12 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => (
   <Paper
     sx={{
       cursor: 'pointer',
-      borderRadius: 3,
-      backgroundColor: 'customPalette.background',
-      maxHeight: '24vh',
-      padding: '5px',
+      borderRadius: 2.5,
+      backgroundColor: 'customPalette.brown',
+      height: 211,
+      width: 371.2,
+      padding: 0.66,
+      margin: 1.5,
     }}
   >
     <Stack direction="column" spacing={0.5}>
@@ -20,15 +22,21 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => (
         component="img"
         alt="Campaign graphic"
         src={CampaignDefaultGraphic}
-        sx={{ borderRadius: 3, height: '18vh' }}
+        sx={{
+          borderRadius: 2,
+          height: 180,
+          width: 370,
+          objectFit: 'cover',
+        }}
       />
       <Typography
         sx={{
           color: 'customPalette.accent',
-          fontWeight: 'bold',
+          fontWeight: 'medium',
           textAlign: 'left',
-          padding: '3px',
-          paddingLeft: '15px',
+          paddingLeft: 1.5,
+          paddingRight: 1.5,
+          paddingTop: 0.3,
         }}
       >
         {props.campaignTitle}

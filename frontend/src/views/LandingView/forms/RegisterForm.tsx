@@ -261,69 +261,62 @@ export const RegisterForm: React.FC<FormProps> = props => {
         direction="column"
         justifyContent="flex-start"
         alignItems="flex-start"
-        spacing={1}
+        spacing={0.5}
         component="form"
         sx={{ width: '100%' }}
         onSubmit={handleRegisterButton}
       >
-        <Stack
-          direction="column"
-          justifyContent="flex-start"
-          alignItems="stretch"
-          sx={{ width: '100%' }}
-        >
-          <LabeledTextInput
-            text="Username"
-            placeholder="Pick unique one"
-            helperText={username.helperText}
-            defaultHelperText="Must be between 7 and 32 characters"
-            onChange={event => handleTextFieldChange(event, setUsername)}
-            onBlur={event => handleTextFieldLeave(event, setUsername, validateUsername)}
-          />
-          <LabeledTextInput
-            text="Email"
-            placeholder="So your password won't be forgotten"
-            helperText={email.helperText}
-            defaultHelperText="Must be real email"
-            onChange={event => handleTextFieldChange(event, setEmail)}
-            onBlur={event => handleTextFieldLeave(event, setEmail, validateEmail)}
-          />
-          <LabeledTextInput
-            text="Repeat email"
-            placeholder="Make sure it's right"
-            helperText={emailRepeat.helperText}
-            defaultHelperText="Must be same as email above"
-            onChange={event => handleTextFieldChange(event, setEmailRepeat)}
-            onBlur={event =>
-              handleTextFieldLeaveTwin(event, email.value, setEmailRepeat, validateEmailsMatch)
-            }
-          />
-          <LabeledTextInput
-            text="Password"
-            placeholder="Mellon"
-            helperText={password.helperText}
-            defaultHelperText="Must contain one big letter and symbol"
-            isPassword={true}
-            onChange={event => handleTextFieldChange(event, setPassword)}
-            onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
-          />
-          <LabeledTextInput
-            text="Repeat password"
-            placeholder="Repeat every letter"
-            helperText={passwordRepeat.helperText}
-            defaultHelperText="Must be same as password above"
-            isPassword={true}
-            onChange={event => handleTextFieldChange(event, setPasswordRepeat)}
-            onBlur={event =>
-              handleTextFieldLeaveTwin(
-                event,
-                password.value,
-                setPasswordRepeat,
-                validatePasswordsMatch
-              )
-            }
-          />
-        </Stack>
+        <LabeledTextInput
+          text="Username"
+          placeholder="Pick unique one"
+          helperText={username.helperText}
+          defaultHelperText="Must be between 7 and 32 characters"
+          onChange={event => handleTextFieldChange(event, setUsername)}
+          onBlur={event => handleTextFieldLeave(event, setUsername, validateUsername)}
+        />
+        <LabeledTextInput
+          text="Email"
+          placeholder="So your password won't be forgotten"
+          helperText={email.helperText}
+          defaultHelperText="Must be real email"
+          onChange={event => handleTextFieldChange(event, setEmail)}
+          onBlur={event => handleTextFieldLeave(event, setEmail, validateEmail)}
+        />
+        <LabeledTextInput
+          text="Repeat email"
+          placeholder="Make sure it's right"
+          helperText={emailRepeat.helperText}
+          defaultHelperText="Must be same as email above"
+          onChange={event => handleTextFieldChange(event, setEmailRepeat)}
+          onBlur={event =>
+            handleTextFieldLeaveTwin(event, email.value, setEmailRepeat, validateEmailsMatch)
+          }
+        />
+        <LabeledTextInput
+          text="Password"
+          placeholder="Mellon"
+          helperText={password.helperText}
+          defaultHelperText="Must contain one big letter and symbol"
+          isPassword={true}
+          onChange={event => handleTextFieldChange(event, setPassword)}
+          onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
+        />
+        <LabeledTextInput
+          text="Repeat password"
+          placeholder="Repeat every letter"
+          helperText={passwordRepeat.helperText}
+          defaultHelperText="Must be same as password above"
+          isPassword={true}
+          onChange={event => handleTextFieldChange(event, setPasswordRepeat)}
+          onBlur={event =>
+            handleTextFieldLeaveTwin(
+              event,
+              password.value,
+              setPasswordRepeat,
+              validatePasswordsMatch
+            )
+          }
+        />
         <CustomButton text="Register" />
       </Stack>
       <ChangeFormComponent

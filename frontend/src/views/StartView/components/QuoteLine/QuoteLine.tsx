@@ -7,7 +7,12 @@ type QuoteLineProps = {
 export const QuoteLine: React.FC<QuoteLineProps> = props => (
   <Typography
     variant="h6"
-    sx={{ color: 'customPalette.accent', fontStyle: 'italic', padding: '5vh' }}
+    sx={{
+      color: 'customPalette.accent',
+      fontStyle: 'italic',
+      padding: 4,
+      fontWeight: 'regular',
+    }}
   >
     {props.text}
   </Typography>

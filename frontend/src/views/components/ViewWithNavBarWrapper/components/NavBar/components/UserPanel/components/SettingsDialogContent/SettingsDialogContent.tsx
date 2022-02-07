@@ -113,27 +113,32 @@ export const SettingsDialogContent: React.FC = () => {
 
   return (
     <Box>
-      <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0.5}>
-        <Stack spacing={1}>
-          <Typography variant="h6">AVATAR</Typography>
+      <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
+        <Typography variant="h6">AVATAR</Typography>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="flex-start"
+          sx={{ paddingBottom: 1 }}
+        >
           <Avatar
             alt={String(username)}
             src={`data:;charset=utf-8;base64,${avatar}`}
             sx={{ width: 90, height: 90 }}
           />
-          <input
-            accept="image/*"
-            id="avatar-button-file"
-            type="file"
-            hidden
-            onChange={e => {
-              if (e) handleChange(e.target.files);
-            }}
-          />
-          <label htmlFor="avatar-button-file">
-            <CustomButton text={'Change'} behavior={CustomButtonBehavior.Upload} />
-          </label>
         </Stack>
+        <input
+          accept="image/*"
+          id="avatar-button-file"
+          type="file"
+          hidden
+          onChange={e => {
+            if (e) handleChange(e.target.files);
+          }}
+        />
+        <label htmlFor="avatar-button-file">
+          <CustomButton text={'Change'} behavior={CustomButtonBehavior.Upload} />
+        </label>
       </Stack>
       <CustomDialog
         title={changeFeedbackContent.title}

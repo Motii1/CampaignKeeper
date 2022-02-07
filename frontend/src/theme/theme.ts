@@ -17,6 +17,7 @@ export const theme = createTheme({
       onAccent: '#262E38',
       red: '#FF8282',
       onRed: '#262E38',
+      brown: '#362C28',
     },
     background: {
       default: '#262E38',
@@ -59,6 +60,7 @@ declare module '@mui/material/styles' {
       onAccent?: string;
       red?: string;
       onRed?: string;
+      brown?: string;
     };
   }
   interface ThemeOptions {

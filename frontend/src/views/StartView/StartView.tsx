@@ -1,6 +1,6 @@
-import { Grid, Stack } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
-import { CampaignTile } from './components/CampaignTitle/CampaignTile';
+import { CampaignTile } from './components/CampaignTile/CampaignTile';
 import { QuoteLine } from './components/QuoteLine/QuoteLine';
 
 export const StartView: React.FC = () => {
@@ -14,7 +14,7 @@ export const StartView: React.FC = () => {
     'Rise of Tiamat',
     `Storm Lord's Wrath`,
     `Sleeping Dragon's Wake`,
-    'Divine Contention ',
+    'Divine Contention',
   ];
 
   return (
@@ -23,17 +23,41 @@ export const StartView: React.FC = () => {
         direction="column"
         justifyContent="center"
         alignItems="center"
-        spacing={0}
-        sx={{ margin: 'auto' }}
+        sx={{ overflowY: 'hidden' }}
       >
         <QuoteLine text={exampleQuote} />
-        <Grid container rowSpacing={3} columnSpacing={4} sx={{ width: '80vw', margin: '0' }}>
-          {exampleTitles.map(title => (
-            <Grid container item xs={4} key={title}>
-              <CampaignTile campaignTitle={title} />
-            </Grid>
-          ))}
-        </Grid>
+        <Box
+          component="div"
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            display: 'flex',
+            height: '100%',
+            width: '100%',
+            maxWidth: 1400,
+            overflowY: 'hidden',
+          }}
+        >
+          <Grid
+            container
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            columnSpacing={10}
+            sx={{
+              maxHeight: '100%',
+              width: 'auto',
+              maxWidth: '100%',
+              paddingLeft: 2,
+            }}
+          >
+            {exampleTitles.map(title => (
+              <Grid item key={title}>
+                <CampaignTile campaignTitle={title} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       </Stack>
     </ViewWithNavBarWrapper>
   );

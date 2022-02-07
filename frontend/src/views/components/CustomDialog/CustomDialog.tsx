@@ -24,7 +24,13 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
   const renderButtons = () => {
     if (otherProps.onOk && otherProps.onCancel && otherProps.onDelete)
       return (
-        <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={1}>
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          spacing={1}
+          sx={{ width: '100%', paddingTop: 1 }}
+        >
           <CustomButton
             text="DELETE"
             behavior={CustomButtonBehavior.Func}
@@ -59,7 +65,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           minWidth: '20vw',
           maxHeight: '90wh',
           paddingTop: 1.6,
-          paddingBottom: 1.7,
+          paddingBottom: 1.9,
           paddingLeft: 2.4,
           paddingRight: 2.4,
         }}

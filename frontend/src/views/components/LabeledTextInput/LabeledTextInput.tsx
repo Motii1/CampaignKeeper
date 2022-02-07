@@ -12,7 +12,13 @@ export type LabeledInputProps = {
 };
 
 export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
-  <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={0}>
+  <Stack
+    direction="column"
+    justifyContent="flex-start"
+    alignItems="stretch"
+    spacing={0}
+    sx={{ width: '100%' }}
+  >
     <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface', paddingLeft: 1 }}>
       {props.text}
     </Typography>

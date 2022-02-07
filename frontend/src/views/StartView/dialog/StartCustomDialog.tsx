@@ -66,7 +66,13 @@ export const StartCustomDialog: React.FC<StartCustomDialogProps> = props => {
       onCancel={handleCancel}
       onDelete={handleDelete}
     >
-      <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
+      <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="flex-start"
+        spacing={1}
+        sx={{ width: '100%' }}
+      >
         <LabeledTextInput
           text={'NAME'}
           placeholder={'Type here'}
@@ -76,7 +82,7 @@ export const StartCustomDialog: React.FC<StartCustomDialogProps> = props => {
           onChange={event => handleTextInputChange(event)}
           onBlur={event => handleTextInputLeave(event)}
         />
-        <ImageUploadField image={image} setImage={setImage} />
+        <ImageUploadField height={180} width={390} image={image} setImage={setImage} />
       </Stack>
     </CustomDialog>
   );

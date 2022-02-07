@@ -24,7 +24,9 @@ export const FabContentWrapper: React.FC<FabContentWrapperProps> = props => {
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={0.5}>
       {renderIcon()}
-      <Typography sx={{ fontWeight: 'bold', textAlign: 'center' }}>{props.text}</Typography>
+      <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingTop: 0.5 }}>
+        {props.text}
+      </Typography>
     </Stack>
   );
 };

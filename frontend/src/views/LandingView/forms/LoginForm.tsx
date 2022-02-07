@@ -143,37 +143,30 @@ export const LoginForm: React.FC<FormProps> = props => {
     >
       <Stack
         direction="column"
-        spacing={1}
+        spacing={0.5}
         component="form"
         justifyContent="flex-start"
         alignItems="flex-start"
         onSubmit={handleLoginButton}
         sx={{ width: '100%' }}
       >
-        <Stack
-          direction="column"
-          justifyContent="flex-start"
-          alignItems="stretch"
-          sx={{ width: '100%' }}
-        >
-          <LabeledTextInput
-            text="Email or username"
-            placeholder="Thou name, brave hero"
-            helperText={username.helperText}
-            defaultHelperText=""
-            onChange={event => handleTextFieldChange(event, setUsername)}
-            onBlur={event => handleTextFieldLeave(event, setUsername, validateLogin)}
-          />
-          <LabeledTextInput
-            text="Password"
-            placeholder="Phrase that must not be spoken"
-            helperText={password.helperText}
-            defaultHelperText=""
-            isPassword={true}
-            onChange={event => handleTextFieldChange(event, setPassword)}
-            onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
-          />
-        </Stack>
+        <LabeledTextInput
+          text="Email or username"
+          placeholder="Thou name, brave hero"
+          helperText={username.helperText}
+          defaultHelperText=""
+          onChange={event => handleTextFieldChange(event, setUsername)}
+          onBlur={event => handleTextFieldLeave(event, setUsername, validateLogin)}
+        />
+        <LabeledTextInput
+          text="Password"
+          placeholder="Phrase that must not be spoken"
+          helperText={password.helperText}
+          defaultHelperText=""
+          isPassword={true}
+          onChange={event => handleTextFieldChange(event, setPassword)}
+          onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
+        />
         <CustomButton text="Login" />
       </Stack>
       <ChangeFormComponent
