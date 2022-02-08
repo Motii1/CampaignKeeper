@@ -1,9 +1,35 @@
 import { Box, Grid, Stack } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import { CampaignTile } from './components/CampaignTile/CampaignTile';
 import { QuoteLine } from './components/QuoteLine/QuoteLine';
 
+const getWindowDimensions = () => {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+};
+
+const useWindowDimensions = () => {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions(getWindowDimensions());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
+};
+
 export const StartView: React.FC = () => {
+  const { width: width } = useWindowDimensions();
+  const stuff = Math.max((width - 1368.1) / 2, 51);
   const exampleQuote = '"On the Honor of the Greyskull!" ~ She-Ra';
   const exampleTitles = [
     'Rime of the Frostmaiden',
@@ -26,18 +52,15 @@ export const StartView: React.FC = () => {
         sx={{ width: '100%', overflowY: 'auto' }}
       >
         <QuoteLine text={exampleQuote} />
-        {/* This Box should be a whole component that calculates on every resize
-            left padding of the grid so the grid is always properly centered */}
         <Box
           component="div"
           sx={{
-            overflowY: 'auto',
+            overflowY: 'hidden',
             alignItems: 'center',
             justifyContent: 'flex-start',
             display: 'flex',
             height: '100%',
             width: '100%',
-            maxWidth: '100%',
           }}
         >
           <Grid
@@ -50,7 +73,7 @@ export const StartView: React.FC = () => {
               maxHeight: '100%',
               width: 'auto',
               maxWidth: '100%',
-              paddingLeft: '14.3%',
+              paddingLeft: stuff + 'px',
             }}
           >
             {exampleTitles.map(title => (

@@ -23,6 +23,7 @@ export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
       {props.text}
     </Typography>
     <TextField
+      size="small"
       placeholder={props.placeholder}
       defaultValue={props.defaultValue}
       inputProps={{
@@ -35,8 +36,6 @@ export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
             filter: 'invert(100%)',
           },
           '&': {
-            borderRadius: 2,
-            height: 7,
             fontSize: 16,
             fontWeight: 'light',
           },
@@ -49,7 +48,7 @@ export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
       onBlur={props.onBlur}
       sx={{
         backgroundColor: props.helperText ? 'customPalette.error' : 'customPalette.background',
-        borderRadius: 2,
+        borderRadius: 1,
         '& .MuiInputBase-root': {
           color: props.helperText ? 'customPalette.onError' : 'customPalette.onBackground',
           opacity: 1,
