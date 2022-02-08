@@ -29,7 +29,7 @@ const useWindowDimensions = () => {
 
 export const StartView: React.FC = () => {
   const { width: width } = useWindowDimensions();
-  const stuff = Math.max((width - 1368.1) / 2, 51);
+  const centeredPadding = Math.max((width - 1368.1) / 2, width < 450 ? 6 : 51);
   const exampleQuote = '"On the Honor of the Greyskull!" ~ She-Ra';
   const exampleTitles = [
     'Rime of the Frostmaiden',
@@ -73,7 +73,7 @@ export const StartView: React.FC = () => {
               maxHeight: '100%',
               width: 'auto',
               maxWidth: '100%',
-              paddingLeft: stuff + 'px',
+              paddingLeft: centeredPadding + 'px',
             }}
           >
             {exampleTitles.map(title => (

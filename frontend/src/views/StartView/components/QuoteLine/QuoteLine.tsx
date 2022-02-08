@@ -11,7 +11,8 @@ export const QuoteLine: React.FC<QuoteLineProps> = props => (
       color: 'customPalette.accent',
       fontStyle: 'italic',
       padding: 1,
-      paddingTop: 6,
+      paddingTop: 7,
+      paddingBottom: 0,
       fontWeight: 'regular',
     }}
   >
