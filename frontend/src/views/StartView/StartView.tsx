@@ -23,19 +23,21 @@ export const StartView: React.FC = () => {
         direction="column"
         justifyContent="center"
         alignItems="center"
-        sx={{ overflowY: 'hidden' }}
+        sx={{ width: '100%', overflowY: 'auto' }}
       >
         <QuoteLine text={exampleQuote} />
+        {/* This Box should be a whole component that calculates on every resize
+            left padding of the grid so the grid is always properly centered */}
         <Box
           component="div"
           sx={{
+            overflowY: 'auto',
             alignItems: 'center',
             justifyContent: 'flex-start',
             display: 'flex',
             height: '100%',
             width: '100%',
-            maxWidth: 1400,
-            overflowY: 'hidden',
+            maxWidth: '100%',
           }}
         >
           <Grid
@@ -48,7 +50,7 @@ export const StartView: React.FC = () => {
               maxHeight: '100%',
               width: 'auto',
               maxWidth: '100%',
-              paddingLeft: 2,
+              paddingLeft: '14.3%',
             }}
           >
             {exampleTitles.map(title => (

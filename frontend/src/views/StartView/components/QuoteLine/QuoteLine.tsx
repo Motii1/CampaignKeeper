@@ -10,7 +10,8 @@ export const QuoteLine: React.FC<QuoteLineProps> = props => (
     sx={{
       color: 'customPalette.accent',
       fontStyle: 'italic',
-      padding: 4,
+      padding: 1,
+      paddingTop: 6,
       fontWeight: 'regular',
     }}
   >

@@ -22,12 +22,14 @@ export const NavBar: React.FC<NavBarProps> = props => {
   const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(props.currentView);
 
   return (
-    <Paper
-      elevation={6}
-      sx={{ backgroundColor: 'customPalette.surface', height: 50, overflow: 'visible' }}
-      square
-    >
-      <Stack direction="row" spacing={0} justifyContent="flex-start" alignItems="flex-start">
+    <Paper elevation={6} square sx={{ backgroundColor: 'customPalette.surface', height: 50 }}>
+      <Stack
+        direction="row"
+        spacing={0}
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        sx={{ overflowX: 'hidden' }}
+      >
         <NavBarLogo />
         <PrimaryNavBarButton
           text="START"

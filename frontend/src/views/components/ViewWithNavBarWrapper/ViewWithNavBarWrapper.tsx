@@ -14,8 +14,9 @@ export const ViewWithNavBarWrapper: React.FC = props => {
       elevation={0}
       sx={{
         height: '100vh',
+        maxHeight: '100%',
         width: '100%',
-        minWidth: 800,
+        position: 'absolute',
         backgroundColor: 'customPalette.background',
       }}
     >
