@@ -10,11 +10,11 @@ type GraphicUploadFieldProps = {
   setImage: (file: File) => void;
 };
 
-//TO-DO: create type - horizontal for campaign creation, vertical for codex entries
-//TO-DO: image size in <img /> tag should fitted to dialog dimensions (and it isn't)
 export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
   const handleChange = (files: null | FileList) => {
     if (files) {
+      // eslint-disable-next-line no-console
+      console.log('File!');
       const file = files.item(0);
       if (file) props.setImage(file);
     }

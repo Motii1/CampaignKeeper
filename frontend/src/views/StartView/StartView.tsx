@@ -31,6 +31,7 @@ const useWindowDimensions = () => {
 
 export const StartView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+
   const { width: width } = useWindowDimensions();
   const centeredPadding = Math.max((width - 1368.1) / 2, width < 450 ? 6 : 51);
   const exampleQuote = '"On the Honor of the Greyskull!" ~ She-Ra';
@@ -81,7 +82,7 @@ export const StartView: React.FC = () => {
           >
             {exampleTitles.map(title => (
               <Grid item key={title}>
-                <CampaignTile campaignTitle={title} />
+                <CampaignTile campaignTitle={title} setIsOpen={setIsOpen} />
               </Grid>
             ))}
           </Grid>

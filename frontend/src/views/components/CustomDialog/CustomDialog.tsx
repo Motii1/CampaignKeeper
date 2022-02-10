@@ -15,12 +15,11 @@ type CustomDialogProps = {
   onDelete?: () => void;
 };
 
-//TO-DO: add buttons as another component (e.g. ButtonPanel)
 export const CustomDialog: React.FC<CustomDialogProps> = ({
   isTitleRed = false,
   ...otherProps
 }) => {
-  //TO-DO: add option with Delete button
+  //TO-DO: add option without Delete button
   const renderButtons = () => {
     if (otherProps.onOk && otherProps.onCancel && otherProps.onDelete)
       return (

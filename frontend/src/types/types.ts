@@ -15,3 +15,8 @@ export enum FabIcon {
   Save,
   Delete,
 }
+
+export enum StartViewDialog {
+  New,
+  Edit,
+}
