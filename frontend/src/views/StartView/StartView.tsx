@@ -4,6 +4,7 @@ import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewW
 import { CampaignTile } from './components/CampaignTile/CampaignTile';
 import { QuoteLine } from './components/QuoteLine/QuoteLine';
 
+//TO-DO: lift this method up as it will be used in another views
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
   return {
@@ -12,6 +13,7 @@ const getWindowDimensions = () => {
   };
 };
 
+//TO-DO: as above
 const useWindowDimensions = () => {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
@@ -28,6 +30,7 @@ const useWindowDimensions = () => {
 };
 
 export const StartView: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const { width: width } = useWindowDimensions();
   const centeredPadding = Math.max((width - 1368.1) / 2, width < 450 ? 6 : 51);
   const exampleQuote = '"On the Honor of the Greyskull!" ~ She-Ra';
@@ -44,7 +47,7 @@ export const StartView: React.FC = () => {
   ];
 
   return (
-    <ViewWithNavBarWrapper>
+    <ViewWithNavBarWrapper isOpen={isOpen} setIsOpen={setIsOpen}>
       <Stack
         direction="column"
         justifyContent="center"

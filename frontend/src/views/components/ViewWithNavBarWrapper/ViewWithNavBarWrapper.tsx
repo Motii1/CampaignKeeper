@@ -1,13 +1,18 @@
 import { Paper, Stack } from '@mui/material';
-import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CustomDialogWrapper } from './components/CustomDialogWrapper/CustomDialogWrapper';
 import { CustomFab } from './components/CustomFab/CustomFab';
 import { NavBar } from './components/NavBar/NavBar';
 
-export const ViewWithNavBarWrapper: React.FC = props => {
+type ViewWithNavBarWrapperProps = {
+  isOpen: boolean;
+  setIsOpen: (newIsOpen: boolean) => void;
+  isSecondaryOpen?: boolean;
+  setIsSecondaryOpen?: (newIsOpen: boolean) => void;
+};
+
+export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props => {
   const currentView = useLocation().pathname;
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   return (
     <Paper
       square
@@ -33,11 +38,11 @@ export const ViewWithNavBarWrapper: React.FC = props => {
         <NavBar currentView={currentView} />
         {props.children}
       </Stack>
-      <CustomFab currentView={currentView} setIsOpen={setIsDialogOpen} />
+      <CustomFab currentView={currentView} setIsOpen={props.setIsOpen} />
       <CustomDialogWrapper
         currentView={currentView}
-        isOpen={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
+        isOpen={props.isOpen}
+        setIsOpen={props.setIsOpen}
       />
     </Paper>
   );
