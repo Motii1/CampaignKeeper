@@ -8,13 +8,15 @@ import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadF
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import { resetState, updateState } from '../startViewSlice';
 
-type StartCustomDialogProps = {
+type StartDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
+  setIsSecondaryOpen: (newIsOpen: boolean) => void;
 };
 
 //TO-DO: think about adding wrapper (for all NavBarViews) on stack inside CustomDialog
-export const StartCustomDialog: React.FC<StartCustomDialogProps> = props => {
+//TO-DO: close Edit dialog after deleting campaign (export isOpen of primary dialog to Redux?)
+export const StartDialog: React.FC<StartDialogProps> = props => {
   const dispatch = useDispatch();
   const type = useSelector((state: RootState) => state.startView.type);
   const [title, setTitle] = useState(
@@ -43,32 +45,34 @@ export const StartCustomDialog: React.FC<StartCustomDialogProps> = props => {
   };
 
   const resetFields = () => {
-    dispatch(resetState({}));
-    setTitle('New campaign');
     setHelperText('');
+    dispatch(resetState({}));
   };
 
   const handleOk = () => {
     //here will go handling new campaign creation with useQuery
     //and history.push('/campaign') redirecting user to new campaign
-    resetFields();
     props.setIsOpen(false);
+    resetFields();
   };
 
   const handleCancel = () => {
-    resetFields();
     props.setIsOpen(false);
+    resetFields();
   };
 
   const handleDelete = () => {
     //here will go handling campaign deletion with useQuery
-    resetFields();
-    props.setIsOpen(false);
+    //props.setIsOpen(false);
+    // eslint-disable-next-line no-console
+    console.log('AAAAAAA');
+    props.setIsSecondaryOpen(true);
+    //resetFields();
   };
 
   const handleClose = () => {
-    if (type === StartViewDialog.Edit) resetFields();
     props.setIsOpen(false);
+    if (type === StartViewDialog.Edit) resetFields();
   };
 
   return (

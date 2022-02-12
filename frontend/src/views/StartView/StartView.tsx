@@ -34,6 +34,7 @@ const useWindowDimensions = () => {
 
 export const StartView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
   const dispatch = useDispatch();
   const handleFab = () => {
     dispatch(updateState({ type: StartViewDialog.New }));
@@ -56,7 +57,13 @@ export const StartView: React.FC = () => {
   ];
 
   return (
-    <ViewWithNavBarWrapper isOpen={isOpen} setIsOpen={setIsOpen} handleFab={handleFab}>
+    <ViewWithNavBarWrapper
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      isSecondaryOpen={isSecondaryOpen}
+      setIsSecondaryOpen={setIsSecondaryOpen}
+      handleFab={handleFab}
+    >
       <Stack
         direction="column"
         justifyContent="center"

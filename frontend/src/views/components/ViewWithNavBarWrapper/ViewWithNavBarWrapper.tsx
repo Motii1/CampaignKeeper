@@ -1,8 +1,9 @@
 import { Paper, Stack } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import { CustomDialogWrapper } from './components/CustomDialogWrapper/CustomDialogWrapper';
+import { DialogWrapper } from './components/CustomDialogWrapper/CustomDialogWrapper';
 import { CustomFab } from './components/CustomFab/CustomFab';
 import { NavBar } from './components/NavBar/NavBar';
+import { SecondaryDialogWrapper } from './components/SecondaryCustomDialogWrapper/SecondaryCustomDialogWrapper';
 
 type ViewWithNavBarWrapperProps = {
   isOpen: boolean;
@@ -43,11 +44,19 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
         currentView={currentView}
         handleClick={props.handleFab ? props.handleFab : () => props.setIsOpen(!props.isOpen)}
       />
-      <CustomDialogWrapper
+      <DialogWrapper
         currentView={currentView}
         isOpen={props.isOpen}
         setIsOpen={props.setIsOpen}
+        setIsSecondaryOpen={props.setIsSecondaryOpen}
       />
+      {props.isSecondaryOpen && props.setIsSecondaryOpen ? (
+        <SecondaryDialogWrapper
+          currentView={currentView}
+          isOpen={props.isSecondaryOpen}
+          setIsOpen={props.setIsSecondaryOpen}
+        />
+      ) : null}
     </Paper>
   );
 };

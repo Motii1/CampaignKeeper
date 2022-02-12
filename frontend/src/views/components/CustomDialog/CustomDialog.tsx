@@ -35,7 +35,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
             text="DELETE"
             behavior={CustomButtonBehavior.Func}
             type={CustomButtonType.Delete}
-            onClick={otherProps.onCancel}
+            onClick={otherProps.onDelete}
           />
           <CustomButton
             text="CANCEL"
