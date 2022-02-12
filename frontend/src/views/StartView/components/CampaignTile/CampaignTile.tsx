@@ -2,6 +2,7 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import CampaignDefaultGraphic from '../../../../graphics/campaignDefault.jpg';
+import { StartViewDialog } from '../../../../types/types';
 import { EditMenu } from '../../../components/EditMenu/EditMenu';
 import { updateState } from '../../startViewSlice';
 
@@ -32,7 +33,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
   };
 
   const handleEdit = () => {
-    dispatch(updateState({ name: props.campaignTitle }));
+    dispatch(updateState({ name: props.campaignTitle, type: StartViewDialog.Edit }));
     props.setIsOpen(true);
     setMenuPos(null);
   };

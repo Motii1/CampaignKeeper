@@ -9,6 +9,7 @@ type ViewWithNavBarWrapperProps = {
   setIsOpen: (newIsOpen: boolean) => void;
   isSecondaryOpen?: boolean;
   setIsSecondaryOpen?: (newIsOpen: boolean) => void;
+  handleFab?: () => void;
 };
 
 export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props => {
@@ -38,7 +39,10 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
         <NavBar currentView={currentView} />
         {props.children}
       </Stack>
-      <CustomFab currentView={currentView} setIsOpen={props.setIsOpen} />
+      <CustomFab
+        currentView={currentView}
+        handleClick={props.handleFab ? props.handleFab : () => props.setIsOpen(!props.isOpen)}
+      />
       <CustomDialogWrapper
         currentView={currentView}
         isOpen={props.isOpen}

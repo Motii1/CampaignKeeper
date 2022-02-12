@@ -10,7 +10,7 @@ interface StartViewState {
 const initialState: StartViewState = {
   name: '',
   image: null,
-  type: StartViewDialog.Edit,
+  type: StartViewDialog.New,
 };
 
 const startViewSlice = createSlice({
@@ -27,6 +27,7 @@ const startViewSlice = createSlice({
     resetState: (state, _action) => {
       state.name = '';
       state.image = null;
+      state.type = StartViewDialog.New;
     },
   },
 });

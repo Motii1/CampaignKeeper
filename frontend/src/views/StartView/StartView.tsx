@@ -1,8 +1,11 @@
 import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { StartViewDialog } from '../../types/types';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import { CampaignTile } from './components/CampaignTile/CampaignTile';
 import { QuoteLine } from './components/QuoteLine/QuoteLine';
+import { updateState } from './startViewSlice';
 
 //TO-DO: lift this method up as it will be used in another views
 const getWindowDimensions = () => {
@@ -31,6 +34,11 @@ const useWindowDimensions = () => {
 
 export const StartView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const handleFab = () => {
+    dispatch(updateState({ type: StartViewDialog.New }));
+    setIsOpen(true);
+  };
 
   const { width: width } = useWindowDimensions();
   const centeredPadding = Math.max((width - 1368.1) / 2, width < 450 ? 6 : 51);
@@ -48,7 +56,7 @@ export const StartView: React.FC = () => {
   ];
 
   return (
-    <ViewWithNavBarWrapper isOpen={isOpen} setIsOpen={setIsOpen}>
+    <ViewWithNavBarWrapper isOpen={isOpen} setIsOpen={setIsOpen} handleFab={handleFab}>
       <Stack
         direction="column"
         justifyContent="center"

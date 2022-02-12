@@ -6,14 +6,10 @@ import viewsRoutes from '../../../../viewsRoutes';
 type CustomFabProps = {
   currentView: string;
   text?: string;
-  setIsOpen: (newIsOpen: boolean) => void;
+  handleClick: () => void;
 };
 
 export const CustomFab: React.FC<CustomFabProps> = props => {
-  const handleClick = () => {
-    props.setIsOpen(true);
-  };
-
   const renderFabContent = () => {
     switch (props.currentView) {
       case viewsRoutes.START:
@@ -26,7 +22,7 @@ export const CustomFab: React.FC<CustomFabProps> = props => {
   return (
     <Fab
       variant="extended"
-      onClick={handleClick}
+      onClick={props.handleClick}
       sx={{
         color: 'customPalette.onAccent',
         backgroundColor: 'customPalette.accent',
