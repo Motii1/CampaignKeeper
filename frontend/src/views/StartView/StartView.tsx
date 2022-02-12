@@ -1,5 +1,5 @@
 import { Box, Grid, Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StartViewDialog } from '../../types/types';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
@@ -30,6 +30,16 @@ const useWindowDimensions = () => {
   }, []);
 
   return windowDimensions;
+};
+
+//TO-DO: as above
+const handleWheelEvent = (e: React.WheelEvent) => {
+  if (e.deltaY !== 0) {
+    e.currentTarget.scrollTo({
+      top: 0,
+      left: e.currentTarget.scrollLeft + e.deltaY,
+    });
+  }
 };
 
 export const StartView: React.FC = () => {
@@ -73,6 +83,7 @@ export const StartView: React.FC = () => {
         <QuoteLine text={exampleQuote} />
         <Box
           component="div"
+          onWheel={handleWheelEvent}
           sx={{
             overflowY: 'hidden',
             alignItems: 'center',
