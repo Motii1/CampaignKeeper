@@ -44,7 +44,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     setHelperText(validateName(newName));
   };
 
-  const resetFields = () => {
+  const resetDialog = () => {
     setHelperText('');
     dispatch(resetState({}));
   };
@@ -53,26 +53,22 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     //here will go handling new campaign creation with useQuery
     //and history.push('/campaign') redirecting user to new campaign
     props.setIsOpen(false);
-    resetFields();
+    resetDialog();
   };
 
   const handleCancel = () => {
     props.setIsOpen(false);
-    resetFields();
+    resetDialog();
   };
 
   const handleDelete = () => {
     //here will go handling campaign deletion with useQuery
-    //props.setIsOpen(false);
-    // eslint-disable-next-line no-console
-    console.log('AAAAAAA');
     props.setIsSecondaryOpen(true);
-    //resetFields();
   };
 
   const handleClose = () => {
     props.setIsOpen(false);
-    if (type === StartViewDialog.Edit) resetFields();
+    if (type === StartViewDialog.Edit) resetDialog();
   };
 
   return (

@@ -9,6 +9,7 @@ type StartSecondaryCustomDialogProps = {
 export const StartSecondaryDialog: React.FC<StartSecondaryCustomDialogProps> = props => {
   const handleOk = () => {
     //here will go deleting campaign by useQuery
+    props.setIsOpen(false);
   };
 
   const handleCancel = () => {
