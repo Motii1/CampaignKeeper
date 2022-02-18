@@ -31,6 +31,16 @@ const useWindowDimensions = () => {
   return windowDimensions;
 };
 
+//TO-DO: as above
+const handleWheelEvent = (e: React.WheelEvent) => {
+  if (e.deltaY !== 0) {
+    e.currentTarget.scrollTo({
+      top: 0,
+      left: e.currentTarget.scrollLeft + e.deltaY,
+    });
+  }
+};
+
 export const StartView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.New);
@@ -78,6 +88,7 @@ export const StartView: React.FC = () => {
         <QuoteLine text={quote} />
         <Box
           component="div"
+          onWheel={handleWheelEvent}
           sx={{
             overflowY: 'hidden',
             alignItems: 'center',
