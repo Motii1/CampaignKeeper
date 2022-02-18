@@ -54,7 +54,7 @@ export const NavBar: React.FC<NavBarProps> = props => {
           }}
         />
         <SecondaryNavBarButton
-          text="SESSIONS"
+          text="EXPLORER"
           isChosen={props.currentView === viewsRoutes.SESSIONS}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {

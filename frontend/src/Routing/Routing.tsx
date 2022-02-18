@@ -2,10 +2,10 @@ import { Route, Switch } from 'react-router-dom';
 import { CampaignView } from '../views/CampaignView/CampaignView';
 import { CodexView } from '../views/CodexView/CodexView';
 import { ErrorView } from '../views/ErrorView/ErrorView';
+import { ExplorerView } from '../views/ExplorerView/ExplorerView';
 import { LandingView } from '../views/LandingView/LandingView';
 import { MapView } from '../views/MapView/MapView';
 import { NotesView } from '../views/NotesView/NotesView';
-import { SessionsView } from '../views/SessionsView/SessionsView';
 import { StartView } from '../views/StartView/StartView';
 import viewsRoutes from '../views/viewsRoutes';
 import { ProtectedRouteWrapper } from './ProtectedRouteWrapper/ProtectedRouteWrapper';
@@ -23,7 +23,7 @@ export const Routing: React.FC = () => (
       <MapView />
     </ProtectedRouteWrapper>
     <ProtectedRouteWrapper path={viewsRoutes.SESSIONS}>
-      <SessionsView />
+      <ExplorerView />
     </ProtectedRouteWrapper>
     <ProtectedRouteWrapper path={viewsRoutes.CODEX}>
       <CodexView />
