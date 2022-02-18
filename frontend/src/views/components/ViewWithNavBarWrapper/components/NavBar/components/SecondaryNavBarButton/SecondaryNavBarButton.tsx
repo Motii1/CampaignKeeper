@@ -40,6 +40,7 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
               letterSpacing: -0.15,
               fontWeight: 'bold',
               fontSize: 17,
+              paddingTop: 0.2,
             }}
           >
             {props.text}

@@ -15,6 +15,7 @@ export const NavBarLogo: React.FC = () => {
         backgroundRepeat: 'no-repeat',
         height: 95,
         width: 247,
+        minWidth: 247,
         marginLeft: 2,
         marginRight: 2,
         overflow: 'visible',

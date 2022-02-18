@@ -1,4 +1,6 @@
 import { Dialog, DialogContent, Stack } from '@mui/material';
+import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
+import { CustomButton } from '../CustomButton/CustomButton';
 import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
 
@@ -8,38 +10,91 @@ type CustomDialogProps = {
   isTitleRed?: boolean;
   isOpen: boolean;
   setIsOpen: (newState: boolean) => void;
+  onOk?: () => void;
+  onCancel?: () => void;
+  onDelete?: () => void;
+  onClose?: () => void;
 };
 
-//TO-DO: add buttons as another component (e.g. ButtonPanel)
 export const CustomDialog: React.FC<CustomDialogProps> = ({
   isTitleRed = false,
   ...otherProps
-}) => (
-  <Dialog
-    open={otherProps.isOpen}
-    onClose={() => otherProps.setIsOpen(false)}
-    sx={{
-      '& .MuiDialog-paper': {
-        backgroundColor: 'customPalette.surface',
-        borderRadius: 3,
-      },
-    }}
-  >
-    <DialogContent
+}) => {
+  //TO-DO: add option without Delete button
+  const renderButtons = () => {
+    if (otherProps.onOk && otherProps.onCancel && otherProps.onDelete)
+      return (
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          spacing={1}
+          sx={{ width: '100%', paddingTop: 1 }}
+        >
+          <CustomButton
+            text="DELETE"
+            behavior={CustomButtonBehavior.Func}
+            type={CustomButtonType.Delete}
+            onClick={otherProps.onDelete}
+          />
+          <CustomButton
+            text="CANCEL"
+            behavior={CustomButtonBehavior.Func}
+            type={CustomButtonType.Primary}
+            onClick={otherProps.onCancel}
+          />
+          <CustomButton text="OK" behavior={CustomButtonBehavior.Func} onClick={otherProps.onOk} />
+        </Stack>
+      );
+    if (otherProps.onOk && otherProps.onCancel)
+      return (
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          spacing={1}
+          sx={{ width: '100%', paddingTop: 1 }}
+        >
+          <CustomButton
+            text="CANCEL"
+            behavior={CustomButtonBehavior.Func}
+            type={CustomButtonType.Primary}
+            onClick={otherProps.onCancel}
+          />
+          <CustomButton text="OK" behavior={CustomButtonBehavior.Func} onClick={otherProps.onOk} />
+        </Stack>
+      );
+    return null;
+  };
+
+  return (
+    <Dialog
+      open={otherProps.isOpen}
+      onClose={otherProps.onClose ? otherProps.onClose : () => otherProps.setIsOpen(false)}
       sx={{
-        minWidth: '20vw',
-        maxHeight: '90wh',
-        paddingTop: 1.6,
-        paddingBottom: 1.7,
-        paddingLeft: 2.4,
-        paddingRight: 2.4,
+        '& .MuiDialog-paper': {
+          backgroundColor: 'customPalette.surface',
+          borderRadius: 3,
+        },
       }}
     >
-      <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0}>
-        <ReturnBar setOpen={otherProps.setIsOpen} />
-        <CustomDialogTitle title={otherProps.title} isTitleRed={isTitleRed} />
-        {otherProps.children}
-      </Stack>
-    </DialogContent>
-  </Dialog>
-);
+      <DialogContent
+        sx={{
+          minWidth: '20vw',
+          maxHeight: '90wh',
+          paddingTop: 1.6,
+          paddingBottom: 1.9,
+          paddingLeft: 2.4,
+          paddingRight: 2.4,
+        }}
+      >
+        <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
+          <ReturnBar setOpen={otherProps.setIsOpen} />
+          <CustomDialogTitle title={otherProps.title} isTitleRed={isTitleRed} />
+          {otherProps.children}
+          {renderButtons()}
+        </Stack>
+      </DialogContent>
+    </Dialog>
+  );
+};

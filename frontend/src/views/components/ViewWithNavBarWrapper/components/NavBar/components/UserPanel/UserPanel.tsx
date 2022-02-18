@@ -119,6 +119,7 @@ export const UserPanel: React.FC = () => {
           <MoreVert
             onClick={handleMoreVertClick}
             sx={{
+              cursor: 'pointer',
               color: 'customPalette.onAccent',
               paddingLeft: 0.5,
               paddingRight: 1,

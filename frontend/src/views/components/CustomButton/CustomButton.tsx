@@ -1,44 +1,59 @@
 import { Button } from '@mui/material';
-import { CustomButtonType } from './CustomButtonTypes';
+import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
 
 //TO-DO add type for color (gold/standard/red)
 type CustomButtonProps = {
   text: string;
+  behavior?: CustomButtonBehavior;
   type?: CustomButtonType;
   onClick?: () => void;
 };
 
 //TO-DO add setting color and background color in standardButtonSx
 export const CustomButton: React.FC<CustomButtonProps> = ({
-  type = CustomButtonType.Submit,
+  behavior = CustomButtonBehavior.Submit,
+  type = CustomButtonType.Accent,
   ...otherProps
 }) => {
+  let backgroundColor: string;
+  let color: string;
+  if (type === CustomButtonType.Accent) {
+    backgroundColor = 'customPalette.accent';
+    color = 'customPalette.onAccent';
+  } else if (type === CustomButtonType.Primary) {
+    backgroundColor = 'customPalette.primary';
+    color = 'customPalette.onPrimary';
+  } else {
+    backgroundColor = 'customPalette.red';
+    color = 'customPalette.onRed';
+  }
+
   const standardButtonSx = {
-    color: 'customPalette.onAccent',
+    color: color,
     paddingLeft: 1.2,
     paddingRight: 1.2,
     paddingTop: 0.5,
     paddingBottom: 0.3,
     fontWeight: 'bold',
-    backgroundColor: 'customPalette.accent',
+    backgroundColor: backgroundColor,
     '&.MuiButtonBase-root:hover': {
-      bgcolor: 'customPalette.accent',
+      bgcolor: backgroundColor,
     },
   };
-  switch (type) {
-    case CustomButtonType.Upload:
+  switch (behavior) {
+    case CustomButtonBehavior.Upload:
       return (
         <Button variant="contained" component="span" sx={standardButtonSx}>
           {otherProps.text}
         </Button>
       );
-    case CustomButtonType.Func:
+    case CustomButtonBehavior.Func:
       return (
         <Button variant="contained" onClick={otherProps.onClick} sx={standardButtonSx}>
           {otherProps.text}
         </Button>
       );
-    case CustomButtonType.Submit:
+    case CustomButtonBehavior.Submit:
       return (
         <Button variant="contained" type="submit" sx={standardButtonSx}>
           {otherProps.text}

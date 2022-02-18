@@ -2,8 +2,8 @@ import { Stack, TextField, Typography } from '@mui/material';
 
 export type LabeledInputProps = {
   text: string;
-  id: string;
   placeholder: string;
+  defaultValue?: string;
   helperText: null | string;
   defaultHelperText: string;
   isPassword?: boolean;
@@ -12,13 +12,20 @@ export type LabeledInputProps = {
 };
 
 export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
-  <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={0}>
+  <Stack
+    direction="column"
+    justifyContent="flex-start"
+    alignItems="stretch"
+    spacing={0}
+    sx={{ width: '100%' }}
+  >
     <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface', paddingLeft: 1 }}>
       {props.text}
     </Typography>
     <TextField
-      id={props.id}
+      size="small"
       placeholder={props.placeholder}
+      defaultValue={props.defaultValue}
       inputProps={{
         sx: {
           '&::placeholder': {
@@ -29,8 +36,6 @@ export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
             filter: 'invert(100%)',
           },
           '&': {
-            borderRadius: 2,
-            height: 7,
             fontSize: 16,
             fontWeight: 'light',
           },
@@ -43,7 +48,7 @@ export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
       onBlur={props.onBlur}
       sx={{
         backgroundColor: props.helperText ? 'customPalette.error' : 'customPalette.background',
-        borderRadius: 2,
+        borderRadius: 1,
         '& .MuiInputBase-root': {
           color: props.helperText ? 'customPalette.onError' : 'customPalette.onBackground',
           opacity: 1,
