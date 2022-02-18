@@ -1,45 +1,11 @@
 import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { NavBarViewDialog } from '../../types/types';
+import { handleWheelEvent, useWindowDimensions } from '../../utils/utils';
+import { CampaignTile } from '../components/CampaignTile/CampaignTile';
+import { QuoteLine } from '../components/QuoteLine/QuoteLine';
+import { quotes } from '../components/QuoteLine/quotes';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
-import { CampaignTile } from './components/CampaignTile/CampaignTile';
-import { QuoteLine } from './components/QuoteLine/QuoteLine';
-import { quotes } from './components/QuoteLine/quotes';
-
-//TO-DO: lift this method up as it will be used in another views
-const getWindowDimensions = () => {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-};
-
-//TO-DO: as above
-const useWindowDimensions = () => {
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowDimensions(getWindowDimensions());
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowDimensions;
-};
-
-//TO-DO: as above
-const handleWheelEvent = (e: React.WheelEvent) => {
-  if (e.deltaY !== 0) {
-    e.currentTarget.scrollTo({
-      top: 0,
-      left: e.currentTarget.scrollLeft + e.deltaY,
-    });
-  }
-};
 
 export const StartView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
