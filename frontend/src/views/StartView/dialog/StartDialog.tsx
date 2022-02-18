@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { StartViewDialog } from '../../../types/types';
+import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
@@ -11,6 +11,7 @@ import { resetState, updateState } from '../startViewSlice';
 type StartDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
+  dialogType: NavBarViewDialog;
   setIsSecondaryOpen: (newIsOpen: boolean) => void;
 };
 
@@ -18,17 +19,16 @@ type StartDialogProps = {
 //TO-DO: close Edit dialog after deleting campaign (export isOpen of primary dialog to Redux?)
 export const StartDialog: React.FC<StartDialogProps> = props => {
   const dispatch = useDispatch();
-  const type = useSelector((state: RootState) => state.startView.type);
   const [title, setTitle] = useState(
-    type === StartViewDialog.New ? 'New campaign' : 'Edit campaign'
+    props.dialogType === NavBarViewDialog.New ? 'New campaign' : 'Edit campaign'
   );
   const name = useSelector((state: RootState) => state.startView.name);
   const image = useSelector((state: RootState) => state.startView.image);
   const [helperText, setHelperText] = useState<null | string>('');
 
   useEffect(() => {
-    setTitle(type === StartViewDialog.New ? 'New campaign' : 'Edit campaign');
-  }, [type]);
+    setTitle(props.dialogType === NavBarViewDialog.New ? 'New campaign' : 'Edit campaign');
+  }, [props.dialogType]);
 
   const validateName = (newName: string) =>
     newName.length > 5 && newName.length < 43 ? '' : 'Too long/short name';
@@ -68,7 +68,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
 
   const handleClose = () => {
     props.setIsOpen(false);
-    if (type === StartViewDialog.Edit) resetDialog();
+    if (props.dialogType === NavBarViewDialog.Edit) resetDialog();
   };
 
   return (
@@ -79,7 +79,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
       onOk={handleOk}
       onCancel={handleCancel}
       //TO-DO: check if using undefined here is okay
-      onDelete={type === StartViewDialog.Edit ? handleDelete : undefined}
+      onDelete={props.dialogType === NavBarViewDialog.Edit ? handleDelete : undefined}
       onClose={handleClose}
     >
       <Stack

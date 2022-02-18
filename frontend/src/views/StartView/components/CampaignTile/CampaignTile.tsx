@@ -2,13 +2,14 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import CampaignDefaultGraphic from '../../../../graphics/campaignDefault.jpg';
-import { StartViewDialog } from '../../../../types/types';
+import { NavBarViewDialog } from '../../../../types/types';
 import { EditMenu } from '../../../components/EditMenu/EditMenu';
 import { updateState } from '../../startViewSlice';
 
 type CampaignTileProps = {
   campaignTitle: string;
   setIsOpen: (newIsOpen: boolean) => void;
+  setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
 //TO-DO this component should take image as one of args -> add after API finished
@@ -33,8 +34,9 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
   };
 
   const handleEdit = () => {
-    dispatch(updateState({ name: props.campaignTitle, type: StartViewDialog.Edit }));
+    dispatch(updateState({ name: props.campaignTitle }));
     props.setIsOpen(true);
+    props.setDialogType(NavBarViewDialog.Edit);
     setMenuPos(null);
   };
 

@@ -1,16 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { StartViewDialog } from '../../types/types';
+import { NavBarViewDialog } from '../../types/types';
 
 interface StartViewState {
   name: string;
   image: null | File;
-  type: StartViewDialog;
+  type: NavBarViewDialog;
 }
 
 const initialState: StartViewState = {
   name: '',
   image: null,
-  type: StartViewDialog.New,
+  type: NavBarViewDialog.New,
 };
 
 const startViewSlice = createSlice({
@@ -27,7 +27,7 @@ const startViewSlice = createSlice({
     resetState: (state, _action) => {
       state.name = '';
       state.image = null;
-      state.type = StartViewDialog.New;
+      state.type = NavBarViewDialog.New;
     },
   },
 });

@@ -1,11 +1,11 @@
 import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { StartViewDialog } from '../../types/types';
+// import { useDispatch } from 'react-redux';
+import { NavBarViewDialog } from '../../types/types';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import { CampaignTile } from './components/CampaignTile/CampaignTile';
 import { QuoteLine } from './components/QuoteLine/QuoteLine';
-import { updateState } from './startViewSlice';
+// import { updateState } from './startViewSlice';
 
 //TO-DO: lift this method up as it will be used in another views
 const getWindowDimensions = () => {
@@ -34,10 +34,13 @@ const useWindowDimensions = () => {
 
 export const StartView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.New);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
-  const dispatch = useDispatch();
+
+  // const dispatch = useDispatch();
   const handleFab = () => {
-    dispatch(updateState({ type: StartViewDialog.New }));
+    //dispatch(updateState({ type: NavBarViewDialog.New }));
+    setDialogType(NavBarViewDialog.New);
     setIsOpen(true);
   };
 
@@ -60,6 +63,8 @@ export const StartView: React.FC = () => {
     <ViewWithNavBarWrapper
       isOpen={isOpen}
       setIsOpen={setIsOpen}
+      dialogType={dialogType}
+      setDialogType={setDialogType}
       isSecondaryOpen={isSecondaryOpen}
       setIsSecondaryOpen={setIsSecondaryOpen}
       handleFab={handleFab}
@@ -97,7 +102,11 @@ export const StartView: React.FC = () => {
           >
             {exampleTitles.map(title => (
               <Grid item key={title}>
-                <CampaignTile campaignTitle={title} setIsOpen={setIsOpen} />
+                <CampaignTile
+                  campaignTitle={title}
+                  setIsOpen={setIsOpen}
+                  setDialogType={setDialogType}
+                />
               </Grid>
             ))}
           </Grid>
