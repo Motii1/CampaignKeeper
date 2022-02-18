@@ -1,11 +1,10 @@
 import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
-// import { useDispatch } from 'react-redux';
 import { NavBarViewDialog } from '../../types/types';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import { CampaignTile } from './components/CampaignTile/CampaignTile';
 import { QuoteLine } from './components/QuoteLine/QuoteLine';
-// import { updateState } from './startViewSlice';
+import { quotes } from './components/QuoteLine/quotes';
 
 //TO-DO: lift this method up as it will be used in another views
 const getWindowDimensions = () => {
@@ -36,17 +35,17 @@ export const StartView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.New);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
+  const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
 
-  // const dispatch = useDispatch();
+  useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
+
   const handleFab = () => {
-    //dispatch(updateState({ type: NavBarViewDialog.New }));
     setDialogType(NavBarViewDialog.New);
     setIsOpen(true);
   };
 
   const { width: width } = useWindowDimensions();
   const centeredPadding = Math.max((width - 1368.1) / 2, width < 450 ? 6 : 51);
-  const exampleQuote = '"On the Honor of the Greyskull!" ~ She-Ra';
   const exampleTitles = [
     'Rime of the Frostmaiden',
     'Descent into Avernus',
@@ -57,6 +56,7 @@ export const StartView: React.FC = () => {
     `Storm Lord's Wrath`,
     `Sleeping Dragon's Wake`,
     'Divine Contention',
+    'Hoard of the Dragon Queen',
   ];
 
   return (
@@ -75,7 +75,7 @@ export const StartView: React.FC = () => {
         alignItems="center"
         sx={{ width: '100%', overflowY: 'auto' }}
       >
-        <QuoteLine text={exampleQuote} />
+        <QuoteLine text={quote} />
         <Box
           component="div"
           sx={{
