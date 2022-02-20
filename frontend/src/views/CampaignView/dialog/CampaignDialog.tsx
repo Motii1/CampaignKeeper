@@ -48,8 +48,9 @@ export const CampaignDialog: React.FC<CampaignDialogProps> = props => {
       />
     );
 
-  const validateName = (newName: string) =>
-    newName.length > 5 && newName.length < 43 ? '' : 'Too long/short name';
+  const validateName = (newName: string) => (checkName(newName) ? '' : 'Too long/short name');
+
+  const checkName = (newName: string) => newName.length > 5 && newName.length < 43;
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     dispatch(updateState({ name: event.target.value }));
@@ -69,9 +70,11 @@ export const CampaignDialog: React.FC<CampaignDialogProps> = props => {
 
   const handleOk = () => {
     //here will go handling new session creation with useQuery
-    dispatch(addSession({ sessionName: name }));
-    props.setIsOpen(false);
-    resetDialog();
+    if (checkName(name)) {
+      dispatch(addSession({ sessionName: name }));
+      props.setIsOpen(false);
+      resetDialog();
+    }
   };
 
   const handleCancel = () => {

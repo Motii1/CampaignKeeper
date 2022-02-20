@@ -30,8 +30,9 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     setTitle(props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign');
   }, [props.dialogType]);
 
-  const validateName = (newName: string) =>
-    newName.length > 5 && newName.length < 43 ? '' : 'Too long/short name';
+  const validateName = (newName: string) => (checkName(newName) ? '' : 'Too long/short name');
+
+  const checkName = (newName: string) => newName.length > 5 && newName.length < 43;
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     dispatch(updateState({ name: event.target.value }));
@@ -52,9 +53,11 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   const handleOk = () => {
     //here will go handling new campaign creation with useQuery
     //and history.push('/campaign') redirecting user to new campaign
-    dispatch(addCampaign({ campaignName: name }));
-    props.setIsOpen(false);
-    resetDialog();
+    if (checkName(name)) {
+      dispatch(addCampaign({ campaignName: name }));
+      props.setIsOpen(false);
+      resetDialog();
+    }
   };
 
   const handleCancel = () => {
