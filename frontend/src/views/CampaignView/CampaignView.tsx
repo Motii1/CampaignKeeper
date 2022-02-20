@@ -1,5 +1,7 @@
 import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
 import { handleWheelEvent, useWindowDimensions } from '../../utils/utils';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
@@ -12,6 +14,7 @@ export const CampaignView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
+  const sessionsNames = useSelector((state: RootState) => state.campaignView.sessionsNames);
 
   const handleFab = () => {
     setDialogType(NavBarViewDialog.NewCampaign);
@@ -25,23 +28,6 @@ export const CampaignView: React.FC = () => {
   const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
 
   useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
-
-  const exampleTitles = [
-    'Session 1',
-    'Session 2',
-    'Session 3',
-    'Session 4',
-    'Session 5',
-    'Session 6',
-    'Session 7',
-    'Session 8',
-    'Session 9',
-    'Session 10',
-    'Session 11',
-    'Session 12',
-    'Session 13',
-    'Session 14',
-  ];
 
   return (
     <ViewWithNavBarWrapper
@@ -86,7 +72,7 @@ export const CampaignView: React.FC = () => {
               paddingLeft: centeredPadding + 'px',
             }}
           >
-            {exampleTitles.map(title => (
+            {sessionsNames.map(title => (
               <Grid item key={title}>
                 <SessionTile
                   sessionTitle={title}

@@ -5,12 +5,26 @@ interface StartViewState {
   name: string;
   image: null | File;
   type: NavBarViewDialog;
+  campaignsNames: Array<string>;
 }
 
 const initialState: StartViewState = {
   name: '',
   image: null,
   type: NavBarViewDialog.NewCampaign,
+  // ofc names for campaigns should be kept in another slice
+  campaignsNames: [
+    'Rime of the Frostmaiden',
+    'Descent into Avernus',
+    'Curse of Strahd',
+    'Tomb of Anihilation',
+    'Dragon of Icespire Peak',
+    'Rise of Tiamat',
+    `Storm Lord's Wrath`,
+    `Sleeping Dragon's Wake`,
+    'Divine Contention',
+    'Hoard of the Dragon Queen',
+  ],
 };
 
 const startViewSlice = createSlice({
@@ -29,9 +43,19 @@ const startViewSlice = createSlice({
       state.image = null;
       state.type = NavBarViewDialog.NewCampaign;
     },
+    // TO-DO: delete after API integration
+    addCampaign: (state, action) => {
+      state.campaignsNames.push(action.payload.campaignName);
+    },
+    // TO-DO: delete after API integration
+    removeCampaign: (state, action) => {
+      state.campaignsNames = state.campaignsNames.filter(
+        name => name !== action.payload.campaignName
+      );
+    },
   },
 });
 
-export const { updateState, resetState } = startViewSlice.actions;
+export const { updateState, resetState, addCampaign, removeCampaign } = startViewSlice.actions;
 
 export default startViewSlice.reducer;

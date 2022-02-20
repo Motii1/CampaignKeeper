@@ -6,7 +6,7 @@ import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import { StartDialog } from '../../StartView/dialog/StartDialog';
-import { resetState, updateState } from '../campaignViewSlice';
+import { addSession, resetState, updateState } from '../campaignViewSlice';
 
 type CampaignDialogProps = {
   isOpen: boolean;
@@ -69,6 +69,7 @@ export const CampaignDialog: React.FC<CampaignDialogProps> = props => {
 
   const handleOk = () => {
     //here will go handling new session creation with useQuery
+    dispatch(addSession({ sessionName: name }));
     props.setIsOpen(false);
     resetDialog();
   };

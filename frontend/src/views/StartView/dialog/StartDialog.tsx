@@ -6,7 +6,7 @@ import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { resetState, updateState } from '../startViewSlice';
+import { addCampaign, resetState, updateState } from '../startViewSlice';
 
 type StartDialogProps = {
   isOpen: boolean;
@@ -52,6 +52,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   const handleOk = () => {
     //here will go handling new campaign creation with useQuery
     //and history.push('/campaign') redirecting user to new campaign
+    dispatch(addCampaign({ campaignName: name }));
     props.setIsOpen(false);
     resetDialog();
   };

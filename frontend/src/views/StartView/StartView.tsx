@@ -1,5 +1,7 @@
 import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
 import { handleWheelEvent, useWindowDimensions } from '../../utils/utils';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
@@ -12,6 +14,7 @@ export const StartView: React.FC = () => {
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
   const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
+  const campaignsNames = useSelector((state: RootState) => state.startView.campaignsNames);
 
   useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
 
@@ -22,18 +25,6 @@ export const StartView: React.FC = () => {
 
   const { width: width } = useWindowDimensions();
   const centeredPadding = Math.max((width - 1368.1) / 2, width < 450 ? 6 : 51);
-  const exampleTitles = [
-    'Rime of the Frostmaiden',
-    'Descent into Avernus',
-    'Curse of Strahd',
-    'Tomb of Anihilation',
-    'Dragon of Icespire Peak',
-    'Rise of Tiamat',
-    `Storm Lord's Wrath`,
-    `Sleeping Dragon's Wake`,
-    'Divine Contention',
-    'Hoard of the Dragon Queen',
-  ];
 
   return (
     <ViewWithNavBarWrapper
@@ -77,7 +68,7 @@ export const StartView: React.FC = () => {
               paddingLeft: centeredPadding + 'px',
             }}
           >
-            {exampleTitles.map(title => (
+            {campaignsNames.map(title => (
               <Grid item key={title}>
                 <CampaignTile
                   campaignTitle={title}

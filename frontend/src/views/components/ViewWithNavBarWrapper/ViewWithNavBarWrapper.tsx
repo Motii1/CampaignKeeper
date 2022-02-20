@@ -59,6 +59,7 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
           currentView={currentView}
           isOpen={props.isSecondaryOpen}
           setIsOpen={props.setIsSecondaryOpen}
+          setIsPrimaryOpen={props.setIsOpen}
         />
       ) : null}
     </Paper>
