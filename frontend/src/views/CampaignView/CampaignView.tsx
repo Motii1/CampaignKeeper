@@ -10,11 +10,11 @@ import { SessionTile } from './components/SessionTile/SessionTile';
 
 export const CampaignView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.New);
+  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
 
   const handleFab = () => {
-    setDialogType(NavBarViewDialog.New);
+    setDialogType(NavBarViewDialog.NewCampaign);
     setIsOpen(true);
   };
 
@@ -33,6 +33,14 @@ export const CampaignView: React.FC = () => {
     'Session 4',
     'Session 5',
     'Session 6',
+    'Session 7',
+    'Session 8',
+    'Session 9',
+    'Session 10',
+    'Session 11',
+    'Session 12',
+    'Session 13',
+    'Session 14',
   ];
 
   return (
@@ -80,7 +88,11 @@ export const CampaignView: React.FC = () => {
           >
             {exampleTitles.map(title => (
               <Grid item key={title}>
-                <SessionTile sessionTitle={title} />
+                <SessionTile
+                  sessionTitle={title}
+                  setIsOpen={setIsOpen}
+                  setDialogType={setDialogType}
+                />
               </Grid>
             ))}
           </Grid>

@@ -9,14 +9,14 @@ import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewW
 
 export const StartView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.New);
+  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
   const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
 
   useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
 
   const handleFab = () => {
-    setDialogType(NavBarViewDialog.New);
+    setDialogType(NavBarViewDialog.NewCampaign);
     setIsOpen(true);
   };
 

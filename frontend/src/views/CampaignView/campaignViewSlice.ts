@@ -1,37 +1,34 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NavBarViewDialog } from '../../types/types';
 
-interface StartViewState {
+interface CampaignViewState {
   name: string;
-  image: null | File;
   type: NavBarViewDialog;
 }
 
-const initialState: StartViewState = {
+const initialState: CampaignViewState = {
   name: '',
-  image: null,
   type: NavBarViewDialog.NewCampaign,
 };
 
-const startViewSlice = createSlice({
-  name: 'startView',
+const campaignViewSlice = createSlice({
+  name: 'campaignView',
   initialState,
   reducers: {
     updateState: (state, action) => {
       state.name = action.payload.name ? action.payload.name : state.name;
-      state.image =
-        action.payload.image || action.payload.image === null ? action.payload.image : state.image;
       state.type = action.payload.type ? action.payload.type : state.type;
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resetState: (state, _action) => {
       state.name = '';
-      state.image = null;
       state.type = NavBarViewDialog.NewCampaign;
+      // eslint-disable-next-line no-console
+      console.log(state.name, state.type);
     },
   },
 });
 
-export const { updateState, resetState } = startViewSlice.actions;
+export const { updateState, resetState } = campaignViewSlice.actions;
 
-export default startViewSlice.reducer;
+export default campaignViewSlice.reducer;
