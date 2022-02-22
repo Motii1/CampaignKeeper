@@ -1,12 +1,3 @@
-// export const findUserByIdentityString = async (identity: string): Promise<User | null> => {
-//   const userRepository = getRepository(UserEntity);
-//   const entity = await userRepository.findOne({
-//     where: [{ username: identity }, { email: identity }],
-//   });
-//   if (!entity) {
-//     return null;
-//   }
-
 import { getRepository } from 'typeorm';
 import { Campaign } from '../../../Domain/Campaign/Campaign';
 import { User } from '../../../Domain/User/User';
