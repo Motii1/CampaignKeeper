@@ -15,8 +15,8 @@ import {
   handleTextFieldChange,
   handleTextFieldLeave,
   TextFieldState,
-  validateLogin,
-  validatePassword,
+  validatePasswordLogin,
+  validateUsernameLogin,
 } from './logic';
 import { AUTH_URL, FormProps } from './RegisterForm';
 
@@ -76,8 +76,8 @@ export const LoginForm: React.FC<FormProps> = props => {
   const handleLoginButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 
-    const usernameValidation = validateLogin(username.value);
-    const passwordValidation = validatePassword(password.value);
+    const usernameValidation = validateUsernameLogin(username.value);
+    const passwordValidation = validatePasswordLogin(password.value);
 
     if (usernameValidation === null && passwordValidation === null) {
       runQuery({
@@ -119,7 +119,7 @@ export const LoginForm: React.FC<FormProps> = props => {
           helperText={username.helperText}
           defaultHelperText=""
           onChange={event => handleTextFieldChange(event, setUsername)}
-          onBlur={event => handleTextFieldLeave(event, setUsername, validateLogin)}
+          onBlur={event => handleTextFieldLeave(event, setUsername, validateUsernameLogin)}
         />
         <LabeledTextInput
           text="Password"
@@ -128,7 +128,7 @@ export const LoginForm: React.FC<FormProps> = props => {
           defaultHelperText=""
           isPassword={true}
           onChange={event => handleTextFieldChange(event, setPassword)}
-          onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
+          onBlur={event => handleTextFieldLeave(event, setPassword, validatePasswordLogin)}
         />
         <CustomButton text="Login" />
       </Stack>
