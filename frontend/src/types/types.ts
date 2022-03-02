@@ -17,6 +17,8 @@ export enum FabIcon {
 }
 
 export enum NavBarViewDialog {
-  New,
-  Edit,
+  NewCampaign,
+  EditCampaign,
+  NewSession,
+  EditSession,
 }

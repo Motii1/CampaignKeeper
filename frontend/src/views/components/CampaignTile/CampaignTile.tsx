@@ -1,10 +1,10 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import CampaignDefaultGraphic from '../../../../graphics/campaignDefault.jpg';
-import { NavBarViewDialog } from '../../../../types/types';
-import { EditMenu } from '../../../components/EditMenu/EditMenu';
-import { updateState } from '../../startViewSlice';
+import CampaignDefaultGraphic from '../../../graphics/campaignDefault.jpg';
+import { NavBarViewDialog } from '../../../types/types';
+import { updateState } from '../../StartView/startViewSlice';
+import { EditMenu } from '../EditMenu/EditMenu';
 
 type CampaignTileProps = {
   campaignTitle: string;
@@ -36,7 +36,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
   const handleEdit = () => {
     dispatch(updateState({ name: props.campaignTitle }));
     props.setIsOpen(true);
-    props.setDialogType(NavBarViewDialog.Edit);
+    props.setDialogType(NavBarViewDialog.EditCampaign);
     setMenuPos(null);
   };
 

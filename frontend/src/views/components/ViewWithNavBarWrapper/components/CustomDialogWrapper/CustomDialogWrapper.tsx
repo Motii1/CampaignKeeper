@@ -1,4 +1,5 @@
 import { NavBarViewDialog } from '../../../../../types/types';
+import { CampaignDialog } from '../../../../CampaignView/dialog/CampaignDialog';
 import { StartDialog } from '../../../../StartView/dialog/StartDialog';
 import viewsRoutes from '../../../../viewsRoutes';
 
@@ -15,6 +16,15 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = props => {
     case viewsRoutes.START:
       return (
         <StartDialog
+          isOpen={props.isOpen}
+          setIsOpen={props.setIsOpen}
+          dialogType={props.dialogType}
+          setIsSecondaryOpen={props.setIsSecondaryOpen as (newIsOpen: boolean) => void}
+        />
+      );
+    case viewsRoutes.CAMPAIGN:
+      return (
+        <CampaignDialog
           isOpen={props.isOpen}
           setIsOpen={props.setIsOpen}
           dialogType={props.dialogType}

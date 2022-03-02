@@ -4,31 +4,49 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
-import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addCampaign, resetState, updateState } from '../startViewSlice';
+import { StartDialog } from '../../StartView/dialog/StartDialog';
+import { addSession, resetState, updateState } from '../campaignViewSlice';
 
-type StartDialogProps = {
+type CampaignDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
   dialogType: NavBarViewDialog;
   setIsSecondaryOpen: (newIsOpen: boolean) => void;
 };
 
-//TO-DO: think about adding wrapper (for all NavBarViews) on stack inside CustomDialog
-//TO-DO: close Edit dialog after deleting campaign (export isOpen of primary dialog to Redux?)
-export const StartDialog: React.FC<StartDialogProps> = props => {
+//TO-DO: close Edit dialog after deleting session (export isOpen of primary dialog to Redux?)
+export const CampaignDialog: React.FC<CampaignDialogProps> = props => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState(
-    props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign'
+    props.dialogType === NavBarViewDialog.NewSession ? 'New session' : 'Edit session'
   );
-  const name = useSelector((state: RootState) => state.startView.name);
-  const image = useSelector((state: RootState) => state.startView.image);
+  const name = useSelector((state: RootState) => state.campaignView.name);
   const [helperText, setHelperText] = useState<null | string>('');
 
   useEffect(() => {
-    setTitle(props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign');
+    switch (props.dialogType) {
+      case NavBarViewDialog.EditSession:
+        setTitle('Edit session');
+        break;
+      case NavBarViewDialog.EditCampaign:
+        setTitle('Edit campaign');
+        break;
+      default:
+        setTitle('New session');
+    }
   }, [props.dialogType]);
+
+  // user edits campaign name/image by clicking on its tile
+  if (props.dialogType === NavBarViewDialog.EditCampaign)
+    return (
+      <StartDialog
+        isOpen={props.isOpen}
+        setIsOpen={props.setIsOpen}
+        dialogType={props.dialogType}
+        setIsSecondaryOpen={props.setIsSecondaryOpen}
+      />
+    );
 
   const validateName = (newName: string) => (checkName(newName) ? '' : 'Too long/short name');
 
@@ -51,10 +69,9 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   };
 
   const handleOk = () => {
-    //here will go handling new campaign creation with useQuery
-    //and history.push('/campaign') redirecting user to new campaign
+    //here will go handling new session creation with useQuery
     if (checkName(name)) {
-      dispatch(addCampaign({ campaignName: name }));
+      dispatch(addSession({ sessionName: name }));
       props.setIsOpen(false);
       resetDialog();
     }
@@ -66,13 +83,13 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   };
 
   const handleDelete = () => {
-    //here will go handling campaign deletion with useQuery
+    //here will go handling session deletion with useQuery
     props.setIsSecondaryOpen(true);
   };
 
   const handleClose = () => {
     props.setIsOpen(false);
-    if (props.dialogType === NavBarViewDialog.EditCampaign) resetDialog();
+    if (props.dialogType === NavBarViewDialog.EditSession) resetDialog();
   };
 
   return (
@@ -83,7 +100,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
       onOk={handleOk}
       onCancel={handleCancel}
       //TO-DO: check if using undefined here is okay
-      onDelete={props.dialogType === NavBarViewDialog.EditCampaign ? handleDelete : undefined}
+      onDelete={props.dialogType === NavBarViewDialog.EditSession ? handleDelete : undefined}
       onClose={handleClose}
     >
       <Stack
@@ -101,12 +118,6 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
           defaultHelperText={''}
           onChange={event => handleTextInputChange(event)}
           onBlur={event => handleTextInputLeave(event)}
-        />
-        <ImageUploadField
-          height={180}
-          width={390}
-          image={image}
-          setImage={newImage => dispatch(updateState({ image: newImage }))}
         />
       </Stack>
     </CustomDialog>

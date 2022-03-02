@@ -4,7 +4,7 @@ import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewW
 
 export const MapView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.New);
+  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
   return (
     <ViewWithNavBarWrapper
       isOpen={isOpen}
