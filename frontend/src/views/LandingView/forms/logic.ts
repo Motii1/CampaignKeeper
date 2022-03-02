@@ -1,6 +1,6 @@
 const usernameRegex = /^(?=.{7,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9]+(?<![_.])$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{7,255}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,255}$/;
 
 export type TextFieldState = {
   value: string;
@@ -25,12 +25,30 @@ export const handleTextFieldChange = (
 export const handleTextFieldLeave = (
   event: React.ChangeEvent<HTMLInputElement>,
   setStateFn: (newState: TextFieldState) => void,
-  validateFn: (value: string) => string | null
+  validateFn: (value: string) => string | null,
+  optionalFn?: () => void
 ): void => {
   const newValue = event.target.value;
   setStateFn({
     value: newValue,
     helperText: validateFn(newValue),
+  });
+
+  if (optionalFn) {
+    optionalFn();
+  }
+};
+
+export const handleTextFieldLeaveTwin = (
+  event: React.ChangeEvent<HTMLInputElement>,
+  twin: string,
+  setStateFn: (newState: TextFieldState) => void,
+  validateFn: (value1: string, value2: string) => string | null
+): void => {
+  const newValue = event.target.value;
+  setStateFn({
+    value: newValue,
+    helperText: validateFn(twin, newValue),
   });
 };
 
@@ -46,7 +64,7 @@ export const validateUsernameLogin = (value: string): null | string => {
 };
 
 export const validateUsernameRegister = (value: string): null | string => {
-  if (value.length < 7 || value.length > 32) return 'Must be between 7 and 32 characters';
+  if (value.length < 8 || value.length > 32) return 'Must be between 8 and 32 characters';
   return !usernameRegex.test(value) ? 'Contains illegal characters' : null;
 };
 
@@ -54,15 +72,15 @@ export const validatePasswordLogin = (value: string): null | string => {
   if (value.length === 0) {
     return "Password can't be empty";
   }
-  if (value.length < 7 || value.length > 255) {
-    return 'Password length must be between 7 and 255';
+  if (value.length < 8 || value.length > 255) {
+    return 'Password length must be between 8 and 255';
   }
 
   return null;
 };
 
 export const validatePasswordRegister = (value: string): null | string => {
-  if (value.length < 7 || value.length > 255) return 'Must be between 7 and 255 characters';
+  if (value.length < 8 || value.length > 255) return 'Must be between 8 and 255 characters';
   return !passwordRegex.test(value) ? 'It is too weak' : null;
 };
 
@@ -72,7 +90,7 @@ export const validatePasswordsMatch = (value1: string, value2: string): null | s
 };
 
 export const validateEmail = (value: string): null | string => {
-  if (value.length < 7 || value.length > 32) return 'Must be between 7 and 32 characters';
+  if (value.length < 3 || value.length > 32) return 'Must be between 7 and 32 characters';
   return !emailRegex.test(value) ? 'This is not proper email' : null;
 };
 

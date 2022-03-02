@@ -10,6 +10,9 @@ import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
 import {
+  handleTextFieldChange,
+  handleTextFieldLeave,
+  handleTextFieldLeaveTwin,
   initalState,
   TextFieldState,
   validateEmail,
@@ -117,46 +120,6 @@ export const RegisterForm: React.FC<FormProps> = props => {
   useEffect(() => {
     handleUseQueryRegister();
   }, [handleUseQueryRegister]);
-
-  const handleTextFieldLeave = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setStateFn: (newState: TextFieldState) => void,
-    validateFn: (value: string) => string | null,
-    optionalFn?: () => void
-  ): void => {
-    const newValue = event.target.value;
-    setStateFn({
-      value: newValue,
-      helperText: validateFn(newValue),
-    });
-
-    if (optionalFn) {
-      optionalFn();
-    }
-  };
-
-  const handleTextFieldLeaveTwin = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    twin: string,
-    setStateFn: (newState: TextFieldState) => void,
-    validateFn: (value1: string, value2: string) => string | null
-  ): void => {
-    const newValue = event.target.value;
-    setStateFn({
-      value: newValue,
-      helperText: validateFn(twin, newValue),
-    });
-  };
-
-  const handleTextFieldChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setStateFn: (newState: TextFieldState) => void
-  ): void => {
-    setStateFn({
-      value: event.target.value,
-      helperText: null,
-    });
-  };
 
   const handleRegisterButton = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
