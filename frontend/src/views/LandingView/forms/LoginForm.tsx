@@ -11,7 +11,14 @@ import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextI
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
-import { AUTH_URL, FormProps, TextFieldState } from './RegisterForm';
+import {
+  handleTextFieldChange,
+  handleTextFieldLeave,
+  TextFieldState,
+  validateLogin,
+  validatePassword,
+} from './logic';
+import { AUTH_URL, FormProps } from './RegisterForm';
 
 export const login = (username: string, password: string): Promise<AxiosResponse> =>
   protectedApiClient.post(`${AUTH_URL}/login`, {
@@ -65,50 +72,6 @@ export const LoginForm: React.FC<FormProps> = props => {
   useEffect(() => {
     handleRunQuery();
   }, [handleRunQuery]);
-
-  const handleTextFieldChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setStateFn: (newState: TextFieldState) => void
-  ): void => {
-    setStateFn({
-      value: event.target.value,
-      helperText: null,
-    });
-  };
-
-  const handleTextFieldLeave = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setStateFn: (newState: TextFieldState) => void,
-    validateFn: (value: string) => string | null
-  ): void => {
-    const newValue = event.target.value;
-    setStateFn({
-      value: newValue,
-      helperText: validateFn(newValue),
-    });
-  };
-
-  const validateLogin = (value: string): null | string => {
-    if (value.length === 0) {
-      return "Login can't be empty";
-    }
-    if (value.length < 3 || value.length > 32) {
-      return 'Login length must be between 3 and 32';
-    }
-
-    return null;
-  };
-
-  const validatePassword = (value: string): null | string => {
-    if (value.length === 0) {
-      return "Password can't be empty";
-    }
-    if (value.length < 7 || value.length > 255) {
-      return 'Password length must be between 7 and 255';
-    }
-
-    return null;
-  };
 
   const handleLoginButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();

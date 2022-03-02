@@ -9,6 +9,7 @@ import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextI
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
+import { TextFieldState } from './logic';
 import { UserData } from './LoginForm';
 
 type RegisterData = {
@@ -17,11 +18,6 @@ type RegisterData = {
 
 export type FormProps = {
   onChangeForm: (event: React.FormEvent<HTMLFormElement>) => void;
-};
-
-export type TextFieldState = {
-  value: string;
-  helperText: null | string;
 };
 
 export const AUTH_URL = '/api/auth';
