@@ -1,11 +1,12 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { CampaignEntity } from '../Campaign/CampaignEntity';
 
 @Entity({ name: 'user' })
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ length: 64 })
   @Index({ unique: true })
   username!: string;
 
@@ -18,4 +19,7 @@ export class UserEntity {
 
   @Column({ type: 'varbinary', nullable: true, length: 'max' })
   image!: Buffer | null;
+
+  @OneToMany(() => CampaignEntity, campaign => campaign.user)
+  campaigns!: CampaignEntity[];
 }
