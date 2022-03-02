@@ -10,6 +10,7 @@ import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
 import {
+  initalState,
   TextFieldState,
   validateEmail,
   validateEmailsMatch,
@@ -32,11 +33,6 @@ export const AUTH_URL = '/api/auth';
 export const RegisterForm: React.FC<FormProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const initalState = {
-    value: '',
-    helperText: null,
-  };
 
   const [username, setUsername] = useState<TextFieldState>(initalState);
   const [email, setEmail] = useState<TextFieldState>(initalState);

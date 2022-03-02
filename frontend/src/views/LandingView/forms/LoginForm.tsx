@@ -14,6 +14,7 @@ import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeForm
 import {
   handleTextFieldChange,
   handleTextFieldLeave,
+  initalState,
   TextFieldState,
   validatePasswordLogin,
   validateUsernameLogin,
@@ -35,11 +36,6 @@ export type UserData = {
 export const LoginForm: React.FC<FormProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const initalState = {
-    value: '',
-    helperText: null,
-  };
 
   const [username, setUsername] = useState<TextFieldState>(initalState);
   const [password, setPassword] = useState<TextFieldState>(initalState);

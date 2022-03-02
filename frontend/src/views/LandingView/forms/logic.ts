@@ -7,6 +7,11 @@ export type TextFieldState = {
   helperText: null | string;
 };
 
+export const initalState = {
+  value: '',
+  helperText: null,
+};
+
 export const handleTextFieldChange = (
   event: React.ChangeEvent<HTMLInputElement>,
   setStateFn: (newState: TextFieldState) => void
