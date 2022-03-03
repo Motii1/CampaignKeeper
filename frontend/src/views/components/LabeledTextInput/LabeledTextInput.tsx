@@ -70,6 +70,7 @@ export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
       variant="subtitle2"
       sx={{
         color: props.helperText ? 'customPalette.onError' : 'customPalette.onBackground',
+        opacity: props.helperText ? 1 : 0.75,
         paddingLeft: 1,
         paddingBottom: 0.5,
         paddingTop: 0.5,

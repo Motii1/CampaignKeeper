@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import requestMethods from '../../../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../../../axios/useQuery';
@@ -142,7 +143,9 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
           )
         }
       />
-      <CustomButton text={'Change'} />
+      <Box sx={{ paddingTop: 1 }}>
+        <CustomButton text={'Change'} />
+      </Box>
     </Stack>
   );
 };
