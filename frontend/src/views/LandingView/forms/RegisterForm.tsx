@@ -17,6 +17,8 @@ import {
   TextFieldState,
   validateEmail,
   validateEmailsMatch,
+  validateField,
+  validateMatch,
   validatePasswordRegister,
   validatePasswordsMatch,
   validateUsernameRegister,
@@ -124,53 +126,28 @@ export const RegisterForm: React.FC<FormProps> = props => {
   const handleRegisterButton = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
-    const userRes = validateUsernameRegister(username.value);
-    const emailRes = validateEmail(email.value);
-    const emailRepeatRes = validateEmailsMatch(email.value, emailRepeat.value);
-    const passRes = validatePasswordRegister(password.value);
-    const passRepeatRes = validatePasswordsMatch(password.value, passwordRepeat.value);
-
-    if (userRes) {
-      setUsername({
-        value: username.value,
-        helperText: userRes,
-      });
-    }
-
-    if (emailRes) {
-      setEmail({
-        value: email.value,
-        helperText: emailRes,
-      });
-    }
-
-    if (emailRepeatRes) {
-      setEmailRepeat({
-        value: emailRepeat.value,
-        helperText: emailRepeatRes,
-      });
-    }
-
-    if (passRes) {
-      setPassword({
-        value: password.value,
-        helperText: passRes,
-      });
-    }
-
-    if (passRepeatRes) {
-      setPasswordRepeat({
-        value: passwordRepeat.value,
-        helperText: passRepeatRes,
-      });
-    }
+    const isUsernameValid = validateField(username.value, validateUsernameRegister, setUsername);
+    const isEmailValid = validateField(email.value, validateEmail, setEmail);
+    const isEmailRepeatValid = validateMatch(
+      email.value,
+      emailRepeat.value,
+      validateEmailsMatch,
+      setEmailRepeat
+    );
+    const isPasswordValid = validateField(password.value, validatePasswordRegister, setPassword);
+    const isPasswordRepeatValid = validateMatch(
+      password.value,
+      passwordRepeat.value,
+      validatePasswordsMatch,
+      setPasswordRepeat
+    );
 
     if (
-      userRes === null &&
-      emailRes === null &&
-      emailRepeatRes === null &&
-      passRes === null &&
-      passRepeatRes === null
+      isUsernameValid &&
+      isEmailValid &&
+      isEmailRepeatValid &&
+      isPasswordValid &&
+      isPasswordRepeatValid
     ) {
       runQueryRegister({
         username: username.value,

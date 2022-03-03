@@ -8,6 +8,8 @@ import {
   handleTextFieldLeaveTwin,
   initalState,
   TextFieldState,
+  validateField,
+  validateMatch,
   validatePasswordLogin,
   validatePasswordRegister,
   validatePasswordsMatch,
@@ -45,32 +47,24 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
-    const currentPassRes = validatePasswordLogin(currentPassword.value);
-    const newPassRes = validatePasswordRegister(newPassword.value);
-    const newPassRepeatRes = validatePasswordsMatch(newPassword.value, newPasswordRepeat.value);
-    // TO-DO: move to logic.ts in forms?
-    if (currentPassRes) {
-      setCurrentPassword({
-        value: currentPassword.value,
-        helperText: currentPassRes,
-      });
-    }
+    const isCurrentPasswordValid = validateField(
+      currentPassword.value,
+      validatePasswordLogin,
+      setCurrentPassword
+    );
+    const isNewPasswordValid = validateField(
+      newPassword.value,
+      validatePasswordRegister,
+      setNewPassword
+    );
+    const isNewPasswordRepeatValid = validateMatch(
+      newPassword.value,
+      newPasswordRepeat.value,
+      validatePasswordsMatch,
+      setNewPasswordRepeat
+    );
 
-    if (newPassRes) {
-      setNewPassword({
-        value: newPassword.value,
-        helperText: newPassRes,
-      });
-    }
-
-    if (newPassRepeatRes) {
-      setNewPasswordRepeat({
-        value: newPasswordRepeat.value,
-        helperText: newPassRepeatRes,
-      });
-    }
-
-    if (currentPassRes === null && newPassRes === null && newPassRepeatRes === null) {
+    if (isCurrentPasswordValid && isNewPasswordValid && isNewPasswordRepeatValid) {
       runQueryPassword({
         currentPassword: currentPassword.value,
         password: newPassword.value,
@@ -88,16 +82,10 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
           isTitleRed: false,
         });
         props.runQueryDetails();
-      } else if (statusPassword === 400 && dataPassword) {
+      } else if (statusPassword === 401 && dataPassword) {
         props.setChangeFeedbackContent({
           title: 'Error',
           text: dataPassword.message ? dataPassword.message : 'Failure during password change',
-          isTitleRed: true,
-        });
-      } else if (statusPassword === 401) {
-        props.setChangeFeedbackContent({
-          title: 'Error',
-          text: 'Wrong password',
           isTitleRed: true,
         });
       }

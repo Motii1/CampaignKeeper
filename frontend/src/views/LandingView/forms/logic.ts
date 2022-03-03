@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 const usernameRegex = /^(?=.{7,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9]+(?<![_.])$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,255}$/;
@@ -96,5 +98,40 @@ export const validateEmail = (value: string): null | string => {
 
 export const validateEmailsMatch = (value1: string, value2: string): null | string => {
   if (value1.length === 0 || value2.length === 0) return "Email can't be empty";
-  return value1 !== value2 ? 'Emails dont match' : null;
+  return value1 !== value2 ? "Emails don't match" : null;
+};
+
+export const validateField = (
+  fieldValue: string,
+  validateFn: (fieldValue: string) => null | string,
+  setStateFn: Dispatch<SetStateAction<TextFieldState>>
+): boolean => {
+  const newHelperText = validateFn(fieldValue);
+  if (newHelperText) {
+    setStateFn({
+      value: fieldValue,
+      helperText: newHelperText,
+    });
+    return false;
+  }
+
+  return true;
+};
+
+export const validateMatch = (
+  fieldValue: string,
+  fieldRepeatValue: string,
+  validateFn: (fieldValue1: string, fieldValue2: string) => null | string,
+  setStateFn: Dispatch<SetStateAction<TextFieldState>>
+): boolean => {
+  const newHelperText = validateFn(fieldValue, fieldRepeatValue);
+  if (newHelperText) {
+    setStateFn({
+      value: fieldRepeatValue,
+      helperText: newHelperText,
+    });
+    return false;
+  }
+
+  return true;
 };

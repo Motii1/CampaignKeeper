@@ -16,6 +16,7 @@ import {
   handleTextFieldLeave,
   initalState,
   TextFieldState,
+  validateField,
   validatePasswordLogin,
   validateUsernameLogin,
 } from './logic';
@@ -72,22 +73,13 @@ export const LoginForm: React.FC<FormProps> = props => {
   const handleLoginButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 
-    const usernameValidation = validateUsernameLogin(username.value);
-    const passwordValidation = validatePasswordLogin(password.value);
+    const isUsernameValid = validateField(username.value, validateUsernameLogin, setUsername);
+    const isPasswordValid = validateField(password.value, validatePasswordLogin, setPassword);
 
-    if (usernameValidation === null && passwordValidation === null) {
+    if (isUsernameValid && isPasswordValid) {
       runQuery({
         username: username.value,
         password: password.value,
-      });
-    } else {
-      setUsername({
-        value: username.value,
-        helperText: usernameValidation,
-      });
-      setPassword({
-        value: password.value,
-        helperText: passwordValidation,
       });
     }
   };
