@@ -3,6 +3,7 @@ import { Box } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import requestMethods from '../../../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../../../axios/useQuery';
+import { CustomSnackbarType } from '../../../../../../../../../../../types/types';
 import {
   handleTextFieldChange,
   handleTextFieldLeave,
@@ -17,14 +18,14 @@ import {
 } from '../../../../../../../../../../LandingView/forms/logic';
 import { CustomButton } from '../../../../../../../../../CustomButton/CustomButton';
 import { LabeledTextInput } from '../../../../../../../../../LabeledTextInput/LabeledTextInput';
-import { ChangeFeedbackContentState } from '../../SettingsDialogContent';
 
 type PasswordResponseData = {
   message?: string;
 };
 
 type ChangePasswordFormProps = {
-  setChangeFeedbackContent: (newFeedbackContent: ChangeFeedbackContentState) => void;
+  setChangeFeedbackMessage: (newFeedbackMessage: string) => void;
+  setChangeFeedbackType: (newFeedbackType: CustomSnackbarType) => void;
   setIsChangeFeedbackOpen: (newIsOpen: boolean) => void;
   runQueryDetails: (payload?: unknown) => void;
 };
@@ -77,18 +78,17 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
   const handleRunQueryPassword = useCallback(() => {
     if (!isLoadingPassword && statusPassword) {
       if (statusPassword === 200) {
-        props.setChangeFeedbackContent({
-          title: 'Sucess',
-          text: 'Password successfully changed',
-          isTitleRed: false,
-        });
         props.runQueryDetails();
+        props.setChangeFeedbackMessage('Password successfully changed');
+        props.setChangeFeedbackType(CustomSnackbarType.Success);
       } else if (statusPassword === 401 && dataPassword) {
-        props.setChangeFeedbackContent({
-          title: 'Error',
-          text: dataPassword.message ? dataPassword.message : 'Failure during password change',
-          isTitleRed: true,
-        });
+        props.setChangeFeedbackMessage(
+          dataPassword.message ? dataPassword.message : 'Failure during password change'
+        );
+        props.setChangeFeedbackType(CustomSnackbarType.Error);
+      } else {
+        props.setChangeFeedbackMessage('Failure during password change');
+        props.setChangeFeedbackType(CustomSnackbarType.Error);
       }
       props.setIsChangeFeedbackOpen(true);
       resetQueryPassword();

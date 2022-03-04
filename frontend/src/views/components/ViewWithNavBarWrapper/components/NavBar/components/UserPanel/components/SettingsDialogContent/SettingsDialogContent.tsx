@@ -1,10 +1,11 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import requestMethods from '../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../axios/useQuery';
+import { CustomSnackbarType } from '../../../../../../../../../types/types';
 import { updateDetails } from '../../../../../../../../LandingView/userDetailsSlice';
-import { CustomDialog } from '../../../../../../../CustomDialog/CustomDialog';
+import { CustomSnackbar } from '../../../../../../../CustomSnackbar/CustomSnackbar';
 import { ChangeAvatarForm } from './components/ChangeAvatarForm/ChangeAvatarForm';
 import { ChangePasswordForm } from './components/ChangePasswordForm/ChangePasswordForm';
 
@@ -14,20 +15,13 @@ type DetailsResponseData = {
   image: string;
 };
 
-export type ChangeFeedbackContentState = {
-  title: string;
-  text: string;
-  isTitleRed: boolean;
-};
-
 // TO-DO: add change username, change email, change password
 export const SettingsDialogContent: React.FC = () => {
   const dispatch = useDispatch();
-  const [changeFeedbackContent, setChangeFeedbackContent] = useState<ChangeFeedbackContentState>({
-    title: '',
-    text: '',
-    isTitleRed: false,
-  });
+  const [changeFeedbackMessage, setChangeFeedbackMessage] = useState<string>('');
+  const [changeFeedbackType, setChangeFeedbackType] = useState<CustomSnackbarType>(
+    CustomSnackbarType.Success
+  );
   const [isChangeFeedbackOpen, setIsChangeFeedbackOpen] = useState(false);
 
   //handles fetching new user details and updating them in store
@@ -62,24 +56,24 @@ export const SettingsDialogContent: React.FC = () => {
     <Box>
       <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
         <ChangeAvatarForm
-          setChangeFeedbackContent={setChangeFeedbackContent}
+          setChangeFeedbackMessage={setChangeFeedbackMessage}
+          setChangeFeedbackType={setChangeFeedbackType}
           setIsChangeFeedbackOpen={setIsChangeFeedbackOpen}
           runQueryDetails={runQueryDetails}
         />
         <ChangePasswordForm
-          setChangeFeedbackContent={setChangeFeedbackContent}
+          setChangeFeedbackMessage={setChangeFeedbackMessage}
+          setChangeFeedbackType={setChangeFeedbackType}
           setIsChangeFeedbackOpen={setIsChangeFeedbackOpen}
           runQueryDetails={runQueryDetails}
         />
       </Stack>
-      <CustomDialog
-        title={changeFeedbackContent.title}
-        isTitleRed={changeFeedbackContent.isTitleRed}
+      <CustomSnackbar
         isOpen={isChangeFeedbackOpen}
         setIsOpen={setIsChangeFeedbackOpen}
-      >
-        <Typography variant="subtitle1">{changeFeedbackContent.text}</Typography>
-      </CustomDialog>
+        message={changeFeedbackMessage}
+        type={changeFeedbackType}
+      />
     </Box>
   );
 };

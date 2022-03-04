@@ -4,7 +4,7 @@ export const quotes: Array<string> = [
   '“Do or do not. There is no try.” ~ Yoda',
   '“Be careful not to choke on your aspiration, Director.” ~ Darth Vader',
   '“You underestimate the power of the Dark Side.” ~ Darth Vader',
-  '“Help me, Obi-Wan Kenobi. You’re my only hope.”” ~ Princess Leia',
+  '“Help me, Obi-Wan Kenobi. You’re my only hope.” ~ Princess Leia',
   '“I have a bad feeling about this.” ~ everyone in Star Wars',
   `“It’s a trap!” ~ Admiral Ackbar`,
   `“I find your lack of faith disturbing.” ~ Darth Vader`,

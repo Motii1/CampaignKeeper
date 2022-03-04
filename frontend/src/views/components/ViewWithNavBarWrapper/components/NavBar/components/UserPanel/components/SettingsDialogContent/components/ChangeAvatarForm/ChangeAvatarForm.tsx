@@ -4,16 +4,19 @@ import { useSelector } from 'react-redux';
 import requestMethods from '../../../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../../../axios/useQuery';
 import { RootState } from '../../../../../../../../../../../store';
-import { CustomButtonBehavior } from '../../../../../../../../../../../types/types';
+import {
+  CustomButtonBehavior,
+  CustomSnackbarType,
+} from '../../../../../../../../../../../types/types';
 import { CustomButton } from '../../../../../../../../../CustomButton/CustomButton';
-import { ChangeFeedbackContentState } from '../../SettingsDialogContent';
 
 type ImageResponseData = {
   message?: string;
 };
 
 type ChangeAvatarFormProps = {
-  setChangeFeedbackContent: (newFeedbackContent: ChangeFeedbackContentState) => void;
+  setChangeFeedbackMessage: (newFeedbackMessage: string) => void;
+  setChangeFeedbackType: (newFeedbackType: CustomSnackbarType) => void;
   setIsChangeFeedbackOpen: (newIsOpen: boolean) => void;
   runQueryDetails: (payload?: unknown) => void;
 };
@@ -47,14 +50,15 @@ export const ChangeAvatarForm: React.FC<ChangeAvatarFormProps> = props => {
     if (!isLoadingImg && statusImg) {
       if (statusImg === 200) {
         props.runQueryDetails();
+        props.setChangeFeedbackMessage('Avatar changed succesfully');
+        props.setChangeFeedbackType(CustomSnackbarType.Success);
       } else if (statusImg === 400 && dataImg) {
-        props.setChangeFeedbackContent({
-          title: 'Error',
-          text: dataImg.message ? dataImg.message : 'Failure during avatar change',
-          isTitleRed: true,
-        });
-        props.setIsChangeFeedbackOpen(true);
+        props.setChangeFeedbackMessage(
+          dataImg.message ? dataImg.message : 'Failure during avatar change'
+        );
+        props.setChangeFeedbackType(CustomSnackbarType.Error);
       }
+      props.setIsChangeFeedbackOpen(true);
       resetQueryImg();
     }
   }, [dataImg, isLoadingImg, props, resetQueryImg, statusImg]);
