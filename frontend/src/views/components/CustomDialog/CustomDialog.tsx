@@ -22,31 +22,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
 }) => {
   //TO-DO: add option without Delete button
   const renderButtons = () => {
-    if (otherProps.onOk && otherProps.onCancel && otherProps.onDelete)
-      return (
-        <Stack
-          direction="row"
-          justifyContent="flex-end"
-          alignItems="center"
-          spacing={1}
-          sx={{ width: '100%', paddingTop: 1, paddingLeft: 2.4, paddingRight: 2.4 }}
-        >
-          <CustomButton
-            text="DELETE"
-            behavior={CustomButtonBehavior.Func}
-            type={CustomButtonType.Delete}
-            onClick={otherProps.onDelete}
-          />
-          <CustomButton
-            text="CANCEL"
-            behavior={CustomButtonBehavior.Func}
-            type={CustomButtonType.Primary}
-            onClick={otherProps.onCancel}
-          />
-          <CustomButton text="OK" behavior={CustomButtonBehavior.Func} onClick={otherProps.onOk} />
-        </Stack>
-      );
-    if (otherProps.onOk && otherProps.onCancel)
+    if (otherProps.onOk || otherProps.onCancel || otherProps.onDelete)
       return (
         <Stack
           direction="row"
@@ -55,16 +31,33 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           spacing={1}
           sx={{ width: '100%', paddingTop: 1 }}
         >
-          <CustomButton
-            text="CANCEL"
-            behavior={CustomButtonBehavior.Func}
-            type={CustomButtonType.Primary}
-            onClick={otherProps.onCancel}
-          />
-          <CustomButton text="OK" behavior={CustomButtonBehavior.Func} onClick={otherProps.onOk} />
+          {otherProps.onDelete ? (
+            <CustomButton
+              text="DELETE"
+              behavior={CustomButtonBehavior.Func}
+              type={CustomButtonType.Delete}
+              onClick={otherProps.onDelete}
+            />
+          ) : null}
+          {otherProps.onCancel ? (
+            <CustomButton
+              text="CANCEL"
+              behavior={CustomButtonBehavior.Func}
+              type={CustomButtonType.Primary}
+              onClick={otherProps.onCancel}
+            />
+          ) : null}
+          {otherProps.onOk ? (
+            <CustomButton
+              text="OK"
+              behavior={CustomButtonBehavior.Func}
+              onClick={otherProps.onOk}
+            />
+          ) : null}
+          <Box sx={{ width: 11 }} />
         </Stack>
       );
-    return null;
+    else return null;
   };
 
   return (
