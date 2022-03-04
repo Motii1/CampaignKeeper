@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, Stack } from '@mui/material';
+import { Box, Dialog, DialogContent, Stack } from '@mui/material';
 import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
 import { CustomButton } from '../CustomButton/CustomButton';
 import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
@@ -29,7 +29,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           justifyContent="flex-end"
           alignItems="center"
           spacing={1}
-          sx={{ width: '100%', paddingTop: 1 }}
+          sx={{ width: '100%', paddingTop: 1, paddingLeft: 2.4, paddingRight: 2.4 }}
         >
           <CustomButton
             text="DELETE"
@@ -81,17 +81,35 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
       <DialogContent
         sx={{
           minWidth: '20vw',
-          maxHeight: '90wh',
+          maxHeight: 710,
           paddingTop: 1.6,
           paddingBottom: 1.9,
-          paddingLeft: 2.4,
-          paddingRight: 2.4,
+          paddingLeft: 0,
+          paddingRight: 0,
+          overflow: 'hidden',
         }}
       >
-        <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="flex-start"
+          spacing={1}
+          sx={{
+            height: '100%',
+            width: '100%',
+          }}
+        >
           <ReturnBar setOpen={otherProps.setIsOpen} />
           <CustomDialogTitle title={otherProps.title} isTitleRed={isTitleRed} />
-          {otherProps.children}
+          <Box
+            sx={{
+              width: '100%',
+              maxHeight: 600,
+              overflowY: 'auto',
+            }}
+          >
+            <Box sx={{ paddingLeft: 2.4, paddingRight: 2.4 }}>{otherProps.children}</Box>
+          </Box>
           {renderButtons()}
         </Stack>
       </DialogContent>

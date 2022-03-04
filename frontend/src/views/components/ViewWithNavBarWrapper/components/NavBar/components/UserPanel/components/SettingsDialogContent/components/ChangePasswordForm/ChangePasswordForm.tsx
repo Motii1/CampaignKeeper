@@ -120,6 +120,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
       spacing={0.5}
       component="form"
       onSubmit={handleSubmit}
+      sx={{ width: '100%' }}
     >
       <Typography variant="h6">PASSWORD</Typography>
       <LabeledTextInput

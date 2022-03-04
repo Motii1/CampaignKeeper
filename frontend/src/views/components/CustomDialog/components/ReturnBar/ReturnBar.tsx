@@ -12,7 +12,7 @@ export const ReturnBar: React.FC<ReturnBarProps> = props => (
     alignItems="center"
     spacing={1.8}
     onClick={() => props.setOpen(false)}
-    sx={{ cursor: 'pointer' }}
+    sx={{ cursor: 'pointer', paddingLeft: 2.4, paddingRight: 2.4 }}
   >
     <ArrowBack sx={{ color: 'customPalette.onSurface', opacity: 0.8 }} />
     <Typography
