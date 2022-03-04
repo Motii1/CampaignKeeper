@@ -82,6 +82,18 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
         props.runQueryDetails();
         props.setChangeFeedbackMessage('Password successfully changed');
         props.setChangeFeedbackType(CustomSnackbarType.Success);
+        setCurrentPassword({
+          value: '',
+          helperText: '',
+        });
+        setNewPassword({
+          value: '',
+          helperText: '',
+        });
+        setNewPasswordRepeat({
+          value: '',
+          helperText: '',
+        });
       } else if (statusPassword === 401 && dataPassword) {
         props.setChangeFeedbackMessage(
           dataPassword.message ? dataPassword.message : 'Failure during password change'
@@ -112,6 +124,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
       <Typography variant="h6">PASSWORD</Typography>
       <LabeledTextInput
         text="Current password"
+        value={currentPassword.value}
         placeholder="Speak friend..."
         helperText={currentPassword.helperText}
         defaultHelperText="Prove that you are you"
@@ -121,6 +134,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
       />
       <LabeledTextInput
         text="New password"
+        value={newPassword.value}
         placeholder="..and enter."
         helperText={newPassword.helperText}
         defaultHelperText="Must contain one big letter and symbol"
@@ -130,6 +144,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
       />
       <LabeledTextInput
         text="Repeat password"
+        value={newPasswordRepeat.value}
         placeholder="Mellon!"
         helperText={newPasswordRepeat.helperText}
         defaultHelperText="Must be same as password above"
