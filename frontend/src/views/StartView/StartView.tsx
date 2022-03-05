@@ -1,6 +1,6 @@
 import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
 import { handleWheelEvent, useWindowDimensions } from '../../utils/utils';
@@ -8,13 +8,19 @@ import { CampaignTile } from '../components/CampaignTile/CampaignTile';
 import { QuoteLine } from '../components/QuoteLine/QuoteLine';
 import { quotes } from '../components/QuoteLine/quotes';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
+import { fetchCampaigns } from './campaignsSlice';
 
 export const StartView: React.FC = () => {
+  const dispatch = useDispatch();
+  const { isCampaignListDownloaded, campaignsList } = useSelector(
+    (state: RootState) => state.campaigns
+  );
+  if (!isCampaignListDownloaded) dispatch(fetchCampaigns());
+
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
   const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
-  const campaignsNames = useSelector((state: RootState) => state.startView.campaignsNames);
 
   useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
 
@@ -68,10 +74,10 @@ export const StartView: React.FC = () => {
               paddingLeft: centeredPadding + 'px',
             }}
           >
-            {campaignsNames.map(title => (
-              <Grid item key={title}>
+            {campaignsList.map(campaign => (
+              <Grid item key={campaign.name}>
                 <CampaignTile
-                  campaignTitle={title}
+                  campaignTitle={campaign.name}
                   setIsOpen={setIsOpen}
                   setDialogType={setDialogType}
                 />

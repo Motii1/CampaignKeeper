@@ -40,6 +40,7 @@ export const UserPanel: React.FC = () => {
   const handleMoreVertClick = (event: React.MouseEvent<Element>) => {
     setMenuAnchor(event.currentTarget);
   };
+
   const handleClose = () => {
     setMenuAnchor(null);
   };
