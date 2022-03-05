@@ -16,6 +16,23 @@ export const CustomSnackbar: React.FC<CustomSnackbarProps> = props => (
     onClose={() => props.setIsOpen(false)}
     message={props.message}
     action={<Close onClick={() => props.setIsOpen(false)} />}
-    autoHideDuration={2000}
+    autoHideDuration={3000}
+    sx={{
+      '& .MuiSnackbarContent-root': {
+        backgroundColor:
+          props.type === CustomSnackbarType.Success
+            ? 'customPalette.accent'
+            : props.type === CustomSnackbarType.Error
+            ? 'customPalette.error'
+            : 'customPalette.surface',
+        color:
+          props.type === CustomSnackbarType.Success
+            ? 'customPalette.onAccent'
+            : props.type === CustomSnackbarType.Error
+            ? 'customPalette.onError'
+            : 'customPalette.onSurface',
+        fontWeight: 'medium',
+      },
+    }}
   />
 );
