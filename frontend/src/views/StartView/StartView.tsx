@@ -1,4 +1,4 @@
-import { Box, Grid, Stack } from '@mui/material';
+import { Box, Grid, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -74,15 +74,30 @@ export const StartView: React.FC = () => {
               paddingLeft: centeredPadding + 'px',
             }}
           >
-            {campaignsList.map(campaign => (
-              <Grid item key={campaign.name}>
-                <CampaignTile
-                  campaignTitle={campaign.name}
-                  setIsOpen={setIsOpen}
-                  setDialogType={setDialogType}
-                />
-              </Grid>
-            ))}
+            {campaignsList.length > 0 ? (
+              campaignsList.map(campaign => (
+                <Grid item key={campaign.name}>
+                  <CampaignTile
+                    campaignTitle={campaign.name}
+                    setIsOpen={setIsOpen}
+                    setDialogType={setDialogType}
+                  />
+                </Grid>
+              ))
+            ) : (
+              // TO-DO: sx here needs rework to make component presentable
+              <Typography
+                variant="h2"
+                sx={{
+                  color: 'customPalette.accent',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  paddingTop: 10,
+                }}
+              >
+                {'Go wild and start your new journey'}
+              </Typography>
+            )}
           </Grid>
         </Box>
       </Stack>
