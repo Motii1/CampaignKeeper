@@ -27,7 +27,6 @@ const CAMPAIGN_IMAGE_DEFAULT_PATH = path.resolve(
 
 enum CampaignRoutes {
   Image = '/image',
-  Root = '/',
   List = '/list',
 }
 
@@ -40,19 +39,19 @@ export class CampaignController implements IController {
   }
 
   private declareRoutes = (): void => {
-    this.router.get(CampaignRoutes.Image, authorization, asyncHandler(this.getImageHandler));
-    this.router.put(CampaignRoutes.Image, authorization, asyncHandler(this.uploadImageHandler));
-    this.router.patch(
-      `${CampaignRoutes.Root}/:id`,
+    this.router.get(
+      `${CampaignRoutes.Image}/:id`,
       authorization,
-      asyncHandler(this.updateCampaignHandler)
+      asyncHandler(this.getImageHandler)
     );
-    this.router.post(CampaignRoutes.Root, authorization, asyncHandler(this.insertCampaignHandler));
-    this.router.delete(
-      `${CampaignRoutes.Root}/:id`,
+    this.router.put(
+      `${CampaignRoutes.Image}/:id`,
       authorization,
-      asyncHandler(this.deleteCampaignHandler)
+      asyncHandler(this.uploadImageHandler)
     );
+    this.router.patch('/:id', authorization, asyncHandler(this.updateCampaignHandler));
+    this.router.post('/', authorization, asyncHandler(this.insertCampaignHandler));
+    this.router.delete('/:id', authorization, asyncHandler(this.deleteCampaignHandler));
     this.router.get(CampaignRoutes.List, authorization, asyncHandler(this.getCampaignsHandler));
   };
 
@@ -205,7 +204,7 @@ export class CampaignController implements IController {
   private loadCampaignDefaultImage = async (): Promise<Buffer> =>
     await loadImage(CAMPAIGN_IMAGE_DEFAULT_PATH);
 
-  private isCampaignIdValid = (id: number) => isNaN(id) && id > 0;
+  private isCampaignIdValid = (id: number) => !isNaN(id) && id > 0;
 
   getRouter = (): Router => this.router;
 }
