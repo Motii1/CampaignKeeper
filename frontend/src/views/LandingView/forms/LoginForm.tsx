@@ -11,7 +11,16 @@ import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextI
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
-import { AUTH_URL, FormProps, TextFieldState } from './RegisterForm';
+import {
+  handleTextFieldChange,
+  handleTextFieldLeave,
+  initalState,
+  TextFieldState,
+  validateField,
+  validatePasswordLogin,
+  validateUsernameLogin,
+} from './logic';
+import { AUTH_URL, FormProps } from './RegisterForm';
 
 export const login = (username: string, password: string): Promise<AxiosResponse> =>
   protectedApiClient.post(`${AUTH_URL}/login`, {
@@ -28,11 +37,6 @@ export type UserData = {
 export const LoginForm: React.FC<FormProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const initalState = {
-    value: '',
-    helperText: null,
-  };
 
   const [username, setUsername] = useState<TextFieldState>(initalState);
   const [password, setPassword] = useState<TextFieldState>(initalState);
@@ -66,69 +70,16 @@ export const LoginForm: React.FC<FormProps> = props => {
     handleRunQuery();
   }, [handleRunQuery]);
 
-  const handleTextFieldChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setStateFn: (newState: TextFieldState) => void
-  ): void => {
-    setStateFn({
-      value: event.target.value,
-      helperText: null,
-    });
-  };
-
-  const handleTextFieldLeave = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setStateFn: (newState: TextFieldState) => void,
-    validateFn: (value: string) => string | null
-  ): void => {
-    const newValue = event.target.value;
-    setStateFn({
-      value: newValue,
-      helperText: validateFn(newValue),
-    });
-  };
-
-  const validateLogin = (value: string): null | string => {
-    if (value.length === 0) {
-      return "Login can't be empty";
-    }
-    if (value.length < 3 || value.length > 32) {
-      return 'Login length must be between 3 and 32';
-    }
-
-    return null;
-  };
-
-  const validatePassword = (value: string): null | string => {
-    if (value.length === 0) {
-      return "Password can't be empty";
-    }
-    if (value.length < 7 || value.length > 255) {
-      return 'Password length must be between 7 and 255';
-    }
-
-    return null;
-  };
-
   const handleLoginButton = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 
-    const usernameValidation = validateLogin(username.value);
-    const passwordValidation = validatePassword(password.value);
+    const isUsernameValid = validateField(username.value, validateUsernameLogin, setUsername);
+    const isPasswordValid = validateField(password.value, validatePasswordLogin, setPassword);
 
-    if (usernameValidation === null && passwordValidation === null) {
+    if (isUsernameValid && isPasswordValid) {
       runQuery({
         username: username.value,
         password: password.value,
-      });
-    } else {
-      setUsername({
-        value: username.value,
-        helperText: usernameValidation,
-      });
-      setPassword({
-        value: password.value,
-        helperText: passwordValidation,
       });
     }
   };
@@ -156,7 +107,7 @@ export const LoginForm: React.FC<FormProps> = props => {
           helperText={username.helperText}
           defaultHelperText=""
           onChange={event => handleTextFieldChange(event, setUsername)}
-          onBlur={event => handleTextFieldLeave(event, setUsername, validateLogin)}
+          onBlur={event => handleTextFieldLeave(event, setUsername, validateUsernameLogin)}
         />
         <LabeledTextInput
           text="Password"
@@ -165,7 +116,7 @@ export const LoginForm: React.FC<FormProps> = props => {
           defaultHelperText=""
           isPassword={true}
           onChange={event => handleTextFieldChange(event, setPassword)}
-          onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
+          onBlur={event => handleTextFieldLeave(event, setPassword, validatePasswordLogin)}
         />
         <CustomButton text="Login" />
       </Stack>

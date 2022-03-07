@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, Stack } from '@mui/material';
+import { Box, Dialog, DialogContent, Stack } from '@mui/material';
 import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
 import { CustomButton } from '../CustomButton/CustomButton';
 import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
@@ -22,7 +22,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
 }) => {
   //TO-DO: add option without Delete button
   const renderButtons = () => {
-    if (otherProps.onOk && otherProps.onCancel && otherProps.onDelete)
+    if (otherProps.onOk || otherProps.onCancel || otherProps.onDelete)
       return (
         <Stack
           direction="row"
@@ -31,40 +31,33 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           spacing={1}
           sx={{ width: '100%', paddingTop: 1 }}
         >
-          <CustomButton
-            text="DELETE"
-            behavior={CustomButtonBehavior.Func}
-            type={CustomButtonType.Delete}
-            onClick={otherProps.onDelete}
-          />
-          <CustomButton
-            text="CANCEL"
-            behavior={CustomButtonBehavior.Func}
-            type={CustomButtonType.Primary}
-            onClick={otherProps.onCancel}
-          />
-          <CustomButton text="OK" behavior={CustomButtonBehavior.Func} onClick={otherProps.onOk} />
+          {otherProps.onDelete ? (
+            <CustomButton
+              text="DELETE"
+              behavior={CustomButtonBehavior.Func}
+              type={CustomButtonType.Delete}
+              onClick={otherProps.onDelete}
+            />
+          ) : null}
+          {otherProps.onCancel ? (
+            <CustomButton
+              text="CANCEL"
+              behavior={CustomButtonBehavior.Func}
+              type={CustomButtonType.Primary}
+              onClick={otherProps.onCancel}
+            />
+          ) : null}
+          {otherProps.onOk ? (
+            <CustomButton
+              text="OK"
+              behavior={CustomButtonBehavior.Func}
+              onClick={otherProps.onOk}
+            />
+          ) : null}
+          <Box sx={{ width: 11 }} />
         </Stack>
       );
-    if (otherProps.onOk && otherProps.onCancel)
-      return (
-        <Stack
-          direction="row"
-          justifyContent="flex-end"
-          alignItems="center"
-          spacing={1}
-          sx={{ width: '100%', paddingTop: 1 }}
-        >
-          <CustomButton
-            text="CANCEL"
-            behavior={CustomButtonBehavior.Func}
-            type={CustomButtonType.Primary}
-            onClick={otherProps.onCancel}
-          />
-          <CustomButton text="OK" behavior={CustomButtonBehavior.Func} onClick={otherProps.onOk} />
-        </Stack>
-      );
-    return null;
+    else return null;
   };
 
   return (
@@ -81,17 +74,35 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
       <DialogContent
         sx={{
           minWidth: '20vw',
-          maxHeight: '90wh',
+          maxHeight: 710,
           paddingTop: 1.6,
           paddingBottom: 1.9,
-          paddingLeft: 2.4,
-          paddingRight: 2.4,
+          paddingLeft: 0,
+          paddingRight: 0,
+          overflow: 'hidden',
         }}
       >
-        <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="flex-start"
+          spacing={1}
+          sx={{
+            height: '100%',
+            width: '100%',
+          }}
+        >
           <ReturnBar setOpen={otherProps.setIsOpen} />
           <CustomDialogTitle title={otherProps.title} isTitleRed={isTitleRed} />
-          {otherProps.children}
+          <Box
+            sx={{
+              width: '100%',
+              maxHeight: 600,
+              overflowY: 'auto',
+            }}
+          >
+            <Box sx={{ paddingLeft: 2.4, paddingRight: 2.4 }}>{otherProps.children}</Box>
+          </Box>
           {renderButtons()}
         </Stack>
       </DialogContent>

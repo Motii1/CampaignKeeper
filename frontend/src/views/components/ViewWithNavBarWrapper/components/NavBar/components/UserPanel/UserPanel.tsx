@@ -102,9 +102,6 @@ export const UserPanel: React.FC = () => {
                 width: 30.5,
                 height: 30.5,
                 imageRendering: 'pixelated',
-                marginRight: 0.06,
-                marginLeft: 0.06,
-                marginTop: 0.08,
               }}
             />
           </Paper>

@@ -18,6 +18,7 @@ export const EditMenu: React.FC<EditMenuProps> = props => (
       '& .MuiPaper-root': {
         backgroundColor: 'customPalette.primary',
         borderRadius: 4,
+        minWidth: 160,
       },
     }}
     disableAutoFocusItem

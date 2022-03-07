@@ -9,6 +9,20 @@ import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextI
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
+import {
+  handleTextFieldChange,
+  handleTextFieldLeave,
+  handleTextFieldLeaveTwin,
+  initalState,
+  TextFieldState,
+  validateEmail,
+  validateEmailsMatch,
+  validateField,
+  validateMatch,
+  validatePasswordRegister,
+  validatePasswordsMatch,
+  validateUsernameRegister,
+} from './logic';
 import { UserData } from './LoginForm';
 
 type RegisterData = {
@@ -19,25 +33,11 @@ export type FormProps = {
   onChangeForm: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
-export type TextFieldState = {
-  value: string;
-  helperText: null | string;
-};
-
 export const AUTH_URL = '/api/auth';
 
 export const RegisterForm: React.FC<FormProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const usernameRegex = /^(?=.{7,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9]+(?<![_.])$/;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{7,255}$/;
-
-  const initalState = {
-    value: '',
-    helperText: null,
-  };
 
   const [username, setUsername] = useState<TextFieldState>(initalState);
   const [email, setEmail] = useState<TextFieldState>(initalState);
@@ -123,121 +123,31 @@ export const RegisterForm: React.FC<FormProps> = props => {
     handleUseQueryRegister();
   }, [handleUseQueryRegister]);
 
-  const validateUsername = (value: string): null | string => {
-    if (value.length < 7 || value.length > 32) return 'Must be between 7 and 32 characters';
-    return !usernameRegex.test(value) ? 'Contains illegal characters' : null;
-  };
-
-  const validateEmail = (value: string): null | string => {
-    if (value.length < 7 || value.length > 32) return 'Must be between 7 and 32 characters';
-    return !emailRegex.test(value) ? 'This is not proper email' : null;
-  };
-
-  const validateEmailsMatch = (value1: string, value2: string): null | string => {
-    if (value1.length === 0 || value2.length === 0) return "Email can't be empty";
-    return value1 !== value2 ? 'Emails dont match' : null;
-  };
-
-  const validatePassword = (value: string): null | string => {
-    if (value.length < 7 || value.length > 255) return 'Must be between 7 and 255 characters';
-    return !passwordRegex.test(value) ? 'It is too weak' : null;
-  };
-
-  const validatePasswordsMatch = (value1: string, value2: string): null | string => {
-    if (value1.length === 0 || value2.length === 0) return "Password can't be empty";
-    return value1 !== value2 ? "Passwords don't match" : null;
-  };
-
-  const handleTextFieldLeave = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setStateFn: (newState: TextFieldState) => void,
-    validateFn: (value: string) => string | null,
-    optionalFn?: () => void
-  ): void => {
-    const newValue = event.target.value;
-    setStateFn({
-      value: newValue,
-      helperText: validateFn(newValue),
-    });
-
-    if (optionalFn) {
-      optionalFn();
-    }
-  };
-
-  const handleTextFieldLeaveTwin = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    twin: string,
-    setStateFn: (newState: TextFieldState) => void,
-    validateFn: (value1: string, value2: string) => string | null
-  ): void => {
-    const newValue = event.target.value;
-    setStateFn({
-      value: newValue,
-      helperText: validateFn(twin, newValue),
-    });
-  };
-
-  const handleTextFieldChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setStateFn: (newState: TextFieldState) => void
-  ): void => {
-    setStateFn({
-      value: event.target.value,
-      helperText: null,
-    });
-  };
-
   const handleRegisterButton = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
-    const userRes = validateUsername(username.value);
-    const emailRes = validateEmail(email.value);
-    const emailRepeatRes = validateEmailsMatch(email.value, emailRepeat.value);
-    const passRes = validatePassword(password.value);
-    const passRepeatRes = validatePasswordsMatch(password.value, passwordRepeat.value);
-
-    if (userRes) {
-      setUsername({
-        value: username.value,
-        helperText: userRes,
-      });
-    }
-
-    if (emailRes) {
-      setEmail({
-        value: email.value,
-        helperText: emailRes,
-      });
-    }
-
-    if (emailRepeatRes) {
-      setEmailRepeat({
-        value: emailRepeat.value,
-        helperText: emailRepeatRes,
-      });
-    }
-
-    if (passRes) {
-      setPassword({
-        value: password.value,
-        helperText: passRes,
-      });
-    }
-
-    if (passRepeatRes) {
-      setPasswordRepeat({
-        value: passwordRepeat.value,
-        helperText: passRepeatRes,
-      });
-    }
+    const isUsernameValid = validateField(username.value, validateUsernameRegister, setUsername);
+    const isEmailValid = validateField(email.value, validateEmail, setEmail);
+    const isEmailRepeatValid = validateMatch(
+      email.value,
+      emailRepeat.value,
+      validateEmailsMatch,
+      setEmailRepeat
+    );
+    const isPasswordValid = validateField(password.value, validatePasswordRegister, setPassword);
+    const isPasswordRepeatValid = validateMatch(
+      password.value,
+      passwordRepeat.value,
+      validatePasswordsMatch,
+      setPasswordRepeat
+    );
 
     if (
-      userRes === null &&
-      emailRes === null &&
-      emailRepeatRes === null &&
-      passRes === null &&
-      passRepeatRes === null
+      isUsernameValid &&
+      isEmailValid &&
+      isEmailRepeatValid &&
+      isPasswordValid &&
+      isPasswordRepeatValid
     ) {
       runQueryRegister({
         username: username.value,
@@ -272,7 +182,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
           helperText={username.helperText}
           defaultHelperText="Must be between 7 and 32 characters"
           onChange={event => handleTextFieldChange(event, setUsername)}
-          onBlur={event => handleTextFieldLeave(event, setUsername, validateUsername)}
+          onBlur={event => handleTextFieldLeave(event, setUsername, validateUsernameRegister)}
         />
         <LabeledTextInput
           text="Email"
@@ -299,7 +209,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
           defaultHelperText="Must contain one big letter and symbol"
           isPassword={true}
           onChange={event => handleTextFieldChange(event, setPassword)}
-          onBlur={event => handleTextFieldLeave(event, setPassword, validatePassword)}
+          onBlur={event => handleTextFieldLeave(event, setPassword, validatePasswordRegister)}
         />
         <LabeledTextInput
           text="Repeat password"
