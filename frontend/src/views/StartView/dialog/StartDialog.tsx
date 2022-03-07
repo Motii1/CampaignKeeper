@@ -1,12 +1,24 @@
+/* eslint-disable no-console */
 import { Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import requestMethods from '../../../axios/requestMethods';
+import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addCampaign, resetState, updateState } from '../startViewSlice';
+import { addCampaign, editCampaign } from '../campaignsSlice';
+import { resetState, updateState } from '../startViewSlice';
+
+type SingleCampaignData = {
+  image: null | string;
+  name: string;
+  schemas: number[];
+  sessions: number[];
+  user: number;
+};
 
 type StartDialogProps = {
   isOpen: boolean;
@@ -24,7 +36,54 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   );
   const name = useSelector((state: RootState) => state.startView.name);
   const image = useSelector((state: RootState) => state.startView.image);
+  const id = useSelector((state: RootState) => state.startView.id);
+
   const [helperText, setHelperText] = useState<null | string>('');
+
+  const {
+    isLoading: isLoadingNew,
+    data: dataNew,
+    status: statusNew,
+    runQuery: runQueryNew,
+    resetQuery: resetQueryNew,
+  } = useQuery<SingleCampaignData>(`/api/campaign`, requestMethods.POST);
+
+  const handleRunQueryNew = useCallback(() => {
+    if (!isLoadingNew && statusNew) {
+      if (statusNew === 200) {
+        dispatch(addCampaign({ newCampaign: dataNew }));
+      } else if (statusNew === 400) {
+        console.log('Error on server');
+      }
+      resetQueryNew();
+    }
+  }, [dataNew, dispatch, isLoadingNew, resetQueryNew, statusNew]);
+
+  useEffect(() => {
+    handleRunQueryNew();
+  }, [handleRunQueryNew]);
+
+  const {
+    isLoading: isLoadingEdit,
+    status: statusEdit,
+    runQuery: runQueryEdit,
+    resetQuery: resetQueryEdit,
+  } = useQuery<SingleCampaignData>(`api/campaign/${id}`, requestMethods.PATCH);
+
+  const handleRunQueryEdit = useCallback(() => {
+    if (!isLoadingEdit && statusEdit) {
+      if (statusEdit === 200) {
+        dispatch(editCampaign({ id: id, name: name }));
+      } else if (statusEdit === 400 || statusEdit === 404) {
+        console.log('Error on server');
+      }
+      resetQueryEdit();
+    }
+  }, [dispatch, id, isLoadingEdit, name, resetQueryEdit, statusEdit]);
+
+  useEffect(() => {
+    handleRunQueryEdit();
+  }, [handleRunQueryEdit]);
 
   useEffect(() => {
     setTitle(props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign');
@@ -50,13 +109,20 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     dispatch(resetState({}));
   };
 
+  // TO-DO: should we redirect user to campaign view after creation of new campaign?
   const handleOk = () => {
-    //here will go handling new campaign creation with useQuery
-    //and history.push('/campaign') redirecting user to new campaign
-    if (checkName(name)) {
-      dispatch(addCampaign({ campaignName: name }));
-      props.setIsOpen(false);
-      resetDialog();
+    if (props.dialogType === NavBarViewDialog.NewCampaign) {
+      if (checkName(name)) {
+        runQueryNew({
+          name: name,
+        });
+        props.setIsOpen(false);
+        resetDialog();
+      }
+    } else {
+      runQueryEdit({
+        name: name,
+      });
     }
   };
 
@@ -65,8 +131,8 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     resetDialog();
   };
 
+  // important: secondaryDialog is responsible for handling deletion, here we only open it
   const handleDelete = () => {
-    //here will go handling campaign deletion with useQuery
     props.setIsSecondaryOpen(true);
   };
 

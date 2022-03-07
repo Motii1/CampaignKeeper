@@ -78,6 +78,7 @@ export const StartView: React.FC = () => {
               campaignsList.map(campaign => (
                 <Grid item key={campaign.name}>
                   <CampaignTile
+                    campaignId={campaign.id}
                     campaignTitle={campaign.name}
                     setIsOpen={setIsOpen}
                     setDialogType={setDialogType}

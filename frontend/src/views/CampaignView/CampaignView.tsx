@@ -25,6 +25,7 @@ export const CampaignView: React.FC = () => {
   const centeredPadding = Math.max((width - 1368.1) / 2, width < 450 ? 6 : 51);
 
   const title = 'Lorem ipsum';
+  const id = -1;
   const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
 
   useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
@@ -46,7 +47,12 @@ export const CampaignView: React.FC = () => {
         sx={{ width: '100%', overflowY: 'auto' }}
       >
         <QuoteLine text={quote} />
-        <CampaignTile campaignTitle={title} setIsOpen={setIsOpen} setDialogType={setDialogType} />
+        <CampaignTile
+          campaignId={id}
+          campaignTitle={title}
+          setIsOpen={setIsOpen}
+          setDialogType={setDialogType}
+        />
         <Box
           component="div"
           onWheel={handleWheelEvent}

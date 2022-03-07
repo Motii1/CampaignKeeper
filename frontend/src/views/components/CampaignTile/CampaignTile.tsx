@@ -7,6 +7,7 @@ import { updateState } from '../../StartView/startViewSlice';
 import { EditMenu } from '../EditMenu/EditMenu';
 
 type CampaignTileProps = {
+  campaignId: number;
   campaignTitle: string;
   setIsOpen: (newIsOpen: boolean) => void;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
@@ -34,7 +35,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
   };
 
   const handleEdit = () => {
-    dispatch(updateState({ name: props.campaignTitle }));
+    dispatch(updateState({ id: props.campaignId, name: props.campaignTitle }));
     props.setIsOpen(true);
     props.setDialogType(NavBarViewDialog.EditCampaign);
     setMenuPos(null);
