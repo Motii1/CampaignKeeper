@@ -1,12 +1,13 @@
 /* eslint-disable no-console */
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
-import { NavBarViewDialog } from '../../../types/types';
+import { CustomSnackbarType, NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
+import { CustomSnackbar } from '../../components/CustomSnackbar/CustomSnackbar';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import { addCampaign, editCampaign } from '../campaignsSlice';
@@ -28,7 +29,6 @@ type StartDialogProps = {
 };
 
 //TO-DO: think about adding wrapper (for all NavBarViews) on stack inside CustomDialog
-//TO-DO: close Edit dialog after deleting campaign (export isOpen of primary dialog to Redux?)
 export const StartDialog: React.FC<StartDialogProps> = props => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState(
@@ -39,6 +39,9 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   const id = useSelector((state: RootState) => state.startView.id);
 
   const [helperText, setHelperText] = useState<null | string>('');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState<CustomSnackbarType>(CustomSnackbarType.Info);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
 
   const {
     isLoading: isLoadingNew,
@@ -52,8 +55,13 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     if (!isLoadingNew && statusNew) {
       if (statusNew === 200) {
         dispatch(addCampaign({ newCampaign: dataNew }));
+        setSnackbarType(CustomSnackbarType.Success);
+        setSnackbarMessage('Campaign created');
+        setIsSnackbarOpen(true);
       } else if (statusNew === 400) {
-        console.log('Error on server');
+        setSnackbarType(CustomSnackbarType.Error);
+        setSnackbarMessage('Error during campaign creation');
+        setIsSnackbarOpen(true);
       }
       resetQueryNew();
     }
@@ -74,8 +82,17 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     if (!isLoadingEdit && statusEdit) {
       if (statusEdit === 200) {
         dispatch(editCampaign({ id: id, name: name }));
-      } else if (statusEdit === 400 || statusEdit === 404) {
-        console.log('Error on server');
+        setSnackbarType(CustomSnackbarType.Success);
+        setSnackbarMessage('Campaign edited');
+        setIsSnackbarOpen(true);
+      } else if (statusEdit === 400) {
+        setSnackbarType(CustomSnackbarType.Error);
+        setSnackbarMessage('Error during campaign update');
+        setIsSnackbarOpen(true);
+      } else if (statusEdit === 404) {
+        setSnackbarType(CustomSnackbarType.Error);
+        setSnackbarMessage("Campaign can't be found");
+        setIsSnackbarOpen(true);
       }
       resetQueryEdit();
     }
@@ -142,38 +159,46 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   };
 
   return (
-    <CustomDialog
-      title={title}
-      isOpen={props.isOpen}
-      setIsOpen={props.setIsOpen}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      onDelete={props.dialogType === NavBarViewDialog.EditCampaign ? handleDelete : undefined}
-      onClose={handleClose}
-    >
-      <Stack
-        direction="column"
-        justifyContent="center"
-        alignItems="flex-start"
-        spacing={1}
-        sx={{ width: '100%' }}
+    <Box>
+      <CustomDialog
+        title={title}
+        isOpen={props.isOpen}
+        setIsOpen={props.setIsOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        onDelete={props.dialogType === NavBarViewDialog.EditCampaign ? handleDelete : undefined}
+        onClose={handleClose}
       >
-        <LabeledTextInput
-          text={'NAME'}
-          placeholder={'Type here'}
-          defaultValue={name}
-          helperText={helperText}
-          defaultHelperText={''}
-          onChange={event => handleTextInputChange(event)}
-          onBlur={event => handleTextInputLeave(event)}
-        />
-        <ImageUploadField
-          height={180}
-          width={390}
-          image={image}
-          setImage={newImage => dispatch(updateState({ image: newImage }))}
-        />
-      </Stack>
-    </CustomDialog>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="flex-start"
+          spacing={1}
+          sx={{ width: '100%' }}
+        >
+          <LabeledTextInput
+            text={'NAME'}
+            placeholder={'Type here'}
+            defaultValue={name}
+            helperText={helperText}
+            defaultHelperText={''}
+            onChange={event => handleTextInputChange(event)}
+            onBlur={event => handleTextInputLeave(event)}
+          />
+          <ImageUploadField
+            height={180}
+            width={390}
+            image={image}
+            setImage={newImage => dispatch(updateState({ image: newImage }))}
+          />
+        </Stack>
+      </CustomDialog>
+      <CustomSnackbar
+        message={snackbarMessage}
+        type={snackbarType}
+        isOpen={isSnackbarOpen}
+        setIsOpen={setIsSnackbarOpen}
+      />
+    </Box>
   );
 };
