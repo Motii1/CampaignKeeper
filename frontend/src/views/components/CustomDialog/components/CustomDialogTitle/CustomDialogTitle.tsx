@@ -12,6 +12,8 @@ export const CustomDialogTitle: React.FC<CustomDialogTitleProps> = props => {
     letterSpacing: 0.5,
     paddingTop: 0.6,
     paddingBottom: 1,
+    paddingLeft: 2.4,
+    paddingRight: 2.4,
   };
   return (
     <Typography variant="h4" sx={sx}>

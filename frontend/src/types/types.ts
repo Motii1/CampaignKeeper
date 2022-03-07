@@ -22,3 +22,9 @@ export enum NavBarViewDialog {
   NewSession,
   EditSession,
 }
+
+export enum CustomSnackbarType {
+  Info,
+  Success,
+  Error,
+}
