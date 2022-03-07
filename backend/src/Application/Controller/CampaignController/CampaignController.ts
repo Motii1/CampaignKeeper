@@ -97,7 +97,7 @@ export class CampaignController implements IController {
   /**
    * @route PATCH /campaign/{id}
    * @group campaign - Operations related to campaign data
-   * @param {CampaignUpdateDto.model} data.body.required - campaign update data, provide null in field that you do not want to update
+   * @param {CampaignUpdateDto.model} data.body.required - campaign update data, do not provide property that you do not want to update
    * @returns {EmptyResponse.model} 200 - Campaign successfully saved
    * @returns {EmptyResponse.model} 400 - Data in wrong format
    * @returns {EmptyResponse.model} 404 - Campaign not found

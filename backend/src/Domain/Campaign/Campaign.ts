@@ -1,6 +1,4 @@
 import { User } from '../User/User';
-import { Schema } from './Schema/Schema';
-import { Session } from './Session/Session';
 
 export type Campaign = {
   id: number;
@@ -8,6 +6,4 @@ export type Campaign = {
   user: User;
   createdAt: Date;
   image: Buffer | null;
-  schemas: Schema[];
-  sessions: Session[];
 };
