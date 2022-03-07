@@ -24,9 +24,9 @@ type PasswordResponseData = {
 };
 
 type ChangePasswordFormProps = {
-  setChangeFeedbackMessage: (newFeedbackMessage: string) => void;
-  setChangeFeedbackType: (newFeedbackType: CustomSnackbarType) => void;
-  setIsChangeFeedbackOpen: (newIsOpen: boolean) => void;
+  setSnackbarMessage: (newSnackbarMessage: string) => void;
+  setSnackbarType: (newSnackbarType: CustomSnackbarType) => void;
+  setIsSnackbarOpen: (newIsSnackbarOpen: boolean) => void;
   runQueryDetails: (payload?: unknown) => void;
 };
 
@@ -80,8 +80,8 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
     if (!isLoadingPassword && statusPassword) {
       if (statusPassword === 200) {
         props.runQueryDetails();
-        props.setChangeFeedbackMessage('Password successfully changed');
-        props.setChangeFeedbackType(CustomSnackbarType.Success);
+        props.setSnackbarMessage('Password successfully changed');
+        props.setSnackbarType(CustomSnackbarType.Success);
         setCurrentPassword({
           value: '',
           helperText: '',
@@ -95,15 +95,15 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
           helperText: '',
         });
       } else if (statusPassword === 401 && dataPassword) {
-        props.setChangeFeedbackMessage(
+        props.setSnackbarMessage(
           dataPassword.message ? dataPassword.message : 'Failure during password change'
         );
-        props.setChangeFeedbackType(CustomSnackbarType.Error);
+        props.setSnackbarType(CustomSnackbarType.Error);
       } else {
-        props.setChangeFeedbackMessage('Failure during password change');
-        props.setChangeFeedbackType(CustomSnackbarType.Error);
+        props.setSnackbarMessage('Failure during password change');
+        props.setSnackbarType(CustomSnackbarType.Error);
       }
-      props.setIsChangeFeedbackOpen(true);
+      props.setIsSnackbarOpen(true);
       resetQueryPassword();
     }
   }, [dataPassword, isLoadingPassword, props, resetQueryPassword, statusPassword]);

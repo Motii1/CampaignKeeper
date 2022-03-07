@@ -6,11 +6,13 @@ import { useHistory } from 'react-router-dom';
 import requestMethods from '../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../axios/useQuery';
 import { RootState } from '../../../../../../../store';
+import { CustomSnackbarType } from '../../../../../../../types/types';
 import { setError } from '../../../../../../ErrorView/errorSlice';
 import { AUTH_URL } from '../../../../../../LandingView/forms/RegisterForm';
 import { clearDetails } from '../../../../../../LandingView/userDetailsSlice';
 import viewsRoutes from '../../../../../../viewsRoutes';
 import { CustomDialog } from '../../../../../CustomDialog/CustomDialog';
+import { CustomSnackbar } from '../../../../../CustomSnackbar/CustomSnackbar';
 import { AboutDialogContent } from './components/AboutDialogContent/AboutDialogContent';
 import { SettingsDialogContent } from './components/SettingsDialogContent/SettingsDialogContent';
 
@@ -19,6 +21,10 @@ export const UserPanel: React.FC = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | Element>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentDialogTitle, setcurrentDialogTitle] = useState<string>('About');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState<CustomSnackbarType>(CustomSnackbarType.Info);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -146,9 +152,25 @@ export const UserPanel: React.FC = () => {
         <MenuItem onClick={handleAboutClick}>About</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
       </Menu>
-      <CustomDialog title={currentDialogTitle} isOpen={isDialogOpen} setIsOpen={setIsDialogOpen}>
-        {currentDialogTitle === 'About' ? <AboutDialogContent /> : <SettingsDialogContent />}
-      </CustomDialog>
+      <Box>
+        <CustomDialog title={currentDialogTitle} isOpen={isDialogOpen} setIsOpen={setIsDialogOpen}>
+          {currentDialogTitle === 'About' ? (
+            <AboutDialogContent />
+          ) : (
+            <SettingsDialogContent
+              setSnackbarMessage={setSnackbarMessage}
+              setSnackbarType={setSnackbarType}
+              setIsSnackbarOpen={setIsSnackbarOpen}
+            />
+          )}
+        </CustomDialog>
+        <CustomSnackbar
+          message={snackbarMessage}
+          type={snackbarType}
+          isOpen={isSnackbarOpen}
+          setIsOpen={setIsSnackbarOpen}
+        />
+      </Box>
     </Box>
   );
 };

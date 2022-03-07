@@ -4,7 +4,6 @@ import { CustomButton } from '../CustomButton/CustomButton';
 import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
 
-//TO-DO: add type of dialog (no/two/three buttons), info about buttons and their functions (if needed)
 type CustomDialogProps = {
   title: string;
   isTitleRed?: boolean;
@@ -20,7 +19,6 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
   isTitleRed = false,
   ...otherProps
 }) => {
-  //TO-DO: add option without Delete button
   const renderButtons = () => {
     if (otherProps.onOk || otherProps.onCancel || otherProps.onDelete)
       return (

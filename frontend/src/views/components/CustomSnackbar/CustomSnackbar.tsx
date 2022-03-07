@@ -9,7 +9,6 @@ type CustomSnackbarProps = {
   setIsOpen: (newIsOpen: boolean) => void;
 };
 
-// TO-DO add sx to Snackbar with switch depending on type (@Michał)
 export const CustomSnackbar: React.FC<CustomSnackbarProps> = props => (
   <Snackbar
     open={props.isOpen}

@@ -148,7 +148,6 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
       setIsOpen={props.setIsOpen}
       onOk={handleOk}
       onCancel={handleCancel}
-      //TO-DO: check if using undefined here is okay
       onDelete={props.dialogType === NavBarViewDialog.EditCampaign ? handleDelete : undefined}
       onClose={handleClose}
     >

@@ -15,9 +15,9 @@ type ImageResponseData = {
 };
 
 type ChangeAvatarFormProps = {
-  setChangeFeedbackMessage: (newFeedbackMessage: string) => void;
-  setChangeFeedbackType: (newFeedbackType: CustomSnackbarType) => void;
-  setIsChangeFeedbackOpen: (newIsOpen: boolean) => void;
+  setSnackbarMessage: (newSnackbarMessage: string) => void;
+  setSnackbarType: (newSnackbarType: CustomSnackbarType) => void;
+  setIsSnackbarOpen: (newIsSnackbarOpen: boolean) => void;
   runQueryDetails: (payload?: unknown) => void;
 };
 
@@ -50,15 +50,15 @@ export const ChangeAvatarForm: React.FC<ChangeAvatarFormProps> = props => {
     if (!isLoadingImg && statusImg) {
       if (statusImg === 200) {
         props.runQueryDetails();
-        props.setChangeFeedbackMessage('Avatar changed succesfully');
-        props.setChangeFeedbackType(CustomSnackbarType.Success);
+        props.setSnackbarMessage('Avatar changed succesfully');
+        props.setSnackbarType(CustomSnackbarType.Success);
       } else if (statusImg === 400 && dataImg) {
-        props.setChangeFeedbackMessage(
+        props.setSnackbarMessage(
           dataImg.message ? dataImg.message : 'Failure during avatar change'
         );
-        props.setChangeFeedbackType(CustomSnackbarType.Error);
+        props.setSnackbarType(CustomSnackbarType.Error);
       }
-      props.setIsChangeFeedbackOpen(true);
+      props.setIsSnackbarOpen(true);
       resetQueryImg();
     }
   }, [dataImg, isLoadingImg, props, resetQueryImg, statusImg]);
