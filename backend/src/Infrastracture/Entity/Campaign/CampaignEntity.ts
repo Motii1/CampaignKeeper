@@ -18,13 +18,13 @@ export class CampaignEntity {
   @Column({ length: 128 })
   name!: string;
 
-  @ManyToOne(() => UserEntity, user => user.campaigns, { nullable: false })
+  @ManyToOne(() => UserEntity, user => user.campaigns, { nullable: false, eager: true })
   user!: UserEntity;
 
-  @OneToMany(() => SchemaEntity, schema => schema.campaign)
+  @OneToMany(() => SchemaEntity, schema => schema.campaign, { eager: true })
   schemas!: SchemaEntity[];
 
-  @OneToMany(() => SessionEntity, session => session.campaign)
+  @OneToMany(() => SessionEntity, session => session.campaign, { eager: true })
   sessions!: SessionEntity[];
 
   @Column({ type: 'varbinary', nullable: true, length: 'max' })
