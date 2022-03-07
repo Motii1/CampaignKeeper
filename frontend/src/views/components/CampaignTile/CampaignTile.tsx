@@ -1,7 +1,6 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import CampaignDefaultGraphic from '../../../graphics/campaignDefault.jpg';
 import { NavBarViewDialog } from '../../../types/types';
 import { updateState } from '../../StartView/startViewSlice';
 import { EditMenu } from '../EditMenu/EditMenu';
@@ -9,6 +8,7 @@ import { EditMenu } from '../EditMenu/EditMenu';
 type CampaignTileProps = {
   campaignId: number;
   campaignTitle: string;
+  campaignImage: string;
   setIsOpen: (newIsOpen: boolean) => void;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
@@ -58,7 +58,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
         <Box
           component="img"
           alt="Campaign graphic"
-          src={CampaignDefaultGraphic}
+          src={`data:;charset=utf-8;base64,${props.campaignImage}`}
           sx={{
             borderRadius: 2,
             height: 180,

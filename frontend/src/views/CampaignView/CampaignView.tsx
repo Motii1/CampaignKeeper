@@ -50,6 +50,7 @@ export const CampaignView: React.FC = () => {
         <CampaignTile
           campaignId={id}
           campaignTitle={title}
+          campaignImage={'TO-DO: replace this with actual session image'}
           setIsOpen={setIsOpen}
           setDialogType={setDialogType}
         />

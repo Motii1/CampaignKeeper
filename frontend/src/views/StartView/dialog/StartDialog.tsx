@@ -54,6 +54,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   const handleRunQueryNew = useCallback(() => {
     if (!isLoadingNew && statusNew) {
       if (statusNew === 200) {
+        console.log(dataNew);
         dispatch(addCampaign({ newCampaign: dataNew }));
         setSnackbarType(CustomSnackbarType.Success);
         setSnackbarMessage('Campaign created');

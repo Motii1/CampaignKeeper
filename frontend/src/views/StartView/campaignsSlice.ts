@@ -16,7 +16,7 @@ type Campaign = {
     id: number;
   }[];
   createdAt: Date;
-  imageBase64?: string;
+  imageBase64: string;
 };
 
 const initialState: CampaignsState = {

@@ -80,6 +80,7 @@ export const StartView: React.FC = () => {
                   <CampaignTile
                     campaignId={campaign.id}
                     campaignTitle={campaign.name}
+                    campaignImage={campaign.imageBase64}
                     setIsOpen={setIsOpen}
                     setDialogType={setDialogType}
                   />
