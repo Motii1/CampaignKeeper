@@ -6,14 +6,12 @@ import { SingleGetCampaignListDto } from '../Dto/GetCampaignListDto';
 import { extractSingleDtoData } from './CampaignList';
 
 export const createCampaign = async (
-  { name }: CampaignInsertDto,
+  { name, imageBase64 }: CampaignInsertDto,
   user: User
 ): Promise<SingleGetCampaignListDto> => {
   const campaign: Omit<Campaign, 'id' | 'createdAt'> = {
-    image: null,
+    image: imageBase64 ? Buffer.from(imageBase64, 'base64') : null,
     name,
-    schemas: [],
-    sessions: [],
     user,
   };
   const savedCampaign = await saveCampaign(campaign);

@@ -14,15 +14,11 @@ const extractDtoData = (campaigns: Campaign[]): GetCampaignListDto =>
 export const extractSingleDtoData = ({
   id,
   name,
-  schemas,
-  sessions,
   createdAt,
   image,
 }: Campaign): SingleGetCampaignListDto => ({
   id,
   name,
-  schemas: schemas.map(({ id }) => ({ id })),
-  sessions: sessions.map(({ id }) => ({ id })),
   createdAt,
   imageBase64: image?.toString('base64'),
 });

@@ -21,10 +21,10 @@ export class CampaignEntity {
   @ManyToOne(() => UserEntity, user => user.campaigns, { nullable: false, eager: true })
   user!: UserEntity;
 
-  @OneToMany(() => SchemaEntity, schema => schema.campaign, { eager: true })
+  @OneToMany(() => SchemaEntity, schema => schema.campaign)
   schemas!: SchemaEntity[];
 
-  @OneToMany(() => SessionEntity, session => session.campaign, { eager: true })
+  @OneToMany(() => SessionEntity, session => session.campaign)
   sessions!: SessionEntity[];
 
   @Column({ type: 'varbinary', nullable: true, length: 'max' })

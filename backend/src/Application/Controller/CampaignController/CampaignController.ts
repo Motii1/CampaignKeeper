@@ -16,9 +16,9 @@ import { loadImage } from '../../Util/Image';
 import { IController } from '../IController';
 import { CampaignInsertDto, campaignInsertDtoSchema } from './Dto/CampaignInsertDto';
 import { CampaignUpdateDto, campaignUpdateDtoSchema } from './Dto/CampaignUpdateDto';
+import { MAX_FILE_SIZE_LIMIT } from './Dto/Const';
 import { GetCampaignListDto } from './Dto/GetCampaignListDto';
 
-const MAX_FILE_SIZE_LIMIT = 900000;
 const IMAGE_FILE_FIELD_NAME = 'image-file';
 const CAMPAIGN_IMAGE_DEFAULT_PATH = path.resolve(
   __dirname,
@@ -97,7 +97,7 @@ export class CampaignController implements IController {
   /**
    * @route PATCH /campaign/{id}
    * @group campaign - Operations related to campaign data
-   * @param {CampaignUpdateDto.model} data.body.required - campaign update data, provide null in field that you do not want to update
+   * @param {CampaignUpdateDto.model} data.body.required - campaign update data, do not provide property that you do not want to update
    * @returns {EmptyResponse.model} 200 - Campaign successfully saved
    * @returns {EmptyResponse.model} 400 - Data in wrong format
    * @returns {EmptyResponse.model} 404 - Campaign not found
@@ -117,7 +117,11 @@ export class CampaignController implements IController {
       res.status(404).json({});
       return;
     }
-    const toSave = { ...campaign, ...dto };
+    const toSave = {
+      ...campaign,
+      name: dto.name ?? campaign.name,
+      image: dto.imageBase64 ? Buffer.from(dto.imageBase64, 'base64') : campaign.image,
+    };
     await saveCampaign(toSave);
     res.status(200).json({});
   };
@@ -139,7 +143,11 @@ export class CampaignController implements IController {
     const dto = value as CampaignInsertDto;
     const user = await extractUserFromCookies(req.cookies);
     const response = await createCampaign(dto, user);
-    res.status(200).json(response);
+    res.status(200).json({
+      ...response,
+      imageBase64:
+        response.imageBase64 ?? (await this.loadCampaignDefaultImage()).toString('base64'),
+    });
   };
 
   /**
