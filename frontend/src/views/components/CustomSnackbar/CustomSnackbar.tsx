@@ -2,7 +2,7 @@ import { Close } from '@mui/icons-material';
 import { Snackbar } from '@mui/material';
 import { CustomSnackbarType } from '../../../types/types';
 
-type CustomSnackbarProps = {
+export type CustomSnackbarProps = {
   message: string;
   type: CustomSnackbarType;
   isOpen: boolean;

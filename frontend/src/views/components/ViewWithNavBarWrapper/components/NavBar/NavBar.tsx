@@ -8,6 +8,9 @@ import { UserPanel } from './components/UserPanel/UserPanel';
 
 type NavBarProps = {
   currentView: string;
+  setSnackbarInfo: (message: string) => void;
+  setSnackbarSuccess: (message: string) => void;
+  setSnackbarError: (message: string) => void;
 };
 
 export const NavBar: React.FC<NavBarProps> = props => {
@@ -76,7 +79,11 @@ export const NavBar: React.FC<NavBarProps> = props => {
             history.push(viewsRoutes.NOTES);
           }}
         />
-        <UserPanel />
+        <UserPanel
+          setSnackbarInfo={props.setSnackbarInfo}
+          setSnackbarSuccess={props.setSnackbarSuccess}
+          setSnackbarError={props.setSnackbarError}
+        />
       </Stack>
     </Paper>
   );

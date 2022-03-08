@@ -4,9 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
-import { CustomSnackbarType, NavBarViewDialog } from '../../../types/types';
+import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
-import { CustomSnackbar } from '../../components/CustomSnackbar/CustomSnackbar';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import { addCampaign, editCampaign } from '../campaignsSlice';
@@ -24,6 +23,8 @@ type StartDialogProps = {
   setIsOpen: (newIsOpen: boolean) => void;
   dialogType: NavBarViewDialog;
   setIsSecondaryOpen: (newIsOpen: boolean) => void;
+  setSnackbarSuccess: (message: string) => void;
+  setSnackbarError: (message: string) => void;
 };
 
 //TO-DO: think about adding wrapper (for all NavBarViews) on stack inside CustomDialog
@@ -37,9 +38,6 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign'
   );
   const [helperText, setHelperText] = useState<null | string>('');
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarType, setSnackbarType] = useState<CustomSnackbarType>(CustomSnackbarType.Info);
-  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
 
   const {
     isLoading: isLoadingNew,
@@ -53,15 +51,13 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     if (!isLoadingNew && statusNew) {
       if (statusNew === 200) {
         dispatch(addCampaign({ newCampaign: dataNew }));
-        setSnackbarType(CustomSnackbarType.Success);
-        setSnackbarMessage('Campaign created');
-        setIsSnackbarOpen(true);
+        props.setSnackbarSuccess('Campaign created');
       } else if (statusNew === 400) {
-        setSnackbarToError('Error during campaign creation');
+        props.setSnackbarError('Error during campaign creation');
       }
       resetQueryNew();
     }
-  }, [dataNew, dispatch, isLoadingNew, resetQueryNew, statusNew]);
+  }, [dataNew, dispatch, isLoadingNew, props, resetQueryNew, statusNew]);
 
   useEffect(() => {
     handleRunQueryNew();
@@ -82,27 +78,19 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
         } else {
           dispatch(editCampaign({ id: id, name: name }));
         }
-        setSnackbarType(CustomSnackbarType.Success);
-        setSnackbarMessage('Campaign edited');
-        setIsSnackbarOpen(true);
+        props.setSnackbarSuccess('Campaign edited');
       } else if (statusEdit === 400) {
-        setSnackbarToError('Error during campaign update');
+        props.setSnackbarError('Error during campaign update');
       } else if (statusEdit === 404) {
-        setSnackbarToError("Campaign can't be found");
+        props.setSnackbarError("Campaign can't be found");
       }
       resetQueryEdit();
     }
-  }, [dispatch, id, image, isLoadingEdit, name, resetQueryEdit, statusEdit]);
+  }, [dispatch, id, image, isLoadingEdit, name, props, resetQueryEdit, statusEdit]);
 
   useEffect(() => {
     handleRunQueryEdit();
   }, [handleRunQueryEdit]);
-
-  const setSnackbarToError = (message: string): void => {
-    setSnackbarType(CustomSnackbarType.Error);
-    setSnackbarMessage(message);
-    setIsSnackbarOpen(true);
-  };
 
   useEffect(() => {
     setTitle(props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign');
@@ -212,12 +200,6 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
           />
         </Stack>
       </CustomDialog>
-      <CustomSnackbar
-        message={snackbarMessage}
-        type={snackbarType}
-        isOpen={isSnackbarOpen}
-        setIsOpen={setIsSnackbarOpen}
-      />
     </Box>
   );
 };

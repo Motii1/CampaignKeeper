@@ -4,10 +4,7 @@ import { useSelector } from 'react-redux';
 import requestMethods from '../../../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../../../axios/useQuery';
 import { RootState } from '../../../../../../../../../../../store';
-import {
-  CustomButtonBehavior,
-  CustomSnackbarType,
-} from '../../../../../../../../../../../types/types';
+import { CustomButtonBehavior } from '../../../../../../../../../../../types/types';
 import { CustomButton } from '../../../../../../../../../CustomButton/CustomButton';
 
 type ImageResponseData = {
@@ -15,9 +12,8 @@ type ImageResponseData = {
 };
 
 type ChangeAvatarFormProps = {
-  setSnackbarMessage: (newSnackbarMessage: string) => void;
-  setSnackbarType: (newSnackbarType: CustomSnackbarType) => void;
-  setIsSnackbarOpen: (newIsSnackbarOpen: boolean) => void;
+  setSnackbarSuccess: (message: string) => void;
+  setSnackbarError: (message: string) => void;
   runQueryDetails: (payload?: unknown) => void;
 };
 
@@ -50,15 +46,10 @@ export const ChangeAvatarForm: React.FC<ChangeAvatarFormProps> = props => {
     if (!isLoadingImg && statusImg) {
       if (statusImg === 200) {
         props.runQueryDetails();
-        props.setSnackbarMessage('Avatar changed succesfully');
-        props.setSnackbarType(CustomSnackbarType.Success);
+        props.setSnackbarSuccess('Avatar changed succesfully');
       } else if (statusImg === 400 && dataImg) {
-        props.setSnackbarMessage(
-          dataImg.message ? dataImg.message : 'Failure during avatar change'
-        );
-        props.setSnackbarType(CustomSnackbarType.Error);
+        props.setSnackbarError(dataImg.message ? dataImg.message : 'Failure during avatar change');
       }
-      props.setIsSnackbarOpen(true);
       resetQueryImg();
     }
   }, [dataImg, isLoadingImg, props, resetQueryImg, statusImg]);

@@ -3,7 +3,6 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import requestMethods from '../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../axios/useQuery';
-import { CustomSnackbarType } from '../../../../../../../../../types/types';
 import { updateDetails } from '../../../../../../../../LandingView/userDetailsSlice';
 import { ChangeAvatarForm } from './components/ChangeAvatarForm/ChangeAvatarForm';
 import { ChangePasswordForm } from './components/ChangePasswordForm/ChangePasswordForm';
@@ -15,9 +14,8 @@ type DetailsResponseData = {
 };
 
 type SettingsDialogContentProps = {
-  setSnackbarMessage: (newSnackbarMessage: string) => void;
-  setSnackbarType: (newSnackbarType: CustomSnackbarType) => void;
-  setIsSnackbarOpen: (newIsSnackbarOpen: boolean) => void;
+  setSnackbarSuccess: (message: string) => void;
+  setSnackbarError: (message: string) => void;
 };
 
 // TO-DO: add change username, change email, change password
@@ -56,15 +54,13 @@ export const SettingsDialogContent: React.FC<SettingsDialogContentProps> = props
     <Box>
       <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
         <ChangeAvatarForm
-          setSnackbarMessage={props.setSnackbarMessage}
-          setSnackbarType={props.setSnackbarType}
-          setIsSnackbarOpen={props.setIsSnackbarOpen}
+          setSnackbarSuccess={props.setSnackbarSuccess}
+          setSnackbarError={props.setSnackbarError}
           runQueryDetails={runQueryDetails}
         />
         <ChangePasswordForm
-          setSnackbarMessage={props.setSnackbarMessage}
-          setSnackbarType={props.setSnackbarType}
-          setIsSnackbarOpen={props.setIsSnackbarOpen}
+          setSnackbarSuccess={props.setSnackbarSuccess}
+          setSnackbarError={props.setSnackbarError}
           runQueryDetails={runQueryDetails}
         />
       </Stack>

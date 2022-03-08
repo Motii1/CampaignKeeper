@@ -5,7 +5,6 @@ import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { StartDialog } from '../../StartView/dialog/StartDialog';
 import { addSession, resetState, updateState } from '../campaignViewSlice';
 
 type CampaignDialogProps = {
@@ -38,15 +37,15 @@ export const CampaignDialog: React.FC<CampaignDialogProps> = props => {
   }, [props.dialogType]);
 
   // user edits campaign name/image by clicking on its tile
-  if (props.dialogType === NavBarViewDialog.EditCampaign)
-    return (
-      <StartDialog
-        isOpen={props.isOpen}
-        setIsOpen={props.setIsOpen}
-        dialogType={props.dialogType}
-        setIsSecondaryOpen={props.setIsSecondaryOpen}
-      />
-    );
+  // if (props.dialogType === NavBarViewDialog.EditCampaign)
+  //   return (
+  //     <StartDialog
+  //       isOpen={props.isOpen}
+  //       setIsOpen={props.setIsOpen}
+  //       dialogType={props.dialogType}
+  //       setIsSecondaryOpen={props.setIsSecondaryOpen}
+  //     />
+  //   );
 
   const validateName = (newName: string) => (checkName(newName) ? '' : 'Too long/short name');
 

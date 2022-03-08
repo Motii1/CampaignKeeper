@@ -3,7 +3,6 @@ import { Box } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import requestMethods from '../../../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../../../axios/useQuery';
-import { CustomSnackbarType } from '../../../../../../../../../../../types/types';
 import {
   handleTextFieldChange,
   handleTextFieldLeave,
@@ -24,9 +23,8 @@ type PasswordResponseData = {
 };
 
 type ChangePasswordFormProps = {
-  setSnackbarMessage: (newSnackbarMessage: string) => void;
-  setSnackbarType: (newSnackbarType: CustomSnackbarType) => void;
-  setIsSnackbarOpen: (newIsSnackbarOpen: boolean) => void;
+  setSnackbarSuccess: (message: string) => void;
+  setSnackbarError: (message: string) => void;
   runQueryDetails: (payload?: unknown) => void;
 };
 
@@ -80,8 +78,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
     if (!isLoadingPassword && statusPassword) {
       if (statusPassword === 200) {
         props.runQueryDetails();
-        props.setSnackbarMessage('Password successfully changed');
-        props.setSnackbarType(CustomSnackbarType.Success);
+        props.setSnackbarSuccess('Password successfully changed');
         setCurrentPassword({
           value: '',
           helperText: '',
@@ -95,15 +92,12 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
           helperText: '',
         });
       } else if (statusPassword === 401 && dataPassword) {
-        props.setSnackbarMessage(
+        props.setSnackbarError(
           dataPassword.message ? dataPassword.message : 'Failure during password change'
         );
-        props.setSnackbarType(CustomSnackbarType.Error);
       } else {
-        props.setSnackbarMessage('Failure during password change');
-        props.setSnackbarType(CustomSnackbarType.Error);
+        props.setSnackbarError('Failure during password change');
       }
-      props.setIsSnackbarOpen(true);
       resetQueryPassword();
     }
   }, [dataPassword, isLoadingPassword, props, resetQueryPassword, statusPassword]);
