@@ -6,6 +6,7 @@ import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
 import { CustomSnackbarType, NavBarViewDialog } from '../../../types/types';
+import { convertImageToBase64 } from '../../../utils/utils';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { CustomSnackbar } from '../../components/CustomSnackbar/CustomSnackbar';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
@@ -14,11 +15,10 @@ import { addCampaign, editCampaign } from '../campaignsSlice';
 import { resetState, updateState } from '../startViewSlice';
 
 type SingleCampaignData = {
-  image: null | string;
+  id: number;
   name: string;
-  schemas: number[];
-  sessions: number[];
-  user: number;
+  createdAt: Date;
+  imageBase64: string;
 };
 
 type StartDialogProps = {
@@ -128,12 +128,19 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   };
 
   // TO-DO: should we redirect user to campaign view after creation of new campaign?
-  const handleOk = () => {
+  const handleOk = async () => {
     if (props.dialogType === NavBarViewDialog.NewCampaign) {
       if (checkName(name)) {
-        runQueryNew({
-          name: name,
-        });
+        if (image) {
+          const imageBase64 = await convertImageToBase64(image);
+          console.log(imageBase64);
+          runQueryNew({
+            name: name,
+            imageBase64: imageBase64,
+          });
+        } else {
+          runQueryNew({ name: name });
+        }
         props.setIsOpen(false);
         resetDialog();
       }
