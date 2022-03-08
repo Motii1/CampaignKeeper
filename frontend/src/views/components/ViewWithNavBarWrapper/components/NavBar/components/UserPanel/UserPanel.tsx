@@ -5,11 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import requestMethods from '../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../axios/useQuery';
-import { RootState } from '../../../../../../../store';
+import { RootState, store } from '../../../../../../../store';
 import { CustomSnackbarType } from '../../../../../../../types/types';
 import { setError } from '../../../../../../ErrorView/errorSlice';
 import { AUTH_URL } from '../../../../../../LandingView/forms/RegisterForm';
-import { clearDetails } from '../../../../../../LandingView/userDetailsSlice';
 import viewsRoutes from '../../../../../../viewsRoutes';
 import { CustomDialog } from '../../../../../CustomDialog/CustomDialog';
 import { CustomSnackbar } from '../../../../../CustomSnackbar/CustomSnackbar';
@@ -33,7 +32,7 @@ export const UserPanel: React.FC = () => {
   const handleRunQuery = useCallback(() => {
     if (!isLoading && status) {
       if (status === 200) {
-        dispatch(clearDetails({}));
+        store.dispatch({ type: 'USER_LOGOUT' });
         history.push(viewsRoutes.LANDING);
       } else dispatch(setError({ isError: true, message: 'Error during logout' }));
     }
