@@ -40,8 +40,6 @@ const campaignViewSlice = createSlice({
     resetState: (state, _action) => {
       state.name = '';
       state.type = NavBarViewDialog.NewCampaign;
-      // eslint-disable-next-line no-console
-      console.log(state.name, state.type);
     },
     // TO-DO: delete after API integration
     addSession: (state, action) => {

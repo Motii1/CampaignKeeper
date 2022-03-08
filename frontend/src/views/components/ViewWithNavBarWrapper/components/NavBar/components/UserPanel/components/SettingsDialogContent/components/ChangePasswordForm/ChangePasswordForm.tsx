@@ -15,7 +15,7 @@ import {
   validatePasswordLogin,
   validatePasswordRegister,
   validatePasswordsMatch,
-} from '../../../../../../../../../../LandingView/forms/logic';
+} from '../../../../../../../../../../LandingView/forms/utils';
 import { CustomButton } from '../../../../../../../../../CustomButton/CustomButton';
 import { LabeledTextInput } from '../../../../../../../../../LabeledTextInput/LabeledTextInput';
 

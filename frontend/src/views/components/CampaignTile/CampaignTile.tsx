@@ -36,7 +36,11 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
 
   const handleEdit = () => {
     dispatch(
-      updateState({ id: props.campaignId, name: props.campaignTitle, image: props.campaignImage })
+      updateState({
+        id: props.campaignId,
+        name: props.campaignTitle,
+        imageBase64: props.campaignImage,
+      })
     );
     props.setIsOpen(true);
     props.setDialogType(NavBarViewDialog.EditCampaign);

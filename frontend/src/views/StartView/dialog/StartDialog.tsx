@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Box, Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +10,7 @@ import { CustomSnackbar } from '../../components/CustomSnackbar/CustomSnackbar';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import { addCampaign, editCampaign } from '../campaignsSlice';
-import { resetState, updateState } from '../startViewSlice';
+import { resetState, updateImage, updateName } from '../startViewSlice';
 
 type SingleCampaignData = {
   id: number;
@@ -30,13 +29,13 @@ type StartDialogProps = {
 //TO-DO: think about adding wrapper (for all NavBarViews) on stack inside CustomDialog
 export const StartDialog: React.FC<StartDialogProps> = props => {
   const dispatch = useDispatch();
+  const name = useSelector((state: RootState) => state.startView.name);
+  const image = useSelector((state: RootState) => state.startView.imageBase64);
+  const id = useSelector((state: RootState) => state.startView.id);
+
   const [title, setTitle] = useState(
     props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign'
   );
-  const name = useSelector((state: RootState) => state.startView.name);
-  const image = useSelector((state: RootState) => state.startView.image);
-  const id = useSelector((state: RootState) => state.startView.id);
-
   const [helperText, setHelperText] = useState<null | string>('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarType, setSnackbarType] = useState<CustomSnackbarType>(CustomSnackbarType.Info);
@@ -53,15 +52,12 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   const handleRunQueryNew = useCallback(() => {
     if (!isLoadingNew && statusNew) {
       if (statusNew === 200) {
-        console.log(dataNew);
         dispatch(addCampaign({ newCampaign: dataNew }));
         setSnackbarType(CustomSnackbarType.Success);
         setSnackbarMessage('Campaign created');
         setIsSnackbarOpen(true);
       } else if (statusNew === 400) {
-        setSnackbarType(CustomSnackbarType.Error);
-        setSnackbarMessage('Error during campaign creation');
-        setIsSnackbarOpen(true);
+        setSnackbarToError('Error during campaign creation');
       }
       resetQueryNew();
     }
@@ -90,13 +86,9 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
         setSnackbarMessage('Campaign edited');
         setIsSnackbarOpen(true);
       } else if (statusEdit === 400) {
-        setSnackbarType(CustomSnackbarType.Error);
-        setSnackbarMessage('Error during campaign update');
-        setIsSnackbarOpen(true);
+        setSnackbarToError('Error during campaign update');
       } else if (statusEdit === 404) {
-        setSnackbarType(CustomSnackbarType.Error);
-        setSnackbarMessage("Campaign can't be found");
-        setIsSnackbarOpen(true);
+        setSnackbarToError("Campaign can't be found");
       }
       resetQueryEdit();
     }
@@ -105,6 +97,12 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   useEffect(() => {
     handleRunQueryEdit();
   }, [handleRunQueryEdit]);
+
+  const setSnackbarToError = (message: string): void => {
+    setSnackbarType(CustomSnackbarType.Error);
+    setSnackbarMessage(message);
+    setIsSnackbarOpen(true);
+  };
 
   useEffect(() => {
     setTitle(props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign');
@@ -115,13 +113,13 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   const checkName = (newName: string) => newName.length > 5 && newName.length < 43;
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    dispatch(updateState({ name: event.target.value }));
+    dispatch(updateName({ name: event.target.value }));
     setHelperText(null);
   };
 
   const handleTextInputLeave = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newName = event.target.value;
-    dispatch(updateState({ name: event.target.value }));
+    dispatch(updateName({ name: event.target.value }));
     setHelperText(validateName(newName));
   };
 
@@ -131,29 +129,34 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   };
 
   // TO-DO: should we redirect user to campaign view after creation of new campaign?
-  const handleOk = async () => {
-    if (props.dialogType === NavBarViewDialog.NewCampaign) {
-      if (checkName(name)) {
+  const handleOk = () => {
+    if (checkName(name)) {
+      if (props.dialogType === NavBarViewDialog.NewCampaign) {
+        runQueryWithImg(runQueryNew);
+        props.setIsOpen(false);
+        resetDialog();
+      } else {
+        runQueryWithImg(runQueryEdit);
         if (image) {
-          runQueryNew({
+          runQueryEdit({
             name: name,
             imageBase64: image,
           });
         } else {
-          runQueryNew({ name: name });
+          runQueryEdit({ name: name });
         }
-        props.setIsOpen(false);
-        resetDialog();
       }
+    }
+  };
+
+  const runQueryWithImg = (runQueryFn: (data?: unknown) => void): void => {
+    if (image) {
+      runQueryFn({
+        name: name,
+        imageBase64: image,
+      });
     } else {
-      if (image) {
-        runQueryEdit({
-          name: name,
-          imageBase64: image,
-        });
-      } else {
-        runQueryEdit({ name: name });
-      }
+      runQueryFn({ name: name });
     }
   };
 
@@ -204,7 +207,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
             width={390}
             image={image}
             setImage={newImageBase64 => {
-              dispatch(updateState({ image: newImageBase64 }));
+              dispatch(updateImage({ imageBase64: newImageBase64 }));
             }}
           />
         </Stack>

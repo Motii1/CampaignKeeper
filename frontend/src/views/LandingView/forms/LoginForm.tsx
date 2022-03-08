@@ -11,6 +11,7 @@ import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextI
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
+import { AUTH_URL, FormProps } from './RegisterForm';
 import {
   handleTextFieldChange,
   handleTextFieldLeave,
@@ -19,8 +20,7 @@ import {
   validateField,
   validatePasswordLogin,
   validateUsernameLogin,
-} from './logic';
-import { AUTH_URL, FormProps } from './RegisterForm';
+} from './utils';
 
 export const login = (username: string, password: string): Promise<AxiosResponse> =>
   protectedApiClient.post(`${AUTH_URL}/login`, {

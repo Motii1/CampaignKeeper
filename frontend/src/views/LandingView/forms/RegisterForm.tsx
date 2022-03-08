@@ -9,6 +9,7 @@ import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextI
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
+import { UserData } from './LoginForm';
 import {
   handleTextFieldChange,
   handleTextFieldLeave,
@@ -22,8 +23,7 @@ import {
   validatePasswordRegister,
   validatePasswordsMatch,
   validateUsernameRegister,
-} from './logic';
-import { UserData } from './LoginForm';
+} from './utils';
 
 type RegisterData = {
   message: string;
