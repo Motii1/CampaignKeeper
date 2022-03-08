@@ -1,22 +1,24 @@
 import { Add } from '@mui/icons-material';
 import { Box, Paper } from '@mui/material';
 import React from 'react';
+import { convertImageToBase64 } from '../../../utils/utils';
 import { UploadAreaWrapper } from './components/UploadAreaWrapper';
 
 type GraphicUploadFieldProps = {
   height?: string | number;
   width?: string | number;
-  image: null | File;
-  setImage: (file: File) => void;
+  image: null | string;
+  setImage: (newImage: string) => void;
 };
 
 export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
-  const handleChange = (files: null | FileList) => {
+  const handleChange = async (files: null | FileList) => {
     if (files) {
-      // eslint-disable-next-line no-console
-      console.log('File!');
       const file = files.item(0);
-      if (file) props.setImage(file);
+      if (file) {
+        const imageBase64 = await convertImageToBase64(file);
+        props.setImage(imageBase64);
+      }
     }
   };
 
@@ -45,7 +47,7 @@ export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
               borderRadius: 2,
             }}
             alt="Image"
-            src={URL.createObjectURL(props.image)}
+            src={`data:;charset=utf-8;base64,${props.image}`}
           />
         </Paper>
       </UploadAreaWrapper>

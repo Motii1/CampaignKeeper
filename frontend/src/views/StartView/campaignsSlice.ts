@@ -34,6 +34,7 @@ const campaignsSlice = createSlice({
       state.campaignsList = state.campaignsList.map(campaign => {
         if (campaign.id === action.payload.id) {
           campaign.name = action.payload.name;
+          if (action.payload.imageBase64) campaign.imageBase64 = action.payload.imageBase64;
           return campaign;
         }
         return campaign;

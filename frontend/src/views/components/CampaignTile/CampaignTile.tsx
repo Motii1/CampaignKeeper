@@ -35,7 +35,9 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
   };
 
   const handleEdit = () => {
-    dispatch(updateState({ id: props.campaignId, name: props.campaignTitle }));
+    dispatch(
+      updateState({ id: props.campaignId, name: props.campaignTitle, image: props.campaignImage })
+    );
     props.setIsOpen(true);
     props.setDialogType(NavBarViewDialog.EditCampaign);
     setMenuPos(null);

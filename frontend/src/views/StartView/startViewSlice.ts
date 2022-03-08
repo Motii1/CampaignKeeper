@@ -4,7 +4,7 @@ import { NavBarViewDialog } from '../../types/types';
 interface StartViewState {
   id: null | number;
   name: string;
-  image: null | File;
+  image: null | string;
   type: NavBarViewDialog;
 }
 

@@ -6,7 +6,6 @@ import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
 import { CustomSnackbarType, NavBarViewDialog } from '../../../types/types';
-import { convertImageToBase64 } from '../../../utils/utils';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { CustomSnackbar } from '../../components/CustomSnackbar/CustomSnackbar';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
@@ -79,10 +78,14 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     resetQuery: resetQueryEdit,
   } = useQuery<SingleCampaignData>(`api/campaign/${id}`, requestMethods.PATCH);
 
-  const handleRunQueryEdit = useCallback(() => {
+  const handleRunQueryEdit = useCallback(async () => {
     if (!isLoadingEdit && statusEdit) {
       if (statusEdit === 200) {
-        dispatch(editCampaign({ id: id, name: name }));
+        if (image) {
+          dispatch(editCampaign({ id: id, name: name, imageBase64: image }));
+        } else {
+          dispatch(editCampaign({ id: id, name: name }));
+        }
         setSnackbarType(CustomSnackbarType.Success);
         setSnackbarMessage('Campaign edited');
         setIsSnackbarOpen(true);
@@ -97,7 +100,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
       }
       resetQueryEdit();
     }
-  }, [dispatch, id, isLoadingEdit, name, resetQueryEdit, statusEdit]);
+  }, [dispatch, id, image, isLoadingEdit, name, resetQueryEdit, statusEdit]);
 
   useEffect(() => {
     handleRunQueryEdit();
@@ -132,11 +135,9 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     if (props.dialogType === NavBarViewDialog.NewCampaign) {
       if (checkName(name)) {
         if (image) {
-          const imageBase64 = await convertImageToBase64(image);
-          console.log(imageBase64);
           runQueryNew({
             name: name,
-            imageBase64: imageBase64,
+            imageBase64: image,
           });
         } else {
           runQueryNew({ name: name });
@@ -145,9 +146,14 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
         resetDialog();
       }
     } else {
-      runQueryEdit({
-        name: name,
-      });
+      if (image) {
+        runQueryEdit({
+          name: name,
+          imageBase64: image,
+        });
+      } else {
+        runQueryEdit({ name: name });
+      }
     }
   };
 
@@ -197,7 +203,9 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
             height={180}
             width={390}
             image={image}
-            setImage={newImage => dispatch(updateState({ image: newImage }))}
+            setImage={newImageBase64 => {
+              dispatch(updateState({ image: newImageBase64 }));
+            }}
           />
         </Stack>
       </CustomDialog>
