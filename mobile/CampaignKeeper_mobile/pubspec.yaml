@@ -26,7 +26,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg:
-  flutter_secure_storage: ^4.2.1
+  flutter_secure_storage:
   http:
   shared_preferences:
   device_info:

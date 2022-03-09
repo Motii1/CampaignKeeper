@@ -39,7 +39,7 @@ npm run start:dev:watch
 
 #### Mobile
 
-To build and debug this app first you will need to install latest [Android Studio](https://developer.android.com/studio) and Android SDK 30 (done through IDE). Then you have to install [Flutter](https://flutter.dev/docs/get-started/install), preferably version 2.5.3 (latest stable at the time of writing this document).
+To build and debug this app first you will need to install latest [Android Studio](https://developer.android.com/studio) and Android SDK 30 (done through IDE). Then you have to install [Flutter](https://flutter.dev/docs/get-started/install), preferably version 2.10.3 (latest stable at the time of writing this document).
 
 Ensure with terminal command `flutter doctor` that Android Toolchain and Android Studio are found by flutter.
 

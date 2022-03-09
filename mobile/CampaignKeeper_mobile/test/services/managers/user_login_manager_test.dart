@@ -8,6 +8,7 @@ import 'package:mockito/mockito.dart';
 
 import 'user_login_manager_test.mocks.dart';
 
+// run flutter pub run build_runner build --delete-conflicting-outputs to generate mocks
 @GenerateMocks([FlutterSecureStorage])
 void main() {
   group("Testing User Data Manager", () {
