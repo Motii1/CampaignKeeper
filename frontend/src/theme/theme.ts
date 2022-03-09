@@ -5,7 +5,7 @@ export const theme = createTheme({
     customPalette: {
       background: '#262E38',
       surface: '#2B3D49',
-      primary: '#3B5163',
+      primary: '#425C71',
       secondary: '#A5C8E8',
       onBackground: '#f4f4f4',
       onSurface: '#ffffff',

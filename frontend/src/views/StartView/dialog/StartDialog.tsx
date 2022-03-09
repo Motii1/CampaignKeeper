@@ -96,9 +96,15 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     setTitle(props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign');
   }, [props.dialogType]);
 
-  const validateName = (newName: string) => (checkName(newName) ? '' : 'Too long/short name');
+  const validateName = (newName: string): string => {
+    if (newName.length < 6) {
+      return 'Name is too short';
+    } else if (newName.length > 42) {
+      return 'Name is too long';
+    }
 
-  const checkName = (newName: string) => newName.length > 5 && newName.length < 43;
+    return '';
+  };
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     dispatch(updateName({ name: event.target.value }));
@@ -118,7 +124,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
 
   // TO-DO: should we redirect user to campaign view after creation of new campaign?
   const handleOk = () => {
-    if (checkName(name)) {
+    if (validateName(name) === '') {
       if (props.dialogType === NavBarViewDialog.NewCampaign) {
         runQueryWithImg(runQueryNew);
         props.setIsOpen(false);

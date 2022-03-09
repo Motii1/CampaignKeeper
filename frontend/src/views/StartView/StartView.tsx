@@ -46,36 +46,37 @@ export const StartView: React.FC = () => {
         direction="column"
         justifyContent="center"
         alignItems="center"
-        sx={{ width: '100%', overflowY: 'auto' }}
+        sx={{ width: '100%', height: '100%', overflowY: 'auto' }}
       >
         <QuoteLine text={quote} />
-        <Box
-          component="div"
-          onWheel={handleWheelEvent}
-          sx={{
-            overflowY: 'hidden',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            display: 'flex',
-            height: '100%',
-            width: '100%',
-          }}
-        >
-          <Grid
-            container
-            direction="column"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            columnSpacing={10}
+        {campaignsList.length > 0 ? (
+          <Box
+            component="div"
+            onWheel={handleWheelEvent}
             sx={{
-              maxHeight: '100%',
-              width: 'auto',
-              maxWidth: '100%',
-              paddingLeft: centeredPadding + 'px',
+              overflowY: 'hidden',
+              alignItems: 'start',
+              justifyContent: 'flex-start',
+              display: 'flex',
+              height: '100%',
+              width: '100%',
+              paddingTop: 5,
             }}
           >
-            {campaignsList.length > 0 ? (
-              campaignsList.map(campaign => (
+            <Grid
+              container
+              direction="column"
+              justifyContent="flex-start"
+              alignItems="flex-start"
+              columnSpacing={10}
+              sx={{
+                maxHeight: '100%',
+                width: 'auto',
+                maxWidth: '100%',
+                paddingLeft: centeredPadding + 'px',
+              }}
+            >
+              {campaignsList.map(campaign => (
                 <Grid item key={campaign.name}>
                   <CampaignTile
                     campaignId={campaign.id}
@@ -85,23 +86,32 @@ export const StartView: React.FC = () => {
                     setDialogType={setDialogType}
                   />
                 </Grid>
-              ))
-            ) : (
-              // TO-DO: sx here needs rework to make component presentable
-              <Typography
-                variant="h2"
-                sx={{
-                  color: 'customPalette.accent',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  paddingTop: 10,
-                }}
-              >
-                {'Go wild and start your new journey'}
-              </Typography>
-            )}
-          </Grid>
-        </Box>
+              ))}
+            </Grid>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography
+              sx={{
+                color: 'customPalette.onBackground',
+                opacity: 0.8,
+                fontSize: 19,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}
+            >
+              {'Go wild and start your new journey, worldshaper'}
+            </Typography>
+          </Box>
+        )}
       </Stack>
     </ViewWithNavBarWrapper>
   );

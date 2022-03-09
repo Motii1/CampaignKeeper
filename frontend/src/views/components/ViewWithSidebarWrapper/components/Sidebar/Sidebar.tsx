@@ -12,6 +12,7 @@ export const Sidebar: React.FC = ({ children }) => (
       display: 'flex',
       alignItems: 'center',
       minWidth: 400,
+      paddingBottom: 2,
     }}
   >
     {children}
