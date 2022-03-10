@@ -27,8 +27,9 @@ class _LoadingState extends State<Loading> {
       case ResponseStatus.Success:
         Navigator.pushReplacementNamed(context, "/campaigns");
         break;
-      case ResponseStatus.Error:
-        Navigator.pushReplacementNamed(context, "/campaigns", arguments: ScreenArguments("connection", "false"));
+      case ResponseStatus.TimeOut:
+        Navigator.pushReplacementNamed(context, "/campaigns",
+            arguments: ScreenArguments("connection", "false"));
         break;
       default:
         Navigator.pushReplacementNamed(context, "/login");
@@ -38,9 +39,7 @@ class _LoadingState extends State<Loading> {
 
   Future<void> loadAssets() async {
     precachePicture(
-        ExactAssetPicture(
-            SvgPicture.svgStringDecoderBuilder, 'assets/campaign_logo.svg'),
-        context);
+        ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, 'assets/campaign_logo.svg'), context);
 
     precacheImage(Image.asset("assets/user.png").image, context);
     precacheImage(Image.asset("assets/campaign_default.jpg").image, context);

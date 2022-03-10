@@ -2,9 +2,7 @@ import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:flutter/material.dart';
 
 class KeeperCampaignTile extends StatelessWidget {
-  const KeeperCampaignTile(
-      {Key? key, required this.entity, this.onTap})
-      : super(key: key);
+  const KeeperCampaignTile({Key? key, required this.entity, this.onTap}) : super(key: key);
 
   final CampaignEntity entity;
   final void Function()? onTap;
@@ -22,21 +20,20 @@ class KeeperCampaignTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: 110,
-                    minHeight: 110,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: entity.image,
-                      ),
+                    constraints: BoxConstraints(
+                      maxHeight: 130,
+                      minHeight: 130,
                     ),
-                  )
-                ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: entity.image,
+                        ),
+                      ),
+                    )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,

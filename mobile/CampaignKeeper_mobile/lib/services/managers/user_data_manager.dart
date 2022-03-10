@@ -46,11 +46,9 @@ class UserDataManager extends BaseManager<UserDataEntity> {
       }
     }
 
-    Response userResponse =
-        await RequestHelper().get(endpoint: UserDataEntity.endpoint);
+    Response userResponse = await RequestHelper().get(endpoint: UserDataEntity.endpoint);
 
-    if (userResponse.status == ResponseStatus.Success &&
-        userResponse.data != null) {
+    if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
       Map responseData = json.decode(userResponse.data!);
 
       if (_entity == null) {
@@ -102,11 +100,8 @@ class UserDataManager extends BaseManager<UserDataEntity> {
     String? imageData = data["imageData"];
 
     if (username != null && email != null) {
-      UserDataEntity ent = new UserDataEntity(
-          username: username,
-          email: email,
-          password: password,
-          imageData: imageData);
+      UserDataEntity ent =
+          new UserDataEntity(username: username, email: email, password: password, imageData: imageData);
 
       return ent;
     }

@@ -57,10 +57,8 @@ class _CampaignsState extends KeeperState<Campaigns> {
 
       if (_arguments != null) {
         if (_arguments!.title == "connection" && _arguments!.message == "false") {
-          Future.delayed(
-              Duration(seconds: 1),
-                  () => ScaffoldMessenger.of(context)
-                  .showSnackBar(KeeperSnackBars().offline));
+          Future.delayed(Duration(seconds: 1),
+              () => ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline));
         }
       }
     }
@@ -88,6 +86,7 @@ class _CampaignsState extends KeeperState<Campaigns> {
         onRefresh: onRefresh,
         sliver: _entities.isEmpty
             ? SliverFillRemaining(
+                hasScrollBody: false,
                 child: Center(
                   child: Text(
                     "There's nothing here.\nStart new adventures on our website!",
@@ -96,8 +95,7 @@ class _CampaignsState extends KeeperState<Campaigns> {
                 ),
               )
             : SliverList(
-                delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
+                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                 return KeeperCampaignTile(entity: _entities[index]);
               }, childCount: _entities.length)),
       ),
