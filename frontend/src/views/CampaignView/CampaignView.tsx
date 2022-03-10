@@ -14,7 +14,10 @@ export const CampaignView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
-  const sessionsNames = useSelector((state: RootState) => state.campaignView.sessionsNames);
+
+  const { campaignId, campaignName, campaignImageBase64, sessionsNames } = useSelector(
+    (state: RootState) => state.campaignView
+  );
 
   const handleFab = () => {
     setDialogType(NavBarViewDialog.NewCampaign);
@@ -24,8 +27,6 @@ export const CampaignView: React.FC = () => {
   const { width: width } = useWindowDimensions();
   const centeredPadding = Math.max((width - 1368.1) / 2, width < 450 ? 6 : 51);
 
-  const title = 'Lorem ipsum';
-  const id = -1;
   const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
 
   useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
@@ -48,9 +49,9 @@ export const CampaignView: React.FC = () => {
       >
         <QuoteLine text={quote} />
         <CampaignTile
-          campaignId={id}
-          campaignTitle={title}
-          campaignImage={'TO-DO: replace this with actual session image'}
+          campaignId={campaignId}
+          campaignName={campaignName}
+          campaignImageBase64={campaignImageBase64}
           setIsOpen={setIsOpen}
           setDialogType={setDialogType}
         />

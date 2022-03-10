@@ -30,9 +30,10 @@ type StartDialogProps = {
 //TO-DO: think about adding wrapper (for all NavBarViews) on stack inside CustomDialog
 export const StartDialog: React.FC<StartDialogProps> = props => {
   const dispatch = useDispatch();
-  const name = useSelector((state: RootState) => state.startView.name);
-  const image = useSelector((state: RootState) => state.startView.imageBase64);
-  const id = useSelector((state: RootState) => state.startView.id);
+
+  const { campaignId, campaignName, campaignImageBase64 } = useSelector(
+    (state: RootState) => state.startView
+  );
 
   const [title, setTitle] = useState(
     props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign'
@@ -68,15 +69,17 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     status: statusEdit,
     runQuery: runQueryEdit,
     resetQuery: resetQueryEdit,
-  } = useQuery<SingleCampaignData>(`api/campaign/${id}`, requestMethods.PATCH);
+  } = useQuery<SingleCampaignData>(`api/campaign/${campaignId}`, requestMethods.PATCH);
 
   const handleRunQueryEdit = useCallback(async () => {
     if (!isLoadingEdit && statusEdit) {
       if (statusEdit === 200) {
-        if (image) {
-          dispatch(editCampaign({ id: id, name: name, imageBase64: image }));
+        if (campaignImageBase64) {
+          dispatch(
+            editCampaign({ id: campaignId, name: campaignName, imageBase64: campaignImageBase64 })
+          );
         } else {
-          dispatch(editCampaign({ id: id, name: name }));
+          dispatch(editCampaign({ id: campaignId, name: campaignName }));
         }
         props.setSnackbarSuccess('Campaign edited');
       } else if (statusEdit === 400) {
@@ -86,7 +89,16 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
       }
       resetQueryEdit();
     }
-  }, [dispatch, id, image, isLoadingEdit, name, props, resetQueryEdit, statusEdit]);
+  }, [
+    dispatch,
+    campaignId,
+    campaignImageBase64,
+    isLoadingEdit,
+    campaignName,
+    props,
+    resetQueryEdit,
+    statusEdit,
+  ]);
 
   useEffect(() => {
     handleRunQueryEdit();
@@ -124,33 +136,33 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
 
   // TO-DO: should we redirect user to campaign view after creation of new campaign?
   const handleOk = () => {
-    if (validateName(name) === '') {
+    if (validateName(campaignName) === '') {
       if (props.dialogType === NavBarViewDialog.NewCampaign) {
         runQueryWithImg(runQueryNew);
         props.setIsOpen(false);
         resetDialog();
       } else {
         runQueryWithImg(runQueryEdit);
-        if (image) {
+        if (campaignImageBase64) {
           runQueryEdit({
-            name: name,
-            imageBase64: image,
+            name: campaignName,
+            imageBase64: campaignImageBase64,
           });
         } else {
-          runQueryEdit({ name: name });
+          runQueryEdit({ name: campaignName });
         }
       }
     }
   };
 
   const runQueryWithImg = (runQueryFn: (data?: unknown) => void): void => {
-    if (image) {
+    if (campaignImageBase64) {
       runQueryFn({
-        name: name,
-        imageBase64: image,
+        name: campaignName,
+        imageBase64: campaignImageBase64,
       });
     } else {
-      runQueryFn({ name: name });
+      runQueryFn({ name: campaignName });
     }
   };
 
@@ -190,7 +202,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
           <LabeledTextInput
             text={'NAME'}
             placeholder={'Type here'}
-            defaultValue={name}
+            defaultValue={campaignName}
             helperText={helperText}
             defaultHelperText={''}
             onChange={event => handleTextInputChange(event)}
@@ -199,7 +211,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
           <ImageUploadField
             height={180}
             width={390}
-            image={image}
+            image={campaignImageBase64}
             setImage={newImageBase64 => {
               dispatch(updateImage({ imageBase64: newImageBase64 }));
             }}

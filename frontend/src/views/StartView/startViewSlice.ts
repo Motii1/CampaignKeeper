@@ -1,15 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface StartViewState {
-  id: null | number;
-  name: string;
-  imageBase64: null | string;
+  campaignId: null | number;
+  campaignName: string;
+  campaignImageBase64: null | string;
 }
 
 const initialState: StartViewState = {
-  id: null,
-  name: '',
-  imageBase64: null,
+  campaignId: null,
+  campaignName: '',
+  campaignImageBase64: null,
 };
 
 const startViewSlice = createSlice({
@@ -17,24 +17,24 @@ const startViewSlice = createSlice({
   initialState,
   reducers: {
     updateName: (state, action) => {
-      state.name = action.payload.name;
+      state.campaignName = action.payload.name;
     },
     updateImage: (state, action) => {
-      state.imageBase64 = action.payload.imageBase64;
+      state.campaignImageBase64 = action.payload.imageBase64;
     },
     updateState: (state, action) => {
-      state.id = action.payload.id ? action.payload.id : state.id;
-      state.name = action.payload.name ? action.payload.name : state.name;
-      state.imageBase64 =
+      state.campaignId = action.payload.id ? action.payload.id : state.campaignId;
+      state.campaignName = action.payload.name ? action.payload.name : state.campaignName;
+      state.campaignImageBase64 =
         action.payload.imageBase64 || action.payload.imageBase64 === null
           ? action.payload.imageBase64
-          : state.imageBase64;
+          : state.campaignImageBase64;
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resetState: (state, _action) => {
-      state.id = null;
-      state.name = '';
-      state.imageBase64 = null;
+      state.campaignId = null;
+      state.campaignName = '';
+      state.campaignImageBase64 = null;
     },
   },
 });

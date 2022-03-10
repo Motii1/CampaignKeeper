@@ -18,7 +18,7 @@ type StartSecondaryCustomDialogProps = {
 
 export const StartSecondaryDialog: React.FC<StartSecondaryCustomDialogProps> = props => {
   const dispatch = useDispatch();
-  const campaignId = useSelector((state: RootState) => state.startView.id);
+  const campaignId = useSelector((state: RootState) => state.startView.campaignId);
 
   const {
     isLoading: isLoadingDelete,

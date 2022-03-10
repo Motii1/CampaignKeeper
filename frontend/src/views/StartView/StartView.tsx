@@ -80,8 +80,8 @@ export const StartView: React.FC = () => {
                 <Grid item key={campaign.name}>
                   <CampaignTile
                     campaignId={campaign.id}
-                    campaignTitle={campaign.name}
-                    campaignImage={campaign.imageBase64}
+                    campaignName={campaign.name}
+                    campaignImageBase64={campaign.imageBase64}
                     setIsOpen={setIsOpen}
                     setDialogType={setDialogType}
                   />
