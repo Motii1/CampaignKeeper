@@ -47,7 +47,7 @@ const campaignViewSlice = createSlice({
       state.name = '';
       state.type = NavBarViewDialog.NewCampaign;
     },
-    redirectFromStart: (state, action) => {
+    updateSelectedCampaignData: (state, action) => {
       state.campaignId = action.payload.campaignId;
       state.campaignName = action.payload.campaignName;
       state.campaignImageBase64 = action.payload.campaignImageBase64;
@@ -63,7 +63,7 @@ const campaignViewSlice = createSlice({
   },
 });
 
-export const { updateState, resetState, redirectFromStart, addSession, removeSession } =
+export const { updateState, resetState, updateSelectedCampaignData, addSession, removeSession } =
   campaignViewSlice.actions;
 
 export default campaignViewSlice.reducer;

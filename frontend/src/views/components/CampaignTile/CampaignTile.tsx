@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../types/types';
-import { redirectFromStart } from '../../CampaignView/campaignViewSlice';
+import { updateSelectedCampaignData } from '../../CampaignView/campaignViewSlice';
 import { updateState } from '../../StartView/startViewSlice';
 import viewsRoutes from '../../viewsRoutes';
 import { EditMenu } from '../EditMenu/EditMenu';
@@ -38,7 +38,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
   const handleClick = () => {
     if (props.isClickable) {
       dispatch(
-        redirectFromStart({
+        updateSelectedCampaignData({
           campaignId: props.campaignId,
           campaignName: props.campaignName,
           campaignImageBase64: props.campaignImageBase64,

@@ -1,10 +1,11 @@
-import { Box, Grid, Stack, Typography } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
-import { handleWheelEvent, useWindowDimensions } from '../../utils/utils';
+import { getCenteredPadding, handleWheelEvent } from '../../utils/utils';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
+import { EmptyPlaceholder } from '../components/EmptyPlaceholder/EmptyPlaceholder';
 import { QuoteLine } from '../components/QuoteLine/QuoteLine';
 import { quotes } from '../components/QuoteLine/quotes';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
@@ -29,8 +30,7 @@ export const StartView: React.FC = () => {
     setIsOpen(true);
   };
 
-  const { width: width } = useWindowDimensions();
-  const centeredPadding = Math.max((width - 1368.1) / 2, width < 450 ? 6 : 51);
+  const centeredPadding = getCenteredPadding();
 
   return (
     <ViewWithNavBarWrapper
@@ -84,6 +84,7 @@ export const StartView: React.FC = () => {
                     campaignImageBase64={campaign.imageBase64}
                     setIsOpen={setIsOpen}
                     setDialogType={setDialogType}
+                    isClickable={true}
                   />
                 </Grid>
               ))}
@@ -99,17 +100,7 @@ export const StartView: React.FC = () => {
               justifyContent: 'center',
             }}
           >
-            <Typography
-              sx={{
-                color: 'customPalette.onBackground',
-                opacity: 0.8,
-                fontSize: 19,
-                fontWeight: 'bold',
-                textAlign: 'center',
-              }}
-            >
-              {'Go wild and start your new journey, worldshaper'}
-            </Typography>
+            <EmptyPlaceholder message={'Go wild and start your new journey, worldshaper'} />
           </Box>
         )}
       </Stack>
