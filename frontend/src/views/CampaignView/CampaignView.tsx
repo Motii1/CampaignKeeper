@@ -79,7 +79,7 @@ export const CampaignView: React.FC = () => {
               justifyContent: 'center',
             }}
           >
-            <EmptyPlaceholder message={"You haven't selected world to explore, wordsmith"} />
+            <EmptyPlaceholder message={"You haven't created any world, wordsmith"} />
           </Box>
         </Stack>
       ) : (

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
+import { resetSelectedCampaignData } from '../../CampaignView/campaignViewSlice';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { deleteCampaign } from '../campaignsSlice';
 import { resetState } from '../startViewSlice';
@@ -31,6 +32,7 @@ export const StartSecondaryDialog: React.FC<StartSecondaryCustomDialogProps> = p
     if (!isLoadingDelete && statusDelete) {
       if (statusDelete === 200) {
         dispatch(deleteCampaign({ id: campaignId }));
+        dispatch(resetSelectedCampaignData({ campaignId: campaignId }));
         dispatch(resetState({}));
         props.setSnackbarSuccess('Campaign deleted');
         props.setIsOpen(false);

@@ -52,6 +52,14 @@ const campaignViewSlice = createSlice({
       state.campaignName = action.payload.campaignName;
       state.campaignImageBase64 = action.payload.campaignImageBase64;
     },
+    // removing data of selected campaign if it was deleted in StartView
+    resetSelectedCampaignData: (state, action) => {
+      if (state.campaignId === action.payload.campaignId) {
+        state.campaignId = -1;
+        state.campaignName = '';
+        state.campaignImageBase64 = '';
+      }
+    },
     // TO-DO: delete after API integration
     addSession: (state, action) => {
       state.sessionsNames.push(action.payload.sessionName);
@@ -63,7 +71,13 @@ const campaignViewSlice = createSlice({
   },
 });
 
-export const { updateState, resetState, updateSelectedCampaignData, addSession, removeSession } =
-  campaignViewSlice.actions;
+export const {
+  updateState,
+  resetState,
+  updateSelectedCampaignData,
+  resetSelectedCampaignData,
+  addSession,
+  removeSession,
+} = campaignViewSlice.actions;
 
 export default campaignViewSlice.reducer;
