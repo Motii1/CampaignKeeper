@@ -1,4 +1,3 @@
-import { CampaignSecondaryDialog } from '../../../../CampaignView/secondaryDialog/CampaignSecondaryDialog';
 import { StartSecondaryDialog } from '../../../../StartView/secondaryDialog/StartSecondaryDialog';
 import viewsRoutes from '../../../../viewsRoutes';
 
@@ -25,13 +24,8 @@ export const SecondaryDialogWrapper: React.FC<SecondaryDialogWrapperProps> = pro
         />
       );
     case viewsRoutes.CAMPAIGN:
-      return (
-        <CampaignSecondaryDialog
-          isOpen={props.isOpen}
-          setIsOpen={props.setIsOpen}
-          setIsPrimaryOpen={props.setIsPrimaryOpen}
-        />
-      );
+      // TO-DO: add opening of the campaign secondary dialog
+      return null;
     default:
       return (
         <StartSecondaryDialog
