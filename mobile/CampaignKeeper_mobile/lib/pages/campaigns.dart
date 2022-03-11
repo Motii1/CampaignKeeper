@@ -50,14 +50,13 @@ class _CampaignsState extends KeeperState<Campaigns> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void didPush() {
     if (_arguments == null) {
       _arguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments?;
 
       if (_arguments != null) {
         if (_arguments!.title == "connection" && _arguments!.message == "false") {
-          Future.delayed(Duration(seconds: 1),
+          Future.delayed(Duration(milliseconds: 500),
               () => ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline));
         }
       }

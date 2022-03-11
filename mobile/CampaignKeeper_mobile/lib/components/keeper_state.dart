@@ -1,10 +1,16 @@
+import 'package:campaign_keeper_mobile/main.dart';
 import 'package:campaign_keeper_mobile/services/helpers/lifecycle_helper.dart';
 import 'package:flutter/material.dart';
 
-class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
+class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver, RouteAware {
   void onResume() async {}
 
   void onEveryResume() async {}
+
+  @override
+  void didPopNext() {
+    onResume();
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
@@ -19,6 +25,12 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
@@ -27,6 +39,7 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
+    routeObserver.unsubscribe(this);
     super.dispose();
   }
 

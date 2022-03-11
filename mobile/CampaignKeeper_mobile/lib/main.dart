@@ -7,53 +7,46 @@ import 'package:campaign_keeper_mobile/pages/loading.dart';
 import 'package:campaign_keeper_mobile/pages/settings.dart';
 import 'package:flutter/services.dart';
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 void main() {
-  runApp(MainApp());
+  runApp(MainAppNew());
 }
 
-class MainApp extends StatefulWidget {
-  @override
-  _MainAppState createState() => _MainAppState();
+class MainAppNew extends StatelessWidget {
+  MainAppNew({Key? key}) : super(key: key);
 
-  static _MainAppState? of(BuildContext context) =>
-      context.findAncestorStateOfType<_MainAppState>();
-}
-
-class _MainAppState extends State<MainApp>{
-  ThemeMode _themeMode = ThemeMode.dark;
-  ThemeData _theme = MainThemes.light;
-  ThemeData _themeDark = MainThemes.dark;
-
-  void changeTheme(ThemeMode themeMode) {
-    setState(() {
-      _themeMode = themeMode;
-    });
-  }
-
-  ThemeMode getTheme() => _themeMode;
+  static ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.dark);
+  final ThemeData _theme = MainThemes.light;
+  final ThemeData _themeDark = MainThemes.dark;
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    return GestureDetector(
-      onTap: () {
-        SystemChannels.textInput.invokeMethod('TextInput.hide');
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (_, mode, __) {
+        return GestureDetector(
+          onTap: () {
+            SystemChannels.textInput.invokeMethod('TextInput.hide');
+          },
+          child: MaterialApp(
+            title: 'Campaign Keeper',
+            theme: _theme,
+            darkTheme: _themeDark,
+            themeMode: mode,
+            initialRoute: "/",
+            routes: {
+              "/": (context) => Loading(),
+              "/settings": (context) => Settings(),
+              "/settings/about": (context) => About(),
+              "/login": (context) => Login(),
+              "/campaigns": (context) => Campaigns(),
+            },
+            navigatorObservers: [routeObserver],
+          ),
+        );
       },
-      child: MaterialApp(
-        title: 'Campaign Keeper',
-        theme: _theme,
-        darkTheme: _themeDark,
-        themeMode: _themeMode,
-        initialRoute: "/",
-        routes: {
-          "/": (context) => Loading(),
-          "/settings": (context) => Settings(),
-          "/settings/about": (context) => About(),
-          "/login": (context) => Login(),
-          "/campaigns": (context) => Campaigns(),
-        },
-      ),
     );
   }
 }
