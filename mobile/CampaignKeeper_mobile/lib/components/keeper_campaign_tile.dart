@@ -43,6 +43,7 @@ class KeeperCampaignTile extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(10.0, 3.0, 10.0, 10.0),
                         child: Text(
                           entity.name,
+                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.headline6,
                         ),
                       )),

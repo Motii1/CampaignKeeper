@@ -65,7 +65,7 @@ class KeeperSearchBar extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 57.5, right: 8),
+                            padding: EdgeInsets.only(left: 14.5, right: 14.5),
                             child: Text(
                               title,
                               style: TextStyle(
@@ -74,7 +74,8 @@ class KeeperSearchBar extends StatelessWidget {
                                     .titleTextStyle!
                                     .color
                                     ?.withOpacity(expandedPercent),
-                                fontSize: 24.5 + expandedPercent * 1.5,
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 28.5 + expandedPercent * 2,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -127,54 +128,51 @@ class _SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(8, 8, 8, 6),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-                padding: EdgeInsets.only(
-                  left: 0,
-                  right: 0,
-                ),
-                child: canPop(context)
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(50.0),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            padding: EdgeInsets.only(left: 10, right: 6),
-                            icon: Icon(
-                              Icons.arrow_back,
-                              size: 23.5,
-                              color: Theme.of(context).appBarTheme.titleTextStyle!.color,
-                            ),
-                          ),
-                        ),
-                      )
-                    : Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 10, 0),
-                        child: Icon(
-                          Icons.search_outlined,
-                          size: 23.5,
-                          color: Theme.of(context).appBarTheme.titleTextStyle!.color,
-                        ),
-                      )),
-            Expanded(
-              child: Text(
-                "Search",
-                style: TextStyle(
-                  color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
+      child: Material(
+        color: Theme.of(context).colorScheme.surface,
+        elevation: 3,
+        borderRadius: BorderRadius.all(Radius.circular(30)),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () {
+            print("Nothing to search for");
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              canPop(context)
+                  ? IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      padding: EdgeInsets.only(left: 10, right: 6),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        size: 23.5,
+                        color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                      ),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.fromLTRB(15, 0, 10, 0),
+                      child: Icon(
+                        Icons.search_outlined,
+                        size: 23.5,
+                        color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                      ),
+                    ),
+              Expanded(
+                child: Text(
+                  "Search",
+                  style: TextStyle(
+                    color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
-            ),
-            popup ?? Container(),
-          ],
+              popup ?? Container(),
+            ],
+          ),
         ),
       ),
     );

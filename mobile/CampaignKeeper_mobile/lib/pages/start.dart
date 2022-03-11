@@ -29,8 +29,8 @@ class _StartState extends KeeperState<Start> {
     });
   }
 
-  void openCampaign(int index) {
-    Navigator.pushNamed(context, '/start/campaign', arguments: CampaignArgument(index));
+  void openCampaign(int id) {
+    Navigator.pushNamed(context, '/start/campaign', arguments: CampaignArgument(id));
   }
 
   @override
@@ -79,7 +79,7 @@ class _StartState extends KeeperState<Start> {
                 return KeeperCampaignTile(
                     entity: _entities[index],
                     onTap: () {
-                      openCampaign(index);
+                      openCampaign(_entities[index].id);
                     });
               }, childCount: _entities.length)),
       ),
