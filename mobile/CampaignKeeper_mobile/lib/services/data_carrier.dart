@@ -27,6 +27,12 @@ class DataCarrier {
     }
   }
 
+  void removeListener<T>(VoidCallback listener) {
+    if (_managers.containsKey(T)) {
+      _managers[T]!.removeListener(listener);
+    }
+  }
+
   void attach<T>(T entity) {
     if (_managers.containsKey(T)) {
       _managers[T]!.attach(entity);

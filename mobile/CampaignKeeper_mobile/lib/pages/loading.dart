@@ -3,7 +3,6 @@ import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
-import 'package:campaign_keeper_mobile/services/screen_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,18 +17,15 @@ class _LoadingState extends State<Loading> {
 
   void autoLogin() async {
     await AppPrefs().refresh(context);
-
     await DataCarrier().refresh<UserDataEntity>();
-
     ResponseStatus status = await LoginHelper().autoLogin();
+
+    RequestHelper().resetStatus();
 
     switch (status) {
       case ResponseStatus.Success:
-        Navigator.pushReplacementNamed(context, "/campaigns");
-        break;
       case ResponseStatus.TimeOut:
-        Navigator.pushReplacementNamed(context, "/campaigns",
-            arguments: ScreenArguments("connection", "false"));
+        Navigator.pushReplacementNamed(context, "/campaigns");
         break;
       default:
         Navigator.pushReplacementNamed(context, "/login");
@@ -43,11 +39,6 @@ class _LoadingState extends State<Loading> {
 
     precacheImage(Image.asset("assets/user.png").image, context);
     precacheImage(Image.asset("assets/campaign_default.jpg").image, context);
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override

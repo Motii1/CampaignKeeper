@@ -3,8 +3,7 @@ import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 
 class KeeperPopup extends StatefulWidget {
-  KeeperPopup({Key? key, required this.itemBuilder, this.onSelected})
-      : super(key: key);
+  KeeperPopup({Key? key, required this.itemBuilder, this.onSelected}) : super(key: key);
 
   final List<PopupMenuEntry<dynamic>> Function(BuildContext) itemBuilder;
   final void Function(dynamic)? onSelected;
@@ -16,16 +15,23 @@ class KeeperPopup extends StatefulWidget {
 class _KeeperPopupState extends State<KeeperPopup> {
   Image userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
 
+  void refreshUserImage() {
+    // if (this.mounted) might be needed
+    setState(() {
+      userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    DataCarrier().addListener<UserDataEntity>(() {
-      if (this.mounted) {
-        setState(() {
-          userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
-        });
-      }
-    });
+    DataCarrier().addListener<UserDataEntity>(refreshUserImage);
+  }
+
+  @override
+  void dispose() {
+    DataCarrier().removeListener<UserDataEntity>(refreshUserImage);
+    super.dispose();
   }
 
   @override
@@ -89,8 +95,7 @@ class KeeperAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color _bgColor =
-        backgroundColor ?? Theme.of(context).appBarTheme.backgroundColor!;
+    Color _bgColor = backgroundColor ?? Theme.of(context).appBarTheme.backgroundColor!;
 
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (overScroll) {
@@ -113,11 +118,9 @@ class KeeperAppBar extends StatelessWidget {
                 backgroundColor: _bgColor,
                 flexibleSpace: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                    double _realAppBarHeight =
-                        MediaQuery.of(context).padding.top + _collapsedHeight;
-                    double increasePercent =
-                        (constraints.biggest.height - _realAppBarHeight) /
-                            (_expandedHeight - _realAppBarHeight);
+                    double _realAppBarHeight = MediaQuery.of(context).padding.top + _collapsedHeight;
+                    double increasePercent = (constraints.biggest.height - _realAppBarHeight) /
+                        (_expandedHeight - _realAppBarHeight);
                     return AnimatedContainer(
                       duration: Duration(milliseconds: 100),
                       color: (innerBoxIsScrolled && changeBgColor)
@@ -142,10 +145,7 @@ class KeeperAppBar extends StatelessWidget {
                                         icon: Icon(
                                           Icons.arrow_back,
                                           size: 24,
-                                          color: Theme.of(context)
-                                              .appBarTheme
-                                              .titleTextStyle!
-                                              .color,
+                                          color: Theme.of(context).appBarTheme.titleTextStyle!.color,
                                         ),
                                       )
                                     : Container(width: 7),
@@ -154,10 +154,7 @@ class KeeperAppBar extends StatelessWidget {
                                 child: Text(
                                   title,
                                   style: TextStyle(
-                                    color: Theme.of(context)
-                                        .appBarTheme
-                                        .titleTextStyle!
-                                        .color,
+                                    color: Theme.of(context).appBarTheme.titleTextStyle!.color,
                                     fontSize: 23 + (increasePercent * 6),
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -174,8 +171,7 @@ class KeeperAppBar extends StatelessWidget {
                                 child: popupItemBuilder == null
                                     ? Container()
                                     : KeeperPopup(
-                                        itemBuilder: popupItemBuilder!,
-                                        onSelected: popupOnSelected),
+                                        itemBuilder: popupItemBuilder!, onSelected: popupOnSelected),
                               ),
                             ],
                           ),
@@ -198,8 +194,7 @@ class KeeperAppBar extends StatelessWidget {
               return CustomScrollView(
                 slivers: [
                   SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   ),
                   sliver,
                 ],

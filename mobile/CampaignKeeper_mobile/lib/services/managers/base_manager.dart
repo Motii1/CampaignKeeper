@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BaseManager<T> extends ChangeNotifier{
+class BaseManager<T> extends ChangeNotifier {
   // Data locations: cache, ram, server
 
   // Attaches given entity to the local base and cache it
@@ -9,7 +9,7 @@ class BaseManager<T> extends ChangeNotifier{
     throw new UnimplementedError();
   }
 
-  T? getEntity({int entId= -1}) {
+  T? getEntity({int entId = -1}) {
     throw new UnimplementedError();
   }
 

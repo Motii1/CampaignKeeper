@@ -1,11 +1,9 @@
 import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/keeper_campaign_title.dart';
-import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/services/screen_arguments.dart';
 import 'package:flutter/material.dart';
 
 class Campaigns extends StatefulWidget {
@@ -17,19 +15,16 @@ class Campaigns extends StatefulWidget {
 
 class _CampaignsState extends KeeperState<Campaigns> {
   List<CampaignEntity> _entities = [];
-  ScreenArguments? _arguments;
 
   Future<void> onRefresh() async {
     DataCarrier().refresh<UserDataEntity>();
     await DataCarrier().refresh<CampaignEntity>();
   }
 
-  Future<void> refresh() async {
-    if (this.mounted) {
-      setState(() {
-        _entities = DataCarrier().getEntities<CampaignEntity>();
-      });
-    }
+  Future<void> refreshScreen() async {
+    setState(() {
+      _entities = DataCarrier().getEntities<CampaignEntity>();
+    });
   }
 
   @override
@@ -45,22 +40,14 @@ class _CampaignsState extends KeeperState<Campaigns> {
   @override
   void initState() {
     super.initState();
-    DataCarrier().addListener<CampaignEntity>(refresh);
+    DataCarrier().addListener<CampaignEntity>(refreshScreen);
     DataCarrier().refresh<CampaignEntity>();
   }
 
   @override
-  void didPush() {
-    if (_arguments == null) {
-      _arguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments?;
-
-      if (_arguments != null) {
-        if (_arguments!.title == "connection" && _arguments!.message == "false") {
-          Future.delayed(Duration(milliseconds: 500),
-              () => ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline));
-        }
-      }
-    }
+  void dispose() {
+    DataCarrier().removeListener<CampaignEntity>(refreshScreen);
+    super.dispose();
   }
 
   @override

@@ -10,11 +10,11 @@ import 'package:flutter/services.dart';
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 void main() {
-  runApp(MainAppNew());
+  runApp(MainApp());
 }
 
-class MainAppNew extends StatelessWidget {
-  MainAppNew({Key? key}) : super(key: key);
+class MainApp extends StatelessWidget {
+  MainApp({Key? key}) : super(key: key);
 
   static ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.dark);
   final ThemeData _theme = MainThemes.light;

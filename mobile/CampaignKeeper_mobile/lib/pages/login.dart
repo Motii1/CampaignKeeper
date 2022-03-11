@@ -6,25 +6,6 @@ import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(0),
-        child: AppBar(),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: LoginCard(),
-        ),
-      ),
-    );
-  }
-}
-
 class LoginCard extends StatefulWidget {
   const LoginCard({Key? key}) : super(key: key);
 
@@ -83,14 +64,12 @@ class _LoginCardState extends State<LoginCard> {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
 
     if (_formKey.currentState!.validate()) {
-      ResponseStatus status = await LoginHelper()
-          .login(loginController.text, passwordController.text);
+      ResponseStatus status = await LoginHelper().login(loginController.text, passwordController.text);
 
       switch (status) {
         case ResponseStatus.Success:
           if (canPop()) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/campaigns', (Route<dynamic> route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil('/campaigns', (Route<dynamic> route) => false);
           } else {
             Navigator.pushReplacementNamed(context, "/campaigns");
           }
@@ -99,8 +78,7 @@ class _LoginCardState extends State<LoginCard> {
           isLoginCorrect = isPasswordCorrect = false;
 
           _formKey.currentState!.validate();
-          ScaffoldMessenger.of(context)
-              .showSnackBar(KeeperSnackBars().incorrect);
+          ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().incorrect);
           break;
         default:
           ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
@@ -119,8 +97,7 @@ class _LoginCardState extends State<LoginCard> {
           children: <Widget>[
             TextFormField(
               autocorrect: false,
-              decoration:
-                  InputDecoration(helperText: " ", labelText: "Login or email"),
+              decoration: InputDecoration(helperText: " ", labelText: "Login or email"),
               controller: loginController,
               validator: validateLogin,
             ),
@@ -130,8 +107,7 @@ class _LoginCardState extends State<LoginCard> {
                 obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
-                decoration:
-                    InputDecoration(helperText: " ", labelText: "Password"),
+                decoration: InputDecoration(helperText: " ", labelText: "Password"),
                 controller: passwordController,
                 validator: validatePassword,
               ),
@@ -153,6 +129,25 @@ class _LoginCardState extends State<LoginCard> {
               child: const Text('LOGIN'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class Login extends StatelessWidget {
+  const Login({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(0),
+        child: AppBar(),
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: LoginCard(),
         ),
       ),
     );

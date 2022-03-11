@@ -93,7 +93,7 @@ class AppPrefs {
   void setTheme(BuildContext context, ThemeMode theme, [bool force = false]) {
     if (theme != _theme || force) {
       _theme = theme;
-      MainAppNew.themeNotifier.value = theme;
+      MainApp.themeNotifier.value = theme;
     }
 
     _cachePrefs();

@@ -15,26 +15,23 @@ class LoginHelper {
   LoginHelper._internal();
 
   Future<ResponseStatus> autoLogin() async {
-    if (RequestHelper().isCookieValid()) {
-      var status = await RequestHelper().testConnection();
+    ResponseStatus? status;
 
-      return status;
+    if (RequestHelper().isCookieValid()) {
+      status = await RequestHelper().testConnection();
     }
 
     UserDataEntity? userEntity = DataCarrier().getEntity();
-    if (userEntity != null && userEntity.password != null) {
-      ResponseStatus status = await login(userEntity.username, userEntity.password!);
-
-      return status;
+    if (status == null && userEntity != null && userEntity.password != null) {
+      status = await login(userEntity.username, userEntity.password!);
     }
 
-    return ResponseStatus.IncorrectData;
+    return status ?? ResponseStatus.IncorrectData;
   }
 
   Future<ResponseStatus> login(String name, String password) async {
     Map body = {"username": name, "password": password};
-    var response = await RequestHelper()
-        .post(endpoint: _loginEnd, body: body, isLogin: true);
+    var response = await RequestHelper().post(endpoint: _loginEnd, body: body, isLogin: true);
 
     if (response.status == ResponseStatus.Success) {
       UserDataEntity? ent = DataCarrier().getEntity<UserDataEntity>();
