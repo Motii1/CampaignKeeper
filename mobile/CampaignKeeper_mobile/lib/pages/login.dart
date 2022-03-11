@@ -3,6 +3,7 @@ import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
+import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -69,9 +70,9 @@ class _LoginCardState extends State<LoginCard> {
       switch (status) {
         case ResponseStatus.Success:
           if (canPop()) {
-            Navigator.of(context).pushNamedAndRemoveUntil('/campaigns', (Route<dynamic> route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil('/start', (Route<dynamic> route) => false);
           } else {
-            Navigator.pushReplacementNamed(context, "/campaigns");
+            Navigator.pushReplacementNamed(context, "/start");
           }
           break;
         case ResponseStatus.IncorrectData:

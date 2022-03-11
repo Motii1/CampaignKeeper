@@ -1,85 +1,20 @@
-import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
-import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:flutter/material.dart';
-
-class KeeperPopup extends StatefulWidget {
-  KeeperPopup({Key? key, required this.itemBuilder, this.onSelected}) : super(key: key);
-
-  final List<PopupMenuEntry<dynamic>> Function(BuildContext) itemBuilder;
-  final void Function(dynamic)? onSelected;
-
-  @override
-  _KeeperPopupState createState() => _KeeperPopupState();
-}
-
-class _KeeperPopupState extends State<KeeperPopup> {
-  Image userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
-
-  void refreshUserImage() {
-    // if (this.mounted) might be needed
-    setState(() {
-      userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    DataCarrier().addListener<UserDataEntity>(refreshUserImage);
-  }
-
-  @override
-  void dispose() {
-    DataCarrier().removeListener<UserDataEntity>(refreshUserImage);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: PopupMenuButton(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: CircleAvatar(
-              radius: 14,
-              backgroundColor: Theme.of(context).colorScheme.onBackground,
-              backgroundImage: userImage.image,
-            ),
-          ),
-          itemBuilder: widget.itemBuilder,
-          onSelected: widget.onSelected,
-          offset: const Offset(0, 35),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class KeeperAppBar extends StatelessWidget {
   KeeperAppBar(
       {Key? key,
-      this.backgroundColor,
-      this.popupItemBuilder,
-      this.popupOnSelected,
-      this.onRefresh,
       required this.title,
       required this.sliver,
-      this.autoLeading = true,
-      this.changeBgColor = false})
+      this.popup,
+      this.onRefresh,
+      this.autoLeading = true})
       : super(key: key);
 
   final String title;
   final Widget sliver;
-  final Color? backgroundColor;
   final bool autoLeading;
-  final bool changeBgColor;
-  final List<PopupMenuEntry<dynamic>> Function(BuildContext)? popupItemBuilder;
-  final void Function(dynamic)? popupOnSelected;
+  final KeeperPopup? popup;
   final Future<void> Function()? onRefresh;
   final double _expandedHeight = 180.0;
   final double _collapsedHeight = 66;
@@ -95,11 +30,9 @@ class KeeperAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color _bgColor = backgroundColor ?? Theme.of(context).appBarTheme.backgroundColor!;
-
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (overScroll) {
-        overScroll.disallowGlow();
+        overScroll.disallowIndicator();
         return false;
       },
       child: NestedScrollView(
@@ -109,23 +42,21 @@ class KeeperAppBar extends StatelessWidget {
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
                 automaticallyImplyLeading: false,
-                elevation: innerBoxIsScrolled ? 6 : 0,
-                shadowColor: Colors.black.withOpacity(0.25),
+                elevation: innerBoxIsScrolled ? 5 : 0,
+                shadowColor: Theme.of(context).colorScheme.brightness == Brightness.light
+                    ? Colors.black.withOpacity(0.25)
+                    : Colors.white.withOpacity(0.075),
                 forceElevated: true,
                 pinned: true,
                 collapsedHeight: _collapsedHeight,
                 expandedHeight: _expandedHeight,
-                backgroundColor: _bgColor,
+                backgroundColor: Theme.of(context).appBarTheme.backgroundColor!,
                 flexibleSpace: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     double _realAppBarHeight = MediaQuery.of(context).padding.top + _collapsedHeight;
                     double increasePercent = (constraints.biggest.height - _realAppBarHeight) /
                         (_expandedHeight - _realAppBarHeight);
-                    return AnimatedContainer(
-                      duration: Duration(milliseconds: 100),
-                      color: (innerBoxIsScrolled && changeBgColor)
-                          ? Theme.of(context).colorScheme.surface
-                          : Colors.transparent,
+                    return Container(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -168,10 +99,7 @@ class KeeperAppBar extends StatelessWidget {
                                 padding: EdgeInsets.only(
                                   right: 2,
                                 ),
-                                child: popupItemBuilder == null
-                                    ? Container()
-                                    : KeeperPopup(
-                                        itemBuilder: popupItemBuilder!, onSelected: popupOnSelected),
+                                child: popup ?? Container(),
                               ),
                             ],
                           ),

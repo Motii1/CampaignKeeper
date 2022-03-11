@@ -1,4 +1,4 @@
-import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
+import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_debug_menu.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';

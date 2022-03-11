@@ -17,8 +17,7 @@ class MainThemes {
   static const Color _light = Color(0xffd0e6fc);
   static const Color _lighterLight = Color(0xffecf8ff);
 
-  static final MaterialColor _swatchLight =
-      MaterialColor(_primaryLight.value, const <int, Color>{
+  static final MaterialColor _swatchLight = MaterialColor(_primaryLight.value, const <int, Color>{
     50: _primaryLight,
     100: _primaryLight,
     200: _primaryLight,
@@ -49,8 +48,7 @@ class MainThemes {
 
   static const Color _dark = Color(0xff262E38);
   static const Color _lighterDark = Color(0xff303d50);
-  static final MaterialColor _swatchDark =
-      MaterialColor(_primaryDark.value, const <int, Color>{
+  static final MaterialColor _swatchDark = MaterialColor(_primaryDark.value, const <int, Color>{
     50: _primaryDark,
     100: _primaryDark,
     200: _primaryDark,
@@ -95,9 +93,7 @@ class MainThemes {
       onSecondary: _onSecondaryLight,
       onSurface: _dark,
       primary: _primaryLight,
-      primaryVariant: _primaryDark,
       secondary: _secondaryLight,
-      secondaryVariant: _secondaryDark,
       surface: _light,
     ),
     primaryColor: _primaryLight,
@@ -118,25 +114,22 @@ class MainThemes {
         color: _errorLight,
       ),
       border: UnderlineInputBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(_radius),
-              topRight: Radius.circular(_radius)),
+          borderRadius:
+              BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
           borderSide: BorderSide(
             color: _lighterDark,
             width: 1.8,
           )),
       enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(_radius),
-              topRight: Radius.circular(_radius)),
+          borderRadius:
+              BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
           borderSide: BorderSide(
             color: _lighterDark,
             width: 1.8,
           )),
       errorBorder: UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(_radius),
-            topRight: Radius.circular(_radius)),
+        borderRadius:
+            BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
         borderSide: BorderSide(
           color: _errorLight,
           width: 1.8,
@@ -195,9 +188,7 @@ class MainThemes {
       onSecondary: _onSecondaryDark,
       onSurface: _lighterLight,
       primary: _primaryDark,
-      primaryVariant: _primaryLight,
       secondary: _secondaryDark,
-      secondaryVariant: _secondaryLight,
       surface: _lighterDark,
     ),
     primaryColor: _primaryDark,
@@ -218,25 +209,22 @@ class MainThemes {
         color: _errorDark,
       ),
       border: UnderlineInputBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(_radius),
-              topRight: Radius.circular(_radius)),
+          borderRadius:
+              BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
           borderSide: BorderSide(
             color: _light,
             width: 1.8,
           )),
       enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(_radius),
-              topRight: Radius.circular(_radius)),
+          borderRadius:
+              BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
           borderSide: BorderSide(
             color: _light,
             width: 1.8,
           )),
       errorBorder: UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(_radius),
-            topRight: Radius.circular(_radius)),
+        borderRadius:
+            BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
         borderSide: BorderSide(
           color: _errorDark,
           width: 1.8,

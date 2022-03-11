@@ -1,19 +1,21 @@
-import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
+import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
+import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
-import 'package:campaign_keeper_mobile/components/keeper_campaign_title.dart';
+import 'package:campaign_keeper_mobile/components/keeper_campaign_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:flutter/material.dart';
 
-class Campaigns extends StatefulWidget {
-  const Campaigns({Key? key}) : super(key: key);
+class Start extends StatefulWidget {
+  const Start({Key? key}) : super(key: key);
 
   @override
-  _CampaignsState createState() => _CampaignsState();
+  _StartState createState() => _StartState();
 }
 
-class _CampaignsState extends KeeperState<Campaigns> {
+class _StartState extends KeeperState<Start> {
   List<CampaignEntity> _entities = [];
 
   Future<void> onRefresh() async {
@@ -21,10 +23,14 @@ class _CampaignsState extends KeeperState<Campaigns> {
     await DataCarrier().refresh<CampaignEntity>();
   }
 
-  Future<void> refreshScreen() async {
+  Future<void> onCampaignRefresh() async {
     setState(() {
       _entities = DataCarrier().getEntities<CampaignEntity>();
     });
+  }
+
+  void openCampaign(int index) {
+    Navigator.pushNamed(context, '/start/campaign', arguments: CampaignArgument(index));
   }
 
   @override
@@ -40,13 +46,13 @@ class _CampaignsState extends KeeperState<Campaigns> {
   @override
   void initState() {
     super.initState();
-    DataCarrier().addListener<CampaignEntity>(refreshScreen);
+    DataCarrier().addListener<CampaignEntity>(onCampaignRefresh);
     DataCarrier().refresh<CampaignEntity>();
   }
 
   @override
   void dispose() {
-    DataCarrier().removeListener<CampaignEntity>(refreshScreen);
+    DataCarrier().removeListener<CampaignEntity>(onCampaignRefresh);
     super.dispose();
   }
 
@@ -56,19 +62,7 @@ class _CampaignsState extends KeeperState<Campaigns> {
       body: KeeperAppBar(
         autoLeading: false,
         title: "Campaigns",
-        popupItemBuilder: (BuildContext context) => [
-          PopupMenuItem<String>(
-            value: "Settings",
-            child: Text("Settings"),
-          )
-        ],
-        popupOnSelected: (dynamic value) {
-          switch (value) {
-            case "Settings":
-              Navigator.pushNamed(context, "/settings");
-              break;
-          }
-        },
+        popup: KeeperPopup.settings(context),
         onRefresh: onRefresh,
         sliver: _entities.isEmpty
             ? SliverFillRemaining(
@@ -82,7 +76,11 @@ class _CampaignsState extends KeeperState<Campaigns> {
               )
             : SliverList(
                 delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                return KeeperCampaignTile(entity: _entities[index]);
+                return KeeperCampaignTile(
+                    entity: _entities[index],
+                    onTap: () {
+                      openCampaign(index);
+                    });
               }, childCount: _entities.length)),
       ),
     );

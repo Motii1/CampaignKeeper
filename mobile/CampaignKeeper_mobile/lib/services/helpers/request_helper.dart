@@ -1,16 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
-
-enum ResponseStatus {
-  Success,
-  Error,
-  IncorrectData,
-  TimeOut,
-}
 
 class RequestHelper extends ChangeNotifier {
   static final RequestHelper _helper = RequestHelper._internal();
@@ -83,13 +77,16 @@ class RequestHelper extends ChangeNotifier {
           .post(Uri.parse("${AppPrefs().url}$endpoint"), body: body, headers: headers)
           .timeout(Duration(seconds: isLogin ? AppPrefs().loginTimeout : AppPrefs().timeout));
     } on TimeoutException catch (_) {
+      _changeStatus(false);
       return Response(ResponseStatus.TimeOut, null, null);
     } on Exception catch (_) {
+      _changeStatus(false);
       return Response(ResponseStatus.Error, null, null);
     }
 
     switch (response.statusCode) {
       case 200:
+        _changeStatus(true);
         if (!isCookieValid()) {
           _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
         }

@@ -3,6 +3,7 @@ import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
+import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,7 +26,7 @@ class _LoadingState extends State<Loading> {
     switch (status) {
       case ResponseStatus.Success:
       case ResponseStatus.TimeOut:
-        Navigator.pushReplacementNamed(context, "/campaigns");
+        Navigator.pushReplacementNamed(context, "/start");
         break;
       default:
         Navigator.pushReplacementNamed(context, "/login");
