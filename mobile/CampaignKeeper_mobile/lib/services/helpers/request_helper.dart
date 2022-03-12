@@ -124,10 +124,6 @@ class RequestHelper extends ChangeNotifier {
     _cookie = null;
   }
 
-  void resetStatus() {
-    _isOnline = true;
-  }
-
   void _changeStatus(bool status) {
     if (status != _isOnline) {
       _isOnline = status;
