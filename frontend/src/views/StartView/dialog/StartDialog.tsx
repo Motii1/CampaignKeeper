@@ -40,6 +40,11 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   );
   const [helperText, setHelperText] = useState<null | string>('');
 
+  const resetDialog = useCallback(() => {
+    setHelperText('');
+    dispatch(resetState({}));
+  }, [dispatch]);
+
   const {
     isLoading: isLoadingNew,
     data: dataNew,
@@ -53,12 +58,16 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
       if (statusNew === 200) {
         dispatch(addCampaign({ newCampaign: dataNew }));
         props.setSnackbarSuccess('Campaign created');
+        props.setIsOpen(false);
+        resetDialog();
       } else if (statusNew === 400) {
         props.setSnackbarError('Error during campaign creation');
+      } else if (statusNew === 413) {
+        props.setSnackbarError('Campaign graphic is too big');
       }
       resetQueryNew();
     }
-  }, [dataNew, dispatch, isLoadingNew, props, resetQueryNew, statusNew]);
+  }, [dataNew, dispatch, isLoadingNew, props, resetDialog, resetQueryNew, statusNew]);
 
   useEffect(() => {
     handleRunQueryNew();
@@ -82,22 +91,28 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
           dispatch(editCampaign({ id: campaignId, name: campaignName }));
         }
         props.setSnackbarSuccess('Campaign edited');
+        props.setIsOpen(false);
+        resetDialog();
       } else if (statusEdit === 400) {
         props.setSnackbarError('Error during campaign update');
       } else if (statusEdit === 404) {
         props.setSnackbarError("Campaign can't be found");
+      } else if (statusNew === 413) {
+        props.setSnackbarError('Campaign graphic is too big');
       }
       resetQueryEdit();
     }
   }, [
+    isLoadingEdit,
+    statusEdit,
+    statusNew,
+    resetQueryEdit,
+    campaignImageBase64,
+    props,
+    resetDialog,
     dispatch,
     campaignId,
-    campaignImageBase64,
-    isLoadingEdit,
     campaignName,
-    props,
-    resetQueryEdit,
-    statusEdit,
   ]);
 
   useEffect(() => {
@@ -129,28 +144,13 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     setHelperText(validateName(newName));
   };
 
-  const resetDialog = () => {
-    setHelperText('');
-    dispatch(resetState({}));
-  };
-
   // TO-DO: should we redirect user to campaign view after creation of new campaign?
   const handleOk = () => {
     if (validateName(campaignName) === '') {
       if (props.dialogType === NavBarViewDialog.NewCampaign) {
         runQueryWithImg(runQueryNew);
-        props.setIsOpen(false);
-        resetDialog();
       } else {
         runQueryWithImg(runQueryEdit);
-        if (campaignImageBase64) {
-          runQueryEdit({
-            name: campaignName,
-            imageBase64: campaignImageBase64,
-          });
-        } else {
-          runQueryEdit({ name: campaignName });
-        }
       }
     }
   };
