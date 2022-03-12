@@ -160,6 +160,20 @@ class MainThemes {
       behavior: SnackBarBehavior.floating,
       backgroundColor: _dark,
     ),
+    navigationBarTheme: NavigationBarThemeData(
+      height: 73,
+      backgroundColor: _light,
+      indicatorColor: _primaryLight,
+      iconTheme: MaterialStateProperty.all(IconThemeData(
+        color: _dark,
+        size: 25,
+      )),
+      labelTextStyle: MaterialStateProperty.all(TextStyle(
+        color: _dark,
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+      )),
+    ),
   );
 
   static final ThemeData dark = ThemeData(
@@ -254,6 +268,29 @@ class MainThemes {
       ),
       backgroundColor: _lighterLight,
       behavior: SnackBarBehavior.floating,
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      height: 73,
+      backgroundColor: _lighterDark,
+      indicatorColor: _primaryDark,
+      iconTheme: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.selected)) {
+          return IconThemeData(
+            color: _lighterDark,
+            size: 25,
+          );
+        } else {
+          return IconThemeData(
+            color: _light,
+            size: 25,
+          );
+        }
+      }),
+      labelTextStyle: MaterialStateProperty.all(TextStyle(
+        color: _light,
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+      )),
     ),
   );
 }

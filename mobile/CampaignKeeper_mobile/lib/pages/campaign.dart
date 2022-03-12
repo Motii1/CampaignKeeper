@@ -17,6 +17,7 @@ class Campaign extends StatefulWidget {
 class _CampaignState extends KeeperState<Campaign> {
   CampaignArgument? args;
   CampaignEntity? campaign;
+  int currentPage = 0;
 
   Future<void> onRefresh() async {
     DataCarrier().refresh<UserDataEntity>();
@@ -83,6 +84,19 @@ class _CampaignState extends KeeperState<Campaign> {
               ),
             ),
           )),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPage = index;
+          });
+        },
+        selectedIndex: currentPage,
+        destinations: [
+          NavigationDestination(icon: Icon(Icons.list), label: "Sessions"),
+          NavigationDestination(
+              icon: Icon(Icons.book_outlined), selectedIcon: Icon(Icons.book), label: "Codex"),
+        ],
+      ),
     );
   }
 }

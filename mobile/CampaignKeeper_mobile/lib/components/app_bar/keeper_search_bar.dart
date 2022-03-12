@@ -165,7 +165,7 @@ class _SearchBar extends StatelessWidget {
                   "Search",
                   style: TextStyle(
                     color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
-                    fontSize: 20,
+                    fontSize: 19,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
