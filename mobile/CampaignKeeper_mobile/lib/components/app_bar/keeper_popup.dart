@@ -3,10 +3,11 @@ import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 
 class KeeperPopup extends StatefulWidget {
-  KeeperPopup({Key? key, required this.itemBuilder, this.onSelected}) : super(key: key);
+  KeeperPopup({Key? key, required this.itemBuilder, this.onSelected, this.padding}) : super(key: key);
 
   final List<PopupMenuEntry<dynamic>> Function(BuildContext) itemBuilder;
   final void Function(dynamic)? onSelected;
+  EdgeInsets? padding;
 
   @override
   _KeeperPopupState createState() => _KeeperPopupState();
@@ -59,7 +60,7 @@ class _KeeperPopupState extends State<KeeperPopup> {
         color: Colors.transparent,
         child: PopupMenuButton(
           child: Padding(
-            padding: const EdgeInsets.all(10),
+            padding: widget.padding ?? EdgeInsets.all(7),
             child: CircleAvatar(
               radius: 14,
               backgroundColor: Theme.of(context).colorScheme.onBackground,

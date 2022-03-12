@@ -161,7 +161,6 @@ class MainThemes {
       backgroundColor: _dark,
     ),
     navigationBarTheme: NavigationBarThemeData(
-      height: 73,
       backgroundColor: _light,
       indicatorColor: _primaryLight,
       iconTheme: MaterialStateProperty.all(IconThemeData(

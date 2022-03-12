@@ -18,4 +18,11 @@ class CampaignEntity {
       return Image.memory(base64.decode(imageData!));
     }
   }
+
+  bool equals(CampaignEntity other) {
+    return id == other.id &&
+        name == other.name &&
+        createdAt == other.createdAt &&
+        imageData == other.imageData;
+  }
 }

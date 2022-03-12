@@ -18,7 +18,7 @@ class KeeperSearchBar extends StatelessWidget {
   final KeeperPopup? popup;
   final Future<void> Function()? onRefresh;
   final double _expandedHeight = 180.0;
-  final double _collapsedHeight = 75;
+  final double _collapsedHeight = 65;
 
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
@@ -75,7 +75,7 @@ class KeeperSearchBar extends StatelessWidget {
                                     .color
                                     ?.withOpacity(expandedPercent),
                                 overflow: TextOverflow.ellipsis,
-                                fontSize: 28.5 + expandedPercent * 2,
+                                fontSize: 27 + expandedPercent * 2,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -92,8 +92,9 @@ class KeeperSearchBar extends StatelessWidget {
         },
         body: RefreshIndicator(
           onRefresh: onRefresh ?? _refresh,
+          edgeOffset: 45,
           color: Theme.of(context).colorScheme.onBackground,
-          displacement: onRefresh == null ? 0 : 50,
+          displacement: onRefresh == null ? 0 : 40,
           strokeWidth: 2.5,
           child: Builder(
             builder: (BuildContext context) {
@@ -131,7 +132,7 @@ class _SearchBar extends StatelessWidget {
       child: Material(
         color: Theme.of(context).colorScheme.surface,
         elevation: 3,
-        borderRadius: BorderRadius.all(Radius.circular(30)),
+        borderRadius: BorderRadius.all(Radius.circular(25)),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () {
@@ -142,6 +143,7 @@ class _SearchBar extends StatelessWidget {
             children: [
               canPop(context)
                   ? IconButton(
+                      constraints: BoxConstraints.expand(width: 40, height: 42),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -153,7 +155,7 @@ class _SearchBar extends StatelessWidget {
                       ),
                     )
                   : Padding(
-                      padding: EdgeInsets.fromLTRB(15, 0, 10, 0),
+                      padding: EdgeInsets.only(left: 15, right: 10),
                       child: Icon(
                         Icons.search_outlined,
                         size: 23.5,

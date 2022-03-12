@@ -45,9 +45,9 @@ class RequestHelper extends ChangeNotifier {
       return Response(ResponseStatus.Error, null, null);
     }
 
+    _changeStatus(true);
     switch (response.statusCode) {
       case 200:
-        _changeStatus(true);
         return Response(ResponseStatus.Success, response.body, response.bodyBytes);
       case 400:
       case 401:
@@ -84,9 +84,9 @@ class RequestHelper extends ChangeNotifier {
       return Response(ResponseStatus.Error, null, null);
     }
 
+    _changeStatus(true);
     switch (response.statusCode) {
       case 200:
-        _changeStatus(true);
         if (!isCookieValid()) {
           _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
         }

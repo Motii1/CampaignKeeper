@@ -11,7 +11,7 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
   void showStatus() {
     bool isOnline = RequestHelper().isOnline;
     ScaffoldMessengerState scaffold = ScaffoldMessenger.of(context);
-    if (scaffold.mounted) {
+    if (ModalRoute.of(context)!.isCurrent && this.mounted && scaffold.mounted) {
       if (isOnline) {
         scaffold.showSnackBar(KeeperSnackBars().online);
       } else {

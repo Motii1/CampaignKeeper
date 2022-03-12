@@ -59,9 +59,21 @@ class CampaignManager extends BaseManager<CampaignEntity> {
       responseData['campaigns'].forEach((data) {
         newEntities.add(_decodeEntity(data));
       });
-    }
 
-    if (newEntities.isNotEmpty) {
+      if (newEntities.length == _entities.length) {
+        bool isEqual = true;
+        for (int i = 0; i < newEntities.length; i++) {
+          if (!newEntities[i].equals(_entities[i])) {
+            isEqual = false;
+            i = newEntities.length;
+          }
+        }
+
+        if (isEqual) {
+          return false;
+        }
+      }
+
       _entities = newEntities;
       notifyListeners();
       _cacheAll();
