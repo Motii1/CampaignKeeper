@@ -1,6 +1,8 @@
 import { Paper, Stack } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../types/types';
+import { CustomSnackbar } from '../CustomSnackbar/CustomSnackbar';
+import { useSnackbar } from '../CustomSnackbar/useSnackbar';
 import { DialogWrapper } from './components/CustomDialogWrapper/CustomDialogWrapper';
 import { CustomFab } from './components/CustomFab/CustomFab';
 import { NavBar } from './components/NavBar/NavBar';
@@ -18,6 +20,10 @@ type ViewWithNavBarWrapperProps = {
 
 export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props => {
   const currentView = useLocation().pathname;
+
+  const { snackbarProperties, setSnackbarInfo, setSnackbarSuccess, setSnackbarError } =
+    useSnackbar();
+
   return (
     <Paper
       square
@@ -40,7 +46,12 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
           width: '100%',
         }}
       >
-        <NavBar currentView={currentView} />
+        <NavBar
+          currentView={currentView}
+          setSnackbarInfo={setSnackbarInfo}
+          setSnackbarSuccess={setSnackbarSuccess}
+          setSnackbarError={setSnackbarError}
+        />
         {props.children}
       </Stack>
       <CustomFab
@@ -53,6 +64,9 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
         dialogType={props.dialogType}
         setIsOpen={props.setIsOpen}
         setIsSecondaryOpen={props.setIsSecondaryOpen}
+        setSnackbarInfo={setSnackbarInfo}
+        setSnackbarSuccess={setSnackbarSuccess}
+        setSnackbarError={setSnackbarError}
       />
       {props.isSecondaryOpen && props.setIsSecondaryOpen ? (
         <SecondaryDialogWrapper
@@ -60,8 +74,17 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
           isOpen={props.isSecondaryOpen}
           setIsOpen={props.setIsSecondaryOpen}
           setIsPrimaryOpen={props.setIsOpen}
+          setSnackbarInfo={setSnackbarInfo}
+          setSnackbarSuccess={setSnackbarSuccess}
+          setSnackbarError={setSnackbarError}
         />
       ) : null}
+      <CustomSnackbar
+        message={snackbarProperties.message}
+        type={snackbarProperties.type}
+        isOpen={snackbarProperties.isOpen}
+        setIsOpen={snackbarProperties.setIsOpen}
+      />
     </Paper>
   );
 };

@@ -2,14 +2,13 @@ import { Close } from '@mui/icons-material';
 import { Snackbar } from '@mui/material';
 import { CustomSnackbarType } from '../../../types/types';
 
-type CustomSnackbarProps = {
+export type CustomSnackbarProps = {
   message: string;
   type: CustomSnackbarType;
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
 };
 
-// TO-DO add sx to Snackbar with switch depending on type (@Michał)
 export const CustomSnackbar: React.FC<CustomSnackbarProps> = props => (
   <Snackbar
     open={props.isOpen}

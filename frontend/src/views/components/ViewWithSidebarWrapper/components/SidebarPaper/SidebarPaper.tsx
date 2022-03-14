@@ -2,7 +2,7 @@ import { Container, Paper } from '@mui/material';
 import { SidebarLogo } from './components/SidebarLogo/SidebarLogo';
 
 export const SidebarPaper: React.FC = ({ children }) => (
-  <Container sx={{ width: 380 }}>
+  <Container sx={{ width: 360, marginTop: -1 }}>
     <Paper
       elevation={6}
       sx={{

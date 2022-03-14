@@ -5,20 +5,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import requestMethods from '../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../axios/useQuery';
-import { RootState } from '../../../../../../../store';
+import { RootState, store } from '../../../../../../../store';
 import { setError } from '../../../../../../ErrorView/errorSlice';
 import { AUTH_URL } from '../../../../../../LandingView/forms/RegisterForm';
-import { clearDetails } from '../../../../../../LandingView/userDetailsSlice';
 import viewsRoutes from '../../../../../../viewsRoutes';
 import { CustomDialog } from '../../../../../CustomDialog/CustomDialog';
 import { AboutDialogContent } from './components/AboutDialogContent/AboutDialogContent';
 import { SettingsDialogContent } from './components/SettingsDialogContent/SettingsDialogContent';
 
-export const UserPanel: React.FC = () => {
+type UserPanelProps = {
+  setSnackbarInfo: (message: string) => void;
+  setSnackbarSuccess: (message: string) => void;
+  setSnackbarError: (message: string) => void;
+};
+
+export const UserPanel: React.FC<UserPanelProps> = props => {
   const { username, avatar } = useSelector((state: RootState) => state.user);
   const [menuAnchor, setMenuAnchor] = useState<null | Element>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentDialogTitle, setcurrentDialogTitle] = useState<string>('About');
+
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -27,7 +33,7 @@ export const UserPanel: React.FC = () => {
   const handleRunQuery = useCallback(() => {
     if (!isLoading && status) {
       if (status === 200) {
-        dispatch(clearDetails({}));
+        store.dispatch({ type: 'USER_LOGOUT' });
         history.push(viewsRoutes.LANDING);
       } else dispatch(setError({ isError: true, message: 'Error during logout' }));
     }
@@ -40,6 +46,7 @@ export const UserPanel: React.FC = () => {
   const handleMoreVertClick = (event: React.MouseEvent<Element>) => {
     setMenuAnchor(event.currentTarget);
   };
+
   const handleClose = () => {
     setMenuAnchor(null);
   };
@@ -145,9 +152,18 @@ export const UserPanel: React.FC = () => {
         <MenuItem onClick={handleAboutClick}>About</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
       </Menu>
-      <CustomDialog title={currentDialogTitle} isOpen={isDialogOpen} setIsOpen={setIsDialogOpen}>
-        {currentDialogTitle === 'About' ? <AboutDialogContent /> : <SettingsDialogContent />}
-      </CustomDialog>
+      <Box>
+        <CustomDialog title={currentDialogTitle} isOpen={isDialogOpen} setIsOpen={setIsDialogOpen}>
+          {currentDialogTitle === 'About' ? (
+            <AboutDialogContent />
+          ) : (
+            <SettingsDialogContent
+              setSnackbarSuccess={props.setSnackbarSuccess}
+              setSnackbarError={props.setSnackbarError}
+            />
+          )}
+        </CustomDialog>
+      </Box>
     </Box>
   );
 };

@@ -13,8 +13,8 @@ export const SidebarLogo: React.FC = () => {
       }}
       sx={{
         cursor: 'pointer',
-        height: 120,
-        marginTop: -8,
+        height: 114,
+        marginTop: -7.5,
         width: '100%',
       }}
       alt="Logo"

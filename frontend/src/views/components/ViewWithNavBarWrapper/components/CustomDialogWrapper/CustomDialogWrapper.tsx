@@ -1,5 +1,4 @@
 import { NavBarViewDialog } from '../../../../../types/types';
-import { CampaignDialog } from '../../../../CampaignView/dialog/CampaignDialog';
 import { StartDialog } from '../../../../StartView/dialog/StartDialog';
 import viewsRoutes from '../../../../viewsRoutes';
 
@@ -8,7 +7,10 @@ type DialogWrapperProps = {
   isOpen: boolean;
   dialogType: NavBarViewDialog;
   setIsOpen: (newIsOpen: boolean) => void;
-  setIsSecondaryOpen?: (newIsOpen: boolean) => void;
+  setIsSecondaryOpen?: (newIsOpen: boolean) => void; // TO-DO: remove question mark?
+  setSnackbarInfo: (message: string) => void;
+  setSnackbarSuccess: (message: string) => void;
+  setSnackbarError: (message: string) => void;
 };
 
 export const DialogWrapper: React.FC<DialogWrapperProps> = props => {
@@ -20,17 +22,13 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = props => {
           setIsOpen={props.setIsOpen}
           dialogType={props.dialogType}
           setIsSecondaryOpen={props.setIsSecondaryOpen as (newIsOpen: boolean) => void}
+          setSnackbarSuccess={props.setSnackbarSuccess}
+          setSnackbarError={props.setSnackbarError}
         />
       );
     case viewsRoutes.CAMPAIGN:
-      return (
-        <CampaignDialog
-          isOpen={props.isOpen}
-          setIsOpen={props.setIsOpen}
-          dialogType={props.dialogType}
-          setIsSecondaryOpen={props.setIsSecondaryOpen as (newIsOpen: boolean) => void}
-        />
-      );
+      // TO-DO: add opening of the campaign dialog
+      return null;
     default:
       return (
         <StartDialog
@@ -38,6 +36,8 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = props => {
           setIsOpen={props.setIsOpen}
           dialogType={props.dialogType}
           setIsSecondaryOpen={props.setIsSecondaryOpen as (newIsOpen: boolean) => void}
+          setSnackbarSuccess={props.setSnackbarSuccess}
+          setSnackbarError={props.setSnackbarError}
         />
       );
   }

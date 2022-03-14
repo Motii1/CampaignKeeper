@@ -1,11 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
-
-export const fetchUserDetails = createAsyncThunk('userDetails/fetchDetails', async () => {
-  const response = await protectedApiClient.get('api/user/details');
-  return response;
-});
-
 interface UserState {
   isDownloaded: boolean;
   username: null | string;
@@ -19,6 +13,11 @@ const initialState: UserState = {
   email: null,
   avatar: null,
 };
+
+export const fetchUserDetails = createAsyncThunk('userDetails/fetchDetails', async () => {
+  const response = await protectedApiClient.get('api/user/details');
+  return response;
+});
 
 const userDetailsSlice = createSlice({
   name: 'userDetails',

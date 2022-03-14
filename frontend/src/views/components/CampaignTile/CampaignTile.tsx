@@ -1,20 +1,26 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import CampaignDefaultGraphic from '../../../graphics/campaignDefault.jpg';
+import { useHistory } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../types/types';
+import { updateSelectedCampaignData } from '../../CampaignView/campaignViewSlice';
 import { updateState } from '../../StartView/startViewSlice';
+import viewsRoutes from '../../viewsRoutes';
 import { EditMenu } from '../EditMenu/EditMenu';
 
 type CampaignTileProps = {
-  campaignTitle: string;
+  campaignId: number;
+  campaignName: string;
+  campaignImageBase64: string;
   setIsOpen: (newIsOpen: boolean) => void;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
+  isClickable?: boolean;
 };
 
-//TO-DO this component should take image as one of args -> add after API finished
 export const CampaignTile: React.FC<CampaignTileProps> = props => {
+  const history = useHistory();
   const dispatch = useDispatch();
+
   const [menuPos, setMenuPos] = useState<null | { mouseX: number; mouseY: number }>(null);
 
   const handleContextMenu = (event: React.MouseEvent) => {
@@ -29,12 +35,31 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
     );
   };
 
+  const handleClick = () => {
+    if (props.isClickable) {
+      dispatch(
+        updateSelectedCampaignData({
+          campaignId: props.campaignId,
+          campaignName: props.campaignName,
+          campaignImageBase64: props.campaignImageBase64,
+        })
+      );
+      history.push(viewsRoutes.CAMPAIGN);
+    }
+  };
+
   const handleClose = () => {
     setMenuPos(null);
   };
 
   const handleEdit = () => {
-    dispatch(updateState({ name: props.campaignTitle }));
+    dispatch(
+      updateState({
+        id: props.campaignId,
+        name: props.campaignName,
+        imageBase64: props.campaignImageBase64,
+      })
+    );
     props.setIsOpen(true);
     props.setDialogType(NavBarViewDialog.EditCampaign);
     setMenuPos(null);
@@ -43,7 +68,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
   return (
     <Paper
       sx={{
-        cursor: 'context-menu',
+        cursor: 'pointer',
         borderRadius: 2.5,
         backgroundColor: 'customPalette.brown',
         height: 211,
@@ -53,11 +78,11 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
       }}
       onContextMenu={handleContextMenu}
     >
-      <Stack direction="column" spacing={0.5}>
+      <Stack direction="column" spacing={0.5} onClick={handleClick}>
         <Box
           component="img"
           alt="Campaign graphic"
-          src={CampaignDefaultGraphic}
+          src={`data:;charset=utf-8;base64,${props.campaignImageBase64}`}
           sx={{
             borderRadius: 2,
             height: 180,
@@ -75,7 +100,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
             paddingTop: 0.3,
           }}
         >
-          {props.campaignTitle}
+          {props.campaignName}
         </Typography>
       </Stack>
       <EditMenu menuPos={menuPos} handleEdit={handleEdit} handleClose={handleClose} />

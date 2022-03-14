@@ -5,6 +5,9 @@ interface CampaignViewState {
   name: string;
   type: NavBarViewDialog;
   sessionsNames: Array<string>;
+  campaignId: number;
+  campaignName: string;
+  campaignImageBase64: string;
 }
 
 const initialState: CampaignViewState = {
@@ -26,6 +29,9 @@ const initialState: CampaignViewState = {
     'Session 13',
     'Session 14',
   ],
+  campaignId: -1,
+  campaignName: '',
+  campaignImageBase64: '',
 };
 
 const campaignViewSlice = createSlice({
@@ -40,8 +46,19 @@ const campaignViewSlice = createSlice({
     resetState: (state, _action) => {
       state.name = '';
       state.type = NavBarViewDialog.NewCampaign;
-      // eslint-disable-next-line no-console
-      console.log(state.name, state.type);
+    },
+    updateSelectedCampaignData: (state, action) => {
+      state.campaignId = action.payload.campaignId;
+      state.campaignName = action.payload.campaignName;
+      state.campaignImageBase64 = action.payload.campaignImageBase64;
+    },
+    // removing data of selected campaign if it was deleted in StartView
+    resetSelectedCampaignData: (state, action) => {
+      if (state.campaignId === action.payload.campaignId) {
+        state.campaignId = -1;
+        state.campaignName = '';
+        state.campaignImageBase64 = '';
+      }
     },
     // TO-DO: delete after API integration
     addSession: (state, action) => {
@@ -54,6 +71,13 @@ const campaignViewSlice = createSlice({
   },
 });
 
-export const { updateState, resetState, addSession, removeSession } = campaignViewSlice.actions;
+export const {
+  updateState,
+  resetState,
+  updateSelectedCampaignData,
+  resetSelectedCampaignData,
+  addSession,
+  removeSession,
+} = campaignViewSlice.actions;
 
 export default campaignViewSlice.reducer;

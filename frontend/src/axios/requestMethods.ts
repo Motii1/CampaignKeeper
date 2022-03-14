@@ -8,4 +8,6 @@ const DELETE: Method = 'delete';
 
 const PUT: Method = 'put';
 
-export default { GET, POST, DELETE, PUT };
+const PATCH: Method = 'patch';
+
+export default { GET, POST, DELETE, PUT, PATCH };
