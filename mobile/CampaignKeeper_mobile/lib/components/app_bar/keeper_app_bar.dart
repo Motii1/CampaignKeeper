@@ -113,7 +113,7 @@ class KeeperAppBar extends StatelessWidget {
           ];
         },
         body: RefreshIndicator(
-          edgeOffset: 45,
+          edgeOffset: 55,
           onRefresh: onRefresh ?? _refresh,
           color: Theme.of(context).colorScheme.onBackground,
           displacement: onRefresh == null ? 0 : 40,
