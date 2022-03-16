@@ -18,7 +18,7 @@ class KeeperSearchBar extends StatelessWidget {
   final KeeperPopup? popup;
   final Future<void> Function()? onRefresh;
   final double _expandedHeight = 180.0;
-  final double _collapsedHeight = 65;
+  final double _collapsedHeight = 64;
 
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
@@ -131,7 +131,7 @@ class _SearchBar extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(8, 8, 8, 6),
       child: Material(
         color: Theme.of(context).colorScheme.surface,
-        elevation: 3,
+        elevation: 0,
         borderRadius: BorderRadius.all(Radius.circular(25)),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
