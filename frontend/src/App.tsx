@@ -11,8 +11,6 @@ export const App: React.FC = () => {
   const dispatch = useDispatch();
   dispatch(fetchUserDetails());
   dispatch(fetchCampaigns());
-  // eslint-disable-next-line no-console
-  console.log('App');
 
   return (
     <BrowserRouter>
