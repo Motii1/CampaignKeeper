@@ -35,10 +35,10 @@ export const StartView: React.FC = () => {
 
   return (
     <ViewWithNavBarWrapper
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      dialogType={dialogType}
-      setDialogType={setDialogType}
+      isPrimaryOpen={isOpen}
+      setIsPrimaryOpen={setIsOpen}
+      primaryDialogType={dialogType}
+      setPrimaryDialogType={setDialogType}
       isSecondaryOpen={isSecondaryOpen}
       setIsSecondaryOpen={setIsSecondaryOpen}
       handleFab={handleFab}
