@@ -5,6 +5,7 @@ import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
 import { getCenteredPadding, handleWheelEvent } from '../../utils/utils';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
+import { CustomGrid } from '../components/CustomGrid/CustomGrid';
 import { EmptyPlaceholder } from '../components/EmptyPlaceholder/EmptyPlaceholder';
 import { QuoteLine } from '../components/QuoteLine/QuoteLine';
 import { quotes } from '../components/QuoteLine/quotes';
@@ -109,19 +110,7 @@ export const CampaignView: React.FC = () => {
               width: '100%',
             }}
           >
-            <Grid
-              container
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              columnSpacing={10}
-              sx={{
-                maxHeight: '100%',
-                width: 'auto',
-                maxWidth: '100%',
-                paddingLeft: centeredPadding + 'px',
-              }}
-            >
+            <CustomGrid centeredPadding={centeredPadding}>
               {sessionsNames.map(title => (
                 <Grid item key={title}>
                   <SessionTile
@@ -131,7 +120,7 @@ export const CampaignView: React.FC = () => {
                   />
                 </Grid>
               ))}
-            </Grid>
+            </CustomGrid>
           </Box>
         </Stack>
       )}
