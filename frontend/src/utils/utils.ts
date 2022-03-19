@@ -40,9 +40,7 @@ export const handleWheelEvent = (e: React.WheelEvent): void => {
   }
 };
 
-// TO-DO: find out type of this function
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const toBase64 = (file: File) =>
+export const toBase64 = (file: File): Promise<null | string | ArrayBuffer> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
