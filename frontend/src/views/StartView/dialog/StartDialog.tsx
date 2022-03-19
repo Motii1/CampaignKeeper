@@ -27,7 +27,6 @@ type StartDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
-//TO-DO: think about adding wrapper (for all NavBarViews) on stack inside CustomDialog
 export const StartDialog: React.FC<StartDialogProps> = props => {
   const dispatch = useDispatch();
 
@@ -144,7 +143,6 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     setHelperText(validateName(newName));
   };
 
-  // TO-DO: should we redirect user to campaign view after creation of new campaign?
   const handleOk = () => {
     if (validateName(campaignName) === '') {
       if (props.dialogType === NavBarViewDialog.NewCampaign) {
