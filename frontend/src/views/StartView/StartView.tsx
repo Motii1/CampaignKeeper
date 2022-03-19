@@ -1,4 +1,4 @@
-import { Box, Grid, Stack } from '@mui/material';
+import { Box, CircularProgress, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -26,12 +26,66 @@ export const StartView: React.FC = () => {
 
   useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
 
+  const centeredPadding = getCenteredPadding();
+
   const handleFab = () => {
     setDialogType(NavBarViewDialog.NewCampaign);
     setIsOpen(true);
   };
 
-  const centeredPadding = getCenteredPadding();
+  // TO-DO: maybe we need small, medium, large CustomCircularProgress components?
+  const renderCampaignsGrid = () => {
+    if (isCampaignListDownloaded)
+      return campaignsList.length > 0 ? (
+        <Box
+          component="div"
+          onWheel={handleWheelEvent}
+          sx={{
+            overflowY: 'hidden',
+            alignItems: 'start',
+            justifyContent: 'flex-start',
+            display: 'flex',
+            height: '100%',
+            width: '100%',
+            paddingTop: 5,
+          }}
+        >
+          <CustomGrid centeredPadding={centeredPadding}>
+            {campaignsList.map(campaign => (
+              <Grid item key={campaign.name}>
+                <CampaignTile
+                  campaignId={campaign.id}
+                  campaignName={campaign.name}
+                  campaignImageBase64={campaign.imageBase64}
+                  setIsOpen={setIsOpen}
+                  setDialogType={setDialogType}
+                  isClickable={true}
+                />
+              </Grid>
+            ))}
+          </CustomGrid>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <EmptyPlaceholder message={'Go wild and start your new journey, worldshaper'} />
+        </Box>
+      );
+    return (
+      <CircularProgress
+        size={64}
+        thickness={6}
+        sx={{ color: 'customPalette.onBackground', margin: 'auto' }}
+      />
+    );
+  };
 
   return (
     <ViewWithNavBarWrapper
@@ -50,48 +104,7 @@ export const StartView: React.FC = () => {
         sx={{ width: '100%', height: '100%', overflowY: 'auto' }}
       >
         <QuoteLine text={quote} />
-        {campaignsList.length > 0 ? (
-          <Box
-            component="div"
-            onWheel={handleWheelEvent}
-            sx={{
-              overflowY: 'hidden',
-              alignItems: 'start',
-              justifyContent: 'flex-start',
-              display: 'flex',
-              height: '100%',
-              width: '100%',
-              paddingTop: 5,
-            }}
-          >
-            <CustomGrid centeredPadding={centeredPadding}>
-              {campaignsList.map(campaign => (
-                <Grid item key={campaign.name}>
-                  <CampaignTile
-                    campaignId={campaign.id}
-                    campaignName={campaign.name}
-                    campaignImageBase64={campaign.imageBase64}
-                    setIsOpen={setIsOpen}
-                    setDialogType={setDialogType}
-                    isClickable={true}
-                  />
-                </Grid>
-              ))}
-            </CustomGrid>
-          </Box>
-        ) : (
-          <Box
-            sx={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <EmptyPlaceholder message={'Go wild and start your new journey, worldshaper'} />
-          </Box>
-        )}
+        {renderCampaignsGrid()}
       </Stack>
     </ViewWithNavBarWrapper>
   );
