@@ -45,9 +45,12 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
         borderRadius: 2.5,
         backgroundColor: 'customPalette.surface',
         height: 40,
-        width: 371.2,
+        width: { xs: 259.8, lg: 371.2 },
         padding: 0.66,
-        margin: 1.5,
+        marginRight: 2,
+        marginLeft: 2,
+        marginTop: 1.2,
+        marginBlock: 1.2,
       }}
       onContextMenu={handleContextMenu}
     >

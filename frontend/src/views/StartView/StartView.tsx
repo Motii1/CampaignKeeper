@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
-import { getCenteredPadding, handleWheelEvent } from '../../utils/utils';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
 import { CustomGrid } from '../components/CustomGrid/CustomGrid';
 import { EmptyPlaceholder } from '../components/EmptyPlaceholder/EmptyPlaceholder';
@@ -26,8 +25,6 @@ export const StartView: React.FC = () => {
 
   useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
 
-  const centeredPadding = getCenteredPadding();
-
   const handleFab = () => {
     setDialogType(NavBarViewDialog.NewCampaign);
     setIsOpen(true);
@@ -39,18 +36,17 @@ export const StartView: React.FC = () => {
       return campaignsList.length > 0 ? (
         <Box
           component="div"
-          onWheel={handleWheelEvent}
           sx={{
-            overflowY: 'hidden',
-            alignItems: 'start',
-            justifyContent: 'flex-start',
+            overflowY: 'auto',
+            alignItems: 'start-flex',
+            justifyContent: 'center',
             display: 'flex',
             height: '100%',
             width: '100%',
-            paddingTop: 5,
+            paddingTop: 0.8,
           }}
         >
-          <CustomGrid centeredPadding={centeredPadding}>
+          <CustomGrid>
             {campaignsList.map(campaign => (
               <Grid item key={campaign.name}>
                 <CampaignTile
@@ -101,7 +97,7 @@ export const StartView: React.FC = () => {
         direction="column"
         justifyContent="center"
         alignItems="center"
-        sx={{ width: '100%', height: '100%', overflowY: 'auto' }}
+        sx={{ width: '100%', overflowY: 'auto' }}
       >
         <QuoteLine text={quote} />
         {renderCampaignsGrid()}

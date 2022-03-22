@@ -71,10 +71,10 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
         cursor: 'pointer',
         borderRadius: 2.5,
         backgroundColor: 'customPalette.brown',
-        height: 211,
-        width: 371.2,
+        height: { xs: 147.7, lg: 211 },
+        width: { xs: 259.8, lg: 371.2 },
         padding: 0.66,
-        margin: 1.5,
+        margin: 2,
       }}
       onContextMenu={handleContextMenu}
     >
@@ -85,8 +85,8 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
           src={`data:;charset=utf-8;base64,${props.campaignImageBase64}`}
           sx={{
             borderRadius: 2,
-            height: 180,
-            width: 370,
+            height: { xs: 126, lg: 180 },
+            width: { xs: 259, lg: 370 },
             objectFit: 'cover',
           }}
         />
@@ -95,9 +95,10 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
             color: 'customPalette.accent',
             fontWeight: 'medium',
             textAlign: 'left',
-            paddingLeft: 1.5,
-            paddingRight: 1.5,
-            paddingTop: 0.3,
+            paddingLeft: { xs: 0.7, lg: 1.5 },
+            paddingRight: { xs: 0.7, lg: 1.5 },
+            paddingTop: { xs: 0, lg: 0.3 },
+            fontSize: { xs: 13, lg: 16 },
           }}
         >
           {props.campaignName}

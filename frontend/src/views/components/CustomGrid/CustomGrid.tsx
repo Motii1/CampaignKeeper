@@ -1,21 +1,16 @@
 import { Grid } from '@mui/material';
 
-type CustomGridProps = {
-  centeredPadding: number;
-};
-
-export const CustomGrid: React.FC<CustomGridProps> = props => (
+export const CustomGrid: React.FC = props => (
   <Grid
     container
-    direction="column"
+    direction="row"
     justifyContent="flex-start"
     alignItems="flex-start"
-    columnSpacing={10}
+    columnSpacing={5}
     sx={{
       maxHeight: '100%',
-      width: 'auto',
-      maxWidth: '100%',
-      paddingLeft: props.centeredPadding + 'px',
+      width: { xs: 413, md: 750, lg: 975, xl: 1442 },
+      paddingLeft: 5.5,
     }}
   >
     {props.children}

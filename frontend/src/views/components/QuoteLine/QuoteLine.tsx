@@ -8,6 +8,8 @@ type QuoteLineProps = {
 // TO-DO: establish contraints on quote length
 export const QuoteLine: React.FC<QuoteLineProps> = props => (
   <Typography
+    noWrap
+    align="center"
     variant="h6"
     sx={{
       color: 'customPalette.accent',
@@ -15,7 +17,9 @@ export const QuoteLine: React.FC<QuoteLineProps> = props => (
       padding: 1,
       paddingTop: 7,
       paddingBottom: 0,
+      height: 55,
       fontWeight: 'regular',
+      width: '95%',
     }}
   >
     {props.text}
