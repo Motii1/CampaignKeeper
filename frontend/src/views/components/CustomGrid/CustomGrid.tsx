@@ -6,11 +6,11 @@ export const CustomGrid: React.FC = props => (
     direction="row"
     justifyContent="flex-start"
     alignItems="flex-start"
-    columnSpacing={5}
+    columnSpacing={2.0}
     sx={{
       maxHeight: '100%',
-      width: { xs: 413, md: 750, lg: 975, xl: 1442 },
-      paddingLeft: 5.5,
+      width: { xs: 380, md: 720, lg: 900, xl: 1352 },
+      paddingLeft: 4.3,
     }}
   >
     {props.children}

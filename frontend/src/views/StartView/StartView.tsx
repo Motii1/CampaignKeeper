@@ -97,7 +97,7 @@ export const StartView: React.FC = () => {
         direction="column"
         justifyContent="center"
         alignItems="center"
-        sx={{ width: '100%', overflowY: 'auto' }}
+        sx={{ width: '100%', overflowY: 'auto', overflowX: 'hidden' }}
       >
         <QuoteLine text={quote} />
         {renderCampaignsGrid()}
