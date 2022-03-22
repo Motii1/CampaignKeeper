@@ -1,5 +1,6 @@
 import { Box, Dialog, DialogContent, Stack } from '@mui/material';
 import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
+import { useWindowDimensions } from '../../../utils/utils';
 import { CustomButton } from '../CustomButton/CustomButton';
 import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
@@ -19,6 +20,8 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
   isTitleRed = false,
   ...otherProps
 }) => {
+  const { height: screenHeight } = useWindowDimensions();
+
   const renderButtons = () => {
     if (otherProps.onOk || otherProps.onCancel || otherProps.onDelete)
       return (
@@ -27,7 +30,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           justifyContent="flex-end"
           alignItems="center"
           spacing={1}
-          sx={{ width: '100%', paddingTop: 1 }}
+          sx={{ width: '100%', paddingTop: 0, paddingBottom: 1.9 }}
         >
           {otherProps.onDelete ? (
             <CustomButton
@@ -71,10 +74,10 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
     >
       <DialogContent
         sx={{
-          minWidth: '20vw',
+          minWidth: 370,
           maxHeight: 710,
           paddingTop: 1.6,
-          paddingBottom: 1.9,
+          paddingBottom: 0,
           paddingLeft: 0,
           paddingRight: 0,
           overflow: 'hidden',
@@ -95,11 +98,13 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           <Box
             sx={{
               width: '100%',
-              maxHeight: 600,
+              maxHeight: screenHeight - 230 + 'px',
               overflowY: 'auto',
             }}
           >
-            <Box sx={{ paddingLeft: 2.4, paddingRight: 2.4 }}>{otherProps.children}</Box>
+            <Box sx={{ paddingLeft: 2.4, paddingRight: 2.4, paddingBlock: 1.4 }}>
+              {otherProps.children}
+            </Box>
           </Box>
           {renderButtons()}
         </Stack>

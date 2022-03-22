@@ -28,18 +28,6 @@ export const useWindowDimensions = (): windowDimensions => {
   return windowDimensions;
 };
 
-export const getCenteredPadding = (width: number = getWindowDimensions().width): number =>
-  Math.max((width - 1368.1) / 2, width < 450 ? 6 : 51);
-
-export const handleWheelEvent = (e: React.WheelEvent): void => {
-  if (e.deltaY !== 0) {
-    e.currentTarget.scrollTo({
-      top: 0,
-      left: e.currentTarget.scrollLeft + e.deltaY,
-    });
-  }
-};
-
 export const toBase64 = (file: File): Promise<null | string | ArrayBuffer> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
