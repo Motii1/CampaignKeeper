@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
-import { getCenteredPadding, handleWheelEvent } from '../../utils/utils';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
+import { CustomGrid } from '../components/CustomGrid/CustomGrid';
 import { EmptyPlaceholder } from '../components/EmptyPlaceholder/EmptyPlaceholder';
 import { QuoteLine } from '../components/QuoteLine/QuoteLine';
 import { quotes } from '../components/QuoteLine/quotes';
@@ -29,8 +29,6 @@ export const CampaignView: React.FC = () => {
     setIsOpen(true);
   };
 
-  const centeredPadding = getCenteredPadding();
-
   const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
 
   useEffect(() => {
@@ -54,10 +52,10 @@ export const CampaignView: React.FC = () => {
 
   return (
     <ViewWithNavBarWrapper
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      dialogType={dialogType}
-      setDialogType={setDialogType}
+      isPrimaryOpen={isOpen}
+      setIsPrimaryOpen={setIsOpen}
+      primaryDialogType={dialogType}
+      setPrimaryDialogType={setDialogType}
       isSecondaryOpen={isSecondaryOpen}
       setIsSecondaryOpen={setIsSecondaryOpen}
       handleFab={handleFab}
@@ -90,6 +88,7 @@ export const CampaignView: React.FC = () => {
           sx={{ width: '100%', overflowY: 'auto' }}
         >
           <QuoteLine text={quote} />
+          <Box sx={{ width: 3, height: { xs: 31, lg: 46 } }} />
           <CampaignTile
             campaignId={campaignId}
             campaignName={campaignName}
@@ -99,29 +98,16 @@ export const CampaignView: React.FC = () => {
           />
           <Box
             component="div"
-            onWheel={handleWheelEvent}
             sx={{
-              overflowY: 'hidden',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
+              overflowY: 'auto',
+              alignItems: 'start-flex',
+              justifyContent: 'center',
               display: 'flex',
               height: '100%',
               width: '100%',
             }}
           >
-            <Grid
-              container
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              columnSpacing={10}
-              sx={{
-                maxHeight: '100%',
-                width: 'auto',
-                maxWidth: '100%',
-                paddingLeft: centeredPadding + 'px',
-              }}
-            >
+            <CustomGrid>
               {sessionsNames.map(title => (
                 <Grid item key={title}>
                   <SessionTile
@@ -131,7 +117,7 @@ export const CampaignView: React.FC = () => {
                   />
                 </Grid>
               ))}
-            </Grid>
+            </CustomGrid>
           </Box>
         </Stack>
       )}

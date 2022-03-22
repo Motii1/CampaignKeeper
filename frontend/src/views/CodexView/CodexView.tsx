@@ -7,10 +7,10 @@ export const CodexView: React.FC = () => {
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
   return (
     <ViewWithNavBarWrapper
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      dialogType={dialogType}
-      setDialogType={setDialogType}
+      isPrimaryOpen={isOpen}
+      setIsPrimaryOpen={setIsOpen}
+      primaryDialogType={dialogType}
+      setPrimaryDialogType={setDialogType}
     />
   );
 };

@@ -1,7 +1,6 @@
 import { Button } from '@mui/material';
 import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
 
-//TO-DO add type for color (gold/standard/red)
 type CustomButtonProps = {
   text: string;
   behavior?: CustomButtonBehavior;
@@ -9,7 +8,6 @@ type CustomButtonProps = {
   onClick?: () => void;
 };
 
-//TO-DO add setting color and background color in standardButtonSx
 export const CustomButton: React.FC<CustomButtonProps> = ({
   behavior = CustomButtonBehavior.Submit,
   type = CustomButtonType.Accent,

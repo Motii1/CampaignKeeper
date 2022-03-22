@@ -9,10 +9,10 @@ import { NavBar } from './components/NavBar/NavBar';
 import { SecondaryDialogWrapper } from './components/SecondaryCustomDialogWrapper/SecondaryCustomDialogWrapper';
 
 type ViewWithNavBarWrapperProps = {
-  isOpen: boolean;
-  setIsOpen: (newIsOpen: boolean) => void;
-  dialogType: NavBarViewDialog;
-  setDialogType: (newType: NavBarViewDialog) => void;
+  isPrimaryOpen: boolean;
+  setIsPrimaryOpen: (newIsOpen: boolean) => void;
+  primaryDialogType: NavBarViewDialog;
+  setPrimaryDialogType: (newType: NavBarViewDialog) => void;
   isSecondaryOpen?: boolean;
   setIsSecondaryOpen?: (newIsOpen: boolean) => void;
   handleFab?: () => void;
@@ -56,13 +56,15 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
       </Stack>
       <CustomFab
         currentView={currentView}
-        handleClick={props.handleFab ? props.handleFab : () => props.setIsOpen(!props.isOpen)}
+        handleClick={
+          props.handleFab ? props.handleFab : () => props.setIsPrimaryOpen(!props.isPrimaryOpen)
+        }
       />
       <DialogWrapper
         currentView={currentView}
-        isOpen={props.isOpen}
-        dialogType={props.dialogType}
-        setIsOpen={props.setIsOpen}
+        isOpen={props.isPrimaryOpen}
+        dialogType={props.primaryDialogType}
+        setIsOpen={props.setIsPrimaryOpen}
         setIsSecondaryOpen={props.setIsSecondaryOpen}
         setSnackbarInfo={setSnackbarInfo}
         setSnackbarSuccess={setSnackbarSuccess}
@@ -73,7 +75,7 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
           currentView={currentView}
           isOpen={props.isSecondaryOpen}
           setIsOpen={props.setIsSecondaryOpen}
-          setIsPrimaryOpen={props.setIsOpen}
+          setIsPrimaryOpen={props.setIsPrimaryOpen}
           setSnackbarInfo={setSnackbarInfo}
           setSnackbarSuccess={setSnackbarSuccess}
           setSnackbarError={setSnackbarError}

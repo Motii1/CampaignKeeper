@@ -73,7 +73,6 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
     }
   };
 
-  // TO-DO: clear values and reset helper texts after success in changing password
   const handleRunQueryPassword = useCallback(() => {
     if (!isLoadingPassword && statusPassword) {
       if (statusPassword === 200) {

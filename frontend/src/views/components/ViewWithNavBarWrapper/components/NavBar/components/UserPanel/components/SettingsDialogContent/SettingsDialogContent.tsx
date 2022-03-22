@@ -18,7 +18,6 @@ type SettingsDialogContentProps = {
   setSnackbarError: (message: string) => void;
 };
 
-// TO-DO: add change username, change email, change password
 export const SettingsDialogContent: React.FC<SettingsDialogContentProps> = props => {
   const dispatch = useDispatch();
 
