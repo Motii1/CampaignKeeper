@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../../Domain/User/User';
-import { findUserByName } from '../../Infrastracture/Entity/User/UserRepository';
+import { findUserByIdentityString } from '../../Infrastracture/Entity/User/UserRepository';
 import { TOKEN_COOKIE_NAME } from '../AppConstants';
 import { JwtPayload } from '../Type/JwtPayload';
 
 export const extractUserFromCookies = async (cookies: Record<string, unknown>): Promise<User> => {
   const username = extractUsernameFromCookies(cookies);
-  const user = await findUserByName(username);
+  const user = await findUserByIdentityString(username);
   return user!;
 };
 
