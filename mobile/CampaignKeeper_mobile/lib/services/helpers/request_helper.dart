@@ -29,7 +29,7 @@ class RequestHelper extends ChangeNotifier {
 
   // Returns pair of a respond status and a string json
   Future<Response> get({required String endpoint, bool autoLogin = true}) async {
-    Map<String, String> headers = {"cookie": isCookieValid() ? _cookie.toString() : ""};
+    Map<String, String> headers = {"Cookie": isCookieValid() ? _cookie.toString() : ""};
     var response;
 
     try {
@@ -44,6 +44,8 @@ class RequestHelper extends ChangeNotifier {
       _changeStatus(false);
       return Response(ResponseStatus.Error, null, null);
     }
+
+    print("Get status: ${response.statusCode}");
 
     _changeStatus(true);
     switch (response.statusCode) {
@@ -69,7 +71,7 @@ class RequestHelper extends ChangeNotifier {
   Future<Response> post(
       {required String endpoint, Object? body, bool isLogin = false, bool autoLogin = true}) async {
     //TODO: maybe headers with cookies here and in get are not needed, it's seems they are automatic
-    Map<String, String> headers = {"cookie": isCookieValid() ? _cookie.toString() : ""};
+    Map<String, String> headers = {"Cookie": isCookieValid() ? _cookie.toString() : ""};
     var response;
     try {
       response = await DependenciesHelper()
@@ -84,11 +86,14 @@ class RequestHelper extends ChangeNotifier {
       return Response(ResponseStatus.Error, null, null);
     }
 
+    print("Post status: ${response.statusCode}");
+
     _changeStatus(true);
     switch (response.statusCode) {
       case 200:
         if (!isCookieValid()) {
           _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
+          print("Cookie: ${_cookie.toString()}");
         }
 
         return Response(ResponseStatus.Success, response.body, response.bodyBytes);
