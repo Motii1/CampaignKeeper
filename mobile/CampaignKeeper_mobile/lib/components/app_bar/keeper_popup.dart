@@ -7,7 +7,7 @@ class KeeperPopup extends StatefulWidget {
 
   final List<PopupMenuEntry<dynamic>> Function(BuildContext) itemBuilder;
   final void Function(dynamic)? onSelected;
-  EdgeInsets? padding;
+  final EdgeInsets? padding;
 
   @override
   _KeeperPopupState createState() => _KeeperPopupState();

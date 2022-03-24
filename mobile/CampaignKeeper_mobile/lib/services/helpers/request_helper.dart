@@ -70,8 +70,7 @@ class RequestHelper extends ChangeNotifier {
 
   Future<Response> post(
       {required String endpoint, Object? body, bool isLogin = false, bool autoLogin = true}) async {
-    //TODO: maybe headers with cookies here and in get are not needed, it's seems they are automatic
-    Map<String, String> headers = {"Cookie": isCookieValid() ? _cookie.toString() : ""};
+    Map<String, String> headers = {"cookie": isCookieValid() ? _cookie.toString() : ""};
     var response;
     try {
       response = await DependenciesHelper()
@@ -91,10 +90,7 @@ class RequestHelper extends ChangeNotifier {
     _changeStatus(true);
     switch (response.statusCode) {
       case 200:
-        if (!isCookieValid()) {
-          _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
-          print("Cookie: ${_cookie.toString()}");
-        }
+        _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
 
         return Response(ResponseStatus.Success, response.body, response.bodyBytes);
       case 400:

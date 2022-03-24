@@ -31,7 +31,7 @@ class _LoadingState extends State<Loading> {
 
   void autoLogin() async {
     await AppPrefs().refresh(context);
-    await DataCarrier().refresh<UserDataEntity>();
+    await DataCarrier().refresh<UserDataEntity>(online: false);
     ResponseStatus status = await LoginHelper().autoLogin();
 
     switch (status) {

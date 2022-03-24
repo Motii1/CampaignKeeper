@@ -21,7 +21,7 @@ class BaseManager<T> extends ChangeNotifier {
   // Get all data from cache, then try to download new, specified one
   // Compare data and if there are differences call notifyListeners() and return true
   // Else return false
-  Future<bool> refresh({int groupId = -1}) {
+  Future<bool> refresh({int groupId = -1, bool online = true}) {
     throw new UnimplementedError();
   }
 

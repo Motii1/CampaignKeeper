@@ -37,7 +37,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   }
 
   @override
-  Future<bool> refresh({int groupId = -1}) async {
+  Future<bool> refresh({int groupId = -1, bool online = true}) async {
     if (_entities.isEmpty) {
       String? cache = await CacheUtil().get(_key);
       if (cache != null) {
@@ -50,37 +50,39 @@ class CampaignManager extends BaseManager<CampaignEntity> {
       }
     }
 
-    List<CampaignEntity> newEntities = [];
-    Response userResponse = await RequestHelper().get(endpoint: CampaignEntity.endpoint);
+    if (online) {
+      List<CampaignEntity> newEntities = [];
+      Response userResponse = await RequestHelper().get(endpoint: CampaignEntity.endpoint);
 
-    if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
-      Map responseData = json.decode(userResponse.data!);
-      newEntities.clear();
-      responseData['campaigns'].forEach((data) {
-        newEntities.add(_decodeEntity(data));
-      });
+      if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
+        Map responseData = json.decode(userResponse.data!);
+        newEntities.clear();
+        responseData['campaigns'].forEach((data) {
+          newEntities.add(_decodeEntity(data));
+        });
 
-      if (newEntities.length == _entities.length) {
-        bool isEqual = true;
-        for (int i = 0; i < newEntities.length; i++) {
-          if (!newEntities[i].equals(_entities[i])) {
-            isEqual = false;
-            i = newEntities.length;
+        if (newEntities.length == _entities.length) {
+          bool isEqual = true;
+          for (int i = 0; i < newEntities.length; i++) {
+            if (!newEntities[i].equals(_entities[i])) {
+              isEqual = false;
+              i = newEntities.length;
+            }
+          }
+
+          if (isEqual) {
+            return false;
           }
         }
 
-        if (isEqual) {
-          return false;
-        }
+        _entities = newEntities;
+        notifyListeners();
+        _cacheAll();
+        return true;
       }
-
-      _entities = newEntities;
-      notifyListeners();
-      _cacheAll();
-      return true;
-    } else {
-      return false;
     }
+
+    return false;
   }
 
   @override
