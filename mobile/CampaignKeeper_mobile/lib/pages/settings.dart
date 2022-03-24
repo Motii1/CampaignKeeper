@@ -24,7 +24,7 @@ class _SettingsState extends KeeperState<Settings> {
   }
 
   void logout() async {
-    await LoginHelper().logout(force: true);
+    LoginHelper().logout(force: true);
     Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
   }
 
