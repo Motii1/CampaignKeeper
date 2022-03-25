@@ -31,7 +31,6 @@ class RequestHelper extends ChangeNotifier {
   Future<Response> get({required String endpoint, bool autoLogin = true}) async {
     Map<String, String> headers = {"Cookie": isCookieValid() ? _cookie.toString() : ""};
     var response;
-
     try {
       response = await DependenciesHelper()
           .client
@@ -75,7 +74,7 @@ class RequestHelper extends ChangeNotifier {
     try {
       response = await DependenciesHelper()
           .client
-          .post(Uri.parse("${AppPrefs().url}$endpoint"), body: body, headers: headers)
+          .post(Uri.parse("${AppPrefs().url}$endpoint"), body: body, headers: isLogin ? null : headers)
           .timeout(Duration(seconds: isLogin ? AppPrefs().loginTimeout : AppPrefs().timeout));
     } on TimeoutException catch (_) {
       _changeStatus(false);
@@ -95,7 +94,7 @@ class RequestHelper extends ChangeNotifier {
         return Response(ResponseStatus.Success, response.body, response.bodyBytes);
       case 400:
       case 401:
-        if (autoLogin && !isCookieValid()) {
+        if (autoLogin && !isLogin && !isCookieValid()) {
           ResponseStatus loginResponse = await LoginHelper().autoLogin();
           if (loginResponse == ResponseStatus.Success) {
             return await post(endpoint: endpoint, body: body, isLogin: isLogin, autoLogin: false);
