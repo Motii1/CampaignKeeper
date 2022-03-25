@@ -57,7 +57,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
           newEntity = new UserDataEntity(
               username: responseData["username"],
               email: responseData["email"],
-              imageData: responseData["imageData"]);
+              imageData: responseData["image"]);
         } else {
           if (_entity!.username != responseData["username"]) {
             _entity!.username = responseData["username"];

@@ -43,7 +43,7 @@ class LoginHelper {
           username: responseData["username"],
           email: responseData["email"],
           password: password,
-          imageData: responseData["imageData"]);
+          imageData: responseData["image"]);
 
       DataCarrier().attach(entity);
     }
