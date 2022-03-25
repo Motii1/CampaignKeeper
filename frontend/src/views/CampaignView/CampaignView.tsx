@@ -60,14 +60,14 @@ export const CampaignView: React.FC = () => {
       setIsSecondaryOpen={setIsSecondaryOpen}
       handleFab={handleFab}
     >
-      {campaignId === -1 ? (
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ width: '100%', height: '100%', overflowY: 'auto' }}
-        >
-          <QuoteLine text={quote} />
+      <Stack
+        direction="column"
+        justifyContent="flex-start"
+        alignItems="start"
+        sx={{ width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden' }}
+      >
+        <QuoteLine text={quote} />
+        {campaignId === -1 ? (
           <Box
             sx={{
               width: '100%',
@@ -79,23 +79,7 @@ export const CampaignView: React.FC = () => {
           >
             <EmptyPlaceholder message={"You haven't created any world, wordsmith"} />
           </Box>
-        </Stack>
-      ) : (
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ width: '100%', overflowY: 'auto' }}
-        >
-          <QuoteLine text={quote} />
-          <Box sx={{ width: 3, height: { xs: 31, lg: 46 } }} />
-          <CampaignTile
-            campaignId={campaignId}
-            campaignName={campaignName}
-            campaignImageBase64={campaignImageBase64}
-            setIsOpen={setIsOpen}
-            setDialogType={setDialogType}
-          />
+        ) : (
           <Box
             component="div"
             sx={{
@@ -103,24 +87,38 @@ export const CampaignView: React.FC = () => {
               alignItems: 'start-flex',
               justifyContent: 'center',
               display: 'flex',
-              height: '100%',
               width: '100%',
+              paddingTop: 0.8,
             }}
           >
-            <CustomGrid>
-              {sessionsNames.map(title => (
-                <Grid item key={title}>
-                  <SessionTile
-                    sessionTitle={title}
-                    setIsOpen={setIsOpen}
-                    setDialogType={setDialogType}
-                  />
-                </Grid>
-              ))}
-            </CustomGrid>
+            <Stack
+              direction="column"
+              justifyContent="flex-start"
+              alignItems="center"
+              sx={{ width: '100%', paddingLeft: 0.8 }}
+            >
+              <CampaignTile
+                campaignId={campaignId}
+                campaignName={campaignName}
+                campaignImageBase64={campaignImageBase64}
+                setIsOpen={setIsOpen}
+                setDialogType={setDialogType}
+              />
+              <CustomGrid>
+                {sessionsNames.map(title => (
+                  <Grid item key={title}>
+                    <SessionTile
+                      sessionTitle={title}
+                      setIsOpen={setIsOpen}
+                      setDialogType={setDialogType}
+                    />
+                  </Grid>
+                ))}
+              </CustomGrid>
+            </Stack>
           </Box>
-        </Stack>
-      )}
+        )}
+      </Stack>
     </ViewWithNavBarWrapper>
   );
 };

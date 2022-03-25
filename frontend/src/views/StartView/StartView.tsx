@@ -41,7 +41,6 @@ export const StartView: React.FC = () => {
             alignItems: 'start-flex',
             justifyContent: 'center',
             display: 'flex',
-            height: '100%',
             width: '100%',
             paddingTop: 0.8,
           }}
@@ -95,9 +94,9 @@ export const StartView: React.FC = () => {
     >
       <Stack
         direction="column"
-        justifyContent="center"
-        alignItems="center"
-        sx={{ width: '100%', overflowY: 'auto', overflowX: 'hidden' }}
+        justifyContent="flex-start"
+        alignItems="start"
+        sx={{ width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden' }}
       >
         <QuoteLine text={quote} />
         {renderCampaignsGrid()}
