@@ -4,23 +4,31 @@ import 'package:flutter/material.dart';
 class CampaignEntity {
   static const String endpoint = "/api/campaign/list";
 
+  Image _imageCache = Image.asset("assets/campaign_default.png");
+  String? _imageData;
+
   int id;
   String name;
   DateTime createdAt;
-  String? imageData;
 
-  CampaignEntity({required this.id, required this.name, required this.createdAt, this.imageData});
+  CampaignEntity({required this.id, required this.name, required this.createdAt, String? imageData}) {
+    this.imageData = imageData;
+  }
 
-  Image get image {
-    if (imageData == null) {
-      return Image.asset("assets/campaign_default.jpg");
-    } else {
-      return Image.memory(
-        base64.decode(imageData!),
+  String? get imageData => _imageData;
+
+  void set imageData(String? value) {
+    _imageData = value;
+
+    if (value != null) {
+      _imageCache = Image.memory(
+        base64.decode(value),
         gaplessPlayback: true,
       );
     }
   }
+
+  Image get image => _imageCache;
 
   bool equals(CampaignEntity other) {
     return id == other.id &&
