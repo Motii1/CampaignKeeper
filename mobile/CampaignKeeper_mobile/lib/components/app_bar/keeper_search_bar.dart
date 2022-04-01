@@ -55,7 +55,6 @@ class KeeperSearchBar extends StatelessWidget {
                 pinned: true,
                 collapsedHeight: _collapsedHeight,
                 expandedHeight: _expandedHeight,
-                backgroundColor: Theme.of(context).appBarTheme.backgroundColor!,
                 flexibleSpace: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     double _realAppBarHeight = MediaQuery.of(context).padding.top + _collapsedHeight;
@@ -63,13 +62,14 @@ class KeeperSearchBar extends StatelessWidget {
                         (constraints.biggest.height - _realAppBarHeight) /
                             (_expandedHeight - _realAppBarHeight),
                         1.0);
-                    return Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 14.5, right: 14.5),
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Visibility(
+                          visible: expandedPercent > 0.02,
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 6, left: 14.5, right: 14.5),
                             child: Text(
                               title,
                               style: TextStyle(
@@ -84,10 +84,10 @@ class KeeperSearchBar extends StatelessWidget {
                               ),
                             ),
                           ),
-                          _SearchBar(
-                              autoLeading: autoLeading, popup: popup, searchController: searchController),
-                        ],
-                      ),
+                        ),
+                        _SearchBar(
+                            autoLeading: autoLeading, popup: popup, searchController: searchController),
+                      ],
                     );
                   },
                 ),
@@ -134,7 +134,7 @@ class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.fromLTRB(8, 8, 8, 6),
+        padding: EdgeInsets.fromLTRB(8, 0, 8, 10),
         child: Hero(
           tag: 'search',
           child: Material(

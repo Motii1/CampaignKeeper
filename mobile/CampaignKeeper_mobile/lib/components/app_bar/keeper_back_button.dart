@@ -12,7 +12,7 @@ class KeeperBackButton extends StatelessWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      padding: padding ?? EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+      padding: padding ?? EdgeInsets.symmetric(vertical: 0, horizontal: 10),
       icon: Icon(
         Icons.arrow_back,
         size: 23.5,
