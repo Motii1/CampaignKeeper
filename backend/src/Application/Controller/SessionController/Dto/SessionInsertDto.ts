@@ -12,6 +12,6 @@ export type SessionInsertDto = {
 };
 
 export const sessionInsertDtoSchema = Joi.object<SessionInsertDto>({
-  name: Joi.string().max(64).required(),
+  name: Joi.string().max(128).required(),
   campaignId: Joi.number().positive().required(),
 });

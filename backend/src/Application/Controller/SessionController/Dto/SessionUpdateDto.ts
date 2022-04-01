@@ -10,5 +10,5 @@ export type SessionUpdateDto = {
 };
 
 export const sessionUpdateDtoSchema = Joi.object<SessionUpdateDto>({
-  name: Joi.string().max(64).required(),
+  name: Joi.string().max(128).required(),
 });

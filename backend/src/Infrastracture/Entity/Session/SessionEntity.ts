@@ -15,7 +15,7 @@ export class SessionEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ nullable: true, length: 64 })
+  @Column({ nullable: true, length: 128 })
   name!: string;
 
   @OneToMany(() => EventEntity, event => event.session)
