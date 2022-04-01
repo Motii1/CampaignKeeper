@@ -4,6 +4,7 @@ import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
 import 'package:campaign_keeper_mobile/services/search_controllers/campaign_search_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -17,10 +18,11 @@ class Campaign extends StatefulWidget {
 
 class _CampaignState extends KeeperState<Campaign> {
   CampaignEntity? campaign;
+  BaseSearchController? searchController = CampaignSearchController();
   int currentPage = 0;
 
   Future<void> onRefresh() async {
-    DataCarrier().refresh<UserDataEntity>();
+    await DataCarrier().refresh<UserDataEntity>();
     await DataCarrier().refresh<CampaignEntity>();
     // refresh sessions and / or codex
   }
@@ -72,7 +74,7 @@ class _CampaignState extends KeeperState<Campaign> {
           title: campaign?.name ?? '',
           popup: KeeperPopup.settings(context),
           onRefresh: onRefresh,
-          searchController: CampaignSearchController(),
+          searchController: searchController,
           sliver: SliverFillRemaining(
             hasScrollBody: false,
             child: Center(
@@ -86,6 +88,8 @@ class _CampaignState extends KeeperState<Campaign> {
         onDestinationSelected: (int index) {
           setState(() {
             currentPage = index;
+            // TODO: change this one to a proper controller when sessions and codex api will be available
+            searchController = index == 0 ? CampaignSearchController() : null;
           });
         },
         selectedIndex: currentPage,

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 class CampaignSearchController extends BaseSearchController<CampaignEntity> {
   @override
   List filterEntities(String input) {
-    // List list = DataCarrier().getEntities().where((element) => element.name.contains(input)).toList();
     List list = DataCarrier()
         .getEntities<CampaignEntity>()
         .where((element) => element.name.toLowerCase().contains(input.toLowerCase()))
@@ -18,7 +17,6 @@ class CampaignSearchController extends BaseSearchController<CampaignEntity> {
 
   @override
   Widget createWidget(Object entity) {
-    // On tap should check if entity still exists
     return KeeperCampaignTile(entity: entity as CampaignEntity);
   }
 }
