@@ -1,4 +1,6 @@
+import 'package:campaign_keeper_mobile/components/app_bar/keeper_back_button.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
+import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -9,7 +11,8 @@ class KeeperSearchBar extends StatelessWidget {
       required this.sliver,
       this.popup,
       this.onRefresh,
-      this.autoLeading = true})
+      this.autoLeading = true,
+      this.searchController})
       : super(key: key);
 
   final String title;
@@ -19,6 +22,7 @@ class KeeperSearchBar extends StatelessWidget {
   final Future<void> Function()? onRefresh;
   final double _expandedHeight = 180.0;
   final double _collapsedHeight = 64;
+  final BaseSearchController? searchController;
 
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
@@ -80,7 +84,8 @@ class KeeperSearchBar extends StatelessWidget {
                               ),
                             ),
                           ),
-                          _SearchBar(autoLeading: autoLeading, popup: popup),
+                          _SearchBar(
+                              autoLeading: autoLeading, popup: popup, searchController: searchController),
                         ],
                       ),
                     );
@@ -92,7 +97,7 @@ class KeeperSearchBar extends StatelessWidget {
         },
         body: RefreshIndicator(
           onRefresh: onRefresh ?? _refresh,
-          edgeOffset: 45,
+          edgeOffset: 55,
           color: Theme.of(context).colorScheme.onBackground,
           displacement: onRefresh == null ? 0 : 40,
           strokeWidth: 2.5,
@@ -115,10 +120,11 @@ class KeeperSearchBar extends StatelessWidget {
 }
 
 class _SearchBar extends StatelessWidget {
-  const _SearchBar({Key? key, this.autoLeading = true, this.popup}) : super(key: key);
+  const _SearchBar({Key? key, this.autoLeading = true, this.popup, this.searchController}) : super(key: key);
 
   final bool autoLeading;
   final KeeperPopup? popup;
+  final BaseSearchController? searchController;
 
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
@@ -128,55 +134,50 @@ class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(8, 8, 8, 6),
-      child: Material(
-        color: Theme.of(context).colorScheme.surface,
-        elevation: 0,
-        borderRadius: BorderRadius.all(Radius.circular(25)),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () {
-            print("Nothing to search for");
-          },
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              canPop(context)
-                  ? IconButton(
-                      constraints: BoxConstraints.expand(width: 40, height: 42),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      padding: EdgeInsets.only(left: 10, right: 6),
-                      icon: Icon(
-                        Icons.arrow_back,
-                        size: 23.5,
-                        color: Theme.of(context).appBarTheme.titleTextStyle!.color,
-                      ),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.only(left: 15, right: 10),
-                      child: Icon(
-                        Icons.search_outlined,
-                        size: 23.5,
-                        color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+        padding: EdgeInsets.fromLTRB(8, 8, 8, 6),
+        child: Hero(
+          tag: 'search',
+          child: Material(
+            color: Theme.of(context).colorScheme.surface,
+            elevation: 0,
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () {
+                if (searchController != null) {
+                  Navigator.pushNamed(context, '/search', arguments: searchController);
+                }
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  canPop(context)
+                      ? KeeperBackButton(
+                          padding: EdgeInsets.only(left: 10, right: 6),
+                          constraints: BoxConstraints.expand(width: 40, height: 42))
+                      : Padding(
+                          padding: EdgeInsets.only(left: 15, right: 10),
+                          child: Icon(
+                            Icons.search_outlined,
+                            size: 23.5,
+                            color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                          ),
+                        ),
+                  Expanded(
+                    child: Text(
+                      "Search",
+                      style: TextStyle(
+                        color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
+                        fontSize: 19,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
-              Expanded(
-                child: Text(
-                  "Search",
-                  style: TextStyle(
-                    color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
-                    fontSize: 19,
-                    fontWeight: FontWeight.w400,
                   ),
-                ),
+                  popup ?? Container(),
+                ],
               ),
-              popup ?? Container(),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

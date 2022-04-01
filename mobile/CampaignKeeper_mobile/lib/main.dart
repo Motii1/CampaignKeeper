@@ -1,5 +1,7 @@
+import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/pages/about.dart';
+import 'package:campaign_keeper_mobile/pages/search.dart';
 import 'package:campaign_keeper_mobile/pages/campaign.dart';
 import 'package:campaign_keeper_mobile/pages/start.dart';
 import 'package:campaign_keeper_mobile/pages/login.dart';
@@ -37,13 +39,27 @@ class MainApp extends StatelessWidget {
             darkTheme: _themeDark,
             themeMode: mode,
             initialRoute: "/",
-            routes: {
-              "/": (context) => Loading(),
-              "/settings": (context) => Settings(),
-              "/settings/about": (context) => About(),
-              "/login": (context) => Login(),
-              "/start": (context) => Start(),
-              "/start/campaign": (context) => Campaign(),
+            // routes: {
+            //   "/": (context) => Loading(),
+            //   "/settings": (context) => Settings(),
+            //   "/settings/about": (context) => About(),
+            //   "/search": (context) => Search(),
+            //   "/login": (context) => Login(),
+            //   "/start": (context) => Start(),
+            //   "/start/campaign": (context) => Campaign(),
+            // },
+            onGenerateRoute: (RouteSettings settings) {
+              var routes = <String, WidgetBuilder>{
+                "/": (context) => Loading(),
+                "/settings": (context) => Settings(),
+                "/settings/about": (context) => About(),
+                "/search": (context) => Search(searchController: settings.arguments as BaseSearchController),
+                "/login": (context) => Login(),
+                "/start": (context) => Start(),
+                "/start/campaign": (context) => Campaign(campaignID: settings.arguments as int),
+              };
+              WidgetBuilder builder = routes[settings.name]!;
+              return MaterialPageRoute(builder: (ctx) => builder(ctx));
             },
             navigatorObservers: [routeObserver],
           ),

@@ -4,18 +4,18 @@ import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/types/types.dart';
+import 'package:campaign_keeper_mobile/services/search_controllers/campaign_search_controller.dart';
 import 'package:flutter/material.dart';
 
 class Campaign extends StatefulWidget {
-  Campaign({Key? key}) : super(key: key);
+  Campaign({Key? key, required this.campaignID}) : super(key: key);
+  final int campaignID;
 
   @override
   State<Campaign> createState() => _CampaignState();
 }
 
 class _CampaignState extends KeeperState<Campaign> {
-  CampaignArgument? args;
   CampaignEntity? campaign;
   int currentPage = 0;
 
@@ -30,15 +30,13 @@ class _CampaignState extends KeeperState<Campaign> {
   }
 
   Future<void> onCampaignRefresh() async {
-    if (args != null) {
-      CampaignEntity? entity = DataCarrier().getEntity(entId: args!.id);
-      if (entity == null) {
-        returnToStart();
-      } else {
-        setState(() {
-          campaign = entity;
-        });
-      }
+    CampaignEntity? entity = DataCarrier().getEntity(entId: widget.campaignID);
+    if (entity == null) {
+      returnToStart();
+    } else {
+      setState(() {
+        campaign = entity;
+      });
     }
   }
 
@@ -58,7 +56,6 @@ class _CampaignState extends KeeperState<Campaign> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    args = ModalRoute.of(context)!.settings.arguments as CampaignArgument?;
     onCampaignRefresh();
   }
 
@@ -75,6 +72,7 @@ class _CampaignState extends KeeperState<Campaign> {
           title: campaign?.name ?? '',
           popup: KeeperPopup.settings(context),
           onRefresh: onRefresh,
+          searchController: CampaignSearchController(),
           sliver: SliverFillRemaining(
             hasScrollBody: false,
             child: Center(
