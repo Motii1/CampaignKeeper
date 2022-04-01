@@ -15,7 +15,10 @@ class CampaignEntity {
     if (imageData == null) {
       return Image.asset("assets/campaign_default.jpg");
     } else {
-      return Image.memory(base64.decode(imageData!));
+      return Image.memory(
+        base64.decode(imageData!),
+        gaplessPlayback: true,
+      );
     }
   }
 
