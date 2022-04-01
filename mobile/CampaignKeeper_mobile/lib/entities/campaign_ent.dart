@@ -1,20 +1,28 @@
-import 'dart:typed_data';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class CampaignEntity {
-  static const String endpoint = "/api/smh";
+  static const String endpoint = "/api/campaign/list";
 
   int id;
   String name;
-  Uint8List? imageData;
+  DateTime createdAt;
+  String? imageData;
 
-  CampaignEntity({required this.id, required this.name, this.imageData});
+  CampaignEntity({required this.id, required this.name, required this.createdAt, this.imageData});
 
   Image get image {
     if (imageData == null) {
       return Image.asset("assets/campaign_default.jpg");
     } else {
-      return Image.memory(imageData!);
+      return Image.memory(base64.decode(imageData!));
     }
+  }
+
+  bool equals(CampaignEntity other) {
+    return id == other.id &&
+        name == other.name &&
+        createdAt == other.createdAt &&
+        imageData == other.imageData;
   }
 }

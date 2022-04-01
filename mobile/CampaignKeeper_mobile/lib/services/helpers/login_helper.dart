@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/types/types.dart';
 
 class LoginHelper {
   static final LoginHelper _login = LoginHelper._internal();
@@ -15,35 +18,34 @@ class LoginHelper {
   LoginHelper._internal();
 
   Future<ResponseStatus> autoLogin() async {
-    if (RequestHelper().isCookieValid()) {
-      var status = await RequestHelper().testConnection();
+    ResponseStatus? status;
 
-      return status;
+    if (RequestHelper().isCookieValid()) {
+      status = await RequestHelper().testConnection();
     }
 
     UserDataEntity? userEntity = DataCarrier().getEntity();
     if (userEntity != null && userEntity.password != null) {
-      ResponseStatus status = await login(userEntity.username, userEntity.password!);
-
-      return status;
+      status = await login(userEntity.username, userEntity.password!);
     }
 
-    return ResponseStatus.IncorrectData;
+    return status ?? ResponseStatus.IncorrectData;
   }
 
   Future<ResponseStatus> login(String name, String password) async {
     Map body = {"username": name, "password": password};
-    var response = await RequestHelper()
-        .post(endpoint: _loginEnd, body: body, isLogin: true);
+    var response = await RequestHelper().post(endpoint: _loginEnd, body: body, isLogin: true);
 
     if (response.status == ResponseStatus.Success) {
-      UserDataEntity? ent = DataCarrier().getEntity<UserDataEntity>();
+      Map responseData = json.decode(response.data!);
 
-      if (ent == null) {
-        ent = UserDataEntity(username: name, email: name, password: password);
-        DataCarrier().attach(ent);
-        await DataCarrier().refresh<UserDataEntity>();
-      }
+      UserDataEntity entity = new UserDataEntity(
+          username: responseData["username"],
+          email: responseData["email"],
+          password: password,
+          imageData: responseData["image"]);
+
+      DataCarrier().attach(entity);
     }
 
     return response.status;
@@ -55,7 +57,7 @@ class LoginHelper {
     }
 
     if (RequestHelper().isCookieValid()) {
-      var response = await RequestHelper().post(endpoint: _logoutEnd);
+      var response = await RequestHelper().post(endpoint: _logoutEnd, isLogin: true);
 
       RequestHelper().clearCookie();
       return response.status;

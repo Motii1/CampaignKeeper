@@ -4,7 +4,11 @@ class KeeperSnackBars {
   static final KeeperSnackBars _bars = KeeperSnackBars._internal();
 
   static const SnackBar _offline = SnackBar(
-    content: Text("Network is under geth attack, going offline."),
+    content: Text("Network is under geth attack, going offline"),
+    dismissDirection: DismissDirection.horizontal,
+  );
+  static const SnackBar _online = SnackBar(
+    content: Text("Power core inserted, network restored"),
     dismissDirection: DismissDirection.horizontal,
   );
   static const SnackBar _incorrect = SnackBar(
@@ -12,12 +16,12 @@ class KeeperSnackBars {
     dismissDirection: DismissDirection.horizontal,
   );
   static const SnackBar _debugUrl = SnackBar(
-    content: Text("Set debug url."),
+    content: Text("Set debug url"),
     dismissDirection: DismissDirection.horizontal,
   );
 
-
   SnackBar get offline => _offline;
+  SnackBar get online => _online;
   SnackBar get incorrect => _incorrect;
   SnackBar get debugUrl => _debugUrl;
 

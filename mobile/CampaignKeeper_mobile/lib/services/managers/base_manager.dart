@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BaseManager<T> extends ChangeNotifier{
+class BaseManager<T> extends ChangeNotifier {
   // Data locations: cache, ram, server
 
   // Attaches given entity to the local base and cache it
@@ -9,7 +9,7 @@ class BaseManager<T> extends ChangeNotifier{
     throw new UnimplementedError();
   }
 
-  T? getEntity({int entId= -1}) {
+  T? getEntity({int entId = -1}) {
     throw new UnimplementedError();
   }
 
@@ -21,7 +21,7 @@ class BaseManager<T> extends ChangeNotifier{
   // Get all data from cache, then try to download new, specified one
   // Compare data and if there are differences call notifyListeners() and return true
   // Else return false
-  Future<bool> refresh({int groupId = -1}) {
+  Future<bool> refresh({int groupId = -1, bool online = true}) {
     throw new UnimplementedError();
   }
 

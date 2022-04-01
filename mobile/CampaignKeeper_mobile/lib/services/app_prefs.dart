@@ -87,14 +87,13 @@ class AppPrefs {
       _theme = await _getDefaultTheme();
     }
 
-    setTheme(context, _theme);
+    setTheme(context, _theme, true);
   }
 
-  void setTheme(BuildContext context, ThemeMode theme) {
-    _theme = theme;
-
-    if (theme != MainApp.of(context)!.getTheme()) {
-      MainApp.of(context)!.changeTheme(theme);
+  void setTheme(BuildContext context, ThemeMode theme, [bool force = false]) {
+    if (theme != _theme || force) {
+      _theme = theme;
+      MainApp.themeNotifier.value = theme;
     }
 
     _cachePrefs();

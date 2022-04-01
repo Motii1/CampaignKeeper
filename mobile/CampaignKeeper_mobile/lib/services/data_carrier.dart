@@ -27,6 +27,12 @@ class DataCarrier {
     }
   }
 
+  void removeListener<T>(VoidCallback listener) {
+    if (_managers.containsKey(T)) {
+      _managers[T]!.removeListener(listener);
+    }
+  }
+
   void attach<T>(T entity) {
     if (_managers.containsKey(T)) {
       _managers[T]!.attach(entity);
@@ -47,9 +53,9 @@ class DataCarrier {
     return [];
   }
 
-  Future<bool> refresh<T>({int groupId = -1}) async {
+  Future<bool> refresh<T>({int groupId = -1, bool online = true}) async {
     if (_managers.containsKey(T)) {
-      return await _managers[T]!.refresh(groupId: groupId);
+      return await _managers[T]!.refresh(groupId: groupId, online: online);
     }
 
     return false;
