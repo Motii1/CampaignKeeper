@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -14,16 +15,17 @@ export class SessionEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ length: 32 })
-  type!: string;
-
-  @Column({ nullable: true, length: 64 })
+  @Column({ nullable: true, length: 128 })
   name!: string;
 
   @OneToMany(() => EventEntity, event => event.session)
   events!: EventEntity[];
 
+  @Column({ name: 'campaign_id' })
+  campaignId?: number;
+
   @ManyToOne(() => CampaignEntity, campaign => campaign.sessions, { nullable: false })
+  @JoinColumn({ name: 'campaign_id' })
   campaign!: CampaignEntity;
 
   @CreateDateColumn()

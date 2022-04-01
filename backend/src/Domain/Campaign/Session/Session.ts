@@ -1,4 +1,6 @@
 export type Session = {
   id: number;
-  // @todo
+  createdAt: Date;
+  name: string;
+  campaignId: number;
 };
