@@ -5,7 +5,6 @@ import 'package:campaign_keeper_mobile/components/keeper_campaign_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:flutter/material.dart';
 
 class Start extends StatefulWidget {
@@ -30,7 +29,7 @@ class _StartState extends KeeperState<Start> {
   }
 
   void openCampaign(int id) {
-    Navigator.pushNamed(context, '/start/campaign', arguments: CampaignArgument(id));
+    Navigator.pushNamed(context, '/start/campaign', arguments: id);
   }
 
   @override
