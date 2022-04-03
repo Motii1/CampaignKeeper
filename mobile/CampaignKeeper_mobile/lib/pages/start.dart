@@ -51,7 +51,7 @@ class _StartState extends KeeperState<Start> {
     } else {
       isPopExit = true;
       ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars.exit);
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(Duration(seconds: 1, milliseconds: 300), () {
         isPopExit = false;
       });
       return true;

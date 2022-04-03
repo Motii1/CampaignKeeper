@@ -66,23 +66,25 @@ class _LoginCardState extends State<LoginCard> {
     if (_formKey.currentState!.validate()) {
       ResponseStatus status = await LoginHelper().login(loginController.text, passwordController.text);
 
-      switch (status) {
-        case ResponseStatus.Success:
-          if (canPop()) {
-            Navigator.of(context).pushNamedAndRemoveUntil('/start', (Route<dynamic> route) => false);
-          } else {
-            Navigator.pushReplacementNamed(context, "/start");
-          }
-          break;
-        case ResponseStatus.IncorrectData:
-          isLoginCorrect = isPasswordCorrect = false;
+      if (ModalRoute.of(context)!.isCurrent) {
+        switch (status) {
+          case ResponseStatus.Success:
+            if (canPop()) {
+              Navigator.of(context).pushNamedAndRemoveUntil('/start', (Route<dynamic> route) => false);
+            } else {
+              Navigator.pushReplacementNamed(context, "/start");
+            }
+            break;
+          case ResponseStatus.IncorrectData:
+            isLoginCorrect = isPasswordCorrect = false;
 
-          _formKey.currentState!.validate();
-          ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars.incorrect);
-          break;
-        default:
-          ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars.offline);
-          break;
+            _formKey.currentState!.validate();
+            ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars.incorrect);
+            break;
+          default:
+            ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars.offline);
+            break;
+        }
       }
     }
   }

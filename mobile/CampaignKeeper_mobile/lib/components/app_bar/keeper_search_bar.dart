@@ -35,6 +35,7 @@ class KeeperSearchBar extends StatelessWidget {
     return Future.delayed(Duration(seconds: 0));
   }
 
+  // TODO: Tweak this with a sized box or smh for clipping issues
   @override
   Widget build(BuildContext context) {
     return NotificationListener<OverscrollIndicatorNotification>(

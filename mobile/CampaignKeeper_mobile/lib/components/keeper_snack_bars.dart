@@ -23,11 +23,13 @@ class KeeperSnackBars {
       "Press back again to exit",
       textAlign: TextAlign.center,
       overflow: TextOverflow.ellipsis,
+      textScaleFactor: 1.0,
+      style: TextStyle(fontSize: 15),
     ),
     duration: Duration(seconds: 1, milliseconds: 500),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(30)),
     ),
-    width: 190,
+    width: 220,
   );
 }
