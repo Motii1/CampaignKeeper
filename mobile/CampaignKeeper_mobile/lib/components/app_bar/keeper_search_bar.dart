@@ -161,8 +161,8 @@ class _SearchBar extends StatelessWidget {
                   children: [
                     canPop(context)
                         ? KeeperBackButton(
-                            padding: EdgeInsets.only(left: 10, right: 6),
-                            constraints: BoxConstraints.expand(width: 40, height: 42))
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            constraints: BoxConstraints.expand(width: 44, height: 42))
                         : Padding(
                             padding: EdgeInsets.only(left: 15, right: 10),
                             child: Icon(
