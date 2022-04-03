@@ -23,7 +23,7 @@ class KeeperSearchBar extends StatelessWidget {
   final KeeperPopup? popup;
   final Future<void> Function()? onRefresh;
   final double _expandedHeight = 180.0;
-  final double _collapsedHeight = 64;
+  final double _collapsedHeight = 60;
   final BaseSearchController? searchController;
 
   bool canPop(BuildContext context) {
@@ -35,7 +35,6 @@ class KeeperSearchBar extends StatelessWidget {
     return Future.delayed(Duration(seconds: 0));
   }
 
-  // TODO: Tweak this with a sized box or smh for clipping issues
   @override
   Widget build(BuildContext context) {
     return NotificationListener<OverscrollIndicatorNotification>(
@@ -69,21 +68,28 @@ class KeeperSearchBar extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Visibility(
-                          visible: expandedPercent > 0.02,
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 6, left: 14.5, right: 14.5),
-                            child: Text(
-                              title,
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .appBarTheme
-                                    .titleTextStyle!
-                                    .color
-                                    ?.withOpacity(expandedPercent),
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 27 + expandedPercent * 2,
-                                fontWeight: FontWeight.w500,
+                        Expanded(
+                          child: ClipRect(
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: SizedBox(
+                                width: constraints.biggest.width,
+                                child: Padding(
+                                  padding: EdgeInsets.only(bottom: 6, left: 14.5, right: 14.5),
+                                  child: Text(
+                                    title,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .appBarTheme
+                                          .titleTextStyle!
+                                          .color
+                                          ?.withOpacity(expandedPercent),
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 27 + expandedPercent * 2,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -143,7 +149,7 @@ class _SearchBar extends StatelessWidget {
           child: Material(
             color: Theme.of(context).colorScheme.surface,
             elevation: 0,
-            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderRadius: BorderRadius.all(Radius.circular(35)),
             clipBehavior: Clip.antiAlias,
             child: InkWell(
               onTap: () {
