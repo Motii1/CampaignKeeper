@@ -1,10 +1,9 @@
-import 'package:campaign_keeper_mobile/components/keeper_app_bar.dart';
+import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_debug_menu.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:campaign_keeper_mobile/main.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -25,14 +24,15 @@ class _SettingsState extends KeeperState<Settings> {
   }
 
   void logout() async {
-    await LoginHelper().logout(force: true);
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/login', (Route<dynamic> route) => false);
+    LoginHelper().logout(force: true);
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
   }
 
   void about() async {
     Navigator.pushNamed(
-        context, '/settings/about',);
+      context,
+      '/settings/about',
+    );
   }
 
   @override
@@ -51,7 +51,7 @@ class _SettingsState extends KeeperState<Settings> {
       isDebugMode = AppPrefs().debug;
     });
 
-    _theme = MainApp.of(context)!.getTheme();
+    _theme = AppPrefs().getTheme(context);
   }
 
   @override

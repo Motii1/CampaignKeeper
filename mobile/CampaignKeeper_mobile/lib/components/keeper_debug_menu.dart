@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class KeeperDebugMenu extends StatefulWidget {
-  const KeeperDebugMenu({Key? key, required this.isDebugMode})
-      : super(key: key);
+  const KeeperDebugMenu({Key? key, required this.isDebugMode}) : super(key: key);
 
   final bool isDebugMode;
 
@@ -26,8 +25,6 @@ class _KeeperDebugMenuState extends State<KeeperDebugMenu> {
       return null;
     } else if (!url.contains("http")) {
       return "Url doesn't contain http";
-    } else if (':'.allMatches(url).length != 2) {
-      return "Url doesn't contain port";
     }
 
     return null;
@@ -54,8 +51,7 @@ class _KeeperDebugMenuState extends State<KeeperDebugMenu> {
         debugUrlController.text = AppPrefs().url;
       }
 
-      if (debugTimeoutController.text.isEmpty ||
-          debugLoginTimeoutController.text.isEmpty) {
+      if (debugTimeoutController.text.isEmpty || debugLoginTimeoutController.text.isEmpty) {
         AppPrefs().resetDebugTimeout();
         debugTimeoutController.text = AppPrefs().timeout.toString();
         debugLoginTimeoutController.text = AppPrefs().loginTimeout.toString();
@@ -106,20 +102,17 @@ class _KeeperDebugMenuState extends State<KeeperDebugMenu> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       TextFormField(
-                        decoration: InputDecoration(
-                            helperText: " ", labelText: "Debug url"),
+                        decoration: InputDecoration(helperText: " ", labelText: "Debug url"),
                         controller: debugUrlController,
                         validator: validateDebugUrl,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
-                            helperText: " ", labelText: "Request timeout"),
+                        decoration: InputDecoration(helperText: " ", labelText: "Request timeout"),
                         controller: debugTimeoutController,
                         validator: validateTimeout,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
-                            helperText: " ", labelText: "Login request timeout"),
+                        decoration: InputDecoration(helperText: " ", labelText: "Login request timeout"),
                         controller: debugLoginTimeoutController,
                         validator: validateTimeout,
                       ),
