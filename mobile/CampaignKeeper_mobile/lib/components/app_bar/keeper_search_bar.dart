@@ -64,30 +64,27 @@ class KeeperSearchBar extends StatelessWidget {
                         (constraints.biggest.height - _realAppBarHeight) /
                             (_expandedHeight - _realAppBarHeight),
                         1.0);
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    return Stack(
+                      alignment: Alignment.bottomCenter,
                       children: [
-                        Expanded(
-                          child: ClipRect(
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: SizedBox(
-                                width: constraints.biggest.width,
-                                child: Padding(
-                                  padding: EdgeInsets.only(bottom: 6, left: 14.5, right: 14.5),
-                                  child: Text(
-                                    title,
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .appBarTheme
-                                          .titleTextStyle!
-                                          .color
-                                          ?.withOpacity(expandedPercent),
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 27 + expandedPercent * 2,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                        ClipRect(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: SizedBox(
+                              width: constraints.biggest.width,
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 55, left: 14, right: 14),
+                                child: Text(
+                                  title,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .appBarTheme
+                                        .titleTextStyle!
+                                        .color
+                                        ?.withOpacity(expandedPercent),
+                                    overflow: TextOverflow.ellipsis,
+                                    fontSize: 27 + expandedPercent * 2,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
@@ -146,20 +143,19 @@ class _SearchBar extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(8, 0, 8, 10),
         child: Hero(
           tag: 'search',
-          child: Material(
-            color: Theme.of(context).colorScheme.surface,
-            elevation: 0,
-            borderRadius: BorderRadius.all(Radius.circular(35)),
-            clipBehavior: Clip.antiAlias,
-            child: InkWell(
-              onTap: () {
-                if (searchController != null) {
-                  SystemChannels.textInput.invokeMethod('TextInput.show');
-                  Navigator.pushNamed(context, '/search', arguments: searchController);
-                }
-              },
-              child: SafeArea(
-                top: false,
+          child: SafeArea(
+            child: Material(
+              color: Theme.of(context).colorScheme.surface,
+              elevation: 0,
+              borderRadius: BorderRadius.all(Radius.circular(35)),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () {
+                  if (searchController != null) {
+                    SystemChannels.textInput.invokeMethod('TextInput.show');
+                    Navigator.pushNamed(context, '/search', arguments: searchController);
+                  }
+                },
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
