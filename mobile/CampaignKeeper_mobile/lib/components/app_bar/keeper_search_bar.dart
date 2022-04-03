@@ -151,33 +151,36 @@ class _SearchBar extends StatelessWidget {
                   Navigator.pushNamed(context, '/search', arguments: searchController);
                 }
               },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  canPop(context)
-                      ? KeeperBackButton(
-                          padding: EdgeInsets.only(left: 10, right: 6),
-                          constraints: BoxConstraints.expand(width: 40, height: 42))
-                      : Padding(
-                          padding: EdgeInsets.only(left: 15, right: 10),
-                          child: Icon(
-                            Icons.search_outlined,
-                            size: 23.5,
-                            color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+              child: SafeArea(
+                top: false,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    canPop(context)
+                        ? KeeperBackButton(
+                            padding: EdgeInsets.only(left: 10, right: 6),
+                            constraints: BoxConstraints.expand(width: 40, height: 42))
+                        : Padding(
+                            padding: EdgeInsets.only(left: 15, right: 10),
+                            child: Icon(
+                              Icons.search_outlined,
+                              size: 23.5,
+                              color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                            ),
                           ),
+                    Expanded(
+                      child: Text(
+                        "Search",
+                        style: TextStyle(
+                          color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
+                          fontSize: 19,
+                          fontWeight: FontWeight.w400,
                         ),
-                  Expanded(
-                    child: Text(
-                      "Search",
-                      style: TextStyle(
-                        color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
-                        fontSize: 19,
-                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                  ),
-                  popup ?? Container(),
-                ],
+                    popup ?? Container(),
+                  ],
+                ),
               ),
             ),
           ),

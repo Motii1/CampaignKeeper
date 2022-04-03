@@ -22,9 +22,9 @@ class _LoadingState extends State<Loading> {
     ScaffoldMessengerState scaffold = ScaffoldMessenger.of(context);
     if (scaffold.mounted) {
       if (isOnline) {
-        scaffold.showSnackBar(KeeperSnackBars().online);
+        scaffold.showSnackBar(KeeperSnackBars.online);
       } else {
-        scaffold.showSnackBar(KeeperSnackBars().offline);
+        scaffold.showSnackBar(KeeperSnackBars.offline);
       }
     }
   }

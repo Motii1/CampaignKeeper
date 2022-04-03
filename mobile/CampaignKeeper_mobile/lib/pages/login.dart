@@ -78,10 +78,10 @@ class _LoginCardState extends State<LoginCard> {
           isLoginCorrect = isPasswordCorrect = false;
 
           _formKey.currentState!.validate();
-          ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().incorrect);
+          ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars.incorrect);
           break;
         default:
-          ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().offline);
+          ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars.offline);
           break;
       }
     }

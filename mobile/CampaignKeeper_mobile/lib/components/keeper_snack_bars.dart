@@ -1,33 +1,33 @@
 import 'package:flutter/material.dart';
 
 class KeeperSnackBars {
-  static final KeeperSnackBars _bars = KeeperSnackBars._internal();
-
-  static const SnackBar _offline = SnackBar(
+  static const SnackBar offline = SnackBar(
     content: Text("Network is under geth attack, going offline"),
     dismissDirection: DismissDirection.horizontal,
   );
-  static const SnackBar _online = SnackBar(
+  static const SnackBar online = SnackBar(
     content: Text("Power core inserted, network restored"),
     dismissDirection: DismissDirection.horizontal,
   );
-  static const SnackBar _incorrect = SnackBar(
+  static const SnackBar incorrect = SnackBar(
     content: Text("Ay, that data doesn't match, does it?"),
     dismissDirection: DismissDirection.horizontal,
   );
-  static const SnackBar _debugUrl = SnackBar(
+  static const SnackBar debugUrl = SnackBar(
     content: Text("Set debug url"),
     dismissDirection: DismissDirection.horizontal,
   );
 
-  SnackBar get offline => _offline;
-  SnackBar get online => _online;
-  SnackBar get incorrect => _incorrect;
-  SnackBar get debugUrl => _debugUrl;
-
-  factory KeeperSnackBars() {
-    return _bars;
-  }
-
-  KeeperSnackBars._internal();
+  static const SnackBar exit = SnackBar(
+    content: Text(
+      "Press back again to exit",
+      textAlign: TextAlign.center,
+      overflow: TextOverflow.ellipsis,
+    ),
+    duration: Duration(seconds: 1, milliseconds: 500),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(30)),
+    ),
+    width: 190,
+  );
 }

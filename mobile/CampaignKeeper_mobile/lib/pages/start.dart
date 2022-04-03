@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
+import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/keeper_campaign_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
@@ -16,6 +17,7 @@ class Start extends StatefulWidget {
 
 class _StartState extends KeeperState<Start> {
   List<CampaignEntity> _entities = [];
+  bool isPopExit = false;
 
   Future<void> onRefresh() async {
     DataCarrier().refresh<UserDataEntity>();
@@ -40,6 +42,20 @@ class _StartState extends KeeperState<Start> {
   @override
   void onEveryResume() async {
     DataCarrier().refresh<UserDataEntity>();
+  }
+
+  @override
+  Future<bool> didPopRoute() async {
+    if (isPopExit) {
+      return false;
+    } else {
+      isPopExit = true;
+      ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars.exit);
+      Future.delayed(Duration(seconds: 1), () {
+        isPopExit = false;
+      });
+      return true;
+    }
   }
 
   @override
