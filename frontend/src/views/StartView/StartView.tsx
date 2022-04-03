@@ -13,7 +13,7 @@ import { fetchCampaigns } from './campaignsSlice';
 
 export const StartView: React.FC = () => {
   const dispatch = useDispatch();
-  const { isCampaignListDownloaded, campaignsList } = useSelector(
+  const { isCampaignsListDownloaded: isCampaignListDownloaded, campaignsList } = useSelector(
     (state: RootState) => state.campaigns
   );
   if (!isCampaignListDownloaded) dispatch(fetchCampaigns());

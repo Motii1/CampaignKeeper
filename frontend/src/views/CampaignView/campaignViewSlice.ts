@@ -4,7 +4,6 @@ import { NavBarViewDialog } from '../../types/types';
 interface CampaignViewState {
   name: string;
   type: NavBarViewDialog;
-  sessionsNames: Array<string>;
   campaignId: number;
   campaignName: string;
   campaignImageBase64: string;
@@ -13,22 +12,6 @@ interface CampaignViewState {
 const initialState: CampaignViewState = {
   name: '',
   type: NavBarViewDialog.NewCampaign,
-  sessionsNames: [
-    'Session 1',
-    'Session 2',
-    'Session 3',
-    'Session 4',
-    'Session 5',
-    'Session 6',
-    'Session 7',
-    'Session 8',
-    'Session 9',
-    'Session 10',
-    'Session 11',
-    'Session 12',
-    'Session 13',
-    'Session 14',
-  ],
   campaignId: -1,
   campaignName: '',
   campaignImageBase64: '',
@@ -60,24 +43,10 @@ const campaignViewSlice = createSlice({
         state.campaignImageBase64 = '';
       }
     },
-    // TO-DO: delete after API integration
-    addSession: (state, action) => {
-      state.sessionsNames.push(action.payload.sessionName);
-    },
-    // TO-DO: delete after API integration
-    removeSession: (state, action) => {
-      state.sessionsNames = state.sessionsNames.filter(name => name !== action.payload.sessionName);
-    },
   },
 });
 
-export const {
-  updateState,
-  resetState,
-  updateSelectedCampaignData,
-  resetSelectedCampaignData,
-  addSession,
-  removeSession,
-} = campaignViewSlice.actions;
+export const { updateState, resetState, updateSelectedCampaignData, resetSelectedCampaignData } =
+  campaignViewSlice.actions;
 
 export default campaignViewSlice.reducer;
