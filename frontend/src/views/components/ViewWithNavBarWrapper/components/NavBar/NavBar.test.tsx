@@ -1,4 +1,4 @@
-import { cleanup, screen } from '@testing-library/react';
+import { cleanup, fireEvent, screen } from '@testing-library/react';
 import { renderWithProviders } from '../../../../../utils/test-utils';
 import viewsRoutes from '../../../../viewsRoutes';
 import { NavBar } from './NavBar';
@@ -60,6 +60,60 @@ test('renders UserPanel', async () => {
   );
 
   expect(screen.getByTestId('MoreVertIcon')).toBeInTheDocument();
+
+  component.unmount();
+});
+
+test('opens UserPanel menu', async () => {
+  const component = renderWithProviders(
+    <NavBar
+      currentView={viewsRoutes.START}
+      setSnackbarInfo={setMessageMock}
+      setSnackbarSuccess={setMessageMock}
+      setSnackbarError={setMessageMock}
+    />
+  );
+
+  fireEvent.click(screen.getByTestId('MoreVertIcon'));
+  expect(screen.getByText('Settings')).toBeInTheDocument();
+  expect(screen.getByText('About')).toBeInTheDocument();
+  expect(screen.getByText('Logout')).toBeInTheDocument();
+
+  component.unmount();
+});
+
+test('opens Settings dialog', async () => {
+  const component = renderWithProviders(
+    <NavBar
+      currentView={viewsRoutes.START}
+      setSnackbarInfo={setMessageMock}
+      setSnackbarSuccess={setMessageMock}
+      setSnackbarError={setMessageMock}
+    />
+  );
+
+  fireEvent.click(screen.getByTestId('MoreVertIcon'));
+  fireEvent.click(screen.getByText('Settings'));
+  expect(screen.getByText('AVATAR')).toBeInTheDocument();
+  expect(screen.getByText('PASSWORD')).toBeInTheDocument();
+
+  component.unmount();
+});
+
+test('opens About dialog', async () => {
+  const component = renderWithProviders(
+    <NavBar
+      currentView={viewsRoutes.START}
+      setSnackbarInfo={setMessageMock}
+      setSnackbarSuccess={setMessageMock}
+      setSnackbarError={setMessageMock}
+    />
+  );
+
+  fireEvent.click(screen.getByTestId('MoreVertIcon'));
+  fireEvent.click(screen.getByText('About'));
+  expect(screen.getByText(/Version/)).toBeInTheDocument();
+  expect(screen.getByText(/Authors/)).toBeInTheDocument();
 
   component.unmount();
 });
