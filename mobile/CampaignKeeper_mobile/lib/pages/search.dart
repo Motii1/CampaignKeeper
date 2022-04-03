@@ -12,6 +12,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final searchTextController = TextEditingController();
+  final searchFocusNode = FocusNode();
 
   List entities = [];
 
@@ -25,10 +26,21 @@ class _SearchState extends State<Search> {
     });
   }
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance?.addPostFrameCallback((_) {
+  //     Future.delayed(Duration(milliseconds: 400), () {
+  //       searchFocusNode.requestFocus();
+  //     });
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return _SearchScaffold(
       searchTextController: searchTextController,
+      searchFocusNode: searchFocusNode,
       onChanged: onSearchChanged,
       onClear: () {
         searchTextController.clear();
@@ -57,12 +69,14 @@ class _SearchScaffold extends StatelessWidget {
   _SearchScaffold(
       {Key? key,
       required this.body,
-      this.searchTextController,
+      required this.searchTextController,
+      required this.searchFocusNode,
       required this.onChanged,
       required this.onClear})
       : super(key: key);
-  final Widget body;
+  final body;
   final searchTextController;
+  final searchFocusNode;
   final void Function(String) onChanged;
   final void Function() onClear;
   final border = OutlineInputBorder(
@@ -75,6 +89,17 @@ class _SearchScaffold extends StatelessWidget {
         automaticallyImplyLeading: false,
         flexibleSpace: Hero(
           tag: 'search',
+          flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
+            animation.addStatusListener((status) {
+              if (status == AnimationStatus.completed) {
+                Future.delayed(Duration(milliseconds: 5), () {
+                  searchFocusNode.requestFocus();
+                });
+              }
+            });
+            final Hero toHero = toHeroContext.widget as Hero;
+            return toHero.child;
+          },
           child: Material(
             color: Theme.of(context).colorScheme.surface,
             child: SafeArea(
@@ -86,8 +111,8 @@ class _SearchScaffold extends StatelessWidget {
                   Expanded(
                     child: Center(
                       child: TextField(
-                        autofocus: true,
                         controller: searchTextController,
+                        focusNode: searchFocusNode,
                         style: TextStyle(
                           fontSize: 20,
                         ),

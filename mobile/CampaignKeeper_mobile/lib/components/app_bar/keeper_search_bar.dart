@@ -4,6 +4,8 @@ import 'package:campaign_keeper_mobile/services/search_controllers/base_search_c
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:flutter/services.dart';
+
 class KeeperSearchBar extends StatelessWidget {
   KeeperSearchBar(
       {Key? key,
@@ -145,6 +147,7 @@ class _SearchBar extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 if (searchController != null) {
+                  SystemChannels.textInput.invokeMethod('TextInput.show');
                   Navigator.pushNamed(context, '/search', arguments: searchController);
                 }
               },
