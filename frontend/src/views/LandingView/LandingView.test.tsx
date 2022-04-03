@@ -1,13 +1,17 @@
-import { fireEvent, screen } from '@testing-library/react';
-import { AllProviders, renderWithRouter } from '../../utils/test-utils';
+import { cleanup, fireEvent, RenderResult, screen } from '@testing-library/react';
+import { renderWithProviders } from '../../utils/test-utils';
 import { LandingView } from './LandingView';
 
+let component: RenderResult;
+
+beforeEach(() => (component = renderWithProviders(<LandingView />)));
+
+afterEach(() => component.unmount());
+
+afterAll(cleanup);
+
 test('renders LandingView', () => {
-  renderWithRouter(
-    <AllProviders>
-      <LandingView />
-    </AllProviders>
-  );
+  expect(screen.getByAltText('Logo')).toBeInTheDocument();
 
   expect(screen.getByText('Email or username')).toBeInTheDocument();
   expect(screen.getByText('Password')).toBeInTheDocument();
@@ -16,12 +20,6 @@ test('renders LandingView', () => {
 });
 
 test('switches from LoginForm to RegisterForm on click', async () => {
-  renderWithRouter(
-    <AllProviders>
-      <LandingView />
-    </AllProviders>
-  );
-
   expect(screen.getByText('Register')).toBeInTheDocument();
   fireEvent.click(screen.getByText('Register'));
 
@@ -39,12 +37,6 @@ test('switches from LoginForm to RegisterForm on click', async () => {
 });
 
 test('switches from RegisterForm to LoginForm on click', async () => {
-  renderWithRouter(
-    <AllProviders>
-      <LandingView />
-    </AllProviders>
-  );
-
   // switching to RegisterForm
   expect(screen.getByText('Register')).toBeInTheDocument();
   fireEvent.click(screen.getByText('Register'));

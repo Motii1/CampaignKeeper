@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { App } from './App';
 import { store } from './store';
@@ -6,14 +6,19 @@ import { store } from './store';
 const StoreProviderWrapper: React.FC = props => <Provider store={store}>{props.children}</Provider>;
 
 test('renders learn react link', () => {
-  const { getByText } = render(
+  const component = render(
     <StoreProviderWrapper>
       <App />
     </StoreProviderWrapper>
   );
 
-  expect(getByText('Email or username')).toBeInTheDocument();
-  expect(getByText('Password')).toBeInTheDocument();
-  expect(getByText('Login')).toBeInTheDocument();
-  expect(getByText('Register')).toBeInTheDocument();
+  expect(screen.getByAltText('Logo')).toBeInTheDocument();
+
+  expect(screen.getByText('Email or username')).toBeInTheDocument();
+  expect(screen.getByText('Password')).toBeInTheDocument();
+  expect(screen.getByText('Login')).toBeInTheDocument();
+  expect(screen.getByText('Register')).toBeInTheDocument();
+
+  component.unmount();
+  cleanup();
 });

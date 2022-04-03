@@ -14,13 +14,15 @@ export const CustomThemeProvider: React.FC = props => (
 );
 
 export const AllProviders: React.FC = props => (
-  <Provider store={store}>
-    <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
-  </Provider>
+  <BrowserRouter>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
+    </Provider>
+  </BrowserRouter>
 );
 
-export const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}): RenderResult => {
+export const renderWithProviders = (ui: React.ReactElement, { route = '/' } = {}): RenderResult => {
   window.history.pushState({}, 'Test page', route);
 
-  return render(ui, { wrapper: BrowserRouter });
+  return render(ui, { wrapper: AllProviders });
 };
