@@ -55,8 +55,6 @@ class KeeperCampaignTile extends StatelessWidget {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    highlightColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.05),
-                    splashColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
                     onTap: onTap,
                   ),
                 ),

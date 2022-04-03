@@ -92,7 +92,7 @@ class _SearchScaffold extends StatelessWidget {
           flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
             animation.addStatusListener((status) {
               if (status == AnimationStatus.completed) {
-                Future.delayed(Duration(milliseconds: 5), () {
+                Future.delayed(Duration(milliseconds: 50), () {
                   searchFocusNode.requestFocus();
                 });
               }
@@ -102,44 +102,46 @@ class _SearchScaffold extends StatelessWidget {
           },
           child: Material(
             color: Theme.of(context).colorScheme.surface,
-            child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  KeeperBackButton(),
-                  Expanded(
-                    child: Center(
-                      child: TextField(
-                        controller: searchTextController,
-                        focusNode: searchFocusNode,
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                        onChanged: onChanged,
-                        decoration: InputDecoration(
-                          hintText: "Search",
-                          hintStyle: TextStyle(
-                              color: Theme.of(context).appBarTheme.titleTextStyle!.color!.withOpacity(0.7)),
-                          fillColor: Colors.transparent,
-                          contentPadding: EdgeInsets.all(0),
-                          focusedBorder: border,
-                          enabledBorder: border,
-                          disabledBorder: border,
-                          border: border,
+            child: InkWell(
+              child: SafeArea(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    KeeperBackButton(),
+                    Expanded(
+                      child: Center(
+                        child: TextField(
+                          controller: searchTextController,
+                          focusNode: searchFocusNode,
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                          onChanged: onChanged,
+                          decoration: InputDecoration(
+                            hintText: "Search",
+                            hintStyle: TextStyle(
+                                color: Theme.of(context).appBarTheme.titleTextStyle!.color!.withOpacity(0.7)),
+                            fillColor: Colors.transparent,
+                            contentPadding: EdgeInsets.all(0),
+                            focusedBorder: border,
+                            enabledBorder: border,
+                            disabledBorder: border,
+                            border: border,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: onClear,
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    icon: Icon(
-                      Icons.clear,
-                      color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                    IconButton(
+                      onPressed: onClear,
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      icon: Icon(
+                        Icons.clear,
+                        color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

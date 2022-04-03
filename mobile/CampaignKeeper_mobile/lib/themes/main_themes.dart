@@ -173,6 +173,8 @@ class MainThemes {
         fontWeight: FontWeight.w600,
       )),
     ),
+    highlightColor: _dark.withOpacity(0.05),
+    splashColor: _dark.withOpacity(0.1),
   );
 
   static final ThemeData dark = ThemeData(
@@ -291,5 +293,7 @@ class MainThemes {
         fontWeight: FontWeight.w600,
       )),
     ),
+    highlightColor: _lighterLight.withOpacity(0.05),
+    splashColor: _lighterLight.withOpacity(0.1),
   );
 }
