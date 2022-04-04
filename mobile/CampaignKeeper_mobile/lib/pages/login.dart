@@ -1,6 +1,8 @@
 import 'package:campaign_keeper_mobile/components/keeper_logo_card.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
+import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
+import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +71,7 @@ class _LoginCardState extends State<LoginCard> {
       if (ModalRoute.of(context)!.isCurrent) {
         switch (status) {
           case ResponseStatus.Success:
+            await DataCarrier().refresh<CampaignEntity>();
             if (canPop()) {
               Navigator.of(context).pushNamedAndRemoveUntil('/start', (Route<dynamic> route) => false);
             } else {

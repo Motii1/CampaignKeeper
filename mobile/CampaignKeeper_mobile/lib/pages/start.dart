@@ -16,7 +16,7 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends KeeperState<Start> {
-  List<CampaignEntity> _entities = [];
+  List<CampaignEntity> _entities = DataCarrier().getEntities<CampaignEntity>();
   bool isPopExit = false;
 
   Future<void> onRefresh() async {
@@ -31,6 +31,7 @@ class _StartState extends KeeperState<Start> {
   }
 
   void openCampaign(int id) {
+    // TODO: Refresh sessions list and codex before pushing
     Navigator.pushNamed(context, '/start/campaign', arguments: id);
   }
 
@@ -62,7 +63,6 @@ class _StartState extends KeeperState<Start> {
   void initState() {
     super.initState();
     DataCarrier().addListener<CampaignEntity>(onCampaignRefresh);
-    DataCarrier().refresh<CampaignEntity>();
   }
 
   @override

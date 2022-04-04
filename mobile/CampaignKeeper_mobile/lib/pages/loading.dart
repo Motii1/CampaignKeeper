@@ -1,3 +1,4 @@
+import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
@@ -36,7 +37,7 @@ class _LoadingState extends State<Loading> {
 
     switch (status) {
       case ResponseStatus.Success:
-      case ResponseStatus.TimeOut:
+        await DataCarrier().refresh<CampaignEntity>();
         Navigator.pushReplacementNamed(context, "/start");
         break;
       default:
@@ -44,6 +45,7 @@ class _LoadingState extends State<Loading> {
         if (userEnt == null) {
           Navigator.pushReplacementNamed(context, "/login");
         } else {
+          await DataCarrier().refresh<CampaignEntity>(online: false);
           Navigator.pushReplacementNamed(context, "/start");
         }
         break;
