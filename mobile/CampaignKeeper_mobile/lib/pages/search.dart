@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_back_button.dart';
 import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
 import 'package:flutter/material.dart';
@@ -97,8 +99,8 @@ class _SearchScaffold extends StatelessWidget {
                 });
               }
             });
-            final Hero toHero = toHeroContext.widget as Hero;
-            return toHero.child;
+            return _AppBarAnimatedPlaceholder(
+                animation: animation, paddingTop: MediaQuery.of(context).padding.top);
           },
           child: Material(
             color: Theme.of(context).colorScheme.surface,
@@ -148,6 +150,74 @@ class _SearchScaffold extends StatelessWidget {
         ),
       ),
       body: body,
+    );
+  }
+}
+
+class _AppBarAnimatedPlaceholder extends StatelessWidget {
+  _AppBarAnimatedPlaceholder({Key? key, required this.animation, required this.paddingTop}) : super(key: key);
+  final Animation<double> animation;
+  final double paddingTop;
+  final border = OutlineInputBorder(
+      borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(6)), gapPadding: 0);
+  final Tween<double> radiusTween = Tween(begin: 30.0, end: 30.0);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, _) {
+        return Padding(
+          padding: EdgeInsets.only(top: paddingTop * (1.0 - animation.value)),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(35 * (1.0 - animation.value))),
+            child: Material(
+              color: Theme.of(context).colorScheme.surface,
+              child: InkWell(
+                child: Padding(
+                  padding: EdgeInsets.only(top: paddingTop * animation.value),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      KeeperBackButton(),
+                      Expanded(
+                        child: Center(
+                          child: TextField(
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Search",
+                              hintStyle: TextStyle(
+                                  color:
+                                      Theme.of(context).appBarTheme.titleTextStyle!.color!.withOpacity(0.7)),
+                              fillColor: Colors.transparent,
+                              contentPadding: EdgeInsets.all(0),
+                              focusedBorder: border,
+                              enabledBorder: border,
+                              disabledBorder: border,
+                              border: border,
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        icon: Icon(
+                          Icons.clear,
+                          color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

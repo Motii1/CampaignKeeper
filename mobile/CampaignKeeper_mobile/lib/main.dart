@@ -39,15 +39,6 @@ class MainApp extends StatelessWidget {
             darkTheme: _themeDark,
             themeMode: mode,
             initialRoute: "/",
-            // routes: {
-            //   "/": (context) => Loading(),
-            //   "/settings": (context) => Settings(),
-            //   "/settings/about": (context) => About(),
-            //   "/search": (context) => Search(),
-            //   "/login": (context) => Login(),
-            //   "/start": (context) => Start(),
-            //   "/start/campaign": (context) => Campaign(),
-            // },
             onGenerateRoute: (RouteSettings settings) {
               var routes = <String, WidgetBuilder>{
                 "/": (context) => Loading(),

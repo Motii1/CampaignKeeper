@@ -143,6 +143,13 @@ class _SearchBar extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(8, 0, 8, 10),
         child: Hero(
           tag: 'search',
+          flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
+            return _SearchBarAnimatedPlaceholder(
+                animation: animation,
+                canPop: canPop(context),
+                paddingTop: MediaQuery.of(context).padding.top,
+                popup: popup);
+          },
           child: SafeArea(
             child: Material(
               color: Theme.of(context).colorScheme.surface,
@@ -188,5 +195,65 @@ class _SearchBar extends StatelessWidget {
             ),
           ),
         ));
+  }
+}
+
+class _SearchBarAnimatedPlaceholder extends StatelessWidget {
+  _SearchBarAnimatedPlaceholder(
+      {Key? key, required this.animation, required this.canPop, required this.paddingTop, this.popup})
+      : super(key: key);
+  final bool canPop;
+  final KeeperPopup? popup;
+  final Animation<double> animation;
+  final double paddingTop;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, _) {
+        return Padding(
+          padding: EdgeInsets.only(top: paddingTop * (1.0 - animation.value)),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(35 * (1.0 - animation.value))),
+            child: Material(
+              color: Theme.of(context).colorScheme.surface,
+              elevation: 0,
+              child: Padding(
+                padding: EdgeInsets.only(top: paddingTop * animation.value),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    canPop
+                        ? KeeperBackButton(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            constraints: BoxConstraints.expand(width: 44, height: 42))
+                        : Padding(
+                            padding: EdgeInsets.only(left: 15, right: 10),
+                            child: Icon(
+                              Icons.search_outlined,
+                              size: 23.5,
+                              color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                            ),
+                          ),
+                    Expanded(
+                      child: Text(
+                        "Search",
+                        style: TextStyle(
+                          color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
+                          fontSize: 19,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    popup ?? Container(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
