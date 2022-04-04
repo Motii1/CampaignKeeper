@@ -221,33 +221,41 @@ class _SearchBarAnimatedPlaceholder extends StatelessWidget {
               elevation: 0,
               child: Padding(
                 padding: EdgeInsets.only(top: paddingTop * animation.value),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    canPop
-                        ? KeeperBackButton(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            constraints: BoxConstraints.expand(width: 44, height: 42))
-                        : Padding(
-                            padding: EdgeInsets.only(left: 15, right: 10),
-                            child: Icon(
-                              Icons.search_outlined,
-                              size: 23.5,
-                              color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                child: SizedBox(
+                  height: 42,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      canPop
+                          ? Padding(
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              child: Icon(
+                                Icons.arrow_back,
+                                size: 23.5,
+                                color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                              ),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(left: 15, right: 10),
+                              child: Icon(
+                                Icons.search_outlined,
+                                size: 23.5,
+                                color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                              ),
                             ),
+                      Expanded(
+                        child: Text(
+                          "Search",
+                          style: TextStyle(
+                            color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
+                            fontSize: 19,
+                            fontWeight: FontWeight.w400,
                           ),
-                    Expanded(
-                      child: Text(
-                        "Search",
-                        style: TextStyle(
-                          color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
-                          fontSize: 19,
-                          fontWeight: FontWeight.w400,
                         ),
                       ),
-                    ),
-                    popup ?? Container(),
-                  ],
+                      popup ?? Container(),
+                    ],
+                  ),
                 ),
               ),
             ),

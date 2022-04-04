@@ -26,16 +26,6 @@ class _SearchState extends State<Search> {
     });
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance?.addPostFrameCallback((_) {
-  //     Future.delayed(Duration(milliseconds: 400), () {
-  //       searchFocusNode.requestFocus();
-  //     });
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return _SearchScaffold(
@@ -106,16 +96,17 @@ class _SearchScaffold extends StatelessWidget {
               child: SafeArea(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     KeeperBackButton(),
                     Expanded(
-                      child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 2),
                         child: TextField(
                           controller: searchTextController,
                           focusNode: searchFocusNode,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 19,
                           ),
                           onChanged: onChanged,
                           decoration: InputDecoration(
@@ -123,7 +114,7 @@ class _SearchScaffold extends StatelessWidget {
                             hintStyle: TextStyle(
                                 color: Theme.of(context).appBarTheme.titleTextStyle!.color!.withOpacity(0.7)),
                             fillColor: Colors.transparent,
-                            contentPadding: EdgeInsets.all(0),
+                            contentPadding: EdgeInsets.zero,
                             focusedBorder: border,
                             enabledBorder: border,
                             disabledBorder: border,
@@ -176,27 +167,23 @@ class _AppBarAnimatedPlaceholder extends StatelessWidget {
                   padding: EdgeInsets.only(top: paddingTop * animation.value),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      KeeperBackButton(),
+                      Padding(
+                        padding: EdgeInsets.only(left: 12, right: 12),
+                        child: Icon(
+                          Icons.arrow_back,
+                          size: 23.5,
+                          color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                        ),
+                      ),
                       Expanded(
-                        child: Center(
-                          child: TextField(
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: "Search",
-                              hintStyle: TextStyle(
-                                  color:
-                                      Theme.of(context).appBarTheme.titleTextStyle!.color!.withOpacity(0.7)),
-                              fillColor: Colors.transparent,
-                              contentPadding: EdgeInsets.all(0),
-                              focusedBorder: border,
-                              enabledBorder: border,
-                              disabledBorder: border,
-                              border: border,
-                            ),
+                        child: Text(
+                          "Search",
+                          style: TextStyle(
+                            color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
+                            fontSize: 19,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
