@@ -17,18 +17,6 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeIOSOptions_0 extends _i1.Fake implements _i2.IOSOptions {}
-
-class _FakeAndroidOptions_1 extends _i1.Fake implements _i2.AndroidOptions {}
-
-class _FakeLinuxOptions_2 extends _i1.Fake implements _i2.LinuxOptions {}
-
-class _FakeWindowsOptions_3 extends _i1.Fake implements _i2.WindowsOptions {}
-
-class _FakeWebOptions_4 extends _i1.Fake implements _i2.WebOptions {}
-
-class _FakeMacOsOptions_5 extends _i1.Fake implements _i2.MacOsOptions {}
-
 /// A class which mocks [FlutterSecureStorage].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -39,150 +27,87 @@ class MockFlutterSecureStorage extends _i1.Mock
   }
 
   @override
-  _i2.IOSOptions get iOptions =>
-      (super.noSuchMethod(Invocation.getter(#iOptions),
-          returnValue: _FakeIOSOptions_0()) as _i2.IOSOptions);
-  @override
-  _i2.AndroidOptions get aOptions =>
-      (super.noSuchMethod(Invocation.getter(#aOptions),
-          returnValue: _FakeAndroidOptions_1()) as _i2.AndroidOptions);
-  @override
-  _i2.LinuxOptions get lOptions =>
-      (super.noSuchMethod(Invocation.getter(#lOptions),
-          returnValue: _FakeLinuxOptions_2()) as _i2.LinuxOptions);
-  @override
-  _i2.WindowsOptions get wOptions =>
-      (super.noSuchMethod(Invocation.getter(#wOptions),
-          returnValue: _FakeWindowsOptions_3()) as _i2.WindowsOptions);
-  @override
-  _i2.WebOptions get webOptions =>
-      (super.noSuchMethod(Invocation.getter(#webOptions),
-          returnValue: _FakeWebOptions_4()) as _i2.WebOptions);
-  @override
-  _i2.MacOsOptions get mOptions =>
-      (super.noSuchMethod(Invocation.getter(#mOptions),
-          returnValue: _FakeMacOsOptions_5()) as _i2.MacOsOptions);
-  @override
   _i3.Future<void> write(
           {String? key,
           String? value,
-          _i2.IOSOptions? iOptions,
+          _i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
           _i2.AndroidOptions? aOptions,
-          _i2.LinuxOptions? lOptions,
-          _i2.WebOptions? webOptions,
-          _i2.MacOsOptions? mOptions,
-          _i2.WindowsOptions? wOptions}) =>
+          _i2.LinuxOptions? lOptions}) =>
       (super.noSuchMethod(
           Invocation.method(#write, [], {
             #key: key,
             #value: value,
             #iOptions: iOptions,
             #aOptions: aOptions,
-            #lOptions: lOptions,
-            #webOptions: webOptions,
-            #mOptions: mOptions,
-            #wOptions: wOptions
+            #lOptions: lOptions
           }),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
   @override
   _i3.Future<String?> read(
           {String? key,
-          _i2.IOSOptions? iOptions,
+          _i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
           _i2.AndroidOptions? aOptions,
-          _i2.LinuxOptions? lOptions,
-          _i2.WebOptions? webOptions,
-          _i2.MacOsOptions? mOptions,
-          _i2.WindowsOptions? wOptions}) =>
+          _i2.LinuxOptions? lOptions}) =>
       (super.noSuchMethod(
           Invocation.method(#read, [], {
             #key: key,
             #iOptions: iOptions,
             #aOptions: aOptions,
-            #lOptions: lOptions,
-            #webOptions: webOptions,
-            #mOptions: mOptions,
-            #wOptions: wOptions
+            #lOptions: lOptions
           }),
           returnValue: Future<String?>.value()) as _i3.Future<String?>);
   @override
   _i3.Future<bool> containsKey(
           {String? key,
-          _i2.IOSOptions? iOptions,
+          _i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
           _i2.AndroidOptions? aOptions,
-          _i2.LinuxOptions? lOptions,
-          _i2.WebOptions? webOptions,
-          _i2.MacOsOptions? mOptions,
-          _i2.WindowsOptions? wOptions}) =>
+          _i2.LinuxOptions? lOptions}) =>
       (super.noSuchMethod(
           Invocation.method(#containsKey, [], {
             #key: key,
             #iOptions: iOptions,
             #aOptions: aOptions,
-            #lOptions: lOptions,
-            #webOptions: webOptions,
-            #mOptions: mOptions,
-            #wOptions: wOptions
+            #lOptions: lOptions
           }),
           returnValue: Future<bool>.value(false)) as _i3.Future<bool>);
   @override
   _i3.Future<void> delete(
           {String? key,
-          _i2.IOSOptions? iOptions,
+          _i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
           _i2.AndroidOptions? aOptions,
-          _i2.LinuxOptions? lOptions,
-          _i2.WebOptions? webOptions,
-          _i2.MacOsOptions? mOptions,
-          _i2.WindowsOptions? wOptions}) =>
+          _i2.LinuxOptions? lOptions}) =>
       (super.noSuchMethod(
           Invocation.method(#delete, [], {
             #key: key,
             #iOptions: iOptions,
             #aOptions: aOptions,
-            #lOptions: lOptions,
-            #webOptions: webOptions,
-            #mOptions: mOptions,
-            #wOptions: wOptions
+            #lOptions: lOptions
           }),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
   @override
   _i3.Future<Map<String, String>> readAll(
-          {_i2.IOSOptions? iOptions,
+          {_i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
           _i2.AndroidOptions? aOptions,
-          _i2.LinuxOptions? lOptions,
-          _i2.WebOptions? webOptions,
-          _i2.MacOsOptions? mOptions,
-          _i2.WindowsOptions? wOptions}) =>
+          _i2.LinuxOptions? lOptions}) =>
       (super.noSuchMethod(
               Invocation.method(#readAll, [], {
                 #iOptions: iOptions,
                 #aOptions: aOptions,
-                #lOptions: lOptions,
-                #webOptions: webOptions,
-                #mOptions: mOptions,
-                #wOptions: wOptions
+                #lOptions: lOptions
               }),
               returnValue:
                   Future<Map<String, String>>.value(<String, String>{}))
           as _i3.Future<Map<String, String>>);
   @override
   _i3.Future<void> deleteAll(
-          {_i2.IOSOptions? iOptions,
+          {_i2.IOSOptions? iOptions = _i2.IOSOptions.defaultOptions,
           _i2.AndroidOptions? aOptions,
-          _i2.LinuxOptions? lOptions,
-          _i2.WebOptions? webOptions,
-          _i2.MacOsOptions? mOptions,
-          _i2.WindowsOptions? wOptions}) =>
+          _i2.LinuxOptions? lOptions}) =>
       (super.noSuchMethod(
-          Invocation.method(#deleteAll, [], {
-            #iOptions: iOptions,
-            #aOptions: aOptions,
-            #lOptions: lOptions,
-            #webOptions: webOptions,
-            #mOptions: mOptions,
-            #wOptions: wOptions
-          }),
+          Invocation.method(#deleteAll, [],
+              {#iOptions: iOptions, #aOptions: aOptions, #lOptions: lOptions}),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
 }

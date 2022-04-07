@@ -1,11 +1,12 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
+import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/keeper_campaign_tile.dart';
+import 'package:campaign_keeper_mobile/components/keeper_toast.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:flutter/material.dart';
 
 class Start extends StatefulWidget {
@@ -16,7 +17,8 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends KeeperState<Start> {
-  List<CampaignEntity> _entities = [];
+  List<CampaignEntity> _entities = DataCarrier().getEntities<CampaignEntity>();
+  bool isPopExit = false;
 
   Future<void> onRefresh() async {
     DataCarrier().refresh<UserDataEntity>();
@@ -30,7 +32,8 @@ class _StartState extends KeeperState<Start> {
   }
 
   void openCampaign(int id) {
-    Navigator.pushNamed(context, '/start/campaign', arguments: CampaignArgument(id));
+    // TODO: Refresh sessions list and codex before pushing
+    Navigator.pushNamed(context, '/start/campaign', arguments: id);
   }
 
   @override
@@ -44,10 +47,24 @@ class _StartState extends KeeperState<Start> {
   }
 
   @override
+  Future<bool> didPopRoute() async {
+    if (isPopExit) {
+      return false;
+    } else {
+      isPopExit = true;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(KeeperToast.createToast(context: context, message: "Press back again to exit"));
+      Future.delayed(Duration(seconds: 1, milliseconds: 300), () {
+        isPopExit = false;
+      });
+      return true;
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     DataCarrier().addListener<CampaignEntity>(onCampaignRefresh);
-    DataCarrier().refresh<CampaignEntity>();
   }
 
   @override
