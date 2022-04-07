@@ -1,12 +1,12 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
-import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/keeper_campaign_tile.dart';
 import 'package:campaign_keeper_mobile/components/keeper_toast.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:flutter/material.dart';
 
 class Start extends StatefulWidget {
@@ -25,7 +25,18 @@ class _StartState extends KeeperState<Start> {
     await DataCarrier().refresh<CampaignEntity>();
   }
 
-  Future<void> onCampaignRefresh() async {
+  void forceLogOut() {
+    LoginHelper().logout();
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
+  }
+
+  void onUserDetailsRefresh() {
+    if (DataCarrier().getEntity<UserDataEntity>() == null) {
+      forceLogOut();
+    }
+  }
+
+  void onCampaignRefresh() {
     setState(() {
       _entities = DataCarrier().getEntities<CampaignEntity>();
     });

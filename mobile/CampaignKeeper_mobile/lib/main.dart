@@ -1,3 +1,4 @@
+import 'package:campaign_keeper_mobile/pages/account.dart';
 import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/pages/about.dart';
@@ -43,6 +44,7 @@ class MainApp extends StatelessWidget {
               var routes = <String, WidgetBuilder>{
                 "/": (context) => Loading(),
                 "/settings": (context) => Settings(),
+                "/settings/account": (context) => Account(),
                 "/settings/about": (context) => About(),
                 "/search": (context) => Search(searchController: settings.arguments as BaseSearchController),
                 "/login": (context) => Login(),

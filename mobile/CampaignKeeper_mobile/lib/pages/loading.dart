@@ -40,6 +40,10 @@ class _LoadingState extends State<Loading> {
         await DataCarrier().refresh<CampaignEntity>();
         Navigator.pushReplacementNamed(context, "/start");
         break;
+      case ResponseStatus.IncorrectData:
+        await DataCarrier().clear();
+        Navigator.pushReplacementNamed(context, "/login");
+        break;
       default:
         UserDataEntity? userEnt = DataCarrier().getEntity();
         if (userEnt == null) {

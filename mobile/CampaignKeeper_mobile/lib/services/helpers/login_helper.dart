@@ -51,10 +51,8 @@ class LoginHelper {
     return response.status;
   }
 
-  Future<ResponseStatus> logout({bool force = false}) async {
-    if (force) {
-      DataCarrier().clear();
-    }
+  Future<ResponseStatus> logout() async {
+    DataCarrier().clear();
 
     if (RequestHelper().isCookieValid()) {
       var response = await RequestHelper().post(endpoint: _logoutEnd, isLogin: true);

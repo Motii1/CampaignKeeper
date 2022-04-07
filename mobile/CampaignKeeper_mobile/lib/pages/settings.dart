@@ -1,7 +1,11 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_debug_menu.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
+import 'package:campaign_keeper_mobile/components/list/keeper_list_header.dart';
+import 'package:campaign_keeper_mobile/components/list/keeper_list_tile.dart';
+import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
+import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -23,12 +27,21 @@ class _SettingsState extends KeeperState<Settings> {
     }
   }
 
-  void logout() async {
-    LoginHelper().logout(force: true);
+  void onTapLogout() async {
+    LoginHelper().logout();
     Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
   }
 
-  void about() async {
+  void onTapAccount() async {
+    if (DataCarrier().getEntity<UserDataEntity>() != null) {
+      Navigator.pushNamed(
+        context,
+        '/settings/account',
+      );
+    }
+  }
+
+  void onTapAbout() async {
     Navigator.pushNamed(
       context,
       '/settings/about',
@@ -62,26 +75,16 @@ class _SettingsState extends KeeperState<Settings> {
         sliver: SliverList(
           delegate: SliverChildListDelegate(
             [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
-                child: Text(
-                  "USER",
-                  style: Theme.of(context).textTheme.subtitle2,
-                ),
+              KeeperListHeader(title: "User"),
+              KeeperListTile(
+                title: "Account",
+                onTap: onTapAccount,
               ),
-              ListTile(
-                title: Text(
-                  "Log out",
-                ),
-                onTap: logout,
+              KeeperListTile(
+                title: "Log out",
+                onTap: onTapLogout,
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(18, 15, 18, 0),
-                child: Text(
-                  "APP THEME",
-                  style: Theme.of(context).textTheme.subtitle2,
-                ),
-              ),
+              KeeperListHeader(title: "App Theme"),
               RadioListTile(
                 title: Text("Light"),
                 value: ThemeMode.light,
@@ -103,20 +106,12 @@ class _SettingsState extends KeeperState<Settings> {
                   onChanged: setTheme,
                 ),
               ),
+              KeeperListHeader(title: "App"),
+              KeeperListTile(
+                title: "About",
+                onTap: onTapAbout,
+              ),
               KeeperDebugMenu(isDebugMode: isDebugMode),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(18, 15, 18, 0),
-                child: Text(
-                  "APP",
-                  style: Theme.of(context).textTheme.subtitle2,
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  "About",
-                ),
-                onTap: about,
-              ),
             ],
           ),
         ),
