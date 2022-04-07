@@ -54,6 +54,7 @@ class RequestHelper extends ChangeNotifier {
       case 401:
       case 402:
       case 403:
+      case 404:
         if (autoLogin && !isCookieValid()) {
           ResponseStatus loginResponse = await LoginHelper().autoLogin();
           if (loginResponse == ResponseStatus.Success) {
@@ -94,6 +95,9 @@ class RequestHelper extends ChangeNotifier {
         return Response(ResponseStatus.Success, response.body, response.bodyBytes);
       case 400:
       case 401:
+      case 402:
+      case 403:
+      case 404:
         if (autoLogin && !isLogin && !isCookieValid()) {
           ResponseStatus loginResponse = await LoginHelper().autoLogin();
           if (loginResponse == ResponseStatus.Success) {

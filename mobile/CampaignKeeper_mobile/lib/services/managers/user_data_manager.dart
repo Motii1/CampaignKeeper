@@ -74,6 +74,13 @@ class UserDataManager extends BaseManager<UserDataEntity> {
             newEntity = _entity!;
           }
         }
+      } else if (userResponse.status == ResponseStatus.IncorrectData) {
+        _entity = null;
+
+        CacheUtil().deleteSecure();
+        notifyListeners();
+
+        return false;
       }
     }
 
