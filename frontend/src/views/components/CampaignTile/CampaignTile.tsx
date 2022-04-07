@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../types/types';
 import { updateSelectedCampaignData } from '../../CampaignView/campaignViewSlice';
-import { updateState } from '../../StartView/startViewSlice';
+import { updateState as updateStateStart } from '../../StartView/startViewSlice';
 import viewsRoutes from '../../viewsRoutes';
 import { EditMenu } from '../EditMenu/EditMenu';
 
@@ -54,7 +54,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
 
   const handleEdit = () => {
     dispatch(
-      updateState({
+      updateStateStart({
         id: props.campaignId,
         name: props.campaignName,
         imageBase64: props.campaignImageBase64,

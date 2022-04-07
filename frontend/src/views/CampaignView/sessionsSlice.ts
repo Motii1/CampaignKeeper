@@ -5,28 +5,36 @@ type Session = {
   id: number;
   name: string;
   createdAt: Date;
-  campaignId: string;
+  sessionsCampaignId: string;
 };
 
 type SessionsState = {
   sessionsList: Session[];
   isSessionsListDownloaded: boolean;
+  sessionsCampaignId: number;
 };
 
 const initialState: SessionsState = {
   sessionsList: [],
   isSessionsListDownloaded: false,
+  sessionsCampaignId: -1,
 };
 
-export const fetchSessions = createAsyncThunk('sessions/fetchSessions', async () => {
-  const response = await protectedApiClient.get('api/session/list');
-  return response;
-});
+export const fetchSessions = createAsyncThunk(
+  'sessions/fetchSessions',
+  async (campaignId: number) => {
+    const response = await protectedApiClient.get(`api/session/list?campaignId=${campaignId}`);
+    return response;
+  }
+);
 
 const sessionsSlice = createSlice({
   name: 'sessions',
   initialState,
   reducers: {
+    updateCampaignId: (state, action) => {
+      state.sessionsCampaignId = action.payload.campaignId;
+    },
     addSession: (state, action) => {
       state.sessionsList = state.sessionsList.concat(action.payload.newSession);
     },
@@ -47,12 +55,12 @@ const sessionsSlice = createSlice({
     builder.addCase(fetchSessions.fulfilled, (state, action) => {
       if (action.payload.status === 200) {
         state.isSessionsListDownloaded = true;
-        state.sessionsList = action.payload.data.campaigns;
+        state.sessionsList = action.payload.data.sessions;
       }
     });
   },
 });
 
-export const { addSession, editSession, deleteSession } = sessionsSlice.actions;
+export const { updateCampaignId, addSession, editSession, deleteSession } = sessionsSlice.actions;
 
 export default sessionsSlice.reducer;
