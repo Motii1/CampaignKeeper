@@ -39,16 +39,16 @@ class DataCarrier {
     }
   }
 
-  T? getEntity<T>({int entId = -1}) {
+  T? get<T>({int entId = -1}) {
     if (_managers.containsKey(T)) {
-      return _managers[T]!.getEntity(entId: entId);
+      return _managers[T]!.get(entId: entId);
     }
     return null;
   }
 
-  List<T> getEntities<T>() {
+  List<T> getList<T>() {
     if (_managers.containsKey(T)) {
-      return _managers[T]!.getEntities() as List<T>;
+      return _managers[T]!.getList() as List<T>;
     }
     return [];
   }
