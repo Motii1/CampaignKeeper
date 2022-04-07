@@ -2,33 +2,49 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NavBarViewDialog } from '../../types/types';
 
 interface CampaignViewState {
-  dialogName: string;
   type: NavBarViewDialog;
   campaignId: number;
   campaignName: string;
   campaignImageBase64: string;
+  sessionId: number;
+  sessionName: string;
 }
 
 const initialState: CampaignViewState = {
-  dialogName: '',
   type: NavBarViewDialog.NewCampaign,
   campaignId: -1,
   campaignName: '',
   campaignImageBase64: '',
+  sessionId: -1,
+  sessionName: '',
 };
 
 const campaignViewSlice = createSlice({
   name: 'campaignView',
   initialState,
   reducers: {
+    updateName: (state, action) => {
+      state.sessionName = action.payload.name;
+    },
     updateState: (state, action) => {
-      state.dialogName = action.payload.name ? action.payload.name : state.dialogName;
       state.type = action.payload.type ? action.payload.type : state.type;
+      state.campaignId = action.payload.campaignId ? action.payload.campaignId : state.campaignId;
+      state.campaignName = action.payload.campaignName
+        ? action.payload.campaignName
+        : state.campaignName;
+      state.campaignImageBase64 = action.payload.campaignImageBase64
+        ? action.payload.campaignImageBase64
+        : state.campaignImageBase64;
+      state.sessionId = action.payload.sessionId ? action.payload.sessionId : state.sessionId;
+      state.sessionName = action.payload.sessionName
+        ? action.payload.sessionName
+        : state.sessionName;
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resetState: (state, _action) => {
-      state.dialogName = '';
       state.type = NavBarViewDialog.NewCampaign;
+      state.sessionId = -1;
+      state.sessionName = '';
     },
     updateSelectedCampaignData: (state, action) => {
       state.campaignId = action.payload.campaignId;
@@ -46,7 +62,12 @@ const campaignViewSlice = createSlice({
   },
 });
 
-export const { updateState, resetState, updateSelectedCampaignData, resetSelectedCampaignData } =
-  campaignViewSlice.actions;
+export const {
+  updateName,
+  updateState,
+  resetState,
+  updateSelectedCampaignData,
+  resetSelectedCampaignData,
+} = campaignViewSlice.actions;
 
 export default campaignViewSlice.reducer;

@@ -41,7 +41,7 @@ export const CampaignView: React.FC = () => {
   }
 
   const [isOpen, setIsOpen] = useState(false);
-  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
+  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewSession);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
   const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
 
@@ -71,7 +71,7 @@ export const CampaignView: React.FC = () => {
               <Grid item key={session.name}>
                 <SessionTile
                   sessionId={session.id}
-                  sessionTitle={session.name}
+                  sessionName={session.name}
                   setIsOpen={setIsOpen}
                   setDialogType={setDialogType}
                 />

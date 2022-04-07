@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavBarViewDialog } from '../../../../types/types';
 import { EditMenu } from '../../../components/EditMenu/EditMenu';
-import { updateState } from '../../campaignViewSlice';
+import { updateState as updateStateCampaign } from '../../campaignViewSlice';
 
 type SessionTileProps = {
   sessionId: number;
-  sessionTitle: string;
+  sessionName: string;
   setIsOpen: (newIsOpen: boolean) => void;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
@@ -33,7 +33,7 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
   };
 
   const handleEdit = () => {
-    dispatch(updateState({ name: props.sessionTitle }));
+    dispatch(updateStateCampaign({ sessionName: props.sessionName, sessionId: props.sessionId }));
     props.setIsOpen(true);
     props.setDialogType(NavBarViewDialog.EditSession);
     setMenuPos(null);
@@ -65,7 +65,7 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
           paddingTop: 1.0,
         }}
       >
-        {props.sessionTitle}
+        {props.sessionName}
       </Typography>
       <EditMenu menuPos={menuPos} handleEdit={handleEdit} handleClose={handleClose} />
     </Paper>

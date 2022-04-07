@@ -6,19 +6,20 @@ import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
-import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addCampaign, editCampaign } from '../campaignsSlice';
-import { resetState, updateImage, updateName } from '../startViewSlice';
+import { resetState, updateName } from '../campaignViewSlice';
+import { addSession, editSession } from '../sessionsSlice';
 
-type SingleCampaignData = {
-  id: number;
+type NewSessionData = {
   name: string;
-  createdAt: Date;
-  imageBase64: string;
+  campaignId: number;
 };
 
-type StartDialogProps = {
+type EditSessionData = {
+  name: string;
+};
+
+type CampaignDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
   dialogType: NavBarViewDialog;
@@ -27,15 +28,15 @@ type StartDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
-export const StartDialog: React.FC<StartDialogProps> = props => {
+export const CampaignDialog: React.FC<CampaignDialogProps> = props => {
   const dispatch = useDispatch();
 
-  const { campaignId, campaignName, campaignImageBase64 } = useSelector(
-    (state: RootState) => state.startView
+  const { sessionId, sessionName, campaignId } = useSelector(
+    (state: RootState) => state.campaignView
   );
 
   const [title, setTitle] = useState(
-    props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign'
+    props.dialogType === NavBarViewDialog.NewSession ? 'New session' : 'Edit session'
   );
   const [helperText, setHelperText] = useState<null | string>('');
 
@@ -50,19 +51,19 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     status: statusNew,
     runQuery: runQueryNew,
     resetQuery: resetQueryNew,
-  } = useQuery<SingleCampaignData>(`/api/campaign`, requestMethods.POST);
+  } = useQuery<NewSessionData>(`/api/session`, requestMethods.POST);
 
   const handleRunQueryNew = useCallback(() => {
     if (!isLoadingNew && statusNew) {
       if (statusNew === 200) {
-        dispatch(addCampaign({ newCampaign: dataNew }));
-        props.setSnackbarSuccess('Campaign created');
+        dispatch(addSession({ newSession: dataNew }));
+        props.setSnackbarSuccess('Session created');
         props.setIsOpen(false);
         resetDialog();
       } else if (statusNew === 400) {
-        props.setSnackbarError('Error during campaign creation');
-      } else if (statusNew === 413) {
-        props.setSnackbarError('Campaign graphic is too big');
+        props.setSnackbarError('Error during session creation');
+      } else if (statusNew === 404) {
+        props.setSnackbarError('Campaign not found');
       }
       resetQueryNew();
     }
@@ -77,41 +78,31 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     status: statusEdit,
     runQuery: runQueryEdit,
     resetQuery: resetQueryEdit,
-  } = useQuery<SingleCampaignData>(`api/campaign/${campaignId}`, requestMethods.PATCH);
+  } = useQuery<EditSessionData>(`api/session/${sessionId}`, requestMethods.PATCH);
 
   const handleRunQueryEdit = useCallback(async () => {
     if (!isLoadingEdit && statusEdit) {
       if (statusEdit === 200) {
-        if (campaignImageBase64) {
-          dispatch(
-            editCampaign({ id: campaignId, name: campaignName, imageBase64: campaignImageBase64 })
-          );
-        } else {
-          dispatch(editCampaign({ id: campaignId, name: campaignName }));
-        }
-        props.setSnackbarSuccess('Campaign edited');
+        dispatch(editSession({ id: sessionId, name: sessionName }));
+        props.setSnackbarSuccess('Session edited');
         props.setIsOpen(false);
         resetDialog();
       } else if (statusEdit === 400) {
-        props.setSnackbarError('Error during campaign update');
+        props.setSnackbarError('Error during session update');
       } else if (statusEdit === 404) {
-        props.setSnackbarError('Campaign not found');
-      } else if (statusNew === 413) {
-        props.setSnackbarError('Campaign graphic is too big');
+        props.setSnackbarError('Session not found');
       }
       resetQueryEdit();
     }
   }, [
     isLoadingEdit,
     statusEdit,
-    statusNew,
     resetQueryEdit,
-    campaignImageBase64,
+    dispatch,
+    sessionId,
+    sessionName,
     props,
     resetDialog,
-    dispatch,
-    campaignId,
-    campaignName,
   ]);
 
   useEffect(() => {
@@ -119,7 +110,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   }, [handleRunQueryEdit]);
 
   useEffect(() => {
-    setTitle(props.dialogType === NavBarViewDialog.NewCampaign ? 'New campaign' : 'Edit campaign');
+    setTitle(props.dialogType === NavBarViewDialog.NewSession ? 'New session' : 'Edit session');
   }, [props.dialogType]);
 
   const validateName = (newName: string): string => {
@@ -144,23 +135,17 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   };
 
   const handleOk = () => {
-    if (validateName(campaignName) === '') {
-      if (props.dialogType === NavBarViewDialog.NewCampaign) {
-        runQueryWithImg(runQueryNew);
+    if (validateName(sessionName) === '') {
+      if (props.dialogType === NavBarViewDialog.NewSession) {
+        runQueryNew({
+          name: sessionName,
+          campaignId: campaignId,
+        });
       } else {
-        runQueryWithImg(runQueryEdit);
+        runQueryEdit({
+          name: sessionName,
+        });
       }
-    }
-  };
-
-  const runQueryWithImg = (runQueryFn: (data?: unknown) => void): void => {
-    if (campaignImageBase64) {
-      runQueryFn({
-        name: campaignName,
-        imageBase64: campaignImageBase64,
-      });
-    } else {
-      runQueryFn({ name: campaignName });
     }
   };
 
@@ -176,7 +161,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
 
   const handleClose = () => {
     props.setIsOpen(false);
-    if (props.dialogType === NavBarViewDialog.EditCampaign) resetDialog();
+    if (props.dialogType === NavBarViewDialog.EditSession) resetDialog();
   };
 
   return (
@@ -187,7 +172,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
         setIsOpen={props.setIsOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-        onDelete={props.dialogType === NavBarViewDialog.EditCampaign ? handleDelete : undefined}
+        onDelete={props.dialogType === NavBarViewDialog.EditSession ? handleDelete : undefined}
         onClose={handleClose}
       >
         <Stack
@@ -200,19 +185,11 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
           <LabeledTextInput
             text={'NAME'}
             placeholder={'Type here'}
-            defaultValue={campaignName}
+            defaultValue={sessionName}
             helperText={helperText}
             defaultHelperText={''}
             onChange={event => handleTextInputChange(event)}
             onBlur={event => handleTextInputLeave(event)}
-          />
-          <ImageUploadField
-            height={180}
-            width={390}
-            image={campaignImageBase64}
-            setImage={newImageBase64 => {
-              dispatch(updateImage({ imageBase64: newImageBase64 }));
-            }}
           />
         </Stack>
       </CustomDialog>
