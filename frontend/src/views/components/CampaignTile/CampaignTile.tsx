@@ -65,10 +65,11 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
     setMenuPos(null);
   };
 
+  const cursorType = props.isClickable ? 'pointer' : 'default';
   return (
     <Paper
       sx={{
-        cursor: 'pointer',
+        cursor: { cursorType },
         borderRadius: 2.5,
         backgroundColor: 'customPalette.brown',
         height: { xs: 147.7, lg: 211 },
@@ -104,7 +105,9 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
           {props.campaignName}
         </Typography>
       </Stack>
-      <EditMenu menuPos={menuPos} handleEdit={handleEdit} handleClose={handleClose} />
+      {props.isClickable ? (
+        <EditMenu menuPos={menuPos} handleEdit={handleEdit} handleClose={handleClose} />
+      ) : null}
     </Paper>
   );
 };

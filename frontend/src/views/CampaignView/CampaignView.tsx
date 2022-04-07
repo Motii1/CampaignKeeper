@@ -154,6 +154,7 @@ export const CampaignView: React.FC = () => {
                 campaignImageBase64={campaignImageBase64}
                 setIsOpen={setIsOpen}
                 setDialogType={setDialogType}
+                isClickable={false}
               />
               {renderSessionsGrid()}
             </Stack>
