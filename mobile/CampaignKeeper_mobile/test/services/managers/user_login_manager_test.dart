@@ -20,22 +20,23 @@ void main() {
 
       var manager = new UserDataManager();
 
-      UserDataEntity? ent = manager.getEntity();
+      UserDataEntity? ent = manager.get();
       expect(ent == null, true);
 
       ent = new UserDataEntity(username: "Testtest", email: "Testtest@test.com", password: "Test");
       manager.attach(ent);
 
-      expect(manager.getEntity(),  ent);
+      expect(manager.get(), ent);
     });
     test("Getting user in a list", () {
       DependenciesHelper().useMocks(secureStorage: secureStorage);
-      
+
       var manager = new UserDataManager();
-      UserDataEntity ent = new UserDataEntity(username: "Testtest", email: "Testtest@test.com", password: "Test");
+      UserDataEntity ent =
+          new UserDataEntity(username: "Testtest", email: "Testtest@test.com", password: "Test");
       manager.attach(ent);
 
-      List list = manager.getEntities();
+      List list = manager.getList();
 
       expect(list.length, 1);
       expect(list[0], ent);

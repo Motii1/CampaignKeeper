@@ -23,7 +23,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   }
 
   @override
-  CampaignEntity? getEntity({int groupId = -1, int entId = -1}) {
+  CampaignEntity? get({int groupId = -1, int entId = -1}) {
     if (_entities.any((element) => element.id == entId)) {
       return _entities.firstWhere((element) => element.id == entId);
     } else {
@@ -32,7 +32,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   }
 
   @override
-  List<CampaignEntity> getEntities({int groupId = -1}) {
+  List<CampaignEntity> getList({int groupId = -1}) {
     return _entities;
   }
 

@@ -20,12 +20,12 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   }
 
   @override
-  UserDataEntity? getEntity({int groupId = -1, int entId = -1}) {
+  UserDataEntity? get({int groupId = -1, int entId = -1}) {
     return _entity;
   }
 
   @override
-  List<UserDataEntity> getEntities({int groupId = -1}) {
+  List<UserDataEntity> getList({int groupId = -1}) {
     List<UserDataEntity> entities = [];
 
     if (_entity != null) {

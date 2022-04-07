@@ -32,11 +32,11 @@ class KeeperPopup extends StatefulWidget {
 }
 
 class _KeeperPopupState extends State<KeeperPopup> {
-  Image? userImage = DataCarrier().getEntity<UserDataEntity>()?.image;
+  Image? userImage = DataCarrier().get<UserDataEntity>()?.image;
 
   void refreshUserImage() {
     setState(() {
-      userImage = DataCarrier().getEntity<UserDataEntity>()?.image;
+      userImage = DataCarrier().get<UserDataEntity>()?.image;
     });
   }
 

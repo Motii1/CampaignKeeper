@@ -17,7 +17,7 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends KeeperState<Start> {
-  List<CampaignEntity> _entities = DataCarrier().getEntities<CampaignEntity>();
+  List<CampaignEntity> _entities = DataCarrier().getList<CampaignEntity>();
   bool isPopExit = false;
 
   Future<void> onRefresh() async {
@@ -31,14 +31,14 @@ class _StartState extends KeeperState<Start> {
   }
 
   void onUserDetailsRefresh() {
-    if (DataCarrier().getEntity<UserDataEntity>() == null) {
+    if (DataCarrier().get<UserDataEntity>() == null) {
       forceLogOut();
     }
   }
 
   void onCampaignRefresh() {
     setState(() {
-      _entities = DataCarrier().getEntities<CampaignEntity>();
+      _entities = DataCarrier().getList<CampaignEntity>();
     });
   }
 

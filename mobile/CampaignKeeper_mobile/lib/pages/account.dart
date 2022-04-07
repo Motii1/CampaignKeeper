@@ -14,11 +14,11 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends KeeperState<Account> {
-  UserDataEntity? ent = DataCarrier().getEntity<UserDataEntity>();
+  UserDataEntity? ent = DataCarrier().get<UserDataEntity>();
 
   void updateEntity() {
     setState(() {
-      ent = DataCarrier().getEntity<UserDataEntity>();
+      ent = DataCarrier().get<UserDataEntity>();
     });
   }
 

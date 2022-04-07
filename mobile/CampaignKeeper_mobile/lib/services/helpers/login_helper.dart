@@ -24,7 +24,7 @@ class LoginHelper {
       status = await RequestHelper().testConnection();
     }
 
-    UserDataEntity? userEntity = DataCarrier().getEntity();
+    UserDataEntity? userEntity = DataCarrier().get();
     if (userEntity != null && userEntity.password != null) {
       status = await login(userEntity.username, userEntity.password!);
     }

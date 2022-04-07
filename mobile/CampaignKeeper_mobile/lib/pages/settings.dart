@@ -33,7 +33,7 @@ class _SettingsState extends KeeperState<Settings> {
   }
 
   void onTapAccount() async {
-    if (DataCarrier().getEntity<UserDataEntity>() != null) {
+    if (DataCarrier().get<UserDataEntity>() != null) {
       Navigator.pushNamed(
         context,
         '/settings/account',

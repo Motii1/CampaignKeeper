@@ -32,7 +32,7 @@ class _CampaignState extends KeeperState<Campaign> {
   }
 
   Future<void> onCampaignRefresh() async {
-    CampaignEntity? entity = DataCarrier().getEntity(entId: widget.campaignID);
+    CampaignEntity? entity = DataCarrier().get(entId: widget.campaignID);
     if (entity == null) {
       returnToStart();
     } else {

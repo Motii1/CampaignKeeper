@@ -45,7 +45,7 @@ class _LoadingState extends State<Loading> {
         Navigator.pushReplacementNamed(context, "/login");
         break;
       default:
-        UserDataEntity? userEnt = DataCarrier().getEntity();
+        UserDataEntity? userEnt = DataCarrier().get();
         if (userEnt == null) {
           Navigator.pushReplacementNamed(context, "/login");
         } else {

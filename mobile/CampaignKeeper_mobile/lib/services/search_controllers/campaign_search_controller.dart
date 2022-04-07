@@ -8,7 +8,7 @@ class CampaignSearchController extends BaseSearchController<CampaignEntity> {
   @override
   List filterEntities(String input) {
     List list = DataCarrier()
-        .getEntities<CampaignEntity>()
+        .getList<CampaignEntity>()
         .where((element) => element.name.toLowerCase().contains(input.toLowerCase()))
         .toList();
 
