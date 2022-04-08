@@ -84,7 +84,7 @@ class _SettingsState extends KeeperState<Settings> {
                 title: "Log out",
                 onTap: onTapLogout,
               ),
-              KeeperListHeader(title: "App Theme"),
+              KeeperListHeader(title: "Theme"),
               RadioListTile(
                 title: Text("Light"),
                 value: ThemeMode.light,

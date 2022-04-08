@@ -2,7 +2,7 @@ import 'package:campaign_keeper_mobile/components/keeper_fadein.dart';
 import 'package:flutter/material.dart';
 
 class KeeperSnackBars {
-  static SnackBar _default(String message) {
+  static SnackBar snack(String message) {
     return SnackBar(
       content: KeeperFadeIn(
         duration: Duration(milliseconds: 100),
@@ -12,8 +12,9 @@ class KeeperSnackBars {
     );
   }
 
-  static SnackBar offline = _default("Network is under geth attack, going offline");
-  static SnackBar online = _default("Power core inserted, network restored");
-  static SnackBar incorrect = _default("Ay, that data doesn't match, does it?");
-  static SnackBar debugUrl = _default("Set debug url");
+  static SnackBar offline = snack("Network is under geth attack, going offline");
+  static SnackBar online = snack("Power core inserted, network restored");
+  static SnackBar incorrect = snack("Ay, that data doesn't match, does it?");
+  static SnackBar debugUrl = snack("Set debug url");
+  static SnackBar genericError = snack("I've bad feelings about that. Something is wrong.");
 }

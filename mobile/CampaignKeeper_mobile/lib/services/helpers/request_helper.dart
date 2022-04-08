@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RequestHelper extends ChangeNotifier {
   static final RequestHelper _helper = RequestHelper._internal();
@@ -22,13 +25,13 @@ class RequestHelper extends ChangeNotifier {
   RequestHelper._internal();
 
   Future<ResponseStatus> testConnection() async {
-    var response = await get(endpoint: _pingEnd);
+    var response = await get(endpoint: _pingEnd, isSilent: true);
 
     return response.status;
   }
 
   // Returns pair of a respond status and a string json
-  Future<Response> get({required String endpoint, bool autoLogin = true}) async {
+  Future<Response> get({required String endpoint, bool isAutoLogin = true, bool isSilent = false}) async {
     Map<String, String> headers = {"Cookie": isCookieValid() ? _cookie.toString() : ""};
     var response;
     try {
@@ -37,16 +40,25 @@ class RequestHelper extends ChangeNotifier {
           .get(Uri.parse("${AppPrefs().url}$endpoint"), headers: headers)
           .timeout(Duration(seconds: AppPrefs().timeout));
     } on TimeoutException catch (_) {
-      _changeStatus(false);
+      if (!isSilent) {
+        _changeStatus(false);
+      }
+
       return Response(ResponseStatus.TimeOut, null, null);
     } on Exception catch (_) {
-      _changeStatus(false);
+      if (!isSilent) {
+        _changeStatus(false);
+      }
+
       return Response(ResponseStatus.Error, null, null);
     }
 
     print("Get status: ${response.statusCode}");
 
-    _changeStatus(true);
+    if (!isSilent) {
+      _changeStatus(true);
+    }
+
     switch (response.statusCode) {
       case 200:
         return Response(ResponseStatus.Success, response.body, response.bodyBytes);
@@ -55,10 +67,10 @@ class RequestHelper extends ChangeNotifier {
       case 402:
       case 403:
       case 404:
-        if (autoLogin && !isCookieValid()) {
+        if (isAutoLogin && !isCookieValid()) {
           ResponseStatus loginResponse = await LoginHelper().autoLogin();
           if (loginResponse == ResponseStatus.Success) {
-            return await get(endpoint: endpoint, autoLogin: false);
+            return await get(endpoint: endpoint, isAutoLogin: false);
           }
         }
 
@@ -69,7 +81,7 @@ class RequestHelper extends ChangeNotifier {
   }
 
   Future<Response> post(
-      {required String endpoint, Object? body, bool isLogin = false, bool autoLogin = true}) async {
+      {required String endpoint, Object? body, bool isLogin = false, bool isAutoLogin = true}) async {
     Map<String, String> headers = {"cookie": isCookieValid() ? _cookie.toString() : ""};
     var response;
     try {
@@ -98,13 +110,53 @@ class RequestHelper extends ChangeNotifier {
       case 402:
       case 403:
       case 404:
-        if (autoLogin && !isLogin && !isCookieValid()) {
+        if (isAutoLogin && !isLogin && !isCookieValid()) {
           ResponseStatus loginResponse = await LoginHelper().autoLogin();
           if (loginResponse == ResponseStatus.Success) {
-            return await post(endpoint: endpoint, body: body, isLogin: isLogin, autoLogin: false);
+            return await post(endpoint: endpoint, body: body, isLogin: isLogin, isAutoLogin: false);
           }
         }
 
+        return Response(ResponseStatus.IncorrectData, null, null);
+      default:
+        return Response(ResponseStatus.Error, null, null);
+    }
+  }
+
+  Future<Response> putFile({required String endpoint, required String field, required XFile file}) async {
+    Map<String, String> headers = {
+      "cookie": isCookieValid() ? _cookie.toString() : "",
+      "Content-type": "multipart/form-data",
+    };
+    var request = new http.MultipartRequest("PUT", Uri.parse("${AppPrefs().url}$endpoint"));
+    http.StreamedResponse streamResponse;
+    http.Response response;
+
+    request.files.add(http.MultipartFile(field, file.readAsBytes().asStream(), await file.length(),
+        filename: field, contentType: MediaType('image', 'jpeg')));
+    request.headers.addAll(headers);
+
+    try {
+      streamResponse = await request.send().timeout(Duration(seconds: AppPrefs().timeout));
+    } on TimeoutException catch (_) {
+      return Response(ResponseStatus.TimeOut, null, null);
+    } on Exception catch (_) {
+      return Response(ResponseStatus.Error, null, null);
+    }
+
+    response = await http.Response.fromStream(streamResponse);
+
+    print("Put status: ${response.statusCode}");
+
+    switch (response.statusCode) {
+      case 200:
+        return Response(ResponseStatus.Success, await response.body, await response.bodyBytes);
+      case 400:
+      case 401:
+      case 402:
+      case 403:
+      case 404:
+        print("Error response: " + await response.body.toString());
         return Response(ResponseStatus.IncorrectData, null, null);
       default:
         return Response(ResponseStatus.Error, null, null);
@@ -134,12 +186,4 @@ class RequestHelper extends ChangeNotifier {
       notifyListeners();
     }
   }
-}
-
-class Response {
-  ResponseStatus status;
-  String? data;
-  dynamic dataBytes;
-
-  Response(this.status, this.data, this.dataBytes);
 }

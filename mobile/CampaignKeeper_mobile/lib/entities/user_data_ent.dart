@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class UserDataEntity {
   static const String endpoint = "/api/user/details";
+  static const String imageEndpoint = "/api/user/image";
 
   Image _imageCache = Image.asset("assets/user.png");
   String? _imageData;

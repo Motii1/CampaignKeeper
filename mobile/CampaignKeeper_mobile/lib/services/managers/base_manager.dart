@@ -9,6 +9,10 @@ class BaseManager<T> extends ChangeNotifier {
     throw new UnimplementedError();
   }
 
+  Future<bool> update({int entId = -1, Object? data}) async {
+    throw new UnimplementedError();
+  }
+
   T? get({int entId = -1}) {
     throw new UnimplementedError();
   }

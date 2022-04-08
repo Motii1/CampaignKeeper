@@ -4,6 +4,7 @@ import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/types/types.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserDataManager extends BaseManager<UserDataEntity> {
   static const String _key = "UserData";
@@ -17,6 +18,23 @@ class UserDataManager extends BaseManager<UserDataEntity> {
     Map data = _encodeEntity(_entity!);
 
     CacheUtil().addSecure(_key, json.encode(data));
+  }
+
+  @override
+  Future<bool> update({int entId = -1, Object? data}) async {
+    if (_entity != null && data != null && data is XFile) {
+      var response = await RequestHelper()
+          .putFile(endpoint: UserDataEntity.imageEndpoint, field: 'image-file', file: data);
+
+      if (response.status == ResponseStatus.Success) {
+        _entity!.imageData = base64Encode(await data.readAsBytes());
+
+        notifyListeners();
+        return true;
+      }
+    }
+
+    return false;
   }
 
   @override
