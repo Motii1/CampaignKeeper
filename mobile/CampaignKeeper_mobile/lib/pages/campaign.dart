@@ -4,8 +4,8 @@ import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
-import 'package:campaign_keeper_mobile/services/search_controllers/campaign_search_controller.dart';
+import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
+import 'package:campaign_keeper_mobile/search_controllers/campaign_search_controller.dart';
 import 'package:flutter/material.dart';
 
 class Campaign extends StatefulWidget {

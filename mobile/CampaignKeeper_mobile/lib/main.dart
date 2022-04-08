@@ -1,5 +1,5 @@
 import 'package:campaign_keeper_mobile/pages/account.dart';
-import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
+import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/pages/about.dart';
 import 'package:campaign_keeper_mobile/pages/search.dart';

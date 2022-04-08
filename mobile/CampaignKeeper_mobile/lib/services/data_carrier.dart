@@ -1,9 +1,9 @@
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
-import 'package:campaign_keeper_mobile/services/managers/campaign_manager.dart';
+import 'package:campaign_keeper_mobile/managers/campaign_manager.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
-import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
-import 'package:campaign_keeper_mobile/services/managers/user_data_manager.dart';
+import 'package:campaign_keeper_mobile/managers/base_manager.dart';
+import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
 import 'package:flutter/material.dart';
 
 class DataCarrier {

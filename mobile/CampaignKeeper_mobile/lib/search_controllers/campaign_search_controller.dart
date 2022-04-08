@@ -1,7 +1,7 @@
 import 'package:campaign_keeper_mobile/components/keeper_campaign_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
+import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
 import 'package:flutter/material.dart';
 
 class CampaignSearchController extends BaseSearchController<CampaignEntity> {

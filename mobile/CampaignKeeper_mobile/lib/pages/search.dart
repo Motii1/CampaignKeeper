@@ -1,5 +1,5 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_back_button.dart';
-import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
+import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
