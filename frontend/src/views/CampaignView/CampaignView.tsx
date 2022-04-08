@@ -139,6 +139,7 @@ export const CampaignView: React.FC = () => {
               justifyContent: 'center',
               display: 'flex',
               width: '100%',
+              height: '100%',
               paddingTop: 0.8,
             }}
           >
@@ -146,7 +147,7 @@ export const CampaignView: React.FC = () => {
               direction="column"
               justifyContent="flex-start"
               alignItems="center"
-              sx={{ width: '100%', paddingLeft: 0.8 }}
+              sx={{ width: '100%', height: '100%', paddingLeft: 0.8 }}
             >
               <CampaignTile
                 campaignId={campaignId}

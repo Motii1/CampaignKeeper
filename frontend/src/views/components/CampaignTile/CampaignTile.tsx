@@ -69,7 +69,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
   return (
     <Paper
       sx={{
-        cursor: { cursorType },
+        cursor: cursorType,
         borderRadius: 2.5,
         backgroundColor: 'customPalette.brown',
         height: { xs: 147.7, lg: 211 },
