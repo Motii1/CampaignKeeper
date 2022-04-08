@@ -49,7 +49,6 @@ class _AccountState extends KeeperState<Account> {
 
       ScaffoldMessenger.of(context)
           .showSnackBar(KeeperSnackBars.snack(res ?? "I have bad feelings about that. Something is wrong."));
-      return;
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(KeeperSnackBars.snack("This action requires network connection."));

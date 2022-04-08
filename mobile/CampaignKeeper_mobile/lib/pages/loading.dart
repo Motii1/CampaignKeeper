@@ -38,14 +38,17 @@ class _LoadingState extends State<Loading> {
     switch (status) {
       case ResponseStatus.Success:
         await DataCarrier().refresh<CampaignEntity>();
+
         Navigator.pushReplacementNamed(context, "/start");
         break;
       case ResponseStatus.IncorrectData:
         await DataCarrier().clear();
+
         Navigator.pushReplacementNamed(context, "/login");
         break;
       default:
         UserDataEntity? userEnt = DataCarrier().get();
+
         if (userEnt == null) {
           Navigator.pushReplacementNamed(context, "/login");
         } else {
@@ -72,9 +75,9 @@ class _LoadingState extends State<Loading> {
 
   @override
   void didChangeDependencies() async {
+    super.didChangeDependencies();
     if (!_loaded) {
       _loaded = true;
-      super.didChangeDependencies();
       await loadAssets();
       autoLogin();
     }
