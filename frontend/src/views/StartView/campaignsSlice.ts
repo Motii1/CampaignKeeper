@@ -1,11 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
 
-type CampaignsState = {
-  campaignsList: Campaign[];
-  isCampaignListDownloaded: boolean;
-};
-
 type Campaign = {
   id: number;
   name: string;
@@ -13,9 +8,14 @@ type Campaign = {
   imageBase64: string;
 };
 
+type CampaignsState = {
+  campaignsList: Campaign[];
+  isCampaignsListDownloaded: boolean;
+};
+
 const initialState: CampaignsState = {
   campaignsList: [],
-  isCampaignListDownloaded: false,
+  isCampaignsListDownloaded: false,
 };
 
 export const fetchCampaigns = createAsyncThunk('campaigns/fetchCampaigns', async () => {
@@ -49,7 +49,7 @@ const campaignsSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(fetchCampaigns.fulfilled, (state, action) => {
       if (action.payload.status === 200) {
-        state.isCampaignListDownloaded = true;
+        state.isCampaignsListDownloaded = true;
         state.campaignsList = action.payload.data.campaigns;
       }
     });

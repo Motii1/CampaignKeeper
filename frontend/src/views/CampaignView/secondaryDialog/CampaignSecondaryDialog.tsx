@@ -4,12 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
-import { resetSelectedCampaignData } from '../../CampaignView/campaignViewSlice';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
-import { deleteCampaign } from '../campaignsSlice';
-import { resetState } from '../startViewSlice';
+import { resetState } from '../campaignViewSlice';
+import { deleteSession } from '../sessionsSlice';
 
-type StartSecondaryDialogProps = {
+type CampaignSecondaryDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
   setIsPrimaryOpen: (newIsOpen: boolean) => void;
@@ -17,33 +16,32 @@ type StartSecondaryDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
-export const StartSecondaryDialog: React.FC<StartSecondaryDialogProps> = props => {
+export const CampaignSecondaryDialog: React.FC<CampaignSecondaryDialogProps> = props => {
   const dispatch = useDispatch();
-  const campaignId = useSelector((state: RootState) => state.startView.campaignId);
+  const sessionId = useSelector((state: RootState) => state.campaignView.sessionId);
 
   const {
     isLoading: isLoadingDelete,
     status: statusDelete,
     runQuery: runQueryDelete,
     resetQuery: resetQueryDelete,
-  } = useQuery(`/api/campaign/${campaignId}`, requestMethods.DELETE);
+  } = useQuery(`/api/session/${sessionId}`, requestMethods.DELETE);
 
   const handleRunQueryDelete = useCallback(() => {
     if (!isLoadingDelete && statusDelete) {
       if (statusDelete === 200) {
-        dispatch(deleteCampaign({ id: campaignId }));
-        dispatch(resetSelectedCampaignData({ campaignId: campaignId }));
+        dispatch(deleteSession({ id: sessionId }));
         dispatch(resetState({}));
-        props.setSnackbarSuccess('Campaign deleted');
+        props.setSnackbarSuccess('Session deleted');
         props.setIsOpen(false);
         props.setIsPrimaryOpen(false);
       } else if (statusDelete === 400) {
-        props.setSnackbarError('Error during campaign deletion');
+        props.setSnackbarError('Error during session deletion');
         props.setIsOpen(false);
       }
       resetQueryDelete();
     }
-  }, [campaignId, dispatch, isLoadingDelete, props, resetQueryDelete, statusDelete]);
+  }, [dispatch, isLoadingDelete, props, resetQueryDelete, sessionId, statusDelete]);
 
   useEffect(() => {
     handleRunQueryDelete();

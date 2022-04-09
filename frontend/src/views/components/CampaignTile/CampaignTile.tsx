@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../types/types';
 import { updateSelectedCampaignData } from '../../CampaignView/campaignViewSlice';
-import { updateState } from '../../StartView/startViewSlice';
+import { updateState as updateStateStart } from '../../StartView/startViewSlice';
 import viewsRoutes from '../../viewsRoutes';
 import { EditMenu } from '../EditMenu/EditMenu';
 
@@ -54,7 +54,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
 
   const handleEdit = () => {
     dispatch(
-      updateState({
+      updateStateStart({
         id: props.campaignId,
         name: props.campaignName,
         imageBase64: props.campaignImageBase64,
@@ -65,10 +65,11 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
     setMenuPos(null);
   };
 
+  const cursorType = props.isClickable ? 'pointer' : 'default';
   return (
     <Paper
       sx={{
-        cursor: 'pointer',
+        cursor: cursorType,
         borderRadius: 2.5,
         backgroundColor: 'customPalette.brown',
         height: { xs: 147.7, lg: 211 },
@@ -104,7 +105,9 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
           {props.campaignName}
         </Typography>
       </Stack>
-      <EditMenu menuPos={menuPos} handleEdit={handleEdit} handleClose={handleClose} />
+      {props.isClickable ? (
+        <EditMenu menuPos={menuPos} handleEdit={handleEdit} handleClose={handleClose} />
+      ) : null}
     </Paper>
   );
 };

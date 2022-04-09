@@ -1,111 +1,118 @@
 import { cleanup, fireEvent, RenderResult, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
+import { store } from '../../store';
 import { renderWithProviders } from '../../utils/test-utils';
-import { StartView } from './StartView';
+import { CampaignView } from './CampaignView';
+import { updateState as updateStateCampaign } from './campaignViewSlice';
 
-type CampaignPostBody = {
+type SessionPostBody = {
   name: string;
-  imageBase64: string;
 };
 
-describe('StartView tests', () => {
+// TO-DO: add test for CampaignTile (will require state update outside of React Component)
+describe('CampaignView tests', () => {
   let component: RenderResult;
 
   const server = setupServer(
-    rest.get('api/campaign/list', (_req, res, ctx) =>
-      res(ctx.json({ campaigns: testCampaignList }))
-    ),
-    rest.post<CampaignPostBody>('api/campaign', (req, res, ctx) =>
+    rest.get('api/session/list', (_req, res, ctx) => res(ctx.json({ sessions: testSessionList }))),
+    rest.post<SessionPostBody>('api/session', (req, res, ctx) =>
       res(
         ctx.json({
           id: 3,
           name: req.body.name,
           createdAt: '',
-          imageBase64: '',
+          campaignId: 1,
         })
       )
     ),
-    rest.patch('api/campaign/1', (_req, res, ctx) => res(ctx.status(200))),
-    rest.delete('api/campaign/2', (_req, res, ctx) => res(ctx.status(200)))
+    rest.patch('api/session/1', (_req, res, ctx) => res(ctx.status(200))),
+    rest.delete('api/session/2', (_req, res, ctx) => res(ctx.status(200)))
   );
 
-  const testCampaignList = [
+  const testSessionList = [
     {
       id: 1,
-      name: 'Test Campaign 1',
+      name: 'Test Session 1',
       createdAt: '2022-03-10T10:10:50.026Z',
-      imageBase64: '',
+      campaignId: 1,
     },
     {
       id: 2,
-      name: 'Test Campaign 2',
+      name: 'Test Session 2',
       createdAt: '2022-03-10T10:10:51.026Z',
-      imageBase64: '',
+      campaignId: 1,
     },
   ];
 
-  beforeAll(() => server.listen());
+  const campaignName = 'Test Campaign';
+
+  beforeAll(() => {
+    server.listen();
+    // required to provide content for Campaign Tile
+    store.dispatch(
+      updateStateCampaign({
+        campaignId: 1,
+        campaignName: campaignName,
+      })
+    );
+  });
 
   afterAll(() => {
     server.close();
     cleanup();
   });
 
-  beforeEach(() => (component = renderWithProviders(<StartView />, { route: '/start' })));
+  beforeEach(() => (component = renderWithProviders(<CampaignView />, { route: '/campaign' })));
   afterEach(() => component.unmount());
 
   describe('rendering test', () => {
-    test('renders StartView with some campaigns', async () => {
+    test('renders CampaignView with some campaigns', async () => {
       expect(screen.getByText(/“.*”/)).toBeInTheDocument();
 
       await waitFor(() => {
-        expect(screen.getByText('Test Campaign 1')).toBeInTheDocument();
-        expect(screen.getByText('Test Campaign 2')).toBeInTheDocument();
-        expect(screen.getByText('New campaign')).toBeInTheDocument();
+        expect(screen.getByText('Test Session 1')).toBeInTheDocument();
+        expect(screen.getByText('Test Session 2')).toBeInTheDocument();
+        expect(screen.getByText('New session')).toBeInTheDocument();
       });
     });
   });
 
   describe('functionalities tests', () => {
-    test('opens StartDialog in creation mode after click on FAB', async () => {
+    test('opens CampaignDialog in creation mode after click on FAB', async () => {
       await waitFor(() => {
         const fab = screen.getByLabelText('custom-fab');
         expect(fab).toBeInTheDocument();
         fireEvent.click(fab);
         expect(screen.getByText('BACK')).toBeInTheDocument();
-        expect(screen.getAllByText(/New campaign/)[1]).toBeInTheDocument();
+        expect(screen.getAllByText(/New session/)[0]).toBeInTheDocument();
         expect(screen.getByText('NAME')).toBeInTheDocument();
         expect(screen.getByText('OK')).toBeInTheDocument();
         expect(screen.getByText('CANCEL')).toBeInTheDocument();
       });
     });
-
-    test('opens context menu after right click on CampaignTile', async () => {
+    test('opens context menu after right click on SessionTile', async () => {
       await waitFor(() => {
-        expect(screen.getByText('Test Campaign 1')).toBeInTheDocument();
-        fireEvent.contextMenu(screen.getByText('Test Campaign 1'));
+        expect(screen.getByText('Test Session 1')).toBeInTheDocument();
+        fireEvent.contextMenu(screen.getByText('Test Session 1'));
         expect(screen.getByText('Edit')).toBeInTheDocument();
       });
     });
-
-    test('opens StartDialog in edit mode after click on Edit', async () => {
+    test('opens CampaignDialog in edit mode after click on Edit', async () => {
       await waitFor(() => {
-        fireEvent.contextMenu(screen.getByText('Test Campaign 2'));
+        fireEvent.contextMenu(screen.getByText('Test Session 2'));
       });
       fireEvent.click(screen.getByText('Edit'));
       expect(screen.getByText('BACK')).toBeInTheDocument();
-      expect(screen.getByText('Edit campaign')).toBeInTheDocument();
+      expect(screen.getByText('Edit session')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /OK/ })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /DELETE/ })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /CANCEL/ })).toBeInTheDocument();
     });
-
     test('shows dialog asking for confirmation on delete', async () => {
-      const campaignNameToDelete = 'Test Campaign 2';
-
+      const sessionNameToDelete = 'Test Session 2';
       await waitFor(() => {
-        fireEvent.contextMenu(screen.getByText(campaignNameToDelete));
+        fireEvent.contextMenu(screen.getByText(sessionNameToDelete));
       });
       fireEvent.click(screen.getByText('Edit'));
       fireEvent.click(screen.getByRole('button', { name: /DELETE/ }));
@@ -115,8 +122,8 @@ describe('StartView tests', () => {
   });
 
   describe('API operations tests', () => {
-    test('creates new campaign', async () => {
-      const newCampaignName = 'Test Campaign New';
+    test('creates new session', async () => {
+      const newSessionName = 'Test Session New';
 
       await waitFor(() => {
         expect(screen.getByLabelText('custom-fab')).toBeInTheDocument();
@@ -124,42 +131,42 @@ describe('StartView tests', () => {
         expect(screen.getByRole('textbox')).toBeInTheDocument();
       });
 
-      fireEvent.change(screen.getByRole('textbox'), { target: { value: newCampaignName } });
+      fireEvent.change(screen.getByRole('textbox'), { target: { value: newSessionName } });
       fireEvent.click(screen.getByRole('button', { name: /OK/ }));
 
-      await waitFor(() => expect(screen.getByText('Test Campaign New')).toBeInTheDocument());
+      await waitFor(() => expect(screen.getByText(newSessionName)).toBeInTheDocument());
     });
 
-    test('edits existing campaign', async () => {
-      const campaignNameToEdit = 'Test Campaign 1';
-      const campaignNameSufix = ' bis';
+    test('edits existing session', async () => {
+      const sessionNameToEdit = 'Test Session 1';
+      const sessionNameSufix = ' bis';
 
       await waitFor(() => {
-        fireEvent.contextMenu(screen.getByText(campaignNameToEdit));
+        fireEvent.contextMenu(screen.getByText(sessionNameToEdit));
       });
       fireEvent.click(screen.getByText('Edit'));
       fireEvent.change(screen.getByRole('textbox'), {
-        target: { value: `${campaignNameToEdit}${campaignNameSufix}` },
+        target: { value: `${sessionNameToEdit}${sessionNameSufix}` },
       });
       fireEvent.click(screen.getByRole('button', { name: /OK/ }));
 
       await waitFor(() =>
-        expect(screen.getByText(`${campaignNameToEdit}${campaignNameSufix}`)).toBeInTheDocument()
+        expect(screen.getByText(`${sessionNameToEdit}${sessionNameSufix}`)).toBeInTheDocument()
       );
     });
 
-    test('delets existing campaign', async () => {
-      const campaignNameToDelete = 'Test Campaign 2';
+    test('delets existing session', async () => {
+      const sessionNameToDelete = 'Test Session 2';
 
       await waitFor(() => {
-        fireEvent.contextMenu(screen.getByText(campaignNameToDelete));
+        fireEvent.contextMenu(screen.getByText(sessionNameToDelete));
       });
       fireEvent.click(screen.getByText('Edit'));
       fireEvent.click(screen.getByRole('button', { name: /DELETE/ }));
       fireEvent.click(screen.getByRole('button', { name: /OK/ }));
 
       await waitFor(() => {
-        expect(screen.queryByText(campaignNameToDelete)).toBeNull();
+        expect(screen.queryByText(sessionNameToDelete)).toBeNull();
       });
     });
   });
