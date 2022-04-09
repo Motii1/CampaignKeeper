@@ -4,23 +4,25 @@ import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/types/types.dart';
+import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
+import 'package:campaign_keeper_mobile/services/search_controllers/campaign_search_controller.dart';
 import 'package:flutter/material.dart';
 
 class Campaign extends StatefulWidget {
-  Campaign({Key? key}) : super(key: key);
+  Campaign({Key? key, required this.campaignID}) : super(key: key);
+  final int campaignID;
 
   @override
   State<Campaign> createState() => _CampaignState();
 }
 
 class _CampaignState extends KeeperState<Campaign> {
-  CampaignArgument? args;
   CampaignEntity? campaign;
+  BaseSearchController? searchController = CampaignSearchController();
   int currentPage = 0;
 
   Future<void> onRefresh() async {
-    DataCarrier().refresh<UserDataEntity>();
+    await DataCarrier().refresh<UserDataEntity>();
     await DataCarrier().refresh<CampaignEntity>();
     // refresh sessions and / or codex
   }
@@ -30,15 +32,13 @@ class _CampaignState extends KeeperState<Campaign> {
   }
 
   Future<void> onCampaignRefresh() async {
-    if (args != null) {
-      CampaignEntity? entity = DataCarrier().getEntity(entId: args!.id);
-      if (entity == null) {
-        returnToStart();
-      } else {
-        setState(() {
-          campaign = entity;
-        });
-      }
+    CampaignEntity? entity = DataCarrier().getEntity(entId: widget.campaignID);
+    if (entity == null) {
+      returnToStart();
+    } else {
+      setState(() {
+        campaign = entity;
+      });
     }
   }
 
@@ -58,7 +58,6 @@ class _CampaignState extends KeeperState<Campaign> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    args = ModalRoute.of(context)!.settings.arguments as CampaignArgument?;
     onCampaignRefresh();
   }
 
@@ -75,6 +74,7 @@ class _CampaignState extends KeeperState<Campaign> {
           title: campaign?.name ?? '',
           popup: KeeperPopup.settings(context),
           onRefresh: onRefresh,
+          searchController: searchController,
           sliver: SliverFillRemaining(
             hasScrollBody: false,
             child: Center(
@@ -88,6 +88,8 @@ class _CampaignState extends KeeperState<Campaign> {
         onDestinationSelected: (int index) {
           setState(() {
             currentPage = index;
+            // TODO: change this one to a proper controller when sessions and codex api will be available
+            searchController = index == 0 ? CampaignSearchController() : null;
           });
         },
         selectedIndex: currentPage,

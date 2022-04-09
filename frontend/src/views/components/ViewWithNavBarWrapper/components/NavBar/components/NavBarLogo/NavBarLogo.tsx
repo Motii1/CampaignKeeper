@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import { Box } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import LogoGraphic from '../../../../../../../graphics/logo.svg';
 import viewsRoutes from '../../../../../../viewsRoutes';
@@ -6,13 +6,13 @@ import viewsRoutes from '../../../../../../viewsRoutes';
 export const NavBarLogo: React.FC = () => {
   const history = useHistory();
   return (
-    <Container
+    <Box
       onClick={() => history.push(viewsRoutes.START)}
+      component="img"
+      alt="Logo"
+      src={LogoGraphic}
       sx={{
         cursor: 'pointer',
-        backgroundImage: `url(${LogoGraphic})`,
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
         height: 95,
         width: 247,
         minWidth: 247,

@@ -25,6 +25,7 @@ export const CustomFab: React.FC<CustomFabProps> = props => {
   return (
     <Fab
       variant="extended"
+      aria-label="custom-fab"
       onClick={props.handleClick}
       sx={{
         color: 'customPalette.onAccent',

@@ -1,3 +1,4 @@
+import 'package:campaign_keeper_mobile/components/app_bar/keeper_back_button.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:flutter/material.dart';
 
@@ -63,24 +64,9 @@ class KeeperAppBar extends StatelessWidget {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left: 5,
-                                  right: 5,
-                                ),
-                                child: canPop(context)
-                                    ? IconButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        icon: Icon(
-                                          Icons.arrow_back,
-                                          size: 24,
-                                          color: Theme.of(context).appBarTheme.titleTextStyle!.color,
-                                        ),
-                                      )
-                                    : Container(width: 7),
-                              ),
+                              canPop(context)
+                                  ? KeeperBackButton(padding: EdgeInsets.symmetric(vertical: 5))
+                                  : Container(width: 17),
                               Expanded(
                                 child: Text(
                                   title,

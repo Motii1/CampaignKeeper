@@ -64,7 +64,7 @@ class _KeeperPopupState extends State<KeeperPopup> {
             child: CircleAvatar(
               radius: 14,
               backgroundColor: Theme.of(context).colorScheme.onBackground,
-              backgroundImage: userImage.image,
+              foregroundImage: userImage.image,
             ),
           ),
           itemBuilder: widget.itemBuilder,

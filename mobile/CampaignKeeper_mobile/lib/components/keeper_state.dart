@@ -13,9 +13,9 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
     ScaffoldMessengerState scaffold = ScaffoldMessenger.of(context);
     if (ModalRoute.of(context)!.isCurrent && this.mounted && scaffold.mounted) {
       if (isOnline) {
-        scaffold.showSnackBar(KeeperSnackBars().online);
+        scaffold.showSnackBar(KeeperSnackBars.online);
       } else {
-        scaffold.showSnackBar(KeeperSnackBars().offline);
+        scaffold.showSnackBar(KeeperSnackBars.offline);
       }
     }
   }
@@ -29,11 +29,15 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      if (ModalRoute.of(context)!.isCurrent && this.mounted) {
-        onResume();
-      }
+      Future.delayed(Duration(milliseconds: 500), () {
+        if (this.mounted) {
+          if (ModalRoute.of(context)!.isCurrent) {
+            onResume();
+          }
 
-      onEveryResume();
+          onEveryResume();
+        }
+      });
     }
   }
 

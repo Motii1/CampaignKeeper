@@ -65,7 +65,7 @@ class _KeeperDebugMenuState extends State<KeeperDebugMenu> {
       int? newLoginTimeout = int.tryParse(debugLoginTimeoutController.text);
       AppPrefs().loginTimeout = newLoginTimeout ?? AppPrefs().loginTimeout;
 
-      ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars().debugUrl);
+      ScaffoldMessenger.of(context).showSnackBar(KeeperSnackBars.debugUrl);
     }
   }
 

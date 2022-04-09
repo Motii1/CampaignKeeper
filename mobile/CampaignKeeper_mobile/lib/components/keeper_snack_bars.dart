@@ -1,33 +1,19 @@
+import 'package:campaign_keeper_mobile/components/keeper_fadein.dart';
 import 'package:flutter/material.dart';
 
 class KeeperSnackBars {
-  static final KeeperSnackBars _bars = KeeperSnackBars._internal();
-
-  static const SnackBar _offline = SnackBar(
-    content: Text("Network is under geth attack, going offline"),
-    dismissDirection: DismissDirection.horizontal,
-  );
-  static const SnackBar _online = SnackBar(
-    content: Text("Power core inserted, network restored"),
-    dismissDirection: DismissDirection.horizontal,
-  );
-  static const SnackBar _incorrect = SnackBar(
-    content: Text("Ay, that data doesn't match, does it?"),
-    dismissDirection: DismissDirection.horizontal,
-  );
-  static const SnackBar _debugUrl = SnackBar(
-    content: Text("Set debug url"),
-    dismissDirection: DismissDirection.horizontal,
-  );
-
-  SnackBar get offline => _offline;
-  SnackBar get online => _online;
-  SnackBar get incorrect => _incorrect;
-  SnackBar get debugUrl => _debugUrl;
-
-  factory KeeperSnackBars() {
-    return _bars;
+  static SnackBar _default(String message) {
+    return SnackBar(
+      content: KeeperFadeIn(
+        duration: Duration(milliseconds: 100),
+        child: Text(message),
+      ),
+      dismissDirection: DismissDirection.horizontal,
+    );
   }
 
-  KeeperSnackBars._internal();
+  static SnackBar offline = _default("Network is under geth attack, going offline");
+  static SnackBar online = _default("Power core inserted, network restored");
+  static SnackBar incorrect = _default("Ay, that data doesn't match, does it?");
+  static SnackBar debugUrl = _default("Set debug url");
 }
