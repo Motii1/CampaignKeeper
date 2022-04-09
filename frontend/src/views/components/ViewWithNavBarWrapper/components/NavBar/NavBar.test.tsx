@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, screen } from '@testing-library/react';
+import { cleanup, fireEvent, RenderResult, screen } from '@testing-library/react';
 import { renderWithProviders } from '../../../../../utils/test-utils';
 import viewsRoutes from '../../../../viewsRoutes';
 import { NavBar } from './NavBar';
@@ -9,111 +9,67 @@ const setMessageMock = (message: string) => {
   console.log(message);
 };
 
-afterAll(cleanup);
+describe('NavBar tests', () => {
+  let component: RenderResult;
 
-test('renders main buttons', () => {
-  const component = renderWithProviders(
-    <NavBar
-      currentView={viewsRoutes.START}
-      setSnackbarInfo={setMessageMock}
-      setSnackbarSuccess={setMessageMock}
-      setSnackbarError={setMessageMock}
-    />
+  afterAll(cleanup);
+
+  beforeEach(
+    () =>
+      (component = renderWithProviders(
+        <NavBar
+          currentView={viewsRoutes.START}
+          setSnackbarInfo={setMessageMock}
+          setSnackbarSuccess={setMessageMock}
+          setSnackbarError={setMessageMock}
+        />
+      ))
   );
 
-  expect(screen.getByAltText('Logo')).toBeInTheDocument();
+  afterEach(() => component.unmount());
 
-  expect(screen.getByText('START')).toBeInTheDocument();
-  expect(screen.getByText('CAMPAIGN')).toBeInTheDocument();
-  expect(screen.getByText('NOTES')).toBeInTheDocument();
+  describe('buttons tests', () => {
+    test('renders main buttons', () => {
+      expect(screen.getByAltText('Logo')).toBeInTheDocument();
 
-  component.unmount();
-});
+      expect(screen.getByText('START')).toBeInTheDocument();
+      expect(screen.getByText('CAMPAIGN')).toBeInTheDocument();
+      expect(screen.getByText('NOTES')).toBeInTheDocument();
+    });
 
-test('renders campaign buttons', () => {
-  const component = renderWithProviders(
-    <NavBar
-      currentView={viewsRoutes.CAMPAIGN}
-      setSnackbarInfo={setMessageMock}
-      setSnackbarSuccess={setMessageMock}
-      setSnackbarError={setMessageMock}
-    />
-  );
+    test('renders campaign buttons', () => {
+      expect(screen.getByAltText('Logo')).toBeInTheDocument();
 
-  expect(screen.getByAltText('Logo')).toBeInTheDocument();
+      expect(screen.getByText('MAP')).toBeInTheDocument();
+      expect(screen.getByText('EXPLORER')).toBeInTheDocument();
+      expect(screen.getByText('CODEX')).toBeInTheDocument();
+    });
+  });
 
-  expect(screen.getByText('MAP')).toBeInTheDocument();
-  expect(screen.getByText('EXPLORER')).toBeInTheDocument();
-  expect(screen.getByText('CODEX')).toBeInTheDocument();
+  describe('userPanel tests', () => {
+    test('renders UserPanel', async () => {
+      expect(screen.getByTestId('MoreVertIcon')).toBeInTheDocument();
+    });
 
-  component.unmount();
-});
+    test('opens UserPanel menu', async () => {
+      fireEvent.click(screen.getByTestId('MoreVertIcon'));
+      expect(screen.getByText('Settings')).toBeInTheDocument();
+      expect(screen.getByText('About')).toBeInTheDocument();
+      expect(screen.getByText('Logout')).toBeInTheDocument();
+    });
 
-test('renders UserPanel', async () => {
-  const component = renderWithProviders(
-    <NavBar
-      currentView={viewsRoutes.START}
-      setSnackbarInfo={setMessageMock}
-      setSnackbarSuccess={setMessageMock}
-      setSnackbarError={setMessageMock}
-    />
-  );
+    test('opens Settings dialog', async () => {
+      fireEvent.click(screen.getByTestId('MoreVertIcon'));
+      fireEvent.click(screen.getByText('Settings'));
+      expect(screen.getByText('AVATAR')).toBeInTheDocument();
+      expect(screen.getByText('PASSWORD')).toBeInTheDocument();
+    });
 
-  expect(screen.getByTestId('MoreVertIcon')).toBeInTheDocument();
-
-  component.unmount();
-});
-
-test('opens UserPanel menu', async () => {
-  const component = renderWithProviders(
-    <NavBar
-      currentView={viewsRoutes.START}
-      setSnackbarInfo={setMessageMock}
-      setSnackbarSuccess={setMessageMock}
-      setSnackbarError={setMessageMock}
-    />
-  );
-
-  fireEvent.click(screen.getByTestId('MoreVertIcon'));
-  expect(screen.getByText('Settings')).toBeInTheDocument();
-  expect(screen.getByText('About')).toBeInTheDocument();
-  expect(screen.getByText('Logout')).toBeInTheDocument();
-
-  component.unmount();
-});
-
-test('opens Settings dialog', async () => {
-  const component = renderWithProviders(
-    <NavBar
-      currentView={viewsRoutes.START}
-      setSnackbarInfo={setMessageMock}
-      setSnackbarSuccess={setMessageMock}
-      setSnackbarError={setMessageMock}
-    />
-  );
-
-  fireEvent.click(screen.getByTestId('MoreVertIcon'));
-  fireEvent.click(screen.getByText('Settings'));
-  expect(screen.getByText('AVATAR')).toBeInTheDocument();
-  expect(screen.getByText('PASSWORD')).toBeInTheDocument();
-
-  component.unmount();
-});
-
-test('opens About dialog', async () => {
-  const component = renderWithProviders(
-    <NavBar
-      currentView={viewsRoutes.START}
-      setSnackbarInfo={setMessageMock}
-      setSnackbarSuccess={setMessageMock}
-      setSnackbarError={setMessageMock}
-    />
-  );
-
-  fireEvent.click(screen.getByTestId('MoreVertIcon'));
-  fireEvent.click(screen.getByText('About'));
-  expect(screen.getByText(/Version/)).toBeInTheDocument();
-  expect(screen.getByText(/Authors/)).toBeInTheDocument();
-
-  component.unmount();
+    test('opens About dialog', async () => {
+      fireEvent.click(screen.getByTestId('MoreVertIcon'));
+      fireEvent.click(screen.getByText('About'));
+      expect(screen.getByText(/Version/)).toBeInTheDocument();
+      expect(screen.getByText(/Authors/)).toBeInTheDocument();
+    });
+  });
 });
