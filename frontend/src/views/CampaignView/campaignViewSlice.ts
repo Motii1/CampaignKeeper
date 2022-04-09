@@ -1,8 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { NavBarViewDialog } from '../../types/types';
 
 interface CampaignViewState {
-  type: NavBarViewDialog;
   campaignId: number;
   campaignName: string;
   campaignImageBase64: string;
@@ -11,7 +9,6 @@ interface CampaignViewState {
 }
 
 const initialState: CampaignViewState = {
-  type: NavBarViewDialog.NewCampaign,
   campaignId: -1,
   campaignName: '',
   campaignImageBase64: '',
@@ -27,7 +24,6 @@ const campaignViewSlice = createSlice({
       state.sessionName = action.payload.name;
     },
     updateState: (state, action) => {
-      state.type = action.payload.type ? action.payload.type : state.type;
       state.campaignId = action.payload.campaignId ? action.payload.campaignId : state.campaignId;
       state.campaignName = action.payload.campaignName
         ? action.payload.campaignName
@@ -42,7 +38,6 @@ const campaignViewSlice = createSlice({
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resetState: (state, _action) => {
-      state.type = NavBarViewDialog.NewCampaign;
       state.sessionId = -1;
       state.sessionName = '';
     },
