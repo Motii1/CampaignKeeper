@@ -11,7 +11,7 @@ import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextI
 import { addCampaign, editCampaign } from '../campaignsSlice';
 import { resetState, updateImage, updateName } from '../startViewSlice';
 
-type SingleCampaignData = {
+export type SingleCampaignData = {
   id: number;
   name: string;
   createdAt: Date;

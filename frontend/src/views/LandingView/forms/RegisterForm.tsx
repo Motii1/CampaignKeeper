@@ -233,7 +233,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
         onSubmit={props.onChangeForm}
         firstLineText="Isn't your drunk face familiar?"
         secondLineText="Come here and..."
-        buttonText="LOGIN"
+        buttonText="Login"
       />
     </Stack>
   );
