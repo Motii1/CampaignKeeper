@@ -65,7 +65,7 @@ class KeeperAppBar extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               canPop(context)
-                                  ? KeeperBackButton(padding: EdgeInsets.symmetric(horizontal: 21))
+                                  ? KeeperBackButton(padding: EdgeInsets.symmetric(horizontal: 21.4))
                                   : Container(width: 17),
                               Expanded(
                                 child: Text(

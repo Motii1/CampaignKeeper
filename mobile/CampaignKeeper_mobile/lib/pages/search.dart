@@ -170,7 +170,7 @@ class _AppBarAnimatedPlaceholder extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: 12, right: 12),
+                        padding: EdgeInsets.symmetric(horizontal: 10 + 4 * animation.value),
                         child: Icon(
                           Icons.arrow_back,
                           size: 23.5,

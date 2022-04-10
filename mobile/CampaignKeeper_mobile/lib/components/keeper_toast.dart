@@ -21,7 +21,7 @@ class KeeperToast {
                   textScaleFactor: 1.0,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Theme.of(context).colorScheme.surface,
+                    color: Theme.of(context).colorScheme.background,
                   ),
                 ),
               ),

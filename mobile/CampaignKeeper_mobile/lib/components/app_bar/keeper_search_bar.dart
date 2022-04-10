@@ -226,23 +226,14 @@ class _SearchBarAnimatedPlaceholder extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      canPop
-                          ? Padding(
-                              padding: EdgeInsets.only(left: 10, right: 10),
-                              child: Icon(
-                                Icons.arrow_back,
-                                size: 23.5,
-                                color: Theme.of(context).appBarTheme.titleTextStyle!.color,
-                              ),
-                            )
-                          : Padding(
-                              padding: EdgeInsets.only(left: 15, right: 10),
-                              child: Icon(
-                                Icons.search_outlined,
-                                size: 23.5,
-                                color: Theme.of(context).appBarTheme.titleTextStyle!.color,
-                              ),
-                            ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10 + 4 * animation.value),
+                        child: Icon(
+                          Icons.arrow_back,
+                          size: 23.5,
+                          color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                        ),
+                      ),
                       Expanded(
                         child: Text(
                           "Search",
