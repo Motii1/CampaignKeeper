@@ -39,9 +39,9 @@ class DataCarrier {
     }
   }
 
-  Future<bool> update<T>({int entId = -1, Object? data}) async {
+  Future<bool> update<T>({required T newEntity}) async {
     if (_managers.containsKey(T)) {
-      return await _managers[T]!.update(entId: entId, data: data);
+      return await _managers[T]!.update(newEntity: newEntity);
     }
 
     return false;

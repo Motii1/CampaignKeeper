@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
@@ -21,13 +22,15 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   }
 
   @override
-  Future<bool> update({int entId = -1, Object? data}) async {
-    if (_entity != null && data != null && data is XFile) {
-      var response = await RequestHelper()
-          .putFile(endpoint: UserDataEntity.imageEndpoint, field: 'image-file', file: data);
+  Future<bool> update({required UserDataEntity newEntity}) async {
+    if (newEntity.imageData != null) {
+      var bytes = base64Decode(newEntity.imageData!);
+      var file = KeeperFile(name: 'image-file', type: KeeperMediaType.image, bytes: bytes);
+
+      var response = await RequestHelper().putFile(endpoint: UserDataEntity.imageEndpoint, file: file);
 
       if (response.status == ResponseStatus.Success) {
-        _entity!.imageData = base64Encode(await data.readAsBytes());
+        _entity!.imageData = newEntity.imageData;
 
         notifyListeners();
         return true;

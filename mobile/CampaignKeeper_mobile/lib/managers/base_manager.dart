@@ -9,7 +9,7 @@ class BaseManager<T> extends ChangeNotifier {
     throw new UnimplementedError();
   }
 
-  Future<bool> update({int entId = -1, Object? data}) async {
+  Future<bool> update({required T newEntity}) async {
     throw new UnimplementedError();
   }
 

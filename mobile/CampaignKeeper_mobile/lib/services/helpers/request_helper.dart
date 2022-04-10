@@ -123,7 +123,7 @@ class RequestHelper extends ChangeNotifier {
     }
   }
 
-  Future<Response> putFile({required String endpoint, required String field, required XFile file}) async {
+  Future<Response> putFile({required String endpoint, required KeeperFile file}) async {
     Map<String, String> headers = {
       "cookie": isCookieValid() ? _cookie.toString() : "",
       "Content-type": "multipart/form-data",
@@ -132,8 +132,8 @@ class RequestHelper extends ChangeNotifier {
     http.StreamedResponse streamResponse;
     http.Response response;
 
-    request.files.add(http.MultipartFile(field, file.readAsBytes().asStream(), await file.length(),
-        filename: field, contentType: MediaType('image', 'jpeg')));
+    request.files.add(
+        http.MultipartFile.fromBytes(file.name, file.bytes, filename: file.name, contentType: file.type));
     request.headers.addAll(headers);
 
     try {

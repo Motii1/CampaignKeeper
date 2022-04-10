@@ -43,8 +43,13 @@ class _AccountState extends KeeperState<Account> {
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       String? res = await validateAvatar(image);
 
-      if (res == null && await DataCarrier().update<UserDataEntity>(data: image)) {
-        return;
+      if (res == null) {
+        var newEntity =
+            UserDataEntity.imageBytes(username: "", email: "", imageData: await image!.readAsBytes());
+
+        if (await DataCarrier().update(newEntity: newEntity)) {
+          return;
+        }
       }
 
       ScaffoldMessenger.of(context)

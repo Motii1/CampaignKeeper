@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 class UserDataEntity {
@@ -14,6 +15,12 @@ class UserDataEntity {
 
   UserDataEntity({required this.username, required this.email, this.password, String? imageData}) {
     this.imageData = imageData;
+  }
+
+  UserDataEntity.imageBytes(
+      {required this.username, required this.email, this.password, required Uint8List imageData}) {
+    String base = base64.encode(imageData);
+    this.imageData = base;
   }
 
   String? get imageData => _imageData;
