@@ -1,9 +1,9 @@
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
-import 'package:campaign_keeper_mobile/services/managers/campaign_manager.dart';
+import 'package:campaign_keeper_mobile/managers/campaign_manager.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
-import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
-import 'package:campaign_keeper_mobile/services/managers/user_data_manager.dart';
+import 'package:campaign_keeper_mobile/managers/base_manager.dart';
+import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
 import 'package:flutter/material.dart';
 
 class DataCarrier {
@@ -39,16 +39,24 @@ class DataCarrier {
     }
   }
 
-  T? getEntity<T>({int entId = -1}) {
+  Future<bool> update<T>({required T newEntity}) async {
     if (_managers.containsKey(T)) {
-      return _managers[T]!.getEntity(entId: entId);
+      return await _managers[T]!.update(newEntity: newEntity);
+    }
+
+    return false;
+  }
+
+  T? get<T>({int entId = -1}) {
+    if (_managers.containsKey(T)) {
+      return _managers[T]!.get(entId: entId);
     }
     return null;
   }
 
-  List<T> getEntities<T>() {
+  List<T> getList<T>() {
     if (_managers.containsKey(T)) {
-      return _managers[T]!.getEntities() as List<T>;
+      return _managers[T]!.getList() as List<T>;
     }
     return [];
   }

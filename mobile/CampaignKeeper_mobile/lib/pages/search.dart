@@ -1,5 +1,5 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_back_button.dart';
-import 'package:campaign_keeper_mobile/services/search_controllers/base_search_controller.dart';
+import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
@@ -170,7 +170,7 @@ class _AppBarAnimatedPlaceholder extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: 12, right: 12),
+                        padding: EdgeInsets.symmetric(horizontal: 10 + 4 * animation.value),
                         child: Icon(
                           Icons.arrow_back,
                           size: 23.5,

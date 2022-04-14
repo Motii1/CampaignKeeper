@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
-import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
+import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/types/types.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserDataManager extends BaseManager<UserDataEntity> {
   static const String _key = "UserData";
@@ -20,12 +22,31 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   }
 
   @override
-  UserDataEntity? getEntity({int groupId = -1, int entId = -1}) {
+  Future<bool> update({required UserDataEntity newEntity}) async {
+    if (newEntity.imageData != null) {
+      var bytes = base64Decode(newEntity.imageData!);
+      var file = KeeperFile(name: 'image-file', type: KeeperMediaType.image, bytes: bytes);
+
+      var response = await RequestHelper().putFile(endpoint: UserDataEntity.imageEndpoint, file: file);
+
+      if (response.status == ResponseStatus.Success) {
+        _entity!.imageData = newEntity.imageData;
+
+        notifyListeners();
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  @override
+  UserDataEntity? get({int groupId = -1, int entId = -1}) {
     return _entity;
   }
 
   @override
-  List<UserDataEntity> getEntities({int groupId = -1}) {
+  List<UserDataEntity> getList({int groupId = -1}) {
     List<UserDataEntity> entities = [];
 
     if (_entity != null) {
@@ -74,6 +95,13 @@ class UserDataManager extends BaseManager<UserDataEntity> {
             newEntity = _entity!;
           }
         }
+      } else if (userResponse.status == ResponseStatus.IncorrectData) {
+        _entity = null;
+
+        CacheUtil().deleteSecure();
+        notifyListeners();
+
+        return false;
       }
     }
 

@@ -65,7 +65,7 @@ class KeeperAppBar extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               canPop(context)
-                                  ? KeeperBackButton(padding: EdgeInsets.symmetric(vertical: 5))
+                                  ? KeeperBackButton(padding: EdgeInsets.symmetric(horizontal: 21.4))
                                   : Container(width: 17),
                               Expanded(
                                 child: Text(
@@ -99,10 +99,10 @@ class KeeperAppBar extends StatelessWidget {
           ];
         },
         body: RefreshIndicator(
-          edgeOffset: 55,
+          edgeOffset: onRefresh == null ? -60 : 55,
           onRefresh: onRefresh ?? _refresh,
           color: Theme.of(context).colorScheme.onBackground,
-          displacement: onRefresh == null ? 0 : 40,
+          displacement: 40,
           strokeWidth: 2.5,
           child: Builder(
             builder: (BuildContext context) {

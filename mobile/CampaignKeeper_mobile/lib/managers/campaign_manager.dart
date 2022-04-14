@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
-import 'package:campaign_keeper_mobile/services/managers/base_manager.dart';
+import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/types/types.dart';
@@ -23,7 +23,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   }
 
   @override
-  CampaignEntity? getEntity({int groupId = -1, int entId = -1}) {
+  CampaignEntity? get({int groupId = -1, int entId = -1}) {
     if (_entities.any((element) => element.id == entId)) {
       return _entities.firstWhere((element) => element.id == entId);
     } else {
@@ -32,7 +32,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   }
 
   @override
-  List<CampaignEntity> getEntities({int groupId = -1}) {
+  List<CampaignEntity> getList({int groupId = -1}) {
     return _entities;
   }
 

@@ -24,7 +24,7 @@ class LoginHelper {
       status = await RequestHelper().testConnection();
     }
 
-    UserDataEntity? userEntity = DataCarrier().getEntity();
+    UserDataEntity? userEntity = DataCarrier().get();
     if (userEntity != null && userEntity.password != null) {
       status = await login(userEntity.username, userEntity.password!);
     }
@@ -51,10 +51,8 @@ class LoginHelper {
     return response.status;
   }
 
-  Future<ResponseStatus> logout({bool force = false}) async {
-    if (force) {
-      DataCarrier().clear();
-    }
+  Future<ResponseStatus> logout() async {
+    DataCarrier().clear();
 
     if (RequestHelper().isCookieValid()) {
       var response = await RequestHelper().post(endpoint: _logoutEnd, isLogin: true);

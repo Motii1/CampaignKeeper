@@ -1,6 +1,6 @@
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
-import 'package:campaign_keeper_mobile/services/managers/user_data_manager.dart';
+import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -20,22 +20,23 @@ void main() {
 
       var manager = new UserDataManager();
 
-      UserDataEntity? ent = manager.getEntity();
+      UserDataEntity? ent = manager.get();
       expect(ent == null, true);
 
       ent = new UserDataEntity(username: "Testtest", email: "Testtest@test.com", password: "Test");
       manager.attach(ent);
 
-      expect(manager.getEntity(),  ent);
+      expect(manager.get(), ent);
     });
     test("Getting user in a list", () {
       DependenciesHelper().useMocks(secureStorage: secureStorage);
-      
+
       var manager = new UserDataManager();
-      UserDataEntity ent = new UserDataEntity(username: "Testtest", email: "Testtest@test.com", password: "Test");
+      UserDataEntity ent =
+          new UserDataEntity(username: "Testtest", email: "Testtest@test.com", password: "Test");
       manager.attach(ent);
 
-      List list = manager.getEntities();
+      List list = manager.getList();
 
       expect(list.length, 1);
       expect(list[0], ent);

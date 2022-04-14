@@ -8,6 +8,25 @@ import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+class Login extends StatelessWidget {
+  const Login({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(0),
+        child: AppBar(),
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: LoginCard(),
+        ),
+      ),
+    );
+  }
+}
+
 class LoginCard extends StatefulWidget {
   const LoginCard({Key? key}) : super(key: key);
 
@@ -72,6 +91,7 @@ class _LoginCardState extends State<LoginCard> {
         switch (status) {
           case ResponseStatus.Success:
             await DataCarrier().refresh<CampaignEntity>();
+
             if (canPop()) {
               Navigator.of(context).pushNamedAndRemoveUntil('/start', (Route<dynamic> route) => false);
             } else {
@@ -134,25 +154,6 @@ class _LoginCardState extends State<LoginCard> {
               child: const Text('LOGIN'),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(0),
-        child: AppBar(),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: LoginCard(),
         ),
       ),
     );

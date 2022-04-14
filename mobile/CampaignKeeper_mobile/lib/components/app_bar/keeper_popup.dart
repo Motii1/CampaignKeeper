@@ -32,12 +32,11 @@ class KeeperPopup extends StatefulWidget {
 }
 
 class _KeeperPopupState extends State<KeeperPopup> {
-  Image userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
+  Image? userImage = DataCarrier().get<UserDataEntity>()?.image;
 
   void refreshUserImage() {
-    // if (this.mounted) might be needed
     setState(() {
-      userImage = DataCarrier().getEntity<UserDataEntity>()!.image;
+      userImage = DataCarrier().get<UserDataEntity>()?.image;
     });
   }
 
@@ -64,7 +63,7 @@ class _KeeperPopupState extends State<KeeperPopup> {
             child: CircleAvatar(
               radius: 14,
               backgroundColor: Theme.of(context).colorScheme.onBackground,
-              foregroundImage: userImage.image,
+              foregroundImage: userImage?.image,
             ),
           ),
           itemBuilder: widget.itemBuilder,
