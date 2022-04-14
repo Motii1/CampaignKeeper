@@ -14,7 +14,7 @@ class KeeperSnackBars {
 
   static SnackBar offline = snack("Network is under geth attack, going offline");
   static SnackBar online = snack("Power core inserted, network restored");
-  static SnackBar incorrect = snack("Ay, that data doesn't match, does it?");
+  static SnackBar incorrect = snack("Aye, that data doesn't match, does it?");
   static SnackBar debugUrl = snack("Set debug url");
   static SnackBar genericError = snack("I've bad feelings about that. Something is wrong.");
 }

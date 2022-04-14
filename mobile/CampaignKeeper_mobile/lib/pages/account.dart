@@ -32,7 +32,7 @@ class _AccountState extends KeeperState<Account> {
     if (image == null) {
       return "An image avatar change requires to choose.";
     } else if (await image.length() > maxImageSize) {
-      return "Sir, this file is too heavy, we can't send it.";
+      return "Commander, this file is too heavy, we can't send it.";
     } else {
       return null;
     }
