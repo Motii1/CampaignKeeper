@@ -1,7 +1,7 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
-import 'package:campaign_keeper_mobile/components/keeper_campaign_tile.dart';
+import 'package:campaign_keeper_mobile/components/tiles/keeper_campaign_tile.dart';
 import 'package:campaign_keeper_mobile/components/keeper_toast.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';

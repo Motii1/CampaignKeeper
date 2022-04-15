@@ -1,6 +1,7 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_search_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
+import 'package:campaign_keeper_mobile/components/tiles/keeper_session_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
@@ -49,7 +50,30 @@ class _CampaignState extends KeeperState<Campaign> {
   }
 
   Future<void> onSessionRefresh() async {
-    sessions = DataCarrier().getList(groupId: widget.campaignID);
+    setState(() {
+      sessions = DataCarrier().getList(groupId: widget.campaignID);
+    });
+  }
+
+  Widget buildBody() {
+    if (currentPage == 0 && sessions.length > 0) {
+      return SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => KeeperSessionTile(entity: sessions[index]),
+          childCount: sessions.length,
+        ),
+      );
+    }
+
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Center(
+        child: Text(
+          "There's nothing here.\nStart new adventures on our website!",
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
 
   @override
@@ -90,15 +114,7 @@ class _CampaignState extends KeeperState<Campaign> {
           popup: KeeperPopup.settings(context),
           onRefresh: onRefresh,
           searchController: searchController,
-          sliver: SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: Text(
-                "There's nothing here.\nStart new adventures on our website!",
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )),
+          sliver: buildBody()),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {

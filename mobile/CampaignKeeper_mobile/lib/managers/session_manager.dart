@@ -61,9 +61,9 @@ class SessionManager extends BaseManager<SessionEntity> {
           await RequestHelper().get(endpoint: SessionEntity.endpoint + "?campaignId=${groupId}");
 
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
+        _map[groupId]?.clear();
         Map responseData = json.decode(userResponse.data!);
         responseData['sessions'].forEach((data) {
-          print(data);
           _attach(_decodeEntity(data));
         });
 
