@@ -61,12 +61,27 @@ class SessionManager extends BaseManager<SessionEntity> {
           await RequestHelper().get(endpoint: SessionEntity.endpoint + "?campaignId=${groupId}");
 
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
-        _map[groupId]?.clear();
+        List<SessionEntity> newEntities = [];
         Map responseData = json.decode(userResponse.data!);
         responseData['sessions'].forEach((data) {
-          _attach(_decodeEntity(data));
+          newEntities.add(_decodeEntity(data));
         });
 
+        if (newEntities.length == _map[groupId]?.length) {
+          bool isEqual = true;
+          for (int i = 0; i < newEntities.length; i++) {
+            if (!newEntities[i].equals(_map[groupId]![i])) {
+              isEqual = false;
+              i = newEntities.length;
+            }
+          }
+
+          if (isEqual) {
+            return false;
+          }
+        }
+
+        _map[groupId] = newEntities;
         notifyListeners();
         _cacheAll();
         return true;
