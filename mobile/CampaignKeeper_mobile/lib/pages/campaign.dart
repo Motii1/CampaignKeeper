@@ -2,6 +2,7 @@ import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_search_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
@@ -18,13 +19,18 @@ class Campaign extends StatefulWidget {
 
 class _CampaignState extends KeeperState<Campaign> {
   CampaignEntity? campaign;
+  late List<SessionEntity> sessions = DataCarrier().getList(groupId: widget.campaignID);
   BaseSearchController? searchController = CampaignSearchController();
   int currentPage = 0;
 
   Future<void> onRefresh() async {
     await DataCarrier().refresh<UserDataEntity>();
     await DataCarrier().refresh<CampaignEntity>();
-    // refresh sessions and / or codex
+    if (currentPage == 0) {
+      await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignID);
+    } else {
+      //TODO: Refresh codex here
+    }
   }
 
   void returnToStart() {
@@ -42,17 +48,25 @@ class _CampaignState extends KeeperState<Campaign> {
     }
   }
 
+  Future<void> onSessionRefresh() async {
+    sessions = DataCarrier().getList(groupId: widget.campaignID);
+  }
+
   @override
   void onResume() async {
     DataCarrier().refresh<CampaignEntity>();
-    // refresh sessions and / or codex
+    if (currentPage == 0) {
+      await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignID);
+    } else {
+      //TODO: Refresh codex here
+    }
   }
 
   @override
   void initState() {
     super.initState();
     DataCarrier().addListener<CampaignEntity>(onCampaignRefresh);
-    DataCarrier().refresh<CampaignEntity>();
+    DataCarrier().addListener<SessionEntity>(onSessionRefresh);
   }
 
   @override
@@ -64,6 +78,7 @@ class _CampaignState extends KeeperState<Campaign> {
   @override
   void dispose() {
     DataCarrier().removeListener<CampaignEntity>(onCampaignRefresh);
+    DataCarrier().removeListener<SessionEntity>(onSessionRefresh);
     super.dispose();
   }
 

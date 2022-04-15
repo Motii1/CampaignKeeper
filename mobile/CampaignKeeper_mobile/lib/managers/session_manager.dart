@@ -1,0 +1,125 @@
+// ignore_for_file: unnecessary_cast
+
+import 'dart:convert';
+import 'package:campaign_keeper_mobile/entities/session_ent.dart';
+import 'package:campaign_keeper_mobile/managers/base_manager.dart';
+import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
+import 'package:campaign_keeper_mobile/services/cache_util.dart';
+import 'package:campaign_keeper_mobile/types/types.dart';
+
+class SessionManager extends BaseManager<SessionEntity> {
+  static const String _key = "Session";
+  Map<int, List<SessionEntity>> _map = {};
+
+  SessionManager();
+
+  @override
+  void attach(SessionEntity entity) {
+    _attach(entity);
+    _cacheAll();
+  }
+
+  @override
+  SessionEntity? get({int groupId = -1, int entId = -1}) {
+    for (var key in _map.keys) {
+      var list = _map[key];
+      if (list != null) {
+        var res = (list as List<SessionEntity?>).firstWhere((ent) => ent?.id == entId, orElse: (() => null));
+
+        if (res != null) {
+          return res;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  @override
+  List<SessionEntity> getList({int groupId = -1}) {
+    var list = _map[groupId];
+
+    return list ?? [];
+  }
+
+  @override
+  Future<bool> refresh({int groupId = -1, bool online = true}) async {
+    if (_map.isEmpty) {
+      String? cache = await CacheUtil().get(_key);
+      if (cache != null) {
+        List cacheData = json.decode(cache);
+        cacheData.forEach((data) {
+          _attach(_decodeEntity(data));
+        });
+
+        notifyListeners();
+      }
+    }
+
+    if (online) {
+      Response userResponse =
+          await RequestHelper().get(endpoint: SessionEntity.endpoint + "?campaignId=${groupId}");
+
+      if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
+        Map responseData = json.decode(userResponse.data!);
+        responseData['sessions'].forEach((data) {
+          print(data);
+          _attach(_decodeEntity(data));
+        });
+
+        notifyListeners();
+        _cacheAll();
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  @override
+  void clear() {
+    _map.clear();
+  }
+
+  void _attach(SessionEntity entity) {
+    int campaignId = entity.campaignId;
+    if (_map[campaignId] == null) {
+      _map[campaignId] = [];
+    }
+
+    _map[campaignId]!.add(entity);
+  }
+
+  void _cacheAll() {
+    var data = [];
+    _map.forEach(
+      (_, list) {
+        list.forEach((element) {
+          data.add(_encodeEntity(element));
+        });
+      },
+    );
+
+    CacheUtil().add(_key, json.encode(data));
+  }
+
+  SessionEntity _decodeEntity(Map data) {
+    int id = data['id'];
+    int campaignId = data['campaignId'];
+    String name = data['name'];
+    DateTime createdAt = DateTime.parse(data['createdAt']);
+
+    return SessionEntity(id: id, campaignId: campaignId, name: name, createdAt: createdAt);
+  }
+
+  Map _encodeEntity(SessionEntity entity) {
+    Map data = {
+      "id": entity.id,
+      "campaignId": entity.campaignId,
+      "name": entity.name,
+      "createdAt": entity.createdAt.toString(),
+    };
+
+    return data;
+  }
+}
