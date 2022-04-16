@@ -1,5 +1,4 @@
 // ignore_for_file: unnecessary_cast
-
 import 'dart:convert';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';

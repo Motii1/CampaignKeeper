@@ -5,6 +5,7 @@ import 'package:campaign_keeper_mobile/components/tiles/keeper_session_tile.dart
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
+import 'package:campaign_keeper_mobile/search_controllers/session_search_controller.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
 import 'package:campaign_keeper_mobile/search_controllers/campaign_search_controller.dart';
@@ -21,7 +22,8 @@ class Campaign extends StatefulWidget {
 class _CampaignState extends KeeperState<Campaign> {
   CampaignEntity? campaign;
   late List<SessionEntity> sessions = DataCarrier().getList(groupId: widget.campaignID);
-  BaseSearchController? searchController = CampaignSearchController();
+  late BaseSearchController sessionSearch = SessionSearchController(campaignId: widget.campaignID);
+  BaseSearchController codexSearch = CampaignSearchController();
   int currentPage = 0;
 
   Future<void> onRefresh() async {
@@ -34,6 +36,7 @@ class _CampaignState extends KeeperState<Campaign> {
     }
   }
 
+  // TODO: Add this to the keeper state
   void returnToStart() {
     Navigator.popUntil(context, ModalRoute.withName('/start'));
   }
@@ -113,14 +116,12 @@ class _CampaignState extends KeeperState<Campaign> {
           title: campaign?.name ?? '',
           popup: KeeperPopup.settings(context),
           onRefresh: onRefresh,
-          searchController: searchController,
+          searchController: currentPage == 0 ? sessionSearch : codexSearch,
           sliver: buildBody()),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
             currentPage = index;
-            // TODO: change this one to a proper controller when sessions and codex api will be available
-            searchController = index == 0 ? CampaignSearchController() : null;
           });
         },
         selectedIndex: currentPage,
