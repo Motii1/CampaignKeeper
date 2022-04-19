@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_cast
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
@@ -23,7 +24,7 @@ class SessionManager extends BaseManager<SessionEntity> {
     for (var key in _map.keys) {
       var list = _map[key];
       if (list != null) {
-        var res = (list as List<SessionEntity?>).firstWhere((ent) => ent?.id == entId, orElse: (() => null));
+        var res = list.firstWhereOrNull((ent) => ent.id == entId);
 
         if (res != null) {
           return res;

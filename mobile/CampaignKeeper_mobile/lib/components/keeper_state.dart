@@ -20,6 +20,10 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
     }
   }
 
+  void returnTo(String destination) {
+    Navigator.popUntil(context, ModalRoute.withName(destination));
+  }
+
   @mustCallSuper
   @override
   void didPopNext() {

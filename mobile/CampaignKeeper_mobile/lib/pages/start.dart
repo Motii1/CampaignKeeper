@@ -44,8 +44,6 @@ class _StartState extends KeeperState<Start> {
   }
 
   void openCampaign(int id) async {
-    // TODO: Refresh sessions list and codex before pushing
-    await DataCarrier().refresh<SessionEntity>(groupId: id);
     Navigator.pushNamed(context, '/start/campaign', arguments: id);
   }
 

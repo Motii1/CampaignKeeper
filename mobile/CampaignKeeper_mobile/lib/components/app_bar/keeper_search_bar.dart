@@ -91,8 +91,7 @@ class KeeperSearchBar extends StatelessWidget {
                             ),
                           ),
                         ),
-                        _SearchBar(
-                            autoLeading: autoLeading, popup: popup, searchController: searchController),
+                        SearchBar(autoLeading: autoLeading, popup: popup, searchController: searchController),
                       ],
                     );
                   },
@@ -125,8 +124,8 @@ class KeeperSearchBar extends StatelessWidget {
   }
 }
 
-class _SearchBar extends StatelessWidget {
-  const _SearchBar({Key? key, this.autoLeading = true, this.popup, this.searchController}) : super(key: key);
+class SearchBar extends StatelessWidget {
+  const SearchBar({Key? key, this.autoLeading = true, this.popup, this.searchController}) : super(key: key);
 
   final bool autoLeading;
   final KeeperPopup? popup;
@@ -143,13 +142,6 @@ class _SearchBar extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(8, 0, 8, 10),
         child: Hero(
           tag: 'search',
-          flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
-            return _SearchBarAnimatedPlaceholder(
-                animation: animation,
-                canPop: canPop(context),
-                paddingTop: MediaQuery.of(context).padding.top,
-                popup: popup);
-          },
           child: SafeArea(
             child: Material(
               color: Theme.of(context).colorScheme.surface,
@@ -195,64 +187,5 @@ class _SearchBar extends StatelessWidget {
             ),
           ),
         ));
-  }
-}
-
-class _SearchBarAnimatedPlaceholder extends StatelessWidget {
-  _SearchBarAnimatedPlaceholder(
-      {Key? key, required this.animation, required this.canPop, required this.paddingTop, this.popup})
-      : super(key: key);
-  final bool canPop;
-  final KeeperPopup? popup;
-  final Animation<double> animation;
-  final double paddingTop;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (context, _) {
-        return Padding(
-          padding: EdgeInsets.only(top: paddingTop * (1.0 - animation.value)),
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(35 * (1.0 - animation.value))),
-            child: Material(
-              color: Theme.of(context).colorScheme.surface,
-              elevation: 0,
-              child: Padding(
-                padding: EdgeInsets.only(top: paddingTop * animation.value),
-                child: SizedBox(
-                  height: 42,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10 + 4 * animation.value),
-                        child: Icon(
-                          Icons.arrow_back,
-                          size: 23.5,
-                          color: Theme.of(context).appBarTheme.titleTextStyle!.color,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          "Search",
-                          style: TextStyle(
-                            color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
-                            fontSize: 19,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      popup ?? Container(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }

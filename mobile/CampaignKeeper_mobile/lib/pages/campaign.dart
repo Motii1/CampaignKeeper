@@ -10,6 +10,7 @@ import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
 import 'package:campaign_keeper_mobile/search_controllers/campaign_search_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Campaign extends StatefulWidget {
   Campaign({Key? key, required this.campaignID}) : super(key: key);
@@ -20,7 +21,7 @@ class Campaign extends StatefulWidget {
 }
 
 class _CampaignState extends KeeperState<Campaign> {
-  CampaignEntity? campaign;
+  late CampaignEntity? campaign = DataCarrier().get(entId: widget.campaignID);
   late List<SessionEntity> sessions = DataCarrier().getList(groupId: widget.campaignID);
   late BaseSearchController sessionSearch = SessionSearchController(campaignId: widget.campaignID);
   BaseSearchController codexSearch = CampaignSearchController();
@@ -36,15 +37,10 @@ class _CampaignState extends KeeperState<Campaign> {
     }
   }
 
-  // TODO: Add this to the keeper state
-  void returnToStart() {
-    Navigator.popUntil(context, ModalRoute.withName('/start'));
-  }
-
   Future<void> onCampaignRefresh() async {
     CampaignEntity? entity = DataCarrier().get(entId: widget.campaignID);
     if (entity == null) {
-      returnToStart();
+      returnTo('/start');
     } else {
       setState(() {
         campaign = entity;
@@ -58,11 +54,20 @@ class _CampaignState extends KeeperState<Campaign> {
     });
   }
 
+  void openSession(int id) async {
+    Navigator.pushNamed(context, '/start/campaign/session_map', arguments: id);
+  }
+
   Widget buildBody() {
     if (currentPage == 0 && sessions.length > 0) {
       return SliverList(
         delegate: SliverChildBuilderDelegate(
-          (context, index) => KeeperSessionTile(entity: sessions[index]),
+          (context, index) => KeeperSessionTile(
+            entity: sessions[index],
+            onTap: () {
+              openSession(sessions[index].id);
+            },
+          ),
           childCount: sessions.length,
         ),
       );
@@ -94,12 +99,8 @@ class _CampaignState extends KeeperState<Campaign> {
     super.initState();
     DataCarrier().addListener<CampaignEntity>(onCampaignRefresh);
     DataCarrier().addListener<SessionEntity>(onSessionRefresh);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    onCampaignRefresh();
+    DataCarrier().refresh<CampaignEntity>();
+    DataCarrier().refresh<SessionEntity>(groupId: widget.campaignID);
   }
 
   @override
@@ -117,7 +118,16 @@ class _CampaignState extends KeeperState<Campaign> {
           popup: KeeperPopup.settings(context),
           onRefresh: onRefresh,
           searchController: currentPage == 0 ? sessionSearch : codexSearch,
-          sliver: buildBody()),
+          sliver: campaign == null
+              ? SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: SpinKitRing(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    size: 40.0,
+                    lineWidth: 5.0,
+                  ),
+                )
+              : buildBody()),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
