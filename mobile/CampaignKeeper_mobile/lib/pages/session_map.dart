@@ -1,11 +1,14 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_floating_search.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
+import 'package:campaign_keeper_mobile/components/keeper_interactive_viewer.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
+import 'package:campaign_keeper_mobile/facades/fake_event_facade.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:graphview/GraphView.dart';
 
 class SessionMap extends StatefulWidget {
   const SessionMap({Key? key, required this.sessionID}) : super(key: key);
@@ -17,6 +20,7 @@ class SessionMap extends StatefulWidget {
 
 class _SessionMapState extends KeeperState<SessionMap> {
   late SessionEntity? session = DataCarrier().get(entId: widget.sessionID);
+  var eventFacade = FakeEventFacade();
 
   Future<void> onRefresh() async {
     await DataCarrier().refresh<UserDataEntity>();
@@ -60,7 +64,21 @@ class _SessionMapState extends KeeperState<SessionMap> {
                   lineWidth: 5.0,
                 ),
               )
-            : Container(),
+            : KeeperInteractiveViewer(
+                child: GraphView(
+                  graph: eventFacade.getGraph(),
+                  algorithm: SugiyamaAlgorithm(eventFacade.getBuilder()),
+                  paint: Paint()
+                    ..color = Theme.of(context).colorScheme.onBackground
+                    ..strokeWidth = 2.5
+                    ..style = PaintingStyle.stroke,
+                  builder: (Node node) {
+                    // I can decide what widget should be shown here based on the id
+                    var id = node.key?.value as int;
+                    return eventFacade.getNodeWidget(context, id);
+                  },
+                ),
+              ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -20,6 +20,8 @@ class KeeperFloatingSearch extends StatelessWidget {
         ? SystemUiOverlayStyle.dark
         : SystemUiOverlayStyle.light);
     return Stack(
+      alignment: Alignment.topCenter,
+      clipBehavior: Clip.hardEdge,
       children: [
         child,
         Padding(
