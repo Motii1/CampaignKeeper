@@ -85,6 +85,10 @@ class SessionManager extends BaseManager<SessionEntity> {
         notifyListeners();
         _cacheAll();
         return true;
+      } else if (userResponse.status == ResponseStatus.IncorrectData) {
+        _map[groupId]?.clear();
+        notifyListeners();
+        _cacheAll();
       }
     }
 
