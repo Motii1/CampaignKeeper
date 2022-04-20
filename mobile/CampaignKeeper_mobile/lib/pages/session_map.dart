@@ -67,7 +67,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
             : KeeperInteractiveViewer(
                 child: GraphView(
                   graph: eventFacade.getGraph(),
-                  algorithm: SugiyamaAlgorithm(eventFacade.getBuilder()),
+                  algorithm: KeeperSugiyamaAlgorithm(eventFacade.getBuilder()),
                   paint: Paint()
                     ..color = Theme.of(context).colorScheme.onBackground
                     ..strokeWidth = 2.5
