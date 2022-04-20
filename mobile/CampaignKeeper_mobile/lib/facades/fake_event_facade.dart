@@ -7,24 +7,24 @@ class FakeEventFacade {
     return SugiyamaConfiguration()
       ..levelSeparation = 75
       ..nodeSeparation = 5
-      ..iterations = 20;
+      ..iterations = 10;
   }
 
   Graph getGraph() {
     final Graph graph = Graph();
 
-    final node1 = Node.Id(1)..size = Size(190, 90);
-    final node2 = Node.Id(2)..size = Size(190, 90);
-    final node3 = Node.Id(3)..size = Size(190, 90);
-    final node4 = Node.Id(4)..size = Size(190, 90);
-    final node5 = Node.Id(5)..size = Size(190, 90);
-    final node6 = Node.Id(6)..size = Size(190, 90);
-    final node8 = Node.Id(7)..size = Size(190, 90);
-    final node7 = Node.Id(8)..size = Size(190, 90);
-    final node9 = Node.Id(9)..size = Size(190, 90);
-    final node10 = Node.Id(10)..size = Size(190, 90);
-    final node11 = Node.Id(11)..size = Size(190, 90);
-    final node12 = Node.Id(12)..size = Size(190, 90);
+    final node1 = Node.Id(1);
+    final node2 = Node.Id(2);
+    final node3 = Node.Id(3);
+    final node4 = Node.Id(4);
+    final node5 = Node.Id(5);
+    final node6 = Node.Id(6);
+    final node8 = Node.Id(7);
+    final node7 = Node.Id(8);
+    final node9 = Node.Id(9);
+    final node10 = Node.Id(10);
+    final node11 = Node.Id(11);
+    final node12 = Node.Id(12);
 
     graph.addEdge(node1, node2);
     graph.addEdge(node1, node3);
@@ -101,7 +101,8 @@ class KeeperSugiyamaAlgorithm extends SugiyamaAlgorithm {
                 x[v] =
                     max(x[v]! + v!.width, x[u]! + nodeSeparation + 0.5 * (blockWidth[u]! + blockWidth[v]!));
               } else {
-                x[v] = min(x[v]! - 100, x[u]! - nodeSeparation - 0.5 * (blockWidth[u]! + blockWidth[v]!));
+                x[v] =
+                    min(x[v]! - v!.width, x[u]! - nodeSeparation - 0.5 * (blockWidth[u]! + blockWidth[v]!));
               }
             }
           }
