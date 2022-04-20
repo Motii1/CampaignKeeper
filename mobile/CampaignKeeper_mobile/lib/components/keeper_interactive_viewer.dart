@@ -10,7 +10,7 @@ class KeeperInteractiveViewer extends StatefulWidget {
 }
 
 class _KeeperInteractiveViewerState extends State<KeeperInteractiveViewer> {
-  var offset = Offset(0.0, 90.0); // x, y
+  var offset = Offset(-10.0, 90.0); // x, y
   var panOffset = Offset(0.0, 0.0);
   double scale = 1.0;
   double scaleFactor = 1.0;

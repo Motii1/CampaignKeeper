@@ -43,6 +43,7 @@ class FakeEventFacade {
   Widget getNodeWidget(BuildContext context, int id) {
     return SizedBox(
       width: 90,
+      height: id % 2 == 0 ? 70 : null,
       child: Material(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
