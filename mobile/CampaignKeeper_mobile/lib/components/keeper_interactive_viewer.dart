@@ -23,12 +23,10 @@ class _KeeperInteractiveViewerState extends State<KeeperInteractiveViewer> {
         scaleFactor = scale;
       },
       onScaleUpdate: (details) {
-        double diffX = details.focalPoint.dx - panOffset.dx;
-        double diffY = details.focalPoint.dy - panOffset.dy;
         panOffset = details.focalPoint;
         setState(() {
-          scale = max(0.5, scaleFactor * details.scale);
-          offset = offset.translate(diffX, diffY);
+          scale = min(3.0, max(0.5, scaleFactor * details.scale));
+          offset = offset.translate(details.focalPointDelta.dx, details.focalPointDelta.dy);
         });
       },
       child: Container(
