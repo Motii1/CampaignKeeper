@@ -11,7 +11,6 @@ class KeeperInteractiveViewer extends StatefulWidget {
 
 class _KeeperInteractiveViewerState extends State<KeeperInteractiveViewer> {
   var offset = Offset(-10.0, 90.0); // x, y
-  var panOffset = Offset(0.0, 0.0);
   double scale = 1.0;
   double scaleFactor = 1.0;
 
@@ -19,11 +18,9 @@ class _KeeperInteractiveViewerState extends State<KeeperInteractiveViewer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onScaleStart: (details) {
-        panOffset = details.focalPoint;
         scaleFactor = scale;
       },
       onScaleUpdate: (details) {
-        panOffset = details.focalPoint;
         setState(() {
           scale = min(3.0, max(0.5, scaleFactor * details.scale));
           offset = offset.translate(details.focalPointDelta.dx, details.focalPointDelta.dy);
