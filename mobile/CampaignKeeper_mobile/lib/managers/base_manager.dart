@@ -17,7 +17,7 @@ class BaseManager<T> extends ChangeNotifier {
     throw new UnimplementedError();
   }
 
-  List<T> getList() {
+  List<T> getList({int groupId = -1}) {
     throw new UnimplementedError();
   }
 
