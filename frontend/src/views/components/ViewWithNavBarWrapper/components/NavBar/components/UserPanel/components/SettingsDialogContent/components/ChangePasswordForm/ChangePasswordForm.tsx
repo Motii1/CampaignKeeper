@@ -154,7 +154,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
         }
       />
       <Box sx={{ paddingTop: 1 }}>
-        <CustomButton text={'Change'} />
+        <CustomButton content={'Change'} />
       </Box>
     </Stack>
   );

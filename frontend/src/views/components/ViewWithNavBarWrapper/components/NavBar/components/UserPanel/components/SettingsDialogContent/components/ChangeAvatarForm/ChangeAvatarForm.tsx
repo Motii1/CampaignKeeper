@@ -83,7 +83,7 @@ export const ChangeAvatarForm: React.FC<ChangeAvatarFormProps> = props => {
         }}
       />
       <label htmlFor="avatar-button-file">
-        <CustomButton text={'Change'} behavior={CustomButtonBehavior.Upload} />
+        <CustomButton content={'Change'} behavior={CustomButtonBehavior.Upload} />
       </label>
     </Stack>
   );

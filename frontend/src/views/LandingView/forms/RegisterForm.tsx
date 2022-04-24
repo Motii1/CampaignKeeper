@@ -227,7 +227,7 @@ export const RegisterForm: React.FC<FormProps> = props => {
             )
           }
         />
-        <CustomButton text="Register" />
+        <CustomButton content="Register" />
       </Stack>
       <ChangeFormComponent
         onSubmit={props.onChangeForm}

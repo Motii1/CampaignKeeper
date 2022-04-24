@@ -34,7 +34,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
         >
           {otherProps.onDelete ? (
             <CustomButton
-              text="DELETE"
+              content="DELETE"
               behavior={CustomButtonBehavior.Func}
               type={CustomButtonType.Delete}
               onClick={otherProps.onDelete}
@@ -42,7 +42,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           ) : null}
           {otherProps.onCancel ? (
             <CustomButton
-              text="CANCEL"
+              content="CANCEL"
               behavior={CustomButtonBehavior.Func}
               type={CustomButtonType.Primary}
               onClick={otherProps.onCancel}
@@ -50,7 +50,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           ) : null}
           {otherProps.onOk ? (
             <CustomButton
-              text="OK"
+              content="OK"
               behavior={CustomButtonBehavior.Func}
               onClick={otherProps.onOk}
             />

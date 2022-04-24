@@ -1,8 +1,9 @@
 import { Button } from '@mui/material';
+import { ReactElement } from 'react';
 import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
 
 type CustomButtonProps = {
-  text: string;
+  content: string | ReactElement;
   behavior?: CustomButtonBehavior;
   type?: CustomButtonType;
   onClick?: () => void;
@@ -42,19 +43,19 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
     case CustomButtonBehavior.Upload:
       return (
         <Button variant="contained" component="span" sx={standardButtonSx}>
-          {otherProps.text}
+          {otherProps.content}
         </Button>
       );
     case CustomButtonBehavior.Func:
       return (
         <Button variant="contained" onClick={otherProps.onClick} sx={standardButtonSx}>
-          {otherProps.text}
+          {otherProps.content}
         </Button>
       );
     case CustomButtonBehavior.Submit:
       return (
         <Button variant="contained" type="submit" sx={standardButtonSx}>
-          {otherProps.text}
+          {otherProps.content}
         </Button>
       );
   }
