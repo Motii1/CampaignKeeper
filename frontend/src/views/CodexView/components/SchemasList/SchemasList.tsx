@@ -7,17 +7,13 @@ import { SchemasListElement } from './components/SchemasListElement/SchemasListE
 import { SchemasListHeader } from './components/SchemasListHeader/SchemasListHeader';
 
 export const SchemasList: React.FC = () => {
-  const { schemas, currentSchemaId } = useSelector((state: RootState) => state.codexView);
+  const { schemas } = useSelector((state: RootState) => state.codexView);
 
   const height = getWindowDimensions().height - 50;
 
   const rednderSchemaElements = () =>
     schemas.map(schema => (
-      <SchemasListElement
-        name={schema.title}
-        isSelected={schema.id === currentSchemaId}
-        key={schema.id}
-      />
+      <SchemasListElement name={schema.title} schemaId={schema.id} key={schema.id} />
     ));
 
   return (

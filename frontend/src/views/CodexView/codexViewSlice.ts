@@ -50,6 +50,9 @@ const codexViewSlice = createSlice({
     addSchema: (state, action) => {
       state.schemas = state.schemas.concat(action.payload.newSchema);
     },
+    updateCurrentSchemaId: (state, action) => {
+      state.currentSchemaId = action.payload.currentSchemaId;
+    },
   },
   extraReducers: builder => {
     builder.addCase(fetchSchemas.fulfilled, (state, action) => {
@@ -61,6 +64,6 @@ const codexViewSlice = createSlice({
   },
 });
 
-export const { addSchema } = codexViewSlice.actions;
+export const { addSchema, updateCurrentSchemaId } = codexViewSlice.actions;
 
 export default codexViewSlice.reducer;
