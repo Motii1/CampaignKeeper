@@ -1,6 +1,8 @@
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/managers/campaign_manager.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
+import 'package:campaign_keeper_mobile/managers/session_manager.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
@@ -19,6 +21,7 @@ class DataCarrier {
   DataCarrier._internal() {
     _managers[UserDataEntity] = new UserDataManager();
     _managers[CampaignEntity] = new CampaignManager();
+    _managers[SessionEntity] = new SessionManager();
   }
 
   void addListener<T>(VoidCallback listener) {
@@ -54,9 +57,9 @@ class DataCarrier {
     return null;
   }
 
-  List<T> getList<T>() {
+  List<T> getList<T>({int groupId = -1}) {
     if (_managers.containsKey(T)) {
-      return _managers[T]!.getList() as List<T>;
+      return _managers[T]!.getList(groupId: groupId) as List<T>;
     }
     return [];
   }

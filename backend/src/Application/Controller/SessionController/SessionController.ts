@@ -121,7 +121,7 @@ export class SessionContoller implements IController {
    * @route POST /session
    * @group session - Operations related to session data
    * @param {SessionInsertDto.model} data.body.required - session insert data
-   * @returns {SingleGetCampaignListDto.model} 200 - Session successfully saved
+   * @returns {SingleGetSessionListDto.model} 200 - Session successfully saved
    * @returns {EmptyResponse.model} 400 - Data in wrong format
    * @returns {EmptyResponse.model} 404 - User campaign of given id not found
    * @security cookieAuth

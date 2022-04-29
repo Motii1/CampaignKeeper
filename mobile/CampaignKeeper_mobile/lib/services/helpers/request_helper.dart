@@ -6,8 +6,6 @@ import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
-import 'package:image_picker/image_picker.dart';
 
 class RequestHelper extends ChangeNotifier {
   static final RequestHelper _helper = RequestHelper._internal();
