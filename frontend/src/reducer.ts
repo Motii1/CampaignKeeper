@@ -2,6 +2,7 @@ import { AnyAction, combineReducers } from 'redux';
 import { RootState } from './store';
 import campaignViewReducer from './views/CampaignView/campaignViewSlice';
 import sessionReducer from './views/CampaignView/sessionsSlice';
+import codexViewReducer from './views/CodexView/codexViewSlice';
 import errorReducer from './views/ErrorView/errorSlice';
 import userDetailsReducer from './views/LandingView/userDetailsSlice';
 import campaignsReducer from './views/StartView/campaignsSlice';
@@ -14,6 +15,7 @@ export const appReducer = combineReducers({
   campaignView: campaignViewReducer,
   campaigns: campaignsReducer,
   sessions: sessionReducer,
+  codexView: codexViewReducer,
 });
 
 const rootReducer = (state: RootState | undefined, action: AnyAction): RootState => {

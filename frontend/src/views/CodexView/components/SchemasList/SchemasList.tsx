@@ -1,24 +1,22 @@
 import { Paper, Stack } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store';
 import { getWindowDimensions } from '../../../../utils/utils';
 import { NewSchemaButton } from './components/NewSchemaButton/NewSchemaButton';
 import { SchemasListElement } from './components/SchemasListElement/SchemasListElement';
 import { SchemasListHeader } from './components/SchemasListHeader/SchemasListHeader';
 
 export const SchemasList: React.FC = () => {
+  const { schemas, currentSchemaId } = useSelector((state: RootState) => state.codexView);
+
   const height = getWindowDimensions().height - 50;
 
-  const mockSchemas = [
-    { name: 'NPC', isSelected: false },
-    { name: 'City', isSelected: true },
-    { name: 'Item', isSelected: false },
-  ];
-
   const rednderSchemaElements = () =>
-    mockSchemas.map(_position => (
+    schemas.map(schema => (
       <SchemasListElement
-        name={_position.name}
-        isSelected={_position.isSelected}
-        key={_position.name}
+        name={schema.title}
+        isSelected={schema.id === currentSchemaId}
+        key={schema.id}
       />
     ));
 
