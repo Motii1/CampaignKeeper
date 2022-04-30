@@ -80,17 +80,7 @@ export const CampaignView: React.FC = () => {
           </CustomGrid>
         </Box>
       ) : (
-        <Box
-          sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <EmptyPlaceholder message={'Go wild and take a first step, worldshaper'} />
-        </Box>
+        <EmptyPlaceholder message={'Go wild and take a first step, worldshaper'} />
       );
     return (
       <CircularProgress

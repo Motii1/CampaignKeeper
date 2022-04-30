@@ -13,6 +13,7 @@ export const SearchBar: React.FC = () => (
     <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={0}>
       <SearchIcon sx={{ marginLeft: '1%' }} />
       <TextField
+        placeholder="Search"
         sx={{
           width: '100%',
           '& .MuiOutlinedInput-root': {
