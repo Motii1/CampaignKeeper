@@ -24,7 +24,10 @@ export class SessionEntity {
   @Column({ name: 'campaign_id' })
   campaignId?: number;
 
-  @ManyToOne(() => CampaignEntity, campaign => campaign.sessions, { nullable: false })
+  @ManyToOne(() => CampaignEntity, campaign => campaign.sessions, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'campaign_id' })
   campaign!: CampaignEntity;
 

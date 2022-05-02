@@ -40,6 +40,9 @@ export class EventEntity {
   @Column()
   positionY!: number;
 
-  @ManyToOne(() => SessionEntity, session => session.events, { nullable: false })
+  @ManyToOne(() => SessionEntity, session => session.events, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   session!: SessionEntity;
 }
