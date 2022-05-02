@@ -2,8 +2,8 @@
  * @typedef SingleGetSchemaListDto
  * @property {string} id - schema id
  * @property {string} title - schema title
+ * @property {number} campaignId - id of campaign
  * @property {Array.<string>} fields - array of field names
- * @property {boolean} deletable - deletable indication
  */
 /**
  * @typedef GetSchemaListDto

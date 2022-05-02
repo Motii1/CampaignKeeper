@@ -1,4 +1,6 @@
 export type Schema = {
-  id: number;
-  // @todo
+  id?: number;
+  campaignId: number;
+  title: string;
+  fields: string[];
 };

@@ -18,7 +18,11 @@ export class CampaignEntity {
   @Column({ length: 128 })
   name!: string;
 
-  @ManyToOne(() => UserEntity, user => user.campaigns, { nullable: false, eager: true })
+  @ManyToOne(() => UserEntity, user => user.campaigns, {
+    nullable: false,
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   user!: UserEntity;
 
   @OneToMany(() => SchemaEntity, schema => schema.campaign)
