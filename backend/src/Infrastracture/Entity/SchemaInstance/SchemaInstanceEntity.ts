@@ -20,6 +20,7 @@ export class SchemaInstanceEntity {
   @OneToMany(() => SchemaInstanceMetadataEntity, metadata => metadata.object, {
     eager: true,
     onDelete: 'CASCADE',
+    cascade: true,
   })
   metadataArray!: SchemaInstanceMetadataEntity[];
 

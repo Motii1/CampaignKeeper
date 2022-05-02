@@ -3,7 +3,7 @@ import { saveCampaign } from '../../../Infrastracture/Entity/Campaign/CampaignRe
 import { User } from '../../User/User';
 import { Campaign } from '../Campaign';
 import { SingleGetCampaignListDto } from '../Dto/GetCampaignListDto';
-import { insertDefaultSchemas } from '../Schema/DefaultSchema';
+import { insertDefaultSchemasWithData } from '../Schema/DefaultSchema';
 import { extractSingleDtoData } from './CampaignList';
 
 export const createCampaign = async (
@@ -16,6 +16,6 @@ export const createCampaign = async (
     user,
   };
   const savedCampaign = await saveCampaign(campaign);
-  await insertDefaultSchemas(savedCampaign.id);
+  await insertDefaultSchemasWithData(savedCampaign.id);
   return extractSingleDtoData(savedCampaign);
 };
