@@ -33,7 +33,16 @@ export const CodexView: React.FC = () => {
       setPrimaryDialogType={setDialogType}
     >
       {isSchemasListDownloaded ? (
-        <Box>
+        <Box
+          sx={{
+            width: '60%',
+            height: 'auto',
+            paddingLeft: '20%',
+            paddingRight: '20%',
+            paddingTop: '2%',
+            paddingBottom: '2%',
+          }}
+        >
           <SchemasList />
           {currentEntry ? <EntryDisplayPanel /> : <EntriesListPanel />}
         </Box>

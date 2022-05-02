@@ -30,12 +30,6 @@ export const EntryDisplayPanel: React.FC = () => {
       elevation={6}
       sx={{
         backgroundColor: 'customPalette.surface',
-        width: '60%',
-        height: '100%',
-        marginLeft: '20%',
-        marginRight: '20%',
-        marginTop: '5%',
-        marginBottom: '5%',
       }}
     >
       <Stack
@@ -43,10 +37,13 @@ export const EntryDisplayPanel: React.FC = () => {
         justifyContent="center"
         alignItems="flex-start"
         spacing={1}
-        sx={{ paddingLeft: '2%', paddingTop: '2%' }}
+        sx={{ padding: '2%' }}
       >
         <ReturnBar />
-        <Typography variant={'h4'} sx={{ color: 'customPalette.accent', marginTop: '2%' }}>
+        <Typography
+          variant={'h4'}
+          sx={{ color: 'customPalette.accent', fontWeight: 'bold', marginTop: '2%' }}
+        >
           {currentEntry.title}
         </Typography>
         {renderEntriesFields()}
