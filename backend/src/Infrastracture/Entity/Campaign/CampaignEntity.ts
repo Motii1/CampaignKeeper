@@ -25,10 +25,10 @@ export class CampaignEntity {
   })
   user!: UserEntity;
 
-  @OneToMany(() => SchemaEntity, schema => schema.campaign)
+  @OneToMany(() => SchemaEntity, schema => schema.campaign, { onDelete: 'CASCADE' })
   schemas!: SchemaEntity[];
 
-  @OneToMany(() => SessionEntity, session => session.campaign)
+  @OneToMany(() => SessionEntity, session => session.campaign, { onDelete: 'CASCADE' })
   sessions!: SessionEntity[];
 
   @Column({ type: 'varbinary', nullable: true, length: 'max' })

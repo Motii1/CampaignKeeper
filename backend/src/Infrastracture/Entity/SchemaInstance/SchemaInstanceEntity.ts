@@ -17,7 +17,10 @@ export class SchemaInstanceEntity {
   @Column({ length: 128 })
   title!: string;
 
-  @OneToMany(() => SchemaInstanceMetadataEntity, metadata => metadata.object, { eager: true })
+  @OneToMany(() => SchemaInstanceMetadataEntity, metadata => metadata.object, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   metadataArray!: SchemaInstanceMetadataEntity[];
 
   @Column({ type: 'varbinary', nullable: true, length: 'max' })
