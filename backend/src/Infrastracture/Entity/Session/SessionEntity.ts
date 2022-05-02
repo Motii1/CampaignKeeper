@@ -18,7 +18,7 @@ export class SessionEntity {
   @Column({ nullable: true, length: 128 })
   name!: string;
 
-  @OneToMany(() => EventEntity, event => event.session)
+  @OneToMany(() => EventEntity, event => event.session, { onDelete: 'CASCADE' })
   events!: EventEntity[];
 
   @Column({ name: 'campaign_id' })
