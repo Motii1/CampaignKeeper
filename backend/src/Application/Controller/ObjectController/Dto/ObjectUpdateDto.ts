@@ -1,16 +1,30 @@
 /**
  * @typedef ObjectUpdateDto
  * @property {string} title - title
- * @property {Array.<SingleFieldValueDto>} fields - array of field with values. Problems with swagger generation, the correct format should be like this: { ..., fields: [ ['Name', { type: 'string', value: 'xxx' }] ] }
+ * @property {string} imageBase64 - base64 representation of the image
+ * @property {Array.<ObjectMetadataDto>} metadataArray - array of field with values
  */
 
 import * as Joi from 'joi';
-import { FieldValue } from './FieldValue';
+import { FieldValueType } from '../../../../Domain/Campaign/SchemaInstance/FieldValueType';
+import { MAX_CAMPAIGN_BASE64_STRING_LENGTH } from './Const';
+import { ObjectInsertMetadata } from './ObjectInsertDto';
 
 export type ObjectUpdateDto = {
   title?: string;
-  fields?: FieldValue[];
+  imageBase64?: string | null;
+  metadataArray?: ObjectInsertMetadata[];
 };
 
-// @todo
-export const objectUpdateDtoSchema = Joi.object<ObjectUpdateDto>({});
+export const objectUpdateDtoSchema = Joi.object<ObjectUpdateDto>({
+  title: Joi.string().max(128),
+  imageBase64: Joi.string().allow(null).max(MAX_CAMPAIGN_BASE64_STRING_LENGTH),
+  metadataArray: Joi.array().items({
+    type: Joi.string()
+      .valid(...Object.values(FieldValueType))
+      .required(),
+    value: Joi.string().required(),
+    sequenceNumber: Joi.number().min(0).required(),
+    fieldName: Joi.string().required(),
+  }),
+});
