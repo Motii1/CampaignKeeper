@@ -13,10 +13,10 @@ export interface Entry {
   title: string;
   schemaId: number;
   imageBase64: string;
-  metadataArray: metadataInstance[];
+  metadataArray: MetadataInstance[];
 }
 
-export type metadataInstance = {
+export type MetadataInstance = {
   type: string;
   sequenceNumber: number;
   value: string;
@@ -66,7 +66,7 @@ const codexViewSlice = createSlice({
       state.currentSchema = newSchema ? newSchema : null;
     },
     updateCurrentEntry: (state, action) => {
-      if (state.currentSchema) {
+      if (state.currentSchema && action.payload.newEntryId) {
         const newEntry = state.entries[state.currentSchema.id].find(
           entry => entry.id === action.payload.newEntryId
         );

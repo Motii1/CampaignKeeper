@@ -1,20 +1,29 @@
-import { CircularProgress, Paper, Stack, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
+import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
+import { MetadataInstance } from '../../codexViewSlice';
+import { EntryField } from './components/EntryField/EntryField';
+import { ReturnBar } from './components/ReturnBar/ReturnBar';
 
 export const EntryDisplayPanel: React.FC = () => {
-  const { currentEntry } = useSelector((state: RootState) => state.codexView);
+  const { currentSchema, currentEntry } = useSelector((state: RootState) => state.codexView);
 
-  // TO-DO move to utils during edit object dialog implementation
-  // const renderObjectFields = () => {
-  //   if (currentObject)
-  //     return currentObject.metadataArray.map(field => (
-  //       <Box key={field.toString}>
-  //         <Typography>{field.toString}</Typography>
-  //       </Box>
-  //     ));
-  //   return null;
-  // };
+  const renderEntriesFields = () => {
+    const getMetadataByFieldName = (fieldName: string, metadata: MetadataInstance[]) =>
+      metadata.filter(element => element.fieldName === fieldName);
+
+    if (currentEntry) {
+      const fields = currentSchema?.fields.map(fieldName =>
+        getMetadataByFieldName(fieldName, currentEntry.metadataArray)
+      );
+      if (fields)
+        return fields.map(field => (
+          <EntryField key={field[0].fieldName} fieldName={field[0].fieldName} data={field} />
+        ));
+    }
+    return null;
+  };
 
   return currentEntry ? (
     <Paper
@@ -25,8 +34,8 @@ export const EntryDisplayPanel: React.FC = () => {
         height: '100%',
         marginLeft: '20%',
         marginRight: '20%',
-        marginTop: '10%',
-        marginBottom: '10%',
+        marginTop: '5%',
+        marginBottom: '5%',
       }}
     >
       <Stack
@@ -34,15 +43,16 @@ export const EntryDisplayPanel: React.FC = () => {
         justifyContent="center"
         alignItems="flex-start"
         spacing={1}
-        sx={{ marginLeft: '2%' }}
+        sx={{ paddingLeft: '2%', paddingTop: '2%' }}
       >
+        <ReturnBar />
         <Typography variant={'h4'} sx={{ color: 'customPalette.accent', marginTop: '2%' }}>
           {currentEntry.title}
         </Typography>
-        {/* {renderObjectFields()} */}
+        {renderEntriesFields()}
       </Stack>
     </Paper>
   ) : (
-    <CircularProgress size={35} thickness={6} sx={{ color: 'customPalette.accent' }} />
+    <EmptyPlaceholder message={'Impossible. Perhaps the archives are incomplete'} />
   );
 };

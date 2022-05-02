@@ -2,7 +2,7 @@ import { Paper, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../../store';
-import { fetchObjects, updateCurrentSchema } from '../../../../codexViewSlice';
+import { fetchObjects, updateCurrentEntry, updateCurrentSchema } from '../../../../codexViewSlice';
 
 type SchemaListElementProps = {
   name: string;
@@ -18,6 +18,7 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
 
   const onClick = () => {
     dispatch(updateCurrentSchema({ newSchemaId: props.schemaId }));
+    dispatch(updateCurrentEntry({ newEntryId: null }));
     if (!downloadedSchemas.find(element => element === props.schemaId))
       dispatch(fetchObjects(props.schemaId));
 

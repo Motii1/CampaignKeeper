@@ -11,7 +11,7 @@ export const SchemasList: React.FC = () => {
 
   const height = getWindowDimensions().height - 50;
 
-  const rednderSchemaElements = () =>
+  const renderSchemaElements = () =>
     schemas.map(schema => (
       <SchemasListElement name={schema.title} schemaId={schema.id} key={schema.id} />
     ));
@@ -32,7 +32,7 @@ export const SchemasList: React.FC = () => {
     >
       <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={0}>
         <SchemasListHeader />
-        {rednderSchemaElements()}
+        {renderSchemaElements()}
         <NewSchemaButton />
       </Stack>
     </Paper>
