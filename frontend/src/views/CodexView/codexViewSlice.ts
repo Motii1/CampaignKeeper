@@ -4,37 +4,41 @@ import protectedApiClient from '../../axios/axios';
 export interface Schema {
   id: string;
   title: string;
+  campaignId: string;
   fields: string[];
-  deletable: boolean;
 }
 
-export interface CustomObject {
+export interface Entry {
   id: string;
   title: string;
-  fields: [
-    {
-      type: undefined;
-      value: string;
-    }
-  ];
+  schemaId: number;
+  imageBase64: string;
+  metadataArray: metadataInstance[];
 }
+
+export type metadataInstance = {
+  type: string;
+  sequenceNumber: number;
+  value: string;
+  fieldName: string;
+};
 
 interface CodexViewState {
   isSchemasListDownloaded: boolean;
   schemas: Schema[];
   downloadedSchemas: string[];
-  objects: { [id: string]: CustomObject[] };
-  currentSchemaId: null | string;
-  currentObjectId: null | string;
+  entries: { [schemaId: string]: Entry[] };
+  currentSchema: null | Schema;
+  currentEntry: null | Entry;
 }
 
 const initialState: CodexViewState = {
   isSchemasListDownloaded: false,
   schemas: [],
   downloadedSchemas: [],
-  objects: {},
-  currentSchemaId: null,
-  currentObjectId: null,
+  entries: {},
+  currentSchema: null,
+  currentEntry: null,
 };
 
 export const fetchSchemas = createAsyncThunk(
@@ -57,11 +61,17 @@ const codexViewSlice = createSlice({
     addSchema: (state, action) => {
       state.schemas = state.schemas.concat(action.payload.newSchema);
     },
-    updateCurrentSchemaId: (state, action) => {
-      state.currentSchemaId = action.payload.currentSchemaId;
+    updateCurrentSchema: (state, action) => {
+      const newSchema = state.schemas.find(schema => schema.id === action.payload.newSchemaId);
+      state.currentSchema = newSchema ? newSchema : null;
     },
-    updateCurrentObjectId: (state, action) => {
-      state.currentObjectId = action.payload.currentObjectId;
+    updateCurrentEntry: (state, action) => {
+      if (state.currentSchema) {
+        const newEntry = state.entries[state.currentSchema.id].find(
+          entry => entry.id === action.payload.newEntryId
+        );
+        state.currentEntry = newEntry ? newEntry : null;
+      } else state.currentEntry = null;
     },
   },
   extraReducers: builder => {
@@ -72,16 +82,16 @@ const codexViewSlice = createSlice({
       }
     });
     builder.addCase(fetchObjects.fulfilled, (state, action) => {
-      if (action.payload.status === 200 && state.currentSchemaId) {
-        state.downloadedSchemas = state.downloadedSchemas.concat(state.currentSchemaId);
-        const newObjectsState = state.objects;
-        newObjectsState[state.currentSchemaId] = action.payload.data.objects;
-        state.objects = newObjectsState;
+      if (action.payload.status === 200 && state.currentSchema) {
+        state.downloadedSchemas = state.downloadedSchemas.concat(state.currentSchema.id);
+        const newObjectsState = state.entries;
+        newObjectsState[state.currentSchema.id] = action.payload.data.objects;
+        state.entries = newObjectsState;
       }
     });
   },
 });
 
-export const { addSchema, updateCurrentSchemaId } = codexViewSlice.actions;
+export const { addSchema, updateCurrentSchema, updateCurrentEntry } = codexViewSlice.actions;
 
 export default codexViewSlice.reducer;

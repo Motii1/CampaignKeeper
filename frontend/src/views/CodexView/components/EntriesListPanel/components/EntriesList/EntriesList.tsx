@@ -1,22 +1,23 @@
 import { Paper, Stack, Typography } from '@mui/material';
 import { EmptyPlaceholder } from '../../../../../components/EmptyPlaceholder/EmptyPlaceholder';
-import { CustomObject } from '../../../../codexViewSlice';
-import { ObjectInstance } from './components/ObjectInstance/ObjectInstance';
+import { Entry } from '../../../../codexViewSlice';
+import { EntriesListElement } from './components/EntriesListElement/EntriesListElement';
 
-type ObjectsListProps = {
+type EntriesListProps = {
   title: string;
-  objectsToRender: CustomObject[];
+  objectsToRender: Entry[];
 };
 
-export const ObjectsList: React.FC<ObjectsListProps> = props =>
-  props.objectsToRender.length > 0 ? (
-    <Paper
-      elevation={6}
-      sx={{
-        backgroundColor: 'customPalette.surface',
-        width: '100%',
-      }}
-    >
+export const EntriesList: React.FC<EntriesListProps> = props => (
+  <Paper
+    elevation={6}
+    sx={{
+      backgroundColor: 'customPalette.surface',
+      width: '100%',
+      height: '100%',
+    }}
+  >
+    {props.objectsToRender.length > 0 ? (
       <Stack
         direction="column"
         justifyContent="flex-start"
@@ -29,7 +30,7 @@ export const ObjectsList: React.FC<ObjectsListProps> = props =>
         </Typography>
         <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
           {props.objectsToRender.map(customObject => (
-            <ObjectInstance
+            <EntriesListElement
               name={customObject.title}
               objectId={customObject.id}
               key={customObject.id}
@@ -37,7 +38,8 @@ export const ObjectsList: React.FC<ObjectsListProps> = props =>
           ))}
         </Stack>
       </Stack>
-    </Paper>
-  ) : (
-    <EmptyPlaceholder message={'Create an object for schema, Creator'} />
-  );
+    ) : (
+      <EmptyPlaceholder message={'Create an object for this schema, Creator'} />
+    )}
+  </Paper>
+);

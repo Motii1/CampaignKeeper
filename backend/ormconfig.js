@@ -8,7 +8,7 @@ module.exports = {
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  synchronize: false,
+  synchronize: true,
   logging: false,
   cache:
     process.env.NODE_ENV === 'development' // temporary disabled for production due to costs related to redis cache in cloud

@@ -1,18 +1,18 @@
 import { Paper, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { updateCurrentSchemaId } from '../../../../../../codexViewSlice';
+import { updateCurrentEntry } from '../../../../../../codexViewSlice';
 
-type ObjectInstance = {
+type EntriesListElementProps = {
   name: string;
   objectId: string;
 };
 
-// why we need to set background color for Typography manually?
-export const ObjectInstance: React.FC<ObjectInstance> = props => {
+// why do we need to set background color for Typography?
+export const EntriesListElement: React.FC<EntriesListElementProps> = props => {
   const dispatch = useDispatch();
 
   const onClick = () => {
-    dispatch(updateCurrentSchemaId({ currentObjectId: props.objectId }));
+    dispatch(updateCurrentEntry({ newEntryId: props.objectId }));
   };
 
   return (

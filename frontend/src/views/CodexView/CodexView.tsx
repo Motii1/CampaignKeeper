@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
-import { EmptyPlaceholder } from '../components/EmptyPlaceholder/EmptyPlaceholder';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import { fetchSchemas } from './codexViewSlice';
-import { ObjectsListPanel } from './components/ObjectsListPanel/ObjectsListPanel';
+import { EntriesListPanel } from './components/EntriesListPanel/EntriesListPanel';
+import { EntryDisplayPanel } from './components/EntryDisplayPanel/EntryDisplayPanel';
 import { SchemasList } from './components/SchemasList/SchemasList';
 
 // TO-DO add updating campaign if user goes straight to /codex HIGH PRIORITY
@@ -16,7 +16,7 @@ export const CodexView: React.FC = () => {
   const dispatch = useDispatch();
 
   const { campaignId } = useSelector((state: RootState) => state.campaignView);
-  const { isSchemasListDownloaded, currentObjectId } = useSelector(
+  const { isSchemasListDownloaded, currentEntry } = useSelector(
     (state: RootState) => state.codexView
   );
 
@@ -35,11 +35,7 @@ export const CodexView: React.FC = () => {
       {isSchemasListDownloaded ? (
         <Box>
           <SchemasList />
-          {currentObjectId ? (
-            <EmptyPlaceholder message={'Yeah, here should be ObjectInstancePanel'} />
-          ) : (
-            <ObjectsListPanel />
-          )}
+          {currentEntry ? <EntryDisplayPanel /> : <EntriesListPanel />}
         </Box>
       ) : (
         <CircularProgress
