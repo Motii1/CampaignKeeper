@@ -3,13 +3,14 @@
  * @property {string} type - type, can be 'string' or 'id'
  * @property {string} value - value as string type
  * @property {number} sequenceNumber - sequence number
+ * @property {string} fieldName - name of the field that is used
  */
 /**
  * @typedef ObjectInsertDto
  * @property {string} title - title
  * @property {string} schemaId - id of schema
  * @property {string} imageBase64 - base64 representation of the image or null
- * @property {Array.<ObjectMetadataDto>} fields - array of field with values
+ * @property {Array.<ObjectMetadataDto>} metadataArray - array of field with values
  */
 
 import * as Joi from 'joi';

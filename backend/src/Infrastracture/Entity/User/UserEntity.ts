@@ -20,6 +20,6 @@ export class UserEntity {
   @Column({ type: 'varbinary', nullable: true, length: 'max' })
   image!: Buffer | null;
 
-  @OneToMany(() => CampaignEntity, campaign => campaign.user)
+  @OneToMany(() => CampaignEntity, campaign => campaign.user, { onDelete: 'CASCADE' })
   campaigns!: CampaignEntity[];
 }

@@ -37,10 +37,10 @@ export class ObjectController implements IController {
   }
 
   private declareRoutes = (): void => {
+    this.router.get(ObjectRoutes.List, authorization, asyncHandler(this.getObjectsHandler));
     this.router.patch('/:id', authorization, asyncHandler(this.updateObjectHandler));
     this.router.post('/', authorization, asyncHandler(this.insertObjectHandler));
     this.router.delete('/:id', authorization, asyncHandler(this.deleteObjectHandler));
-    this.router.get(ObjectRoutes.List, authorization, asyncHandler(this.getObjectsHandler));
     this.router.get('/:id', authorization, asyncHandler(this.getSingleObjectHandler));
   };
 
@@ -56,6 +56,7 @@ export class ObjectController implements IController {
     const objectId = Number(req.params.id);
     if (!this.isObjectIdValid(objectId)) {
       res.status(400).json({});
+      return;
     }
 
     const object = await findSchemaInstanceById(objectId);
