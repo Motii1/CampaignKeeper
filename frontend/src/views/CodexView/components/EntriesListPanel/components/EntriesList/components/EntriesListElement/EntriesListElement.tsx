@@ -1,10 +1,12 @@
 import { Paper, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
+import { NavBarViewDialog } from '../../../../../../../../types/types';
 import { updateCurrentEntry } from '../../../../../../codexViewSlice';
 
 type EntriesListElementProps = {
   name: string;
   objectId: string;
+  setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
 // why do we need to set background color for Typography?
@@ -13,6 +15,7 @@ export const EntriesListElement: React.FC<EntriesListElementProps> = props => {
 
   const onClick = () => {
     dispatch(updateCurrentEntry({ newEntryId: props.objectId }));
+    props.setDialogType(NavBarViewDialog.EditEntry);
   };
 
   return (

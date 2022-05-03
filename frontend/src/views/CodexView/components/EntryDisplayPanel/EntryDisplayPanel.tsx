@@ -2,7 +2,7 @@ import { Paper, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
-import { MetadataInstance } from '../../codexViewSlice';
+import { getMetadataByFieldName } from '../utils';
 import { EntryField } from './components/EntryField/EntryField';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
 
@@ -10,9 +10,6 @@ export const EntryDisplayPanel: React.FC = () => {
   const { currentSchema, currentEntry } = useSelector((state: RootState) => state.codexView);
 
   const renderEntriesFields = () => {
-    const getMetadataByFieldName = (fieldName: string, metadata: MetadataInstance[]) =>
-      metadata.filter(element => element.fieldName === fieldName);
-
     if (currentEntry) {
       const fields = currentSchema?.fields.map(fieldName =>
         getMetadataByFieldName(fieldName, currentEntry.metadataArray)

@@ -9,24 +9,21 @@ import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addEntry, Schema } from '../codexViewSlice';
+import { addEntry, Entry, MetadataInstance, Schema, updateCurrentEntry } from '../codexViewSlice';
+import { convertStringToMetadataArray, getValueFromMetadataByFieldName } from '../components/utils';
 import { FieldTextArea } from './components/FieldTextArea/FieldTextArea';
-import { convertStringToMetadataArray } from './utils';
-
-type EntryFields = { [fieldName: string]: string };
 
 type NewEntryData = {
   title: string;
   schemaId: string;
   imageBase64: string;
-  metadataArray: [
-    {
-      type: string;
-      value: string;
-      sequenceNumber: number;
-      fieldName: string;
-    }
-  ];
+  metadataArray: MetadataInstance[];
+};
+
+type EditEntryData = {
+  title: string;
+  imageBase64: string;
+  metadataArray: MetadataInstance[];
 };
 
 type CodexDialogProps = {
@@ -38,25 +35,54 @@ type CodexDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
-const createInitialState = (schema: null | Schema): EntryFields => {
-  const initialState: EntryFields = {};
-  schema?.fields.forEach(field => (initialState[field] = ''));
-  return initialState;
+type EntryFields = { [fieldName: string]: string };
+
+const createEmptyFields = (schema: null | Schema): EntryFields => {
+  const currentFields: EntryFields = {};
+  schema?.fields.forEach(field => (currentFields[field] = ''));
+  return currentFields;
+};
+
+const createFilledFields = (schema: null | Schema, entry: Entry | null): EntryFields => {
+  const currentFields: EntryFields = {};
+  schema?.fields.forEach(
+    fieldName =>
+      (currentFields[fieldName] = getValueFromMetadataByFieldName(fieldName, entry?.metadataArray))
+  );
+  console.log(currentFields);
+  return currentFields;
 };
 
 export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const dispatch = useDispatch();
 
-  const { currentSchema } = useSelector((state: RootState) => state.codexView);
-
-  const [dialogTitle, _setDialogTitle] = useState(
+  const { currentSchema, currentEntry } = useSelector((state: RootState) => state.codexView);
+  const [dialogTitle, setDialogTitle] = useState(
     props.dialogType === NavBarViewDialog.NewEntry
       ? 'Create new entry'
       : `Edit ${currentSchema?.title} entry`
   );
   const [entryTitle, setEntryTitle] = useState<string>('');
   const [entryTitleHelperText, setEntryTitleHelperText] = useState<string>('');
-  const [fields, setFields] = useState(createInitialState(currentSchema));
+  const [fields, setFields] = useState(createEmptyFields(currentSchema));
+
+  useEffect(() => {
+    if (currentEntry) setDialogTitle(`Edit ${currentSchema?.title} entry`);
+    else setDialogTitle('Create new entry');
+  }, [currentEntry, currentSchema?.title]);
+
+  useEffect(() => {
+    if (currentEntry) {
+      setFields(createFilledFields(currentSchema, currentEntry));
+      setEntryTitle(currentEntry.title);
+    }
+  }, [currentEntry, currentSchema]);
+
+  const resetDialog = useCallback(() => {
+    setEntryTitle('');
+    setEntryTitleHelperText('');
+    setFields(createEmptyFields(currentSchema));
+  }, [currentSchema]);
 
   const {
     isLoading: isLoadingNew,
@@ -72,7 +98,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
         dispatch(addEntry({ newEntry: dataNew }));
         props.setSnackbarSuccess('Entry created');
         props.setIsOpen(false);
-        // resetDialog();
+        resetDialog();
       } else if (statusNew === 400) {
         props.setSnackbarError('Error during entry creation');
       } else if (statusNew === 404) {
@@ -80,22 +106,83 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       }
       resetQueryNew();
     }
-  }, [dataNew, dispatch, isLoadingNew, props, resetQueryNew, statusNew]);
+  }, [dataNew, dispatch, isLoadingNew, props, resetDialog, resetQueryNew, statusNew]);
 
   useEffect(() => {
     handleRunQueryNew();
   }, [handleRunQueryNew]);
 
+  const {
+    isLoading: isLoadingEdit,
+    status: statusEdit,
+    runQuery: runQueryEdit,
+    resetQuery: resetQueryEdit,
+  } = useQuery<EditEntryData>(`api/object/${currentEntry?.id}`, requestMethods.PATCH);
+
+  const handleRunQueryEdit = useCallback(async () => {
+    if (!isLoadingEdit && statusEdit) {
+      if (statusEdit === 200) {
+        if (currentSchema && currentEntry) {
+          dispatch(
+            updateCurrentEntry({
+              id: currentEntry.id,
+              title: entryTitle,
+              imageBase64: 'lorem ipsum',
+              metadataArray: currentSchema?.fields.map(fieldName =>
+                convertStringToMetadataArray(fields[fieldName], fieldName)
+              ),
+            })
+          );
+          props.setSnackbarSuccess('Entry edited');
+          props.setIsOpen(false);
+          resetDialog();
+        }
+      } else if (statusEdit === 400) {
+        props.setSnackbarError('Error during entry update');
+      } else if (statusEdit === 404) {
+        props.setSnackbarError('Entry not found');
+      } else if (statusNew === 413) {
+        props.setSnackbarError('Entry graphic is too big');
+      }
+      resetQueryEdit();
+    }
+  }, [
+    isLoadingEdit,
+    statusEdit,
+    statusNew,
+    resetQueryEdit,
+    currentSchema,
+    currentEntry,
+    dispatch,
+    entryTitle,
+    props,
+    resetDialog,
+    fields,
+  ]);
+
+  useEffect(() => {
+    handleRunQueryEdit();
+  }, [handleRunQueryEdit]);
+
   const handleOk = () => {
     if (entryTitleHelperText === '' && currentSchema)
-      runQueryNew({
-        title: entryTitle,
-        schemaId: currentSchema.id.toString(),
-        imageBase64: 'lorem ipsum',
-        metadataArray: currentSchema.fields.map(fieldName =>
-          convertStringToMetadataArray(fields[fieldName], fieldName)
-        ),
-      });
+      if (props.dialogType === NavBarViewDialog.NewEntry)
+        runQueryNew({
+          title: entryTitle,
+          schemaId: currentSchema.id.toString(),
+          imageBase64: 'lorem ipsum',
+          metadataArray: currentSchema.fields.map(fieldName =>
+            convertStringToMetadataArray(fields[fieldName], fieldName)
+          ),
+        });
+      else
+        runQueryEdit({
+          title: entryTitle,
+          imageBase64: 'lorem ipsum',
+          metadataArray: currentSchema.fields.map(fieldName =>
+            convertStringToMetadataArray(fields[fieldName], fieldName)
+          ),
+        });
   };
 
   const handleEntryTitleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {

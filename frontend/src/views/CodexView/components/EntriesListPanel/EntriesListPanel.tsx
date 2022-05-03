@@ -2,12 +2,16 @@ import { CircularProgress, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
+import { NavBarViewDialog } from '../../../../types/types';
 import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
 import { EntriesList } from './components/EntriesList/EntriesList';
 import { SearchBar } from './components/SearchBar/SearchBar';
 
-// TO-DO add scroll for long list of objects
-export const EntriesListPanel: React.FC = () => {
+type EntriesListPanelProps = {
+  setDialogType: (newDialogType: NavBarViewDialog) => void;
+};
+
+export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
   const { currentSchema, entries } = useSelector((state: RootState) => state.codexView);
 
   const [searchPhrase, setSearchPhrase] = useState<string>('');
@@ -20,6 +24,7 @@ export const EntriesListPanel: React.FC = () => {
           title={currentSchema.title}
           entriesToRender={entries[currentSchema.id]}
           searchPhrase={searchPhrase}
+          setDialogType={props.setDialogType}
         />
       </Stack>
     ) : (

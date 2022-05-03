@@ -74,6 +74,18 @@ const codexViewSlice = createSlice({
         state.entries = newEntries;
       }
     },
+    editEntry: (state, action) => {
+      if (state.currentSchema) {
+        const newEntries = state.entries;
+        newEntries[state.currentSchema.id] = newEntries[state.currentSchema.id].filter(
+          element => element.id !== action.payload.newEntry.id
+        );
+        newEntries[state.currentSchema.id] = newEntries[state.currentSchema.id].concat(
+          action.payload.newEntry
+        );
+        state.entries = newEntries;
+      }
+    },
     updateCurrentEntry: (state, action) => {
       if (state.currentSchema && action.payload.newEntryId) {
         const newEntry = state.entries[state.currentSchema.id].find(
@@ -101,7 +113,7 @@ const codexViewSlice = createSlice({
   },
 });
 
-export const { addSchema, updateCurrentSchema, addEntry, updateCurrentEntry } =
+export const { addSchema, updateCurrentSchema, addEntry, editEntry, updateCurrentEntry } =
   codexViewSlice.actions;
 
 export default codexViewSlice.reducer;

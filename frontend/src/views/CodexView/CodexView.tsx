@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material';
 import { Box } from '@mui/system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
@@ -27,6 +27,11 @@ export const CodexView: React.FC = () => {
 
   if (!isSchemasListDownloaded) dispatch(fetchSchemas(campaignId));
 
+  useEffect(() => {
+    if (currentEntry) setDialogType(NavBarViewDialog.EditEntry);
+    else setDialogType(NavBarViewDialog.NewEntry);
+  }, [currentEntry]);
+
   return (
     <ViewWithNavBarWrapper
       isPrimaryOpen={isPrimaryOpen}
@@ -47,7 +52,11 @@ export const CodexView: React.FC = () => {
             }}
           >
             <SchemasList setIsOpen={setIsSchemaDialogOpen} />
-            {currentEntry ? <EntryDisplayPanel /> : <EntriesListPanel />}
+            {currentEntry ? (
+              <EntryDisplayPanel />
+            ) : (
+              <EntriesListPanel setDialogType={setDialogType} />
+            )}
           </Box>
           <NewSchemaDialog isOpen={isSchemaDialogOpen} setIsOpen={setIsSchemaDialogOpen} />
         </Box>

@@ -1,4 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
+import { NavBarViewDialog } from '../../../../../../types/types';
 import { EmptyPlaceholder } from '../../../../../components/EmptyPlaceholder/EmptyPlaceholder';
 import { Entry } from '../../../../codexViewSlice';
 import { EntriesListElement } from './components/EntriesListElement/EntriesListElement';
@@ -7,6 +8,7 @@ type EntriesListProps = {
   title: string;
   entriesToRender: Entry[];
   searchPhrase: string;
+  setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
 export const EntriesList: React.FC<EntriesListProps> = props => {
@@ -37,7 +39,12 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
           </Typography>
           <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
             {filteredEntries.map(entry => (
-              <EntriesListElement name={entry.title} objectId={entry.id} key={entry.id} />
+              <EntriesListElement
+                name={entry.title}
+                objectId={entry.id}
+                key={entry.id}
+                setDialogType={props.setDialogType}
+              />
             ))}
           </Stack>
         </Stack>
