@@ -23,6 +23,16 @@ export const saveSchemaInstance = async (
   schemaInstance: SchemaInstance
 ): Promise<SchemaInstance> => {
   const repo = getRepository(SchemaInstanceEntity);
+  if (!schemaInstance.id) {
+    const entity = await repo.save(schemaInstance);
+    return mapEntityToDomainObject(entity);
+  }
+  const existing = await repo.findOne(schemaInstance.id);
+  if (!existing) {
+    throw new Error(`Cannot update object with id ${schemaInstance.id}`);
+  }
+  const metadataRepo = getRepository(SchemaInstanceMetadataEntity);
+  await metadataRepo.delete({ objectId: existing.id });
   const entity = await repo.save(schemaInstance);
   return mapEntityToDomainObject(entity);
 };
