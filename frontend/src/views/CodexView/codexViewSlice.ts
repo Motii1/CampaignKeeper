@@ -11,7 +11,7 @@ export interface Schema {
 export interface Entry {
   id: string;
   title: string;
-  schemaId: number;
+  schemaId: string;
   imageBase64: string;
   metadataArray: MetadataInstance[];
 }
@@ -65,6 +65,15 @@ const codexViewSlice = createSlice({
       const newSchema = state.schemas.find(schema => schema.id === action.payload.newSchemaId);
       state.currentSchema = newSchema ? newSchema : null;
     },
+    addEntry: (state, action) => {
+      if (state.currentSchema) {
+        const newEntries = state.entries;
+        newEntries[state.currentSchema.id] = newEntries[state.currentSchema.id].concat(
+          action.payload.newEntry
+        );
+        state.entries = newEntries;
+      }
+    },
     updateCurrentEntry: (state, action) => {
       if (state.currentSchema && action.payload.newEntryId) {
         const newEntry = state.entries[state.currentSchema.id].find(
@@ -92,6 +101,7 @@ const codexViewSlice = createSlice({
   },
 });
 
-export const { addSchema, updateCurrentSchema, updateCurrentEntry } = codexViewSlice.actions;
+export const { addSchema, updateCurrentSchema, addEntry, updateCurrentEntry } =
+  codexViewSlice.actions;
 
 export default codexViewSlice.reducer;

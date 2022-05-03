@@ -22,7 +22,7 @@ export const CodexView: React.FC = () => {
   );
 
   const [isPrimaryOpen, setIsPrimaryOpen] = useState(false);
-  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
+  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewEntry);
   const [isSchemaDialogOpen, setIsSchemaDialogOpen] = useState(false);
 
   if (!isSchemasListDownloaded) dispatch(fetchSchemas(campaignId));

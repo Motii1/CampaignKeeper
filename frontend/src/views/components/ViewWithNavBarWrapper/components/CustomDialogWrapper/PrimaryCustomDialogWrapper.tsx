@@ -1,5 +1,6 @@
 import { NavBarViewDialog } from '../../../../../types/types';
 import { CampaignDialog } from '../../../../CampaignView/dialog/CampaignDialog';
+import { CodexDialog } from '../../../../CodexView/dialog/CodexDialog';
 import { StartDialog } from '../../../../StartView/dialog/StartDialog';
 import viewsRoutes from '../../../../viewsRoutes';
 
@@ -30,6 +31,17 @@ export const PrimaryCustomDialogWrapper: React.FC<PrimaryCustomDialogWrapperProp
     case viewsRoutes.CAMPAIGN:
       return (
         <CampaignDialog
+          isOpen={props.isOpen}
+          setIsOpen={props.setIsOpen}
+          dialogType={props.dialogType}
+          setIsSecondaryOpen={props.setIsSecondaryOpen as (newIsOpen: boolean) => void}
+          setSnackbarSuccess={props.setSnackbarSuccess}
+          setSnackbarError={props.setSnackbarError}
+        />
+      );
+    case viewsRoutes.CODEX:
+      return (
+        <CodexDialog
           isOpen={props.isOpen}
           setIsOpen={props.setIsOpen}
           dialogType={props.dialogType}
