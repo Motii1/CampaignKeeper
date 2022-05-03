@@ -6,7 +6,11 @@ import { NewSchemaButton } from './components/NewSchemaButton/NewSchemaButton';
 import { SchemasListElement } from './components/SchemasListElement/SchemasListElement';
 import { SchemasListHeader } from './components/SchemasListHeader/SchemasListHeader';
 
-export const SchemasList: React.FC = () => {
+type SchemasListProps = {
+  setIsOpen: (newIsOpen: boolean) => void;
+};
+
+export const SchemasList: React.FC<SchemasListProps> = props => {
   const { schemas } = useSelector((state: RootState) => state.codexView);
 
   const height = getWindowDimensions().height - 50;
@@ -33,7 +37,7 @@ export const SchemasList: React.FC = () => {
       <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={0}>
         <SchemasListHeader />
         {renderSchemaElements()}
-        <NewSchemaButton />
+        <NewSchemaButton setIsOpen={props.setIsOpen} />
       </Stack>
     </Paper>
   );

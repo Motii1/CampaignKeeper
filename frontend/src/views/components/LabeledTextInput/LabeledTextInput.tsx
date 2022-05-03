@@ -9,7 +9,7 @@ export type LabeledInputProps = {
   defaultHelperText: string;
   isPassword?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 };
 
 export const LabeledTextInput: React.FC<LabeledInputProps> = props => (

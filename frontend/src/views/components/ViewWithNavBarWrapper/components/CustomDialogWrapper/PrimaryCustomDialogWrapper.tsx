@@ -3,7 +3,7 @@ import { CampaignDialog } from '../../../../CampaignView/dialog/CampaignDialog';
 import { StartDialog } from '../../../../StartView/dialog/StartDialog';
 import viewsRoutes from '../../../../viewsRoutes';
 
-type DialogWrapperProps = {
+type PrimaryCustomDialogWrapperProps = {
   currentView: string;
   isOpen: boolean;
   dialogType: NavBarViewDialog;
@@ -14,7 +14,7 @@ type DialogWrapperProps = {
   setSnackbarError: (message: string) => void;
 };
 
-export const DialogWrapper: React.FC<DialogWrapperProps> = props => {
+export const PrimaryCustomDialogWrapper: React.FC<PrimaryCustomDialogWrapperProps> = props => {
   switch (props.currentView) {
     case viewsRoutes.START:
       return (

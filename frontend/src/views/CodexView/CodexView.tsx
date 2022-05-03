@@ -8,6 +8,7 @@ import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewW
 import { fetchSchemas } from './codexViewSlice';
 import { EntriesListPanel } from './components/EntriesListPanel/EntriesListPanel';
 import { EntryDisplayPanel } from './components/EntryDisplayPanel/EntryDisplayPanel';
+import { NewSchemaDialog } from './components/NewSchemaDialog/NewSchemaDialog';
 import { SchemasList } from './components/SchemasList/SchemasList';
 
 // TO-DO add updating campaign if user goes straight to /codex HIGH PRIORITY
@@ -20,31 +21,35 @@ export const CodexView: React.FC = () => {
     (state: RootState) => state.codexView
   );
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isPrimaryOpen, setIsPrimaryOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
+  const [isSchemaDialogOpen, setIsSchemaDialogOpen] = useState(false);
 
   if (!isSchemasListDownloaded) dispatch(fetchSchemas(campaignId));
 
   return (
     <ViewWithNavBarWrapper
-      isPrimaryOpen={isOpen}
-      setIsPrimaryOpen={setIsOpen}
+      isPrimaryOpen={isPrimaryOpen}
+      setIsPrimaryOpen={setIsPrimaryOpen}
       primaryDialogType={dialogType}
       setPrimaryDialogType={setDialogType}
     >
       {isSchemasListDownloaded ? (
-        <Box
-          sx={{
-            width: '60%',
-            height: 'auto',
-            paddingLeft: '20%',
-            paddingRight: '20%',
-            paddingTop: '2%',
-            paddingBottom: '2%',
-          }}
-        >
-          <SchemasList />
-          {currentEntry ? <EntryDisplayPanel /> : <EntriesListPanel />}
+        <Box>
+          <Box
+            sx={{
+              width: '60%',
+              height: 'auto',
+              paddingLeft: '20%',
+              paddingRight: '20%',
+              paddingTop: '2%',
+              paddingBottom: '2%',
+            }}
+          >
+            <SchemasList setIsOpen={setIsSchemaDialogOpen} />
+            {currentEntry ? <EntryDisplayPanel /> : <EntriesListPanel />}
+          </Box>
+          <NewSchemaDialog isOpen={isSchemaDialogOpen} setIsOpen={setIsSchemaDialogOpen} />
         </Box>
       ) : (
         <CircularProgress

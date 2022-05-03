@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomSnackbar } from '../CustomSnackbar/CustomSnackbar';
 import { useSnackbar } from '../CustomSnackbar/useSnackbar';
-import { DialogWrapper } from './components/CustomDialogWrapper/CustomDialogWrapper';
+import { PrimaryCustomDialogWrapper } from './components/CustomDialogWrapper/PrimaryCustomDialogWrapper';
 import { CustomFab } from './components/CustomFab/CustomFab';
 import { NavBar } from './components/NavBar/NavBar';
 import { SecondaryDialogWrapper } from './components/SecondaryCustomDialogWrapper/SecondaryCustomDialogWrapper';
@@ -60,7 +60,7 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
           props.handleFab ? props.handleFab : () => props.setIsPrimaryOpen(!props.isPrimaryOpen)
         }
       />
-      <DialogWrapper
+      <PrimaryCustomDialogWrapper
         currentView={currentView}
         isOpen={props.isPrimaryOpen}
         dialogType={props.primaryDialogType}
