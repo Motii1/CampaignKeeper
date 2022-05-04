@@ -22,6 +22,7 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
       elevation={6}
       sx={{
         backgroundColor: 'customPalette.surface',
+        borderRadius: 3,
         width: '100%',
         height: '100%',
         maxHeight: '100%',
@@ -34,11 +35,21 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
           alignItems="flex-start"
           spacing={1.5}
           sx={{
-            margin: '25px',
+            marginLeft: '25px',
+            marginRight: '25px',
+            marginTop: '15px',
+            marginBottom: '15px',
             width: '100%',
           }}
         >
-          <Typography variant={'h4'} sx={{ color: 'customPalette.accent' }}>
+          <Typography
+            variant={'h4'}
+            sx={{
+              color: 'customPalette.accent',
+              fontWeight: 'medium',
+              textTransform: 'uppercase',
+            }}
+          >
             {props.title}
           </Typography>
           <Stack

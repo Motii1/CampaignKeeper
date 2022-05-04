@@ -25,14 +25,17 @@ export const EntriesListElement: React.FC<EntriesListElementProps> = props => {
       onClick={onClick}
       sx={{
         cursor: 'pointer',
+        backgroundColor: 'transparent',
       }}
     >
       <Typography
         variant={'h6'}
         sx={{
           color: 'customPalette.onSurface',
-          backgroundColor: 'customPalette.surface',
-          fontWeight: 'bold',
+          fontWeight: 'medium',
+          '&:hover': {
+            opacity: 0.75,
+          },
         }}
       >
         {props.name}

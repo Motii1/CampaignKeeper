@@ -15,14 +15,40 @@ export const SearchBar: React.FC<SearchBarProps> = props => {
       elevation={6}
       sx={{
         backgroundColor: 'customPalette.surface',
+        borderRadius: 3.5,
         width: '100%',
+        height: 45,
       }}
     >
-      <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={0}>
-        <SearchIcon sx={{ marginLeft: '1%' }} />
+      <Stack
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="center"
+        spacing={0}
+        sx={{
+          height: '100%',
+        }}
+      >
+        <SearchIcon sx={{ marginLeft: 2, opacity: 0.75 }} />
         <TextField
           placeholder="Search"
           onChange={onChange}
+          size="small"
+          inputProps={{
+            sx: {
+              '&::placeholder': {
+                color: 'customPalette.onBackground',
+                opacity: 0.75,
+              },
+              '&::-ms-reveal': {
+                filter: 'invert(100%)',
+              },
+              '&': {
+                fontSize: 17,
+                fontWeight: 'light',
+              },
+            },
+          }}
           sx={{
             width: '100%',
             '& .MuiOutlinedInput-root': {
