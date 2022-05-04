@@ -35,9 +35,7 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
       elevation={0}
       onClick={onClick}
       sx={{
-        backgroundColor: isElementSelected
-          ? 'customPalette.schemaInstanceColor'
-          : 'customPalette.surface',
+        backgroundColor: isElementSelected ? 'customPalette.secondary' : 'customPalette.surface',
         width: 220,
         height: 30,
         paddingTop: 1,
@@ -47,9 +45,7 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
     >
       <Typography
         sx={{
-          color: isElementSelected
-            ? 'customPalette.onSchemaInstanceColor'
-            : 'customPalette.onSurface',
+          color: isElementSelected ? 'customPalette.onSecondary' : 'customPalette.onSurface',
           fontWeight: 'bold',
           position: 'absolute',
           left: 20,

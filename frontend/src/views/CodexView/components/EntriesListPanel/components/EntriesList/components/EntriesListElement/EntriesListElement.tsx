@@ -1,4 +1,4 @@
-import { Paper, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { NavBarViewDialog } from '../../../../../../../../types/types';
 import { updateCurrentEntry } from '../../../../../../codexViewSlice';
@@ -19,9 +19,7 @@ export const EntriesListElement: React.FC<EntriesListElementProps> = props => {
   };
 
   return (
-    <Paper
-      square
-      elevation={0}
+    <Box
       onClick={onClick}
       sx={{
         cursor: 'pointer',
@@ -40,6 +38,6 @@ export const EntriesListElement: React.FC<EntriesListElementProps> = props => {
       >
         {props.name}
       </Typography>
-    </Paper>
+    </Box>
   );
 };

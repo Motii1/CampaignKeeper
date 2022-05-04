@@ -4,7 +4,7 @@ export const SchemasListHeader: React.FC = () => (
   <Paper
     square
     sx={{
-      backgroundColor: 'customPalette.schemaHeaderColor',
+      backgroundColor: 'customPalette.primary',
       height: 100,
       width: 220,
       position: 'relative',
@@ -12,7 +12,7 @@ export const SchemasListHeader: React.FC = () => (
   >
     <Typography
       sx={{
-        color: 'customPalette.onSchemaHeaderColor',
+        color: 'customPalette.onPrimary',
         fontWeight: 'bold',
         position: 'absolute',
         left: 10,

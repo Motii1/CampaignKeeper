@@ -7,14 +7,10 @@ export const theme = createTheme({
       surface: '#2B3D49',
       primary: '#425C71',
       secondary: '#A5C8E8',
-      schemaHeaderColor: '#3B5163', // to rename by Michal
-      schemaInstanceColor: '#A5C8E8', // to rename by Michal
       onBackground: '#f4f4f4',
       onSurface: '#ffffff',
       onPrimary: '#ffffff',
       onSecondary: '#2B3D49',
-      onSchemaHeaderColor: '#ffffff', // to rename by Michal
-      onSchemaInstanceColor: '#000000',
       error: '#604e57',
       onError: '#FF8282',
       accent: '#FFE082',
@@ -54,14 +50,10 @@ declare module '@mui/material/styles' {
       surface?: string;
       primary?: string;
       secondary?: string;
-      schemaHeaderColor?: string;
-      schemaInstanceColor?: string;
       onBackground?: string;
       onSurface?: string;
       onPrimary?: string;
       onSecondary?: string;
-      onSchemaHeaderColor?: string;
-      onSchemaInstanceColor?: string;
       error?: string;
       onError?: string;
       accent?: string;
