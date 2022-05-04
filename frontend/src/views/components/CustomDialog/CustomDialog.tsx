@@ -1,6 +1,5 @@
 import { Box, Dialog, DialogContent, Stack } from '@mui/material';
 import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
-import { useWindowDimensions } from '../../../utils/utils';
 import { CustomButton } from '../CustomButton/CustomButton';
 import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
@@ -9,6 +8,7 @@ type CustomDialogProps = {
   title: string;
   isTitleRed?: boolean;
   isOpen: boolean;
+  isLarge?: undefined | boolean;
   setIsOpen: (newState: boolean) => void;
   onOk?: () => void;
   onCancel?: () => void;
@@ -20,8 +20,6 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
   isTitleRed = false,
   ...otherProps
 }) => {
-  const { height: screenHeight } = useWindowDimensions();
-
   const renderButtons = () => {
     if (otherProps.onOk || otherProps.onCancel || otherProps.onDelete)
       return (
@@ -74,8 +72,8 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
     >
       <DialogContent
         sx={{
-          minWidth: 370,
-          maxHeight: 710,
+          minWidth: otherProps.isLarge ? 600 : 370,
+          maxHeight: 'calc(100vh - 100px)',
           paddingTop: 1.6,
           paddingBottom: 0,
           paddingLeft: 0,
@@ -90,6 +88,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           spacing={1}
           sx={{
             height: '100%',
+            maxHeight: '100%',
             width: '100%',
           }}
         >
@@ -98,7 +97,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           <Box
             sx={{
               width: '100%',
-              maxHeight: screenHeight - 230 + 'px',
+              maxHeight: 'calc(100vh - 270px)',
               overflowY: 'auto',
             }}
           >
@@ -112,3 +111,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
     </Dialog>
   );
 };
+
+CustomDialog.defaultProps = {
+  isLarge: false,
+} as Partial<CustomDialogProps>;

@@ -224,6 +224,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
     <CustomDialog
       title={dialogTitle}
       isOpen={props.isOpen}
+      isLarge={true}
       setIsOpen={props.setIsOpen}
       onOk={handleOk}
     >
