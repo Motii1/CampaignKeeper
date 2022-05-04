@@ -198,7 +198,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
           sx={{ width: '100%' }}
         >
           <LabeledTextInput
-            text={'NAME'}
+            text={'Name'}
             placeholder={'Type here'}
             defaultValue={campaignName}
             helperText={helperText}
@@ -208,7 +208,7 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
           />
           <ImageUploadField
             height={180}
-            width={390}
+            width={372}
             image={campaignImageBase64}
             setImage={newImageBase64 => {
               dispatch(updateImage({ imageBase64: newImageBase64 }));

@@ -19,7 +19,7 @@ export const FieldTextArea: React.FC<FieldTextAreaProps> = props => (
     </Typography>
     <TextField
       value={props.value}
-      size="medium"
+      size="small"
       inputProps={{
         sx: {
           '&::placeholder': {

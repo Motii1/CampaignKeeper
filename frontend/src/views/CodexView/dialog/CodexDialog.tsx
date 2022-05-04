@@ -235,8 +235,9 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
         spacing={1}
         sx={{ width: '100%' }}
       >
+        {/* This one can't be LabeledTextInput due to the footer displaying validation of this component making a gap */}
         <LabeledTextInput
-          text={'TITLE'}
+          text={'Title'}
           value={entryTitle}
           placeholder={''}
           helperText={entryTitleHelperText}

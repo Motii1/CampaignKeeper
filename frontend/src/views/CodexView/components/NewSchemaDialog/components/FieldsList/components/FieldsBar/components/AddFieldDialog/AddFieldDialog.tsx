@@ -52,7 +52,7 @@ export const AddFieldDialog: React.FC<AddFieldDialogProps> = props => {
       onCancel={onCancel}
     >
       <LabeledTextInput
-        text={'NAME'}
+        text={'Name'}
         placeholder={'Enter new field name'}
         helperText={helperText}
         defaultHelperText={''}

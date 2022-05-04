@@ -111,7 +111,7 @@ export const NewSchemaDialog: React.FC<NewSchemaDialogProps> = props => {
       onCancel={handleCancel}
     >
       <LabeledTextInput
-        text={'TITLE'}
+        text={'Title'}
         placeholder={'Enter new schema name'}
         helperText={helperText}
         defaultHelperText={''}

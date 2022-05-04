@@ -183,7 +183,7 @@ export const CampaignDialog: React.FC<CampaignDialogProps> = props => {
           sx={{ width: '100%' }}
         >
           <LabeledTextInput
-            text={'NAME'}
+            text={'Name'}
             placeholder={'Type here'}
             defaultValue={sessionName}
             helperText={helperText}

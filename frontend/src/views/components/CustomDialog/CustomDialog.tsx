@@ -62,9 +62,10 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
   return (
     <Dialog
       open={otherProps.isOpen}
+      maxWidth={false}
       onClose={otherProps.onClose ? otherProps.onClose : () => otherProps.setIsOpen(false)}
       sx={{
-        '& .MuiDialog-paper': {
+        '& .MuiDialog-paperWidthFalse': {
           backgroundColor: 'customPalette.surface',
           borderRadius: 3,
         },
@@ -72,7 +73,8 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
     >
       <DialogContent
         sx={{
-          minWidth: otherProps.isLarge ? 600 : 370,
+          width: otherProps.isLarge ? 1200 : 410,
+          maxWidth: 'calc(100vw - 100px)',
           maxHeight: 'calc(100vh - 100px)',
           paddingTop: 1.6,
           paddingBottom: 0,

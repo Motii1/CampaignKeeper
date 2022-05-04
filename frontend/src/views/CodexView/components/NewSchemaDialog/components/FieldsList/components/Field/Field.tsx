@@ -1,4 +1,4 @@
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import Cancel from '@mui/icons-material/Cancel';
 import { Chip, Stack } from '@mui/material';
 
 type FieldProps = {
@@ -22,7 +22,7 @@ export const Field: React.FC<FieldProps> = props => {
           color: 'customPalette.onAccent',
           fontWeight: 'bold',
         }}
-        deleteIcon={<DeleteOutlineIcon sx={{ fill: '#000000' }} />}
+        deleteIcon={<Cancel sx={{ fill: '#262E38' }} />}
         onDelete={onDelete}
       />
     </Stack>

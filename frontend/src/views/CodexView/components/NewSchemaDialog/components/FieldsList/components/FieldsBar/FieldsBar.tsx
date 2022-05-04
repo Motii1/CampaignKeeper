@@ -15,9 +15,16 @@ export const FieldsBar: React.FC<FieldsBarProps> = props => {
     <Box>
       <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={0}>
         <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface', paddingLeft: 1 }}>
-          {'FIELDS'}
+          {'Fields'}
         </Typography>
-        <AddIcon sx={{ cursor: 'pointer' }} onClick={() => setIsOpen(true)} />
+        <AddIcon
+          sx={{
+            cursor: 'pointer',
+            color: 'customPalette.onSurface',
+            height: 22,
+          }}
+          onClick={() => setIsOpen(true)}
+        />
       </Stack>
       <AddFieldDialog
         isOpen={isOpen}

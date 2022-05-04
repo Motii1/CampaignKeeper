@@ -20,7 +20,13 @@ export const LabeledTextInput: React.FC<LabeledInputProps> = props => (
     spacing={0}
     sx={{ width: '100%' }}
   >
-    <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface', paddingLeft: 1 }}>
+    <Typography
+      variant="subtitle1"
+      sx={{
+        color: 'customPalette.onSurface',
+        paddingLeft: 1,
+      }}
+    >
       {props.text}
     </Typography>
     <TextField
