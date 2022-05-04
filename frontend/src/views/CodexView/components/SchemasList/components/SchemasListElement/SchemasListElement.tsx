@@ -38,7 +38,7 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
         backgroundColor: isElementSelected
           ? 'customPalette.schemaInstanceColor'
           : 'customPalette.surface',
-        width: 250,
+        width: 220,
         height: 30,
         paddingTop: 1,
         position: 'relative',

@@ -49,7 +49,7 @@ export const CodexView: React.FC = () => {
               overflowY: 'auto',
             }}
           >
-            <Box sx={{ marginLeft: '250px', marginRight: '250px' }}>
+            <Box sx={{ marginLeft: '230px', marginRight: '230px' }}>
               {currentEntry ? (
                 <EntryDisplayPanel />
               ) : (

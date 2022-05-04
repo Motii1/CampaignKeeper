@@ -27,7 +27,7 @@ export const SchemasList: React.FC<SchemasListProps> = props => {
         left: 0,
         top: 50,
         bottom: 0,
-        width: 250,
+        width: 220,
         display: 'flex',
       }}
     >

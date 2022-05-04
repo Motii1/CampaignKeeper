@@ -6,7 +6,7 @@ export const SchemasListHeader: React.FC = () => (
     sx={{
       backgroundColor: 'customPalette.schemaHeaderColor',
       height: 100,
-      width: 250,
+      width: 220,
       position: 'relative',
     }}
   >
