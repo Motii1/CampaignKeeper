@@ -1,8 +1,9 @@
-import { CircularProgress, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import { NavBarViewDialog } from '../../../../types/types';
+import { CircleProgress } from '../../../components/CircleProgress/CircleProgress';
 import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
 import { EntriesList } from './components/EntriesList/EntriesList';
 import { SearchBar } from './components/SearchBar/SearchBar';
@@ -18,7 +19,15 @@ export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
 
   if (currentSchema)
     return entries[currentSchema.id] ? (
-      <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={2}>
+      <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="flex-start"
+        spacing={2}
+        sx={{
+          margin: '25px',
+        }}
+      >
         <SearchBar setSearchPhrase={setSearchPhrase} />
         <EntriesList
           title={currentSchema.title}
@@ -28,7 +37,7 @@ export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
         />
       </Stack>
     ) : (
-      <CircularProgress size={35} thickness={6} sx={{ color: 'customPalette.accent' }} />
+      <CircleProgress />
     );
   return <EmptyPlaceholder message={'Select a schema, ye wise sage'} />;
 };

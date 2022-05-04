@@ -24,6 +24,7 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
         backgroundColor: 'customPalette.surface',
         width: '100%',
         height: '100%',
+        maxHeight: '100%',
       }}
     >
       {props.entriesToRender.length > 0 ? (
@@ -32,12 +33,23 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
           justifyContent="flex-start"
           alignItems="flex-start"
           spacing={1.5}
-          sx={{ margin: '20px' }}
+          sx={{
+            margin: '25px',
+            width: '100%',
+          }}
         >
           <Typography variant={'h4'} sx={{ color: 'customPalette.accent' }}>
             {props.title}
           </Typography>
-          <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
+          <Stack
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            spacing={1}
+            sx={{
+              width: '100%',
+            }}
+          >
             {filteredEntries.map(entry => (
               <EntriesListElement
                 name={entry.title}

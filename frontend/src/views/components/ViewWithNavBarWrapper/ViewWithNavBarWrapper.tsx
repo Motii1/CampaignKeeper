@@ -1,4 +1,4 @@
-import { Paper, Stack } from '@mui/material';
+import { Box, Paper, Stack } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomSnackbar } from '../CustomSnackbar/CustomSnackbar';
@@ -43,6 +43,7 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
         spacing={0}
         sx={{
           height: '100%',
+          maxHeight: '100%',
           width: '100%',
         }}
       >
@@ -52,7 +53,16 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
           setSnackbarSuccess={setSnackbarSuccess}
           setSnackbarError={setSnackbarError}
         />
-        {props.children}
+        <Box
+          sx={{
+            height: '100%',
+            maxHeight: '100%',
+            width: '100%',
+            overflow: 'hidden',
+          }}
+        >
+          {props.children}
+        </Box>
       </Stack>
       <CustomFab
         currentView={currentView}

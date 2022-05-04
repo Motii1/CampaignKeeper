@@ -1,9 +1,9 @@
-import { CircularProgress } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
+import { CircleProgress } from '../components/CircleProgress/CircleProgress';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import { fetchSchemas } from './codexViewSlice';
 import { EntriesListPanel } from './components/EntriesListPanel/EntriesListPanel';
@@ -40,32 +40,27 @@ export const CodexView: React.FC = () => {
       setPrimaryDialogType={setDialogType}
     >
       {isSchemasListDownloaded ? (
-        <Box>
+        <Box sx={{ height: '100%', width: '100%' }}>
+          <SchemasList setIsOpen={setIsSchemaDialogOpen} />
           <Box
             sx={{
-              width: '60%',
-              height: 'auto',
-              paddingLeft: '20%',
-              paddingRight: '20%',
-              paddingTop: '2%',
-              paddingBottom: '2%',
+              height: '100%',
+              maxHeight: '100%',
+              overflowY: 'auto',
             }}
           >
-            <SchemasList setIsOpen={setIsSchemaDialogOpen} />
-            {currentEntry ? (
-              <EntryDisplayPanel />
-            ) : (
-              <EntriesListPanel setDialogType={setDialogType} />
-            )}
+            <Box sx={{ marginLeft: '250px', marginRight: '250px' }}>
+              {currentEntry ? (
+                <EntryDisplayPanel />
+              ) : (
+                <EntriesListPanel setDialogType={setDialogType} />
+              )}
+            </Box>
           </Box>
           <NewSchemaDialog isOpen={isSchemaDialogOpen} setIsOpen={setIsSchemaDialogOpen} />
         </Box>
       ) : (
-        <CircularProgress
-          size={90}
-          thickness={6}
-          sx={{ color: 'customPalette.accent', margin: 'auto' }}
-        />
+        <CircleProgress />
       )}
     </ViewWithNavBarWrapper>
   );
