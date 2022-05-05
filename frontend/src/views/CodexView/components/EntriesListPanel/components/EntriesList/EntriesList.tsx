@@ -1,4 +1,4 @@
-import { Paper, Stack, Typography } from '@mui/material';
+import { Box, Paper, Stack, Typography } from '@mui/material';
 import { NavBarViewDialog } from '../../../../../../types/types';
 import { EmptyPlaceholder } from '../../../../../components/EmptyPlaceholder/EmptyPlaceholder';
 import { Entry } from '../../../../codexViewSlice';
@@ -18,62 +18,77 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
       : props.entriesToRender.filter(entry => entry.title.includes(props.searchPhrase));
 
   return (
-    <Paper
-      elevation={6}
+    <Box
       sx={{
-        backgroundColor: 'customPalette.surface',
-        borderRadius: 3,
         width: '100%',
         height: '100%',
         maxHeight: '100%',
       }}
     >
       {props.entriesToRender.length > 0 ? (
-        <Stack
-          direction="column"
-          justifyContent="flex-start"
-          alignItems="flex-start"
-          spacing={1.5}
+        <Paper
+          elevation={6}
           sx={{
-            marginLeft: '25px',
-            marginRight: '25px',
-            marginTop: '15px',
-            marginBottom: '15px',
+            backgroundColor: 'customPalette.surface',
+            borderRadius: 3,
             width: '100%',
+            height: '100%',
+            maxHeight: '100%',
           }}
         >
-          <Typography
-            variant={'h4'}
-            sx={{
-              color: 'customPalette.accent',
-              fontWeight: 'medium',
-              textTransform: 'uppercase',
-            }}
-          >
-            {props.title}
-          </Typography>
           <Stack
             direction="column"
             justifyContent="flex-start"
             alignItems="flex-start"
-            spacing={1}
+            spacing={1.5}
             sx={{
+              paddingLeft: '25px',
+              paddingRight: '25px',
+              paddingTop: '15px',
+              paddingBottom: '15px',
               width: '100%',
             }}
           >
-            {filteredEntries.map(entry => (
-              <EntriesListElement
-                name={entry.title}
-                objectId={entry.id}
-                key={entry.id}
-                setDialogType={props.setDialogType}
-              />
-            ))}
+            <Typography
+              variant={'h4'}
+              sx={{
+                color: 'customPalette.accent',
+                fontWeight: 'medium',
+                textTransform: 'uppercase',
+              }}
+            >
+              {props.title}
+            </Typography>
+            <Stack
+              direction="column"
+              justifyContent="flex-start"
+              alignItems="flex-start"
+              spacing={1}
+              sx={{
+                width: '100%',
+              }}
+            >
+              {filteredEntries.map(entry => (
+                <EntriesListElement
+                  name={entry.title}
+                  objectId={entry.id}
+                  key={entry.id}
+                  setDialogType={props.setDialogType}
+                />
+              ))}
+            </Stack>
           </Stack>
-        </Stack>
+        </Paper>
       ) : (
-        <EmptyPlaceholder message={'Create an object for this schema, Creator'} />
+        <Box
+          sx={{
+            height: 'calc(100vh - 170px)',
+            width: '100%',
+          }}
+        >
+          <EmptyPlaceholder message={'Create an object for this schema, Creator'} />
+        </Box>
       )}
-    </Paper>
+    </Box>
   );
 };

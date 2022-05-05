@@ -22,7 +22,7 @@ export const ReturnBar: React.FC = () => {
         sx={{
           paddingTop: 0.2,
           fontSize: 18,
-          fontWeight: 'bold',
+          fontWeight: 'medium',
           color: 'customPalette.onSurface',
           opacity: 0.8,
         }}
