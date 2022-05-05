@@ -15,7 +15,7 @@ export const FieldsBar: React.FC<FieldsBarProps> = props => {
     <Box>
       <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={0}>
         <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface', paddingLeft: 1 }}>
-          {'Fields'}
+          Fields
         </Typography>
         <AddIcon
           sx={{

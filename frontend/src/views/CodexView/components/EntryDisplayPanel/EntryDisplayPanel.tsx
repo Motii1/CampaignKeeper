@@ -60,6 +60,8 @@ export const EntryDisplayPanel: React.FC = () => {
       </Paper>
     </Box>
   ) : (
-    <EmptyPlaceholder message={'Impossible. Perhaps the archives are incomplete'} />
+    <EmptyPlaceholder
+      message={'Impossible. Perhaps the archives are incomplete... (entry not found)'}
+    />
   );
 };

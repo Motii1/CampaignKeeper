@@ -1,9 +1,6 @@
 import { MetadataInstance } from '../codexViewSlice';
 
-export const convertStringToMetadataArray = (
-  text: string,
-  fieldName: string
-): MetadataInstance => ({
+export const convertFieldToMetadataArray = (text: string, fieldName: string): MetadataInstance => ({
   type: 'string',
   sequenceNumber: 0,
   value: text,

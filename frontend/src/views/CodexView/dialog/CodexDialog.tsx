@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,8 +7,8 @@ import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addEntry, Entry, MetadataInstance, Schema, updateCurrentEntry } from '../codexViewSlice';
-import { convertStringToMetadataArray, getValueFromMetadataByFieldName } from '../components/utils';
+import { addEntry, Entry, MetadataInstance, Schema, setCurrentEntry } from '../codexViewSlice';
+import { convertFieldToMetadataArray, getValueFromMetadataByFieldName } from '../components/utils';
 import { FieldTextArea } from './components/FieldTextArea/FieldTextArea';
 
 type NewEntryData = {
@@ -49,7 +47,6 @@ const createFilledFields = (schema: null | Schema, entry: Entry | null): EntryFi
     fieldName =>
       (currentFields[fieldName] = getValueFromMetadataByFieldName(fieldName, entry?.metadataArray))
   );
-  console.log(currentFields);
   return currentFields;
 };
 
@@ -124,12 +121,12 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       if (statusEdit === 200) {
         if (currentSchema && currentEntry) {
           dispatch(
-            updateCurrentEntry({
+            setCurrentEntry({
               id: currentEntry.id,
               title: entryTitle,
               imageBase64: 'lorem ipsum',
               metadataArray: currentSchema?.fields.map(fieldName =>
-                convertStringToMetadataArray(fields[fieldName], fieldName)
+                convertFieldToMetadataArray(fields[fieldName], fieldName)
               ),
             })
           );
@@ -172,7 +169,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
           schemaId: currentSchema.id.toString(),
           imageBase64: 'lorem ipsum',
           metadataArray: currentSchema.fields.map(fieldName =>
-            convertStringToMetadataArray(fields[fieldName], fieldName)
+            convertFieldToMetadataArray(fields[fieldName], fieldName)
           ),
         });
       else
@@ -180,7 +177,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
           title: entryTitle,
           imageBase64: 'lorem ipsum',
           metadataArray: currentSchema.fields.map(fieldName =>
-            convertStringToMetadataArray(fields[fieldName], fieldName)
+            convertFieldToMetadataArray(fields[fieldName], fieldName)
           ),
         });
   };

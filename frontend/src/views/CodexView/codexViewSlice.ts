@@ -49,7 +49,7 @@ export const fetchSchemas = createAsyncThunk(
   }
 );
 
-export const fetchObjects = createAsyncThunk('codexView/fetchObjects', async (schemaId: string) => {
+export const fetchEntries = createAsyncThunk('codexView/fetchEntries', async (schemaId: string) => {
   const response = await protectedApiClient.get(`api/object/list?schemaId=${schemaId}`);
   return response;
 });
@@ -61,7 +61,7 @@ const codexViewSlice = createSlice({
     addSchema: (state, action) => {
       state.schemas = state.schemas.concat(action.payload.newSchema);
     },
-    updateCurrentSchema: (state, action) => {
+    setCurrentSchema: (state, action) => {
       const newSchema = state.schemas.find(schema => schema.id === action.payload.newSchemaId);
       state.currentSchema = newSchema ? newSchema : null;
     },
@@ -86,7 +86,7 @@ const codexViewSlice = createSlice({
         state.entries = newEntries;
       }
     },
-    updateCurrentEntry: (state, action) => {
+    setCurrentEntry: (state, action) => {
       if (state.currentSchema && action.payload.newEntryId) {
         const newEntry = state.entries[state.currentSchema.id].find(
           entry => entry.id === action.payload.newEntryId
@@ -102,7 +102,7 @@ const codexViewSlice = createSlice({
         state.schemas = action.payload.data.schemas;
       }
     });
-    builder.addCase(fetchObjects.fulfilled, (state, action) => {
+    builder.addCase(fetchEntries.fulfilled, (state, action) => {
       if (action.payload.status === 200 && state.currentSchema) {
         state.downloadedSchemas = state.downloadedSchemas.concat(state.currentSchema.id);
         const newObjectsState = state.entries;
@@ -113,7 +113,7 @@ const codexViewSlice = createSlice({
   },
 });
 
-export const { addSchema, updateCurrentSchema, addEntry, editEntry, updateCurrentEntry } =
+export const { addSchema, setCurrentSchema, addEntry, editEntry, setCurrentEntry } =
   codexViewSlice.actions;
 
 export default codexViewSlice.reducer;

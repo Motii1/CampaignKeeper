@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,16 +31,16 @@ export const NewSchemaDialog: React.FC<NewSchemaDialogProps> = props => {
   const [helperText, setHelperText] = useState<null | string>(null);
   const [fields, setFields] = useState<string[]>([]);
 
-  const { isLoading, data, status, runQuery, resetQuery } = useQuery<SchemaData>(
-    `/api/schema`,
-    requestMethods.POST
-  );
-
   const resetDialog = useCallback(() => {
     setName('');
     setHelperText(null);
     setFields([]);
   }, []);
+
+  const { isLoading, data, status, runQuery, resetQuery } = useQuery<SchemaData>(
+    `/api/schema`,
+    requestMethods.POST
+  );
 
   const handleRunQuery = useCallback(() => {
     if (!isLoading && status) {

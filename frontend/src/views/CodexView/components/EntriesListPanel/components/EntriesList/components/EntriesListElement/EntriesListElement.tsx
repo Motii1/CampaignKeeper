@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { NavBarViewDialog } from '../../../../../../../../types/types';
-import { updateCurrentEntry } from '../../../../../../codexViewSlice';
+import { setCurrentEntry } from '../../../../../../codexViewSlice';
 
 type EntriesListElementProps = {
   name: string;
@@ -9,12 +9,11 @@ type EntriesListElementProps = {
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
-// why do we need to set background color for Typography?
 export const EntriesListElement: React.FC<EntriesListElementProps> = props => {
   const dispatch = useDispatch();
 
   const onClick = () => {
-    dispatch(updateCurrentEntry({ newEntryId: props.objectId }));
+    dispatch(setCurrentEntry({ newEntryId: props.objectId }));
     props.setDialogType(NavBarViewDialog.EditEntry);
   };
 

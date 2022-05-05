@@ -12,10 +12,14 @@ type EntriesListProps = {
 };
 
 export const EntriesList: React.FC<EntriesListProps> = props => {
-  const filteredEntries =
-    props.searchPhrase === ''
-      ? props.entriesToRender
-      : props.entriesToRender.filter(entry => entry.title.includes(props.searchPhrase));
+  const filterEntries = () => {
+    const searchPhraseLowercase = props.searchPhrase.toLowerCase();
+    return props.entriesToRender.filter(entry =>
+      entry.title.toLowerCase().includes(searchPhraseLowercase)
+    );
+  };
+
+  const filteredEntries = props.searchPhrase === '' ? props.entriesToRender : filterEntries();
 
   return (
     <Box
@@ -86,7 +90,7 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
             width: '100%',
           }}
         >
-          <EmptyPlaceholder message={'Create an object for this schema, Creator'} />
+          <EmptyPlaceholder message={'Create an object for this schema, Wordsmith'} />
         </Box>
       )}
     </Box>

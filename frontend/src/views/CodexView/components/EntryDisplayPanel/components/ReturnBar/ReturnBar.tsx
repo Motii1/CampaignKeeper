@@ -1,11 +1,11 @@
 import { ArrowBack } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { updateCurrentEntry } from '../../../../codexViewSlice';
+import { setCurrentEntry } from '../../../../codexViewSlice';
 
 export const ReturnBar: React.FC = () => {
   const dispatch = useDispatch();
-  const onClick = () => dispatch(updateCurrentEntry({ newEntryId: null }));
+  const onClick = () => dispatch(setCurrentEntry({ newEntryId: null }));
 
   return (
     <Stack
@@ -27,7 +27,7 @@ export const ReturnBar: React.FC = () => {
           opacity: 0.8,
         }}
       >
-        {'BACK'}
+        BACK
       </Typography>
     </Stack>
   );

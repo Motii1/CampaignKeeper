@@ -21,7 +21,6 @@ const ButtonContent: React.FC = () => (
   </Stack>
 );
 
-// add props and onClick after API integration
 export const NewSchemaButton: React.FC<NewSchemaButtonProps> = props => {
   const onClick = () => props.setIsOpen(true);
 
