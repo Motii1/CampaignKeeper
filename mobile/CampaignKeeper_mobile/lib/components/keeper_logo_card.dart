@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+// A card featuring Campaign Keeper logo at the top.
 class KeeperLogoCard extends StatelessWidget {
   const KeeperLogoCard({Key? key, required this.child}) : super(key: key);
 

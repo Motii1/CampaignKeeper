@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// An element of an ordinary list
+// like a settings page.
 class KeeperListTile extends StatelessWidget {
   final String title;
   final String? subtitle;

@@ -3,6 +3,8 @@ import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Widget representing a debug menu used to
+// control server url address, timeouts.
 class KeeperDebugMenu extends StatefulWidget {
   const KeeperDebugMenu({Key? key, required this.isDebugMode}) : super(key: key);
 

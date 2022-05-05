@@ -1,6 +1,7 @@
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:flutter/material.dart';
 
+// List element representing a campaign.
 class KeeperCampaignTile extends StatelessWidget {
   const KeeperCampaignTile({Key? key, required this.entity, this.onTap}) : super(key: key);
 

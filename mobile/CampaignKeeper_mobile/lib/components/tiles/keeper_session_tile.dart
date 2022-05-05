@@ -1,6 +1,7 @@
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:flutter/material.dart';
 
+// List element representing a session.
 class KeeperSessionTile extends StatelessWidget {
   const KeeperSessionTile({Key? key, required this.entity, this.onTap}) : super(key: key);
 
