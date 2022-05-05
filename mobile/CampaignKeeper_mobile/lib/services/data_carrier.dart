@@ -42,9 +42,9 @@ class DataCarrier {
     }
   }
 
-  Future<bool> update<T>({required T newEntity}) async {
+  Future<bool> patch<T>({required T newEntity}) async {
     if (_managers.containsKey(T)) {
-      return await _managers[T]!.update(newEntity: newEntity);
+      return await _managers[T]!.patch(newEntity: newEntity);
     }
 
     return false;

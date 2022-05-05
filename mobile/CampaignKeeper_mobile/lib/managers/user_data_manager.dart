@@ -20,7 +20,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   }
 
   @override
-  Future<bool> update({required UserDataEntity newEntity}) async {
+  Future<bool> patch({required UserDataEntity newEntity}) async {
     if (newEntity.imageData != null) {
       var bytes = base64Decode(newEntity.imageData!);
       var file = KeeperFile(name: 'image-file', type: KeeperMediaType.image, bytes: bytes);

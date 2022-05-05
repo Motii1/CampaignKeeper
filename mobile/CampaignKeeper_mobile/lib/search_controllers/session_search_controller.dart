@@ -1,4 +1,3 @@
-import 'package:campaign_keeper_mobile/components/tiles/keeper_campaign_tile.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_session_tile.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';

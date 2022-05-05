@@ -47,7 +47,7 @@ class _AccountState extends KeeperState<Account> {
         var newEntity =
             UserDataEntity.imageBytes(username: "", email: "", imageData: await image!.readAsBytes());
 
-        if (await DataCarrier().update(newEntity: newEntity)) {
+        if (await DataCarrier().patch(newEntity: newEntity)) {
           return;
         }
       }

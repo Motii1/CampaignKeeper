@@ -4,7 +4,6 @@ import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_campaign_tile.dart';
 import 'package:campaign_keeper_mobile/components/keeper_toast.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
-import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
