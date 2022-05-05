@@ -6,6 +6,10 @@ import 'dart:math';
 
 import 'package:flutter/services.dart';
 
+// Modern and accessbile action bar featuring
+// a search bar. It takes as arguments a title, sliver body,
+// popup, refresh function and a search controller that
+// will be used at the search page.
 class KeeperSearchBar extends StatelessWidget {
   KeeperSearchBar(
       {Key? key,
@@ -26,6 +30,8 @@ class KeeperSearchBar extends StatelessWidget {
   final double _collapsedHeight = 60;
   final BaseSearchController? searchController;
 
+  // Simple function checking if navigation stack
+  // can be popped.
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
     return navigator != null && navigator.canPop() && autoLeading;
@@ -124,6 +130,11 @@ class KeeperSearchBar extends StatelessWidget {
   }
 }
 
+// Widget representing a search bar.
+// As arguemnts it takes option to show
+// a back arrow button, popup and a search controller
+// that will be used at a search page when bar
+// is pressed.
 class SearchBar extends StatelessWidget {
   const SearchBar({Key? key, this.autoLeading = true, this.popup, this.searchController}) : super(key: key);
 
@@ -131,6 +142,8 @@ class SearchBar extends StatelessWidget {
   final KeeperPopup? popup;
   final BaseSearchController? searchController;
 
+  // Simple function checking if navigation stack
+  // can be popped.
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
     return navigator != null && navigator.canPop() && autoLeading;
