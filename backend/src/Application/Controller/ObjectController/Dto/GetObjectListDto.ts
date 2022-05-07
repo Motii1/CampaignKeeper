@@ -21,5 +21,6 @@
 import * as Joi from 'joi';
 
 export const getObjectQuerySchema = Joi.object({
-  schemaId: Joi.number().positive().required(),
+  schemaId: Joi.number().positive(),
+  campaignId: Joi.number().positive(),
 });

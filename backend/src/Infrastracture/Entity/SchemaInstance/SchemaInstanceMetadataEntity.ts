@@ -10,8 +10,11 @@ export class SchemaInstanceMetadataEntity {
   @Column({ name: 'object_id' })
   objectId?: number;
 
-  @ManyToOne(() => SchemaInstanceEntity, { nullable: false, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'object_id' })
+  @ManyToOne(() => SchemaInstanceEntity, object => object.metadataArray, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'object_id', referencedColumnName: 'id' })
   object!: SchemaInstanceEntity;
 
   @Column({ enum: FieldValueType })
