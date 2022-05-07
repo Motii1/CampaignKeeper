@@ -8,7 +8,10 @@ import {
   deleteObject,
   DeleteObjectError,
 } from '../../../Domain/Campaign/SchemaInstance/Service/Delete';
-import { updateObject } from '../../../Domain/Campaign/SchemaInstance/Service/Update';
+import {
+  updateObject,
+  UpdateObjectError,
+} from '../../../Domain/Campaign/SchemaInstance/Service/Update';
 import { SchemaValidationError } from '../../../Domain/Campaign/SchemaInstance/Service/Validate';
 import { User } from '../../../Domain/User/User';
 import { findUserCampaignById } from '../../../Infrastracture/Entity/Campaign/CampaignRepository';
@@ -179,13 +182,12 @@ export class ObjectController implements IController {
       await updateObject(dto, object, schema!, user);
       res.status(200).json({});
     } catch (error) {
-      if (error instanceof SchemaValidationError) {
+      if (error instanceof SchemaValidationError || error instanceof UpdateObjectError) {
         res.status(400).json({ message: error.message });
         return;
       }
       throw error;
     }
-    res.status(200).json({});
   };
 
   /**
