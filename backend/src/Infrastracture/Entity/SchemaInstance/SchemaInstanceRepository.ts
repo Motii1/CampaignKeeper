@@ -5,11 +5,20 @@ import { mapEntityToDomainObject } from './Mapping';
 import { SchemaInstanceEntity } from './SchemaInstanceEntity';
 import { SchemaInstanceMetadataEntity } from './SchemaInstanceMetadataEntity';
 
-export const findSchemaInstancesBySchemaId = async (
-  schemaId: number
+export const findSchemaInstances = async (
+  schemaId?: number,
+  campaignId?: number
 ): Promise<SchemaInstance[]> => {
-  const repo = getRepository(SchemaInstanceEntity);
-  const entities = await repo.find({ schemaId });
+  const queryBuilder = getRepository(SchemaInstanceEntity).createQueryBuilder('schemaInstance');
+  queryBuilder.leftJoinAndSelect('schemaInstance.schema', 'schema');
+  queryBuilder.leftJoinAndSelect('schemaInstance.metadataArray', 'metadataArray');
+  if (schemaId) {
+    queryBuilder.where('schemaInstance.schemaId = :schemaId', { schemaId });
+  }
+  if (campaignId) {
+    queryBuilder.andWhere('schema.campaignId = :campaignId', { campaignId });
+  }
+  const entities = await queryBuilder.getMany();
   return entities.map(mapEntityToDomainObject);
 };
 
