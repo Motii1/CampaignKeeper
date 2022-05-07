@@ -43,7 +43,7 @@ const initialState: CodexViewState = {
 
 export const fetchSchemas = createAsyncThunk(
   'codexView/fetchSchemas',
-  async (campaignId: number) => {
+  async (campaignId: string) => {
     const response = await protectedApiClient.get(`api/schema/list?campaignId=${campaignId}`);
     return response;
   }

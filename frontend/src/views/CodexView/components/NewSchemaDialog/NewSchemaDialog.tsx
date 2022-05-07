@@ -24,7 +24,7 @@ type NewSchemaDialogProps = {
 
 export const NewSchemaDialog: React.FC<NewSchemaDialogProps> = props => {
   const dispatch = useDispatch();
-  const { campaignId } = useSelector((state: RootState) => state.campaignView);
+  const { currentCampaignId: campaignId } = useSelector((state: RootState) => state.campaignView);
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
 
   const [name, setName] = useState('');

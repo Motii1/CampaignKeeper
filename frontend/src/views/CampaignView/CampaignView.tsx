@@ -15,11 +15,11 @@ import { fetchSessions, updateCampaignId } from './sessionsSlice';
 
 export const CampaignView: React.FC = () => {
   const dispatch = useDispatch();
-  const { campaignId, campaignName, campaignImageBase64 } = useSelector(
+  const { currentCampaignId, currentCampaignName, currentCampaignImageBase64 } = useSelector(
     (state: RootState) => state.campaignView
   );
   const campaigns = useSelector((state: RootState) => state.campaigns.campaignsList);
-  if (campaignId === -1) {
+  if (currentCampaignId === '') {
     const lastCampaign = campaigns[campaigns.length - 1];
     if (lastCampaign) {
       dispatch(
@@ -35,9 +35,12 @@ export const CampaignView: React.FC = () => {
   const { sessionsList, isSessionsListDownloaded, sessionsCampaignId } = useSelector(
     (state: RootState) => state.sessions
   );
-  if ((!isSessionsListDownloaded || sessionsCampaignId !== campaignId) && campaignId !== -1) {
-    dispatch(fetchSessions(campaignId));
-    dispatch(updateCampaignId({ campaignId: campaignId }));
+  if (
+    (!isSessionsListDownloaded || sessionsCampaignId !== currentCampaignId) &&
+    currentCampaignId !== ''
+  ) {
+    dispatch(fetchSessions(currentCampaignId));
+    dispatch(updateCampaignId({ currentCampaignId: currentCampaignId }));
   }
 
   const [isOpen, setIsOpen] = useState(false);
@@ -108,7 +111,7 @@ export const CampaignView: React.FC = () => {
         sx={{ width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden' }}
       >
         <QuoteLine text={quote} />
-        {campaignId === -1 ? (
+        {currentCampaignId === '' ? (
           <Box
             sx={{
               width: '100%',
@@ -140,9 +143,9 @@ export const CampaignView: React.FC = () => {
               sx={{ width: '100%', height: '100%', paddingLeft: 0.8 }}
             >
               <CampaignTile
-                campaignId={campaignId}
-                campaignName={campaignName}
-                campaignImageBase64={campaignImageBase64}
+                campaignId={currentCampaignId}
+                campaignName={currentCampaignName}
+                campaignImageBase64={currentCampaignImageBase64}
                 setIsOpen={setIsOpen}
                 setDialogType={setDialogType}
                 isClickable={false}

@@ -6,7 +6,7 @@ import { EditMenu } from '../../../components/EditMenu/EditMenu';
 import { updateState as updateStateCampaign } from '../../campaignViewSlice';
 
 type SessionTileProps = {
-  sessionId: number;
+  sessionId: string;
   sessionName: string;
   setIsOpen: (newIsOpen: boolean) => void;
   setDialogType: (newDialogType: NavBarViewDialog) => void;

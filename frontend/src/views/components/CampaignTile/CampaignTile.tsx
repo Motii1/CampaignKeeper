@@ -9,7 +9,7 @@ import viewsRoutes from '../../viewsRoutes';
 import { EditMenu } from '../EditMenu/EditMenu';
 
 type CampaignTileProps = {
-  campaignId: number;
+  campaignId: string;
   campaignName: string;
   campaignImageBase64: string;
   setIsOpen: (newIsOpen: boolean) => void;

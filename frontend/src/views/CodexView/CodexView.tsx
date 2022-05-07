@@ -15,7 +15,7 @@ import { SchemasList } from './components/SchemasList/SchemasList';
 // TO-DO improve CircularProgress
 export const CodexView: React.FC = () => {
   const dispatch = useDispatch();
-  const { campaignId } = useSelector((state: RootState) => state.campaignView);
+  const { currentCampaignId: campaignId } = useSelector((state: RootState) => state.campaignView);
   const { isSchemasListDownloaded, currentEntry } = useSelector(
     (state: RootState) => state.codexView
   );
