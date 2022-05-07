@@ -1,9 +1,11 @@
-import { Box, CircularProgress, Grid, Stack } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
+import { fetchSchemas } from '../CodexView/codexSlice';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
+import { CircleProgress } from '../components/CircleProgress/CircleProgress';
 import { CustomGrid } from '../components/CustomGrid/CustomGrid';
 import { EmptyPlaceholder } from '../components/EmptyPlaceholder/EmptyPlaceholder';
 import { QuoteLine } from '../components/QuoteLine/QuoteLine';
@@ -18,9 +20,20 @@ export const CampaignView: React.FC = () => {
   const { currentCampaignId, currentCampaignName, currentCampaignImageBase64 } = useSelector(
     (state: RootState) => state.campaignView
   );
-  const campaigns = useSelector((state: RootState) => state.campaigns.campaignsList);
+  const { sessionsList, isSessionsListDownloaded, sessionsCampaignId } = useSelector(
+    (state: RootState) => state.sessions
+  );
+  const { campaignsList } = useSelector((state: RootState) => state.campaigns);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewSession);
+  const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
+  const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
+
+  useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
+
   if (currentCampaignId === '') {
-    const lastCampaign = campaigns[campaigns.length - 1];
+    const lastCampaign = campaignsList[campaignsList.length - 1];
     if (lastCampaign) {
       dispatch(
         updateSelectedCampaignData({
@@ -29,26 +42,14 @@ export const CampaignView: React.FC = () => {
           campaignImageBase64: lastCampaign.imageBase64,
         })
       );
+      dispatch(fetchSchemas(lastCampaign.id));
+    }
+  } else {
+    if (!isSessionsListDownloaded || sessionsCampaignId !== currentCampaignId) {
+      dispatch(fetchSessions(currentCampaignId));
+      dispatch(updateCampaignId({ campaignId: currentCampaignId }));
     }
   }
-
-  const { sessionsList, isSessionsListDownloaded, sessionsCampaignId } = useSelector(
-    (state: RootState) => state.sessions
-  );
-  if (
-    (!isSessionsListDownloaded || sessionsCampaignId !== currentCampaignId) &&
-    currentCampaignId !== ''
-  ) {
-    dispatch(fetchSessions(currentCampaignId));
-    dispatch(updateCampaignId({ currentCampaignId: currentCampaignId }));
-  }
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewSession);
-  const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
-  const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
-
-  useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
 
   const handleFab = () => {
     setDialogType(NavBarViewDialog.NewSession);
@@ -85,13 +86,7 @@ export const CampaignView: React.FC = () => {
       ) : (
         <EmptyPlaceholder message={'Go wild and take a first step, worldshaper'} />
       );
-    return (
-      <CircularProgress
-        size={64}
-        thickness={6}
-        sx={{ color: 'customPalette.onBackground', margin: 'auto' }}
-      />
-    );
+    return <CircleProgress />;
   };
 
   return (
@@ -112,17 +107,7 @@ export const CampaignView: React.FC = () => {
       >
         <QuoteLine text={quote} />
         {currentCampaignId === '' ? (
-          <Box
-            sx={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <EmptyPlaceholder message={"You haven't created any world, wordsmith"} />
-          </Box>
+          <EmptyPlaceholder message={"You haven't created any world, wordsmith"} />
         ) : (
           <Box
             component="div"

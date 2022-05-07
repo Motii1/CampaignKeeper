@@ -27,12 +27,14 @@ interface CodexViewState {
   schemas: Schema[];
   downloadedSchemas: string[];
   entries: { [schemaId: string]: Entry[] };
+  isCodexDownloaded: boolean;
 }
 
 const initialState: CodexViewState = {
   schemas: [],
   downloadedSchemas: [],
   entries: {},
+  isCodexDownloaded: false,
 };
 
 export const fetchSchemas = createAsyncThunk('codex/fetchSchemas', async (campaignId: string) => {
@@ -77,6 +79,7 @@ const codexViewSlice = createSlice({
     builder.addCase(fetchSchemas.fulfilled, (state, action) => {
       if (action.payload.status === 200) {
         state.schemas = action.payload.data.schemas;
+        state.isCodexDownloaded = true;
       }
     });
     builder.addCase(fetchEntries.fulfilled, (state, action) => {
