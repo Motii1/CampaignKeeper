@@ -7,7 +7,7 @@ import { RootState } from '../../../../store';
 import { CustomDialog } from '../../../components/CustomDialog/CustomDialog';
 import { useSnackbar } from '../../../components/CustomSnackbar/useSnackbar';
 import { LabeledTextInput } from '../../../components/LabeledTextInput/LabeledTextInput';
-import { addSchema } from '../../codexViewSlice';
+import { addSchema } from '../../codexSlice';
 import { Field } from './components/FieldsList/components/Field/Field';
 import { FieldsBar } from './components/FieldsList/components/FieldsBar/FieldsBar';
 

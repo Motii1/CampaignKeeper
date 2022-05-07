@@ -1,7 +1,7 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import { NavBarViewDialog } from '../../../../../../types/types';
 import { EmptyPlaceholder } from '../../../../../components/EmptyPlaceholder/EmptyPlaceholder';
-import { Entry } from '../../../../codexViewSlice';
+import { Entry } from '../../../../codexSlice';
 import { EntriesListElement } from './components/EntriesListElement/EntriesListElement';
 
 type EntriesListProps = {

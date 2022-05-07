@@ -2,7 +2,8 @@ import { Paper, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../../store';
-import { fetchEntries, setCurrentEntry, setCurrentSchema } from '../../../../codexViewSlice';
+import { fetchEntries } from '../../../../codexSlice';
+import { setCurrentEntry, setCurrentSchema } from '../../../../codexViewSlice';
 
 type SchemaListElementProps = {
   name: string;
@@ -11,7 +12,7 @@ type SchemaListElementProps = {
 
 export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
   const dispatch = useDispatch();
-  const { currentSchema, downloadedSchemas } = useSelector((state: RootState) => state.codexView);
+  const { currentSchema } = useSelector((state: RootState) => state.codexView);
   const [isElementSelected, setIsElementSelected] = useState<boolean>(
     props.schemaId === currentSchema?.id
   );
@@ -23,8 +24,7 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
   const onClick = () => {
     dispatch(setCurrentSchema({ newSchemaId: props.schemaId }));
     dispatch(setCurrentEntry({ newEntryId: null }));
-    if (!downloadedSchemas.find(element => element === props.schemaId))
-      dispatch(fetchEntries(props.schemaId));
+    dispatch(fetchEntries(props.schemaId));
 
     setIsElementSelected(true);
   };

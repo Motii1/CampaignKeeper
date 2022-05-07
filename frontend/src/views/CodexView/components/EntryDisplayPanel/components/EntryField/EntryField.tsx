@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import { MetadataInstance } from '../../../../codexViewSlice';
+import { MetadataInstance } from '../../../../codexSlice';
 
 type EntryFieldProps = {
   fieldName: string;

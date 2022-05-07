@@ -10,7 +10,7 @@ type SchemasListProps = {
 };
 
 export const SchemasList: React.FC<SchemasListProps> = props => {
-  const { schemas } = useSelector((state: RootState) => state.codexView);
+  const { schemas } = useSelector((state: RootState) => state.codex);
 
   const renderSchemaElements = () =>
     schemas.map(schema => (

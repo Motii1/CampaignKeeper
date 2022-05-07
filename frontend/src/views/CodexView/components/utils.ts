@@ -1,4 +1,4 @@
-import { MetadataInstance } from '../codexViewSlice';
+import { MetadataInstance } from '../codexSlice';
 
 export const convertFieldToMetadataArray = (text: string, fieldName: string): MetadataInstance => ({
   type: 'string',

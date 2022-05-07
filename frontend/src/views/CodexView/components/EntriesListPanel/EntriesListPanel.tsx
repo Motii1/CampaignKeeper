@@ -13,7 +13,8 @@ type EntriesListPanelProps = {
 };
 
 export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
-  const { currentSchema, entries } = useSelector((state: RootState) => state.codexView);
+  const { currentSchema } = useSelector((state: RootState) => state.codexView);
+  const { entries } = useSelector((state: RootState) => state.codex);
 
   const [searchPhrase, setSearchPhrase] = useState<string>('');
 

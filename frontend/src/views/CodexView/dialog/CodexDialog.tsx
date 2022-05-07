@@ -7,7 +7,8 @@ import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addEntry, Entry, MetadataInstance, Schema, setCurrentEntry } from '../codexViewSlice';
+import { addEntry, Entry, MetadataInstance, Schema } from '../codexSlice';
+import { setCurrentEntry } from '../codexViewSlice';
 import { convertFieldToMetadataArray, getValueFromMetadataByFieldName } from '../components/utils';
 import { FieldTextArea } from './components/FieldTextArea/FieldTextArea';
 
@@ -91,8 +92,9 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
 
   const handleRunQueryNew = useCallback(() => {
     if (!isLoadingNew && statusNew) {
-      if (statusNew === 200) {
-        dispatch(addEntry({ newEntry: dataNew }));
+      if (statusNew === 200 && currentSchema) {
+        dispatch(addEntry({ newEntry: dataNew, schemaId: currentSchema.id }));
+        dispatch(setCurrentEntry({ newEntry: dataNew }));
         props.setSnackbarSuccess('Entry created');
         props.setIsOpen(false);
         resetDialog();
@@ -103,7 +105,16 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       }
       resetQueryNew();
     }
-  }, [dataNew, dispatch, isLoadingNew, props, resetDialog, resetQueryNew, statusNew]);
+  }, [
+    currentSchema,
+    dataNew,
+    dispatch,
+    isLoadingNew,
+    props,
+    resetDialog,
+    resetQueryNew,
+    statusNew,
+  ]);
 
   useEffect(() => {
     handleRunQueryNew();
@@ -122,12 +133,14 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
         if (currentSchema && currentEntry) {
           dispatch(
             setCurrentEntry({
-              id: currentEntry.id,
-              title: entryTitle,
-              imageBase64: 'lorem ipsum',
-              metadataArray: currentSchema?.fields.map(fieldName =>
-                convertFieldToMetadataArray(fields[fieldName], fieldName)
-              ),
+              newEntry: {
+                id: currentEntry.id,
+                title: entryTitle,
+                imageBase64: 'lorem ipsum',
+                metadataArray: currentSchema?.fields.map(fieldName =>
+                  convertFieldToMetadataArray(fields[fieldName], fieldName)
+                ),
+              },
             })
           );
           props.setSnackbarSuccess('Entry edited');
