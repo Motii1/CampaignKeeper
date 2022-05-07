@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
-import { fetchSchemas } from '../CodexView/codexSlice';
+import { fetchSchemasAndEntries } from '../CodexView/codexSlice';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
 import { CircleProgress } from '../components/CircleProgress/CircleProgress';
 import { CustomGrid } from '../components/CustomGrid/CustomGrid';
@@ -42,7 +42,7 @@ export const CampaignView: React.FC = () => {
           campaignImageBase64: lastCampaign.imageBase64,
         })
       );
-      dispatch(fetchSchemas(lastCampaign.id));
+      dispatch(fetchSchemasAndEntries(lastCampaign.id));
     }
   } else {
     if (!isSessionsListDownloaded || sessionsCampaignId !== currentCampaignId) {

@@ -74,8 +74,7 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
             >
               {filteredEntries.map(entry => (
                 <EntriesListElement
-                  name={entry.title}
-                  objectId={entry.id}
+                  entry={entry}
                   key={entry.id}
                   setDialogType={props.setDialogType}
                 />

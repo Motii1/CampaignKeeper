@@ -5,7 +5,7 @@ import { setCurrentEntry } from '../../../../codexViewSlice';
 
 export const ReturnBar: React.FC = () => {
   const dispatch = useDispatch();
-  const onClick = () => dispatch(setCurrentEntry({ newEntryId: null }));
+  const onClick = () => dispatch(setCurrentEntry({ newEntry: null }));
 
   return (
     <Stack

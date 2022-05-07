@@ -25,30 +25,31 @@ export type MetadataInstance = {
 
 interface CodexViewState {
   schemas: Schema[];
-  downloadedSchemas: string[];
   entries: { [schemaId: string]: Entry[] };
   isCodexDownloaded: boolean;
 }
 
 const initialState: CodexViewState = {
   schemas: [],
-  downloadedSchemas: [],
   entries: {},
   isCodexDownloaded: false,
 };
 
-export const fetchSchemas = createAsyncThunk('codex/fetchSchemas', async (campaignId: string) => {
-  const response = await protectedApiClient.get(`api/schema/list?campaignId=${campaignId}`);
-  return response;
-});
-
-export const fetchEntries = createAsyncThunk('codex/fetchEntries', async (schemaId: string) => {
-  const response = await protectedApiClient.get(`api/object/list?schemaId=${schemaId}`);
-  return {
-    response: response,
-    schemaId: schemaId,
-  };
-});
+export const fetchSchemasAndEntries = createAsyncThunk(
+  'codex/fetchSchemas',
+  async (campaignId: string) => {
+    const responseSchemas = await protectedApiClient.get(
+      `api/schema/list?campaignId=${campaignId}`
+    );
+    const responseEntries = await protectedApiClient.get(
+      `api/object/list?campaignId=${campaignId}`
+    );
+    return {
+      responseSchemas,
+      responseEntries,
+    };
+  }
+);
 
 const codexViewSlice = createSlice({
   name: 'codex',
@@ -76,18 +77,23 @@ const codexViewSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(fetchSchemas.fulfilled, (state, action) => {
-      if (action.payload.status === 200) {
-        state.schemas = action.payload.data.schemas;
+    builder.addCase(fetchSchemasAndEntries.fulfilled, (state, action) => {
+      if (
+        action.payload.responseEntries.status === 200 &&
+        action.payload.responseEntries.status === 200
+      ) {
+        state.schemas = action.payload.responseSchemas.data.schemas;
+        const newEntries: { [schemaId: string]: Entry[] } = {};
+        state.schemas.forEach(schema => {
+          newEntries[schema.id] = [];
+        });
+        const entriesAsList: Entry[] = action.payload.responseEntries.data.objects;
+        entriesAsList.forEach(entry => {
+          newEntries[entry.schemaId].push(entry);
+        });
+
+        state.entries = newEntries;
         state.isCodexDownloaded = true;
-      }
-    });
-    builder.addCase(fetchEntries.fulfilled, (state, action) => {
-      if (action.payload.response.status === 200) {
-        state.downloadedSchemas = state.downloadedSchemas.concat(action.payload.schemaId);
-        const newObjectsState = state.entries;
-        newObjectsState[action.payload.schemaId] = action.payload.response.data.objects;
-        state.entries = newObjectsState;
       }
     });
   },

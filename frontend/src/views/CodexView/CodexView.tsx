@@ -6,7 +6,7 @@ import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import viewsRoutes from '../viewsRoutes';
-import { fetchSchemas } from './codexSlice';
+import { fetchSchemasAndEntries } from './codexSlice';
 import { updateCampaignId } from './codexViewSlice';
 import { EntriesListPanel } from './components/EntriesListPanel/EntriesListPanel';
 import { EntryDisplayPanel } from './components/EntryDisplayPanel/EntryDisplayPanel';
@@ -32,7 +32,7 @@ export const CodexView: React.FC = () => {
 
   if (currentCampaignId === '') history.push(viewsRoutes.CAMPAIGN);
   else if (!isCodexDownloaded || codexCampaignId !== currentCampaignId) {
-    dispatch(fetchSchemas(currentCampaignId));
+    dispatch(fetchSchemasAndEntries(currentCampaignId));
     dispatch(updateCampaignId({ campaignId: currentCampaignId }));
   }
 

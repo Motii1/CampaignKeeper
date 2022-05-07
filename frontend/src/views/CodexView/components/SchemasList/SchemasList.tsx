@@ -13,9 +13,7 @@ export const SchemasList: React.FC<SchemasListProps> = props => {
   const { schemas } = useSelector((state: RootState) => state.codex);
 
   const renderSchemaElements = () =>
-    schemas.map(schema => (
-      <SchemasListElement name={schema.title} schemaId={schema.id} key={schema.id} />
-    ));
+    schemas.map(schema => <SchemasListElement schema={schema} key={schema.id} />);
 
   return (
     <Paper

@@ -1,11 +1,11 @@
 import { Box, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { NavBarViewDialog } from '../../../../../../../../types/types';
+import { Entry } from '../../../../../../codexSlice';
 import { setCurrentEntry } from '../../../../../../codexViewSlice';
 
 type EntriesListElementProps = {
-  name: string;
-  objectId: string;
+  entry: Entry;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
@@ -13,7 +13,7 @@ export const EntriesListElement: React.FC<EntriesListElementProps> = props => {
   const dispatch = useDispatch();
 
   const onClick = () => {
-    dispatch(setCurrentEntry({ newEntryId: props.objectId }));
+    dispatch(setCurrentEntry({ newEntry: props.entry }));
     props.setDialogType(NavBarViewDialog.EditEntry);
   };
 
@@ -35,7 +35,7 @@ export const EntriesListElement: React.FC<EntriesListElementProps> = props => {
           },
         }}
       >
-        {props.name}
+        {props.entry.title}
       </Typography>
     </Box>
   );

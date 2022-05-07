@@ -135,6 +135,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
             setCurrentEntry({
               newEntry: {
                 id: currentEntry.id,
+                schemaId: currentSchema.id,
                 title: entryTitle,
                 imageBase64: 'lorem ipsum',
                 metadataArray: currentSchema?.fields.map(fieldName =>

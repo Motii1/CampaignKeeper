@@ -21,7 +21,7 @@ const codexViewSlice = createSlice({
       state.currentSchema = action.payload.newSchema;
     },
     setCurrentEntry: (state, action) => {
-      state.currentSchema = action.payload.newEntry;
+      state.currentEntry = action.payload.newEntry;
     },
     updateCampaignId: (state, action) => {
       state.codexCampaignId = action.payload.campaignId;
