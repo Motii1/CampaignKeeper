@@ -65,14 +65,14 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const [fields, setFields] = useState(createEmptyFields(currentSchema));
 
   useEffect(() => {
-    if (currentEntry) setDialogTitle(`Edit ${currentSchema?.title} entry`);
-    else setDialogTitle('Create new entry');
-  }, [currentEntry, currentSchema?.title]);
-
-  useEffect(() => {
     if (currentEntry) {
+      setDialogTitle(`Edit ${currentSchema?.title} entry`);
       setFields(createFilledFields(currentSchema, currentEntry));
       setEntryTitle(currentEntry.title);
+    } else {
+      setDialogTitle('Create new entry');
+      setFields(createEmptyFields(currentSchema));
+      setEntryTitle('');
     }
   }, [currentEntry, currentSchema]);
 
