@@ -83,7 +83,7 @@ const codexViewSlice = createSlice({
     deleteEntry: (state, action) => {
       const newEntries = state.entries;
       newEntries[action.payload.schemaId] = newEntries[action.payload.schemaId].filter(
-        element => element.id !== action.payload.entryId.id
+        element => element.id !== action.payload.entryId
       );
       state.entries = newEntries;
     },
