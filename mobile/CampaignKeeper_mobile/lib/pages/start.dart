@@ -9,6 +9,9 @@ import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:flutter/material.dart';
 
+// Page showing users campaigns list.
+// Implements double back to exit with a toast
+// information.
 class Start extends StatefulWidget {
   const Start({Key? key}) : super(key: key);
 

@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphview/GraphView.dart';
 
+// Page displaying map of events in the current session.
+// Allows to show details of a particular event or
+// use a FAB to show the first, root one.
 class SessionMap extends StatefulWidget {
   const SessionMap({Key? key, required this.sessionID}) : super(key: key);
   final int sessionID;

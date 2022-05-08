@@ -12,6 +12,8 @@ import 'package:campaign_keeper_mobile/search_controllers/campaign_search_contro
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+// Page showing a basic campaign info - list of sessions
+// and a codex with ability to search.
 class Campaign extends StatefulWidget {
   Campaign({Key? key, required this.campaignID}) : super(key: key);
   final int campaignID;

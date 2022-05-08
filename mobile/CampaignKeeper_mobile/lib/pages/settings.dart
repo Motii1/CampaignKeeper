@@ -9,6 +9,9 @@ import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:flutter/material.dart';
 
+// Page representing settings.
+// Allows to log out, enter account or about subpage
+// and for developers to change url and timeout options.
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();

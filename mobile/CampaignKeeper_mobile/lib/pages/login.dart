@@ -8,6 +8,7 @@ import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Page that allows user to login.
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -27,6 +28,8 @@ class Login extends StatelessWidget {
   }
 }
 
+// A card widget with the whole functionality
+// of a login.
 class LoginCard extends StatefulWidget {
   const LoginCard({Key? key}) : super(key: key);
 

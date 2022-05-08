@@ -2,6 +2,9 @@ import 'package:campaign_keeper_mobile/components/app_bar/keeper_back_button.dar
 import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
 import 'package:flutter/material.dart';
 
+// Universal search page that uses a search controller.
+// Controller is used to filter entities by string
+// and build a list entry widget per entity.
 class Search extends StatefulWidget {
   const Search({Key? key, required this.searchController}) : super(key: key);
   final BaseSearchController searchController;

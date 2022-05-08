@@ -1,3 +1,4 @@
+// Entity representing a session.
 class SessionEntity {
   static const String endpoint = "/api/session/list";
 
