@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import { NavBarViewDialog } from '../../../../types/types';
-import { CircleProgress } from '../../../components/CircleProgress/CircleProgress';
 import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
 import { EntriesList } from './components/EntriesList/EntriesList';
 import { SearchBar } from './components/SearchBar/SearchBar';
@@ -19,7 +18,7 @@ export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
   const [searchPhrase, setSearchPhrase] = useState<string>('');
 
   if (currentSchema)
-    return entries[currentSchema.id] ? (
+    return (
       <Stack
         direction="column"
         justifyContent="center"
@@ -38,8 +37,6 @@ export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
           setDialogType={props.setDialogType}
         />
       </Stack>
-    ) : (
-      <CircleProgress />
     );
   return <EmptyPlaceholder message={'Select a schema, ye wise sage'} />;
 };

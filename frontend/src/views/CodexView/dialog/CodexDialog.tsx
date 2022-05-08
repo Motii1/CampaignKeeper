@@ -7,10 +7,23 @@ import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addEntry, Entry, MetadataInstance, Schema } from '../codexSlice';
+import { addEntry, EntriesHashMap, Entry, MetadataInstance, Schema } from '../codexSlice';
 import { setCurrentEntry } from '../codexViewSlice';
-import { convertFieldToMetadataArray, getValueFromMetadataByFieldName } from '../components/utils';
+import {
+  convertEntriesHashMapToList,
+  convertFieldToMetadataArray,
+  getEditFieldFromMetadata,
+} from '../utils';
 import { FieldTextArea } from './components/FieldTextArea/FieldTextArea';
+
+export type EntryFieldState = {
+  value: string;
+  ids: string[];
+};
+
+export type EntryFields = {
+  [fieldName: string]: EntryFieldState;
+};
 
 type NewEntryData = {
   title: string;
@@ -34,20 +47,28 @@ type CodexDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
-type EntryFields = { [fieldName: string]: string };
-
 const createEmptyFields = (schema: null | Schema): EntryFields => {
   const currentFields: EntryFields = {};
-  schema?.fields.forEach(field => (currentFields[field] = ''));
+  schema?.fields.forEach(field => (currentFields[field] = { value: '', ids: [] }));
   return currentFields;
 };
 
-const createFilledFields = (schema: null | Schema, entry: Entry | null): EntryFields => {
+const createFilledFields = (
+  schema: null | Schema,
+  entry: Entry | null,
+  entries: EntriesHashMap
+): EntryFields => {
   const currentFields: EntryFields = {};
-  schema?.fields.forEach(
-    fieldName =>
-      (currentFields[fieldName] = getValueFromMetadataByFieldName(fieldName, entry?.metadataArray))
-  );
+  const entriesAsList: Entry[] = convertEntriesHashMapToList(entries);
+  if (entry)
+    schema?.fields.forEach(
+      fieldName =>
+        (currentFields[fieldName] = getEditFieldFromMetadata(
+          fieldName,
+          entry.metadataArray,
+          entriesAsList
+        ))
+    );
   return currentFields;
 };
 
@@ -55,6 +76,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const dispatch = useDispatch();
 
   const { currentSchema, currentEntry } = useSelector((state: RootState) => state.codexView);
+  const { entries } = useSelector((state: RootState) => state.codex);
   const [dialogTitle, setDialogTitle] = useState(
     props.dialogType === NavBarViewDialog.NewEntry
       ? 'Create new entry'
@@ -67,20 +89,26 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   useEffect(() => {
     if (currentEntry) {
       setDialogTitle(`Edit ${currentSchema?.title} entry`);
-      setFields(createFilledFields(currentSchema, currentEntry));
+      setFields(createFilledFields(currentSchema, currentEntry, entries));
       setEntryTitle(currentEntry.title);
     } else {
       setDialogTitle('Create new entry');
       setFields(createEmptyFields(currentSchema));
       setEntryTitle('');
     }
-  }, [currentEntry, currentSchema]);
+  }, [currentEntry, currentSchema, entries]);
 
   const resetDialog = useCallback(() => {
-    setEntryTitle('');
-    setEntryTitleHelperText('');
-    setFields(createEmptyFields(currentSchema));
-  }, [currentSchema]);
+    if (currentEntry) {
+      setDialogTitle(`Edit ${currentSchema?.title} entry`);
+      setFields(createFilledFields(currentSchema, currentEntry, entries));
+      setEntryTitle(currentEntry.title);
+    } else {
+      setDialogTitle('Create new entry');
+      setFields(createEmptyFields(currentSchema));
+      setEntryTitle('');
+    }
+  }, [currentEntry, currentSchema, entries]);
 
   const {
     isLoading: isLoadingNew,
@@ -196,6 +224,11 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
         });
   };
 
+  const handleCancel = () => {
+    props.setIsOpen(false);
+    resetDialog();
+  };
+
   const handleEntryTitleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setEntryTitle(event.target.value);
     setEntryTitleHelperText('');
@@ -214,17 +247,17 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const handleFieldInput = (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
     const newValue = event.target.value;
     const newFields = fields;
-    newFields[fieldName] = newValue;
+    newFields[fieldName].value = newValue;
     setFields({ ...newFields });
   };
 
   const renderFields = () => {
-    if (currentSchema)
-      return currentSchema.fields.map(fieldName => (
+    if (props.isOpen)
+      return currentSchema?.fields.map(fieldName => (
         <FieldTextArea
           key={fieldName}
           name={fieldName}
-          value={fields[fieldName]}
+          value={fields[fieldName].value}
           onChange={event => handleFieldInput(event, fieldName)}
         />
       ));
@@ -238,6 +271,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       isLarge={true}
       setIsOpen={props.setIsOpen}
       onOk={handleOk}
+      onCancel={handleCancel}
     >
       <Stack
         direction="column"

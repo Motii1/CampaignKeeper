@@ -6,8 +6,6 @@ import { setCurrentEntry } from '../../../../codexViewSlice';
 export const ReturnBar: React.FC = () => {
   const dispatch = useDispatch();
   const onClick = () => {
-    // eslint-disable-next-line no-console
-    console.log('yes');
     dispatch(setCurrentEntry({ newEntry: null }));
   };
 

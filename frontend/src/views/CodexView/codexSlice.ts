@@ -16,6 +16,8 @@ export interface Entry {
   metadataArray: MetadataInstance[];
 }
 
+export type EntriesHashMap = { [schemaId: string]: Entry[] };
+
 export type MetadataInstance = {
   type: string;
   sequenceNumber: number;
@@ -25,7 +27,7 @@ export type MetadataInstance = {
 
 interface CodexViewState {
   schemas: Schema[];
-  entries: { [schemaId: string]: Entry[] };
+  entries: EntriesHashMap;
   isCodexDownloaded: boolean;
 }
 
@@ -57,6 +59,9 @@ const codexViewSlice = createSlice({
   reducers: {
     addSchema: (state, action) => {
       state.schemas = state.schemas.concat(action.payload.newSchema);
+      const newEntries = state.entries;
+      newEntries[action.payload.newSchema.id] = [];
+      state.entries = newEntries;
     },
     addEntry: (state, action) => {
       const newEntries = state.entries;
