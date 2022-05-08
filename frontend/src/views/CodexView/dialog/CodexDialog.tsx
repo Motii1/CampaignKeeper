@@ -14,7 +14,7 @@ import {
   convertFieldToMetadataArray,
   getEditFieldFromMetadata,
 } from '../utils';
-import { FieldTextArea } from './components/FieldTextArea/FieldTextArea';
+import { EditFieldList } from './components/EditFieldList/EditFieldList';
 
 export type EntryFieldState = {
   value: string;
@@ -244,26 +244,6 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
     });
   };
 
-  const handleFieldInput = (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
-    const newValue = event.target.value;
-    const newFields = fields;
-    newFields[fieldName].value = newValue;
-    setFields({ ...newFields });
-  };
-
-  const renderFields = () => {
-    if (props.isOpen)
-      return currentSchema?.fields.map(fieldName => (
-        <FieldTextArea
-          key={fieldName}
-          name={fieldName}
-          value={fields[fieldName].value}
-          onChange={event => handleFieldInput(event, fieldName)}
-        />
-      ));
-    return null;
-  };
-
   return (
     <CustomDialog
       title={dialogTitle}
@@ -290,7 +270,9 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
           onChange={event => handleEntryTitleChange(event)}
           onBlur={event => handleEntryTitleLeave(event)}
         />
-        {renderFields()}
+        {currentSchema ? (
+          <EditFieldList currentSchema={currentSchema} fields={fields} setFields={setFields} />
+        ) : null}
       </Stack>
     </CustomDialog>
   );
