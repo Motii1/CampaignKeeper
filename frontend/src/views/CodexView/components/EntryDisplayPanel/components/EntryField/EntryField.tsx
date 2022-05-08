@@ -13,16 +13,19 @@ export const EntryField: React.FC<EntryFieldProps> = props => {
   const renderValue = () =>
     props.data.map(metadata =>
       metadata.type === 'string' ? (
-        <Typography sx={{ wordWrap: 'break-word', whiteSpace: 'pre' }}>{metadata.value}</Typography>
+        <Typography
+          sx={{ wordWrap: 'break-word', whiteSpace: 'pre' }}
+          key={metadata.sequenceNumber}
+        >
+          {metadata.value}
+        </Typography>
       ) : (
-        <ReferenceChip entry={getEntryFromMetadata(metadata, props.entries)} />
+        <ReferenceChip
+          entry={getEntryFromMetadata(metadata, props.entries)}
+          key={metadata.sequenceNumber}
+        />
       )
     );
-
-  // eslint-disable-next-line no-console
-  console.log(renderValue());
-  // eslint-disable-next-line no-console
-  console.log(props.entries);
 
   return (
     <Stack

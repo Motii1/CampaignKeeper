@@ -22,6 +22,7 @@ export const CodexView: React.FC = () => {
   const history = useHistory();
 
   const [isPrimaryOpen, setIsPrimaryOpen] = useState(false);
+  const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewEntry);
   const [isSchemaDialogOpen, setIsSchemaDialogOpen] = useState(false);
 
@@ -42,6 +43,8 @@ export const CodexView: React.FC = () => {
       setIsPrimaryOpen={setIsPrimaryOpen}
       primaryDialogType={dialogType}
       setPrimaryDialogType={setDialogType}
+      isSecondaryOpen={isSecondaryOpen}
+      setIsSecondaryOpen={setIsSecondaryOpen}
     >
       <Box sx={{ height: '100%', width: '100%' }}>
         <SchemasList setIsOpen={setIsSchemaDialogOpen} />

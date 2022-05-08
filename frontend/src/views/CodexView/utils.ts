@@ -45,7 +45,7 @@ export const getMetadataByFieldName = (
 ): MetadataInstance[] => metadata.filter(element => element.fieldName === fieldName);
 
 const getEntryNameById = (id: string, entries: Entry[]): string => {
-  const entry = entries.find(entry => entry.id === id);
+  const entry = entries.find(entry => `${entry.id}` === id);
   return entry ? entry.title : 'REFERENCE_NOT_FOUND';
 };
 

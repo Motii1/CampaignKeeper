@@ -229,6 +229,10 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
     resetDialog();
   };
 
+  const handleDelete = () => {
+    props.setIsSecondaryOpen(true);
+  };
+
   const handleEntryTitleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setEntryTitle(event.target.value);
     setEntryTitleHelperText('');
@@ -252,6 +256,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       setIsOpen={props.setIsOpen}
       onOk={handleOk}
       onCancel={handleCancel}
+      onDelete={handleDelete}
     >
       <Stack
         direction="column"

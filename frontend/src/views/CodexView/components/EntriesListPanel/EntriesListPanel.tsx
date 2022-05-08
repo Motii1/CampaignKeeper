@@ -1,9 +1,10 @@
 import { Stack } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import { NavBarViewDialog } from '../../../../types/types';
 import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
+import { Entry } from '../../codexSlice';
 import { EntriesList } from './components/EntriesList/EntriesList';
 import { SearchBar } from './components/SearchBar/SearchBar';
 
@@ -12,10 +13,24 @@ type EntriesListPanelProps = {
 };
 
 export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
-  const { currentSchema } = useSelector((state: RootState) => state.codexView);
+  const { currentSchema, currentEntry } = useSelector((state: RootState) => state.codexView);
   const { entries } = useSelector((state: RootState) => state.codex);
 
   const [searchPhrase, setSearchPhrase] = useState<string>('');
+  const [shownEntries, setShownEntries] = useState<Entry[] | null>(
+    currentSchema ? entries[currentSchema.id] : null
+  );
+
+  const filterEntries = useCallback(() => {
+    const searchPhraseLowercase = searchPhrase.toLowerCase();
+    return currentSchema
+      ? entries[currentSchema.id].filter(entry =>
+          entry.title.toLowerCase().includes(searchPhraseLowercase)
+        )
+      : null;
+  }, [currentSchema, entries, searchPhrase]);
+
+  useEffect(() => setShownEntries(filterEntries()), [currentEntry, filterEntries]);
 
   if (currentSchema)
     return (
@@ -32,7 +47,7 @@ export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
         <SearchBar setSearchPhrase={setSearchPhrase} />
         <EntriesList
           title={currentSchema.title}
-          entriesToRender={entries[currentSchema.id]}
+          entriesToRender={shownEntries}
           searchPhrase={searchPhrase}
           setDialogType={props.setDialogType}
         />

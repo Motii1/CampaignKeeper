@@ -80,6 +80,13 @@ const codexViewSlice = createSlice({
       );
       state.entries = newEntries;
     },
+    deleteEntry: (state, action) => {
+      const newEntries = state.entries;
+      newEntries[action.payload.schemaId] = newEntries[action.payload.schemaId].filter(
+        element => element.id !== action.payload.entryId.id
+      );
+      state.entries = newEntries;
+    },
   },
   extraReducers: builder => {
     builder.addCase(fetchSchemasAndEntries.fulfilled, (state, action) => {
@@ -104,6 +111,6 @@ const codexViewSlice = createSlice({
   },
 });
 
-export const { addSchema, addEntry, editEntry } = codexViewSlice.actions;
+export const { addSchema, addEntry, editEntry, deleteEntry } = codexViewSlice.actions;
 
 export default codexViewSlice.reducer;
