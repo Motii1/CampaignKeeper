@@ -1,13 +1,28 @@
-import { Stack, Typography } from '@mui/material';
-import { MetadataInstance } from '../../../../codexSlice';
+import { Box, Stack, Typography } from '@mui/material';
+import { Entry, MetadataInstance } from '../../../../codexSlice';
+import { getEntryFromMetadata } from '../../../../utils';
+import { ReferenceChip } from './components/ReferenceChip/ReferenceChip';
 
 type EntryFieldProps = {
   fieldName: string;
   data: MetadataInstance[];
+  entries: Entry[];
 };
 
 export const EntryField: React.FC<EntryFieldProps> = props => {
-  const value = props.data.map(element => element.value).join(' ');
+  const renderValue = () =>
+    props.data.map(metadata =>
+      metadata.type === 'string' ? (
+        <Typography sx={{ wordWrap: 'break-word', whiteSpace: 'pre' }}>{metadata.value}</Typography>
+      ) : (
+        <ReferenceChip entry={getEntryFromMetadata(metadata, props.entries)} />
+      )
+    );
+
+  // eslint-disable-next-line no-console
+  console.log(renderValue());
+  // eslint-disable-next-line no-console
+  console.log(props.entries);
 
   return (
     <Stack
@@ -20,7 +35,7 @@ export const EntryField: React.FC<EntryFieldProps> = props => {
       }}
     >
       <Typography variant={'h6'}>{props.fieldName}</Typography>
-      <Typography sx={{ width: '100%', wordWrap: 'break-word' }}>{value}</Typography>
+      <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap' }}>{renderValue()}</Box>
     </Stack>
   );
 };

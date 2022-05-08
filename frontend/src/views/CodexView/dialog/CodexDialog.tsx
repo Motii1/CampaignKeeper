@@ -10,8 +10,8 @@ import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextI
 import { addEntry, EntriesHashMap, Entry, MetadataInstance, Schema } from '../codexSlice';
 import { setCurrentEntry } from '../codexViewSlice';
 import {
+  convertEditFieldToMetadata,
   convertEntriesHashMapToList,
-  convertFieldToMetadataArray,
   getEditFieldFromMetadata,
 } from '../utils';
 import { EditFieldList } from './components/EditFieldList/EditFieldList';
@@ -166,9 +166,9 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
                 schemaId: currentSchema.id,
                 title: entryTitle,
                 imageBase64: 'lorem ipsum',
-                metadataArray: currentSchema?.fields.map(fieldName =>
-                  convertFieldToMetadataArray(fields[fieldName], fieldName)
-                ),
+                metadataArray: currentSchema?.fields
+                  .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
+                  .flat(),
               },
             })
           );
@@ -210,17 +210,17 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
           title: entryTitle,
           schemaId: currentSchema.id.toString(),
           imageBase64: 'lorem ipsum',
-          metadataArray: currentSchema.fields.map(fieldName =>
-            convertFieldToMetadataArray(fields[fieldName], fieldName)
-          ),
+          metadataArray: currentSchema.fields
+            .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
+            .flat(),
         });
       else
         runQueryEdit({
           title: entryTitle,
           imageBase64: 'lorem ipsum',
-          metadataArray: currentSchema.fields.map(fieldName =>
-            convertFieldToMetadataArray(fields[fieldName], fieldName)
-          ),
+          metadataArray: currentSchema.fields
+            .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
+            .flat(),
         });
   };
 
