@@ -13,7 +13,7 @@ type EditFieldListProps = {
 
 export const EditFieldList: React.FC<EditFieldListProps> = props => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_currentField, setCurrentField] = useState('');
+  const [currentField, setCurrentField] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
@@ -44,7 +44,13 @@ export const EditFieldList: React.FC<EditFieldListProps> = props => {
           />
         ))}
       </Stack>
-      <AddReferenceDialog isOpen={isAddDialogOpen} setIsOpen={setIsAddDialogOpen} />
+      <AddReferenceDialog
+        currentField={currentField}
+        isOpen={isAddDialogOpen}
+        setIsOpen={setIsAddDialogOpen}
+        fields={props.fields}
+        setFields={props.setFields}
+      />
     </Box>
   );
 };

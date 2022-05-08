@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Stack, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store';
 import { CustomDialog } from '../../../../../../components/CustomDialog/CustomDialog';
 import { Entry, Schema } from '../../../../../codexSlice';
+import { EntryFields } from '../../../../CodexDialog';
 import { CustomSelect } from './components/CustomSelect/CustomSelect';
 
 export type SelectItem = {
@@ -13,8 +14,11 @@ export type SelectItem = {
 };
 
 type AddReferenceDialogProps = {
+  currentField: string;
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
+  fields: EntryFields;
+  setFields: (newEntryFields: EntryFields) => void;
 };
 
 const codexItemsToSelectItems = (items: Schema[] | Entry[]): SelectItem[] =>
@@ -24,29 +28,49 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
   const { schemas, entries } = useSelector((state: RootState) => state.codex);
 
   const [chosenSchema, setChosenSchema] = useState<SelectItem | null>(null);
-  const [_chosenEntry, setChosenEntry] = useState<SelectItem | null>(null);
+  const [chosenEntry, setChosenEntry] = useState<SelectItem | null>(null);
+
+  const handleOk = () => {
+    if (chosenSchema && chosenEntry) {
+      const newFields = props.fields;
+      newFields[props.currentField] = {
+        value: newFields[props.currentField].value.concat(`|${chosenEntry.name}|`),
+        ids: newFields[props.currentField].ids.concat(chosenEntry.id),
+      };
+      props.setFields({ ...newFields });
+      props.setIsOpen(false);
+    }
+  };
+
+  const handleCancel = () => {
+    props.setIsOpen(false);
+  };
 
   return (
-    <CustomDialog title={'Add entry reference'} isOpen={props.isOpen} setIsOpen={props.setIsOpen}>
+    <CustomDialog
+      title={'Add entry reference'}
+      isOpen={props.isOpen}
+      setIsOpen={props.setIsOpen}
+      onOk={handleOk}
+      onCancel={handleCancel}
+    >
       <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-          SCHEME
-        </Typography>
         <CustomSelect
+          name="SCHEME"
           id="schema-select"
           label="Choose schema"
           setValue={setChosenSchema}
           items={codexItemsToSelectItems(schemas)}
         />
-        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-          ENTRY
-        </Typography>
-        <CustomSelect
-          id="entry-select"
-          label="Choose entry"
-          setValue={setChosenEntry}
-          items={chosenSchema ? codexItemsToSelectItems(entries[chosenSchema.id]) : null}
-        />
+        {chosenSchema ? (
+          <CustomSelect
+            name="ENTRY"
+            id="entry-select"
+            label="Choose entry"
+            setValue={setChosenEntry}
+            items={chosenSchema ? codexItemsToSelectItems(entries[chosenSchema.id]) : null}
+          />
+        ) : null}
       </Stack>
     </CustomDialog>
   );
