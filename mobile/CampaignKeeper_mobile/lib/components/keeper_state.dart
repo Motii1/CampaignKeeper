@@ -14,6 +14,9 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
   // but not necessarily visible.
   void onEveryResume() async {}
 
+  // Function run on the return to this widget.
+  void onReturn() async {}
+
   // It shows a snackbar with a connection status info
   // when connection status changes.
   void showStatus() {
@@ -29,14 +32,18 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
   }
 
   // Allows to return to the specific page in a stack.
+  // Will work only if current widget is a currently
+  // visible one.
   void returnTo(String destination) {
-    Navigator.popUntil(context, ModalRoute.withName(destination));
+    if (this.mounted && ModalRoute.of(context)!.isCurrent) {
+      Navigator.popUntil(context, ModalRoute.withName(destination));
+    }
   }
 
   @mustCallSuper
   @override
   void didPopNext() {
-    onResume();
+    onReturn();
   }
 
   @override

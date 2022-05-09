@@ -87,13 +87,14 @@ class _CampaignState extends KeeperState<Campaign> {
   }
 
   @override
-  void onResume() async {
-    DataCarrier().refresh<CampaignEntity>();
-    if (currentPage == 0) {
-      await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignID);
-    } else {
-      //TODO: Refresh codex here
-    }
+  void onEveryResume() async {
+    await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignID);
+    //TODO: Refresh codex here
+  }
+
+  @override
+  void onReturn() async {
+    onCampaignRefresh();
   }
 
   @override

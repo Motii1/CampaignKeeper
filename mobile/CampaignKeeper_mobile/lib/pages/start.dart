@@ -50,13 +50,9 @@ class _StartState extends KeeperState<Start> {
   }
 
   @override
-  void onResume() async {
-    DataCarrier().refresh<CampaignEntity>();
-  }
-
-  @override
   void onEveryResume() async {
     DataCarrier().refresh<UserDataEntity>();
+    DataCarrier().refresh<CampaignEntity>();
   }
 
   @override

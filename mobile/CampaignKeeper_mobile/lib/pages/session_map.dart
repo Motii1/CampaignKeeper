@@ -42,6 +42,16 @@ class _SessionMapState extends KeeperState<SessionMap> {
   }
 
   @override
+  void onEveryResume() {
+    DataCarrier().refresh<SessionEntity>(groupId: session?.campaignId ?? -1);
+  }
+
+  @override
+  void onReturn() {
+    onSessionRefresh();
+  }
+
+  @override
   void initState() {
     super.initState();
     DataCarrier().addListener<SessionEntity>(onSessionRefresh);
