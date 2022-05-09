@@ -6,6 +6,8 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/main.dart';
 
+// Used to store any information that are app specific
+// not related to the account and tthe service.
 class AppPrefs {
   static final AppPrefs _app = AppPrefs._internal();
   final String milestone = "Eden Prime";

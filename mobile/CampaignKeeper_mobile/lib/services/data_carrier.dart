@@ -8,6 +8,9 @@ import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
 import 'package:flutter/material.dart';
 
+// Service used throught the whole app to unify
+// data managment. It's implementing an interface
+// very similar to the managers.
 class DataCarrier {
   static final DataCarrier _dc = DataCarrier._internal();
 
@@ -17,7 +20,7 @@ class DataCarrier {
 
   Map<Type, BaseManager> _managers = new Map();
 
-  // Adding managers
+  // Hardcoded managers addition to the DataCarrier.
   DataCarrier._internal() {
     _managers[UserDataEntity] = new UserDataManager();
     _managers[CampaignEntity] = new CampaignManager();
@@ -72,6 +75,9 @@ class DataCarrier {
     return false;
   }
 
+  // This function differs as it's not clearing only
+  // a specific managers data, but it's clearing
+  // everything at once.
   Future<void> clear() async {
     _managers.forEach((key, value) {
       value.clear();

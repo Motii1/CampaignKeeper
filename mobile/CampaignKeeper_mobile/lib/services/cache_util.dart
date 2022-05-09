@@ -1,6 +1,7 @@
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Util used to cache information.
 class CacheUtil {
   static final CacheUtil _cache = CacheUtil._internal();
 

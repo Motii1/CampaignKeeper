@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+// Helper used as an dependency injection tool.
 class DependenciesHelper {
   static final DependenciesHelper _deps = DependenciesHelper._internal();
 
