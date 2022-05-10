@@ -27,7 +27,7 @@ export const EntriesList: React.FC<EntriesListProps> = props => (
           borderRadius: 3,
           overflowY: 'auto',
           width: '100%',
-          height: 'calc(100vh - 150px)',
+          height: 'calc(100vh - 155px)',
         }}
       >
         <Stack
@@ -68,6 +68,7 @@ export const EntriesList: React.FC<EntriesListProps> = props => (
               spacing={1}
               sx={{
                 width: '100%',
+                paddingBottom: '15px',
               }}
             >
               {props.entriesToRender.map(entry => (

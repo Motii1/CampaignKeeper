@@ -43,6 +43,7 @@ export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
           margin: '25px',
           height: '100%',
           maxHeight: '100%',
+          width: '100%',
         }}
       >
         <SearchBar setSearchPhrase={setSearchPhrase} />

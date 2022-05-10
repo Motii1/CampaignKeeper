@@ -18,6 +18,7 @@ export const SearchBar: React.FC<SearchBarProps> = props => {
         borderRadius: 3.5,
         width: '100%',
         height: 45,
+        minHeight: 45,
       }}
     >
       <Stack

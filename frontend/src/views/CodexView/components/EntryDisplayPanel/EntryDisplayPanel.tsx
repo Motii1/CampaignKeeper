@@ -1,4 +1,4 @@
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
@@ -30,42 +30,60 @@ export const EntryDisplayPanel: React.FC = () => {
   };
 
   return currentEntry ? (
-    <Box
+    <Paper
+      elevation={6}
       sx={{
-        paddingBottom: '5px',
+        backgroundColor: 'customPalette.surface',
+        borderRadius: 3,
+        marginLeft: '25px',
+        marginRight: '25px',
+        marginTop: '25px',
+        height: '100%',
+        width: '100%',
       }}
     >
-      <Paper
-        elevation={6}
+      <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="flex-start"
+        spacing={1}
         sx={{
-          backgroundColor: 'customPalette.surface',
-          borderRadius: 3,
-          margin: '25px',
+          paddingLeft: '25px',
+          paddingTop: '15px',
+          height: 'calc(100% - 15px)',
+          width: 'calc(100% - 25px)',
         }}
       >
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="flex-start"
-          spacing={1}
+        <ReturnBar />
+        <Typography
+          variant={'h4'}
+          sx={{ color: 'customPalette.accent', fontWeight: 'medium', marginTop: '25px' }}
+        >
+          {currentEntry.title}
+        </Typography>
+        <Paper
+          elevation={0}
           sx={{
-            paddingLeft: '25px',
-            paddingRight: '25px',
-            paddingTop: '15px',
-            paddingBottom: '15px',
+            backgroundColor: 'transparent',
+            height: '100%',
+            width: '100%',
+            overflowY: 'auto',
           }}
         >
-          <ReturnBar />
-          <Typography
-            variant={'h4'}
-            sx={{ color: 'customPalette.accent', fontWeight: 'medium', marginTop: '25px' }}
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="flex-start"
+            spacing={1}
+            sx={{
+              paddingBottom: '15px',
+            }}
           >
-            {currentEntry.title}
-          </Typography>
-          {renderEntriesFields()}
-        </Stack>
-      </Paper>
-    </Box>
+            {renderEntriesFields()}
+          </Stack>
+        </Paper>
+      </Stack>
+    </Paper>
   ) : (
     <EmptyPlaceholder
       message={'Impossible. Perhaps the archives are incomplete... (entry not found)'}

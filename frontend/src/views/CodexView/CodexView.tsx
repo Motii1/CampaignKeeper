@@ -59,9 +59,10 @@ export const CodexView: React.FC = () => {
             sx={{
               position: 'absolute',
               left: '230px',
-              right: { xs: '0px', md: '220px' },
+              right: { xs: '0px', md: '230px' },
               top: '50px',
               bottom: '50px',
+              height: 'calc(100% - 94px)',
             }}
           >
             {currentEntry ? (

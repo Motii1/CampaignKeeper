@@ -42,6 +42,7 @@ export const SchemasList: React.FC<SchemasListProps> = props => {
         <SchemasListHeader />
         <Paper
           elevation={0}
+          square={true}
           sx={{
             backgroundColor: 'transparent',
             height: '100%',
