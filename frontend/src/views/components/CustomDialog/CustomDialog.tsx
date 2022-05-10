@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogContent, Stack } from '@mui/material';
+import { Box, Dialog, DialogContent, Paper, Stack } from '@mui/material';
 import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
 import { CustomButton } from '../CustomButton/CustomButton';
 import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
@@ -96,8 +96,10 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
         >
           <ReturnBar setOpen={otherProps.setIsOpen} />
           <CustomDialogTitle title={otherProps.title} isTitleRed={isTitleRed} />
-          <Box
+          <Paper
+            elevation={0}
             sx={{
+              backgroundColor: 'transparent',
               width: '100%',
               maxHeight: 'calc(100vh - 270px)',
               overflowY: 'auto',
@@ -106,7 +108,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
             <Box sx={{ paddingLeft: 2.4, paddingRight: 2.4, paddingBlock: 1.4 }}>
               {otherProps.children}
             </Box>
-          </Box>
+          </Paper>
           {renderButtons()}
         </Stack>
       </DialogContent>

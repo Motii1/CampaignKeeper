@@ -37,10 +37,9 @@ export const EntriesList: React.FC<EntriesListProps> = props => (
           spacing={1.5}
           sx={{
             paddingLeft: '25px',
-            paddingRight: '25px',
             paddingTop: '15px',
-            paddingBottom: '15px',
-            width: 'calc(100% - 50px)',
+            width: 'calc(100% - 25px)',
+            height: 'calc(100% - 15px)',
           }}
         >
           <Typography
@@ -53,23 +52,33 @@ export const EntriesList: React.FC<EntriesListProps> = props => (
           >
             {props.title}
           </Typography>
-          <Stack
-            direction="column"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            spacing={1}
+          <Paper
+            elevation={0}
             sx={{
+              backgroundColor: 'transparent',
+              height: '100%',
               width: '100%',
+              overflowY: 'auto',
             }}
           >
-            {props.entriesToRender.map(entry => (
-              <EntriesListElement
-                entry={entry}
-                key={entry.id}
-                setDialogType={props.setDialogType}
-              />
-            ))}
-          </Stack>
+            <Stack
+              direction="column"
+              justifyContent="flex-start"
+              alignItems="flex-start"
+              spacing={1}
+              sx={{
+                width: '100%',
+              }}
+            >
+              {props.entriesToRender.map(entry => (
+                <EntriesListElement
+                  entry={entry}
+                  key={entry.id}
+                  setDialogType={props.setDialogType}
+                />
+              ))}
+            </Stack>
+          </Paper>
         </Stack>
       </Paper>
     ) : (

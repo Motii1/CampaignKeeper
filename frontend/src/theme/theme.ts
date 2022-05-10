@@ -15,6 +15,7 @@ export const theme = createTheme({
             boxShadow: 'inset 0 0 10px 10px #ffffffaa',
             border: 'solid 10px transparent',
             borderRadius: '20px',
+            minHeight: '40px',
           },
           '&::-webkit-scrollbar-thumb:hover': {
             boxShadow: 'inset 0 0 10px 10px #ffffffdd',
