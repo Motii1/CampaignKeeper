@@ -1,6 +1,28 @@
 import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          '&::-webkit-scrollbar': {
+            width: '26px',
+          },
+          '&::-webkit-scrollbar-track': {
+            margin: 0.1,
+          },
+          '&::-webkit-scrollbar-thumb': {
+            boxShadow: 'inset 0 0 10px 10px #ffffffaa',
+            border: 'solid 10px transparent',
+            borderRadius: '20px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            boxShadow: 'inset 0 0 10px 10px #ffffffdd',
+          },
+        },
+      },
+    },
+  },
   palette: {
     customPalette: {
       background: '#262E38',

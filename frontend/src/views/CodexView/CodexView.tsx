@@ -57,9 +57,11 @@ export const CodexView: React.FC = () => {
         >
           <Box
             sx={{
-              marginLeft: '230px',
-              marginRight: { xs: '0px', md: '220px' },
-              height: 'calc(100% - 25px)',
+              position: 'absolute',
+              left: '230px',
+              right: { xs: '0px', md: '220px' },
+              top: '50px',
+              bottom: '50px',
             }}
           >
             {currentEntry ? (

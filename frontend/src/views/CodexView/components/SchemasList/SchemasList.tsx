@@ -23,15 +23,36 @@ export const SchemasList: React.FC<SchemasListProps> = props => {
         backgroundColor: 'customPalette.surface',
         position: 'absolute',
         left: 0,
-        top: 50,
+        top: '50px',
         bottom: 0,
+        height: 'calc(100vh - 50px)',
         width: 220,
-        display: 'flex',
       }}
     >
-      <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={0}>
+      <Stack
+        direction="column"
+        justifyContent="flex-start"
+        alignItems="center"
+        spacing={0}
+        sx={{
+          height: '100%',
+          width: '100%',
+        }}
+      >
         <SchemasListHeader />
-        {renderSchemaElements()}
+        <Stack
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="center"
+          spacing={0}
+          sx={{
+            height: '100%',
+            width: '100%',
+            overflowY: 'auto',
+          }}
+        >
+          {renderSchemaElements()}
+        </Stack>
         <NewSchemaButton setIsOpen={props.setIsOpen} />
       </Stack>
     </Paper>

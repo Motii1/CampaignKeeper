@@ -25,9 +25,9 @@ export const EntriesList: React.FC<EntriesListProps> = props => (
         sx={{
           backgroundColor: 'customPalette.surface',
           borderRadius: 3,
+          overflowY: 'auto',
           width: '100%',
-          height: '100%',
-          maxHeight: '100%',
+          height: 'calc(100vh - 150px)',
         }}
       >
         <Stack
@@ -40,7 +40,7 @@ export const EntriesList: React.FC<EntriesListProps> = props => (
             paddingRight: '25px',
             paddingTop: '15px',
             paddingBottom: '15px',
-            width: '100%',
+            width: 'calc(100% - 50px)',
           }}
         >
           <Typography

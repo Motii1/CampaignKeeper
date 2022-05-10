@@ -5,18 +5,19 @@ export const SchemasListHeader: React.FC = () => (
     square
     sx={{
       backgroundColor: 'customPalette.primary',
+      minHeight: 100,
       height: 100,
       width: 220,
-      position: 'relative',
+      display: 'flex',
+      alignItems: 'end',
     }}
   >
     <Typography
       sx={{
         color: 'customPalette.onPrimary',
         fontWeight: 'bold',
-        position: 'absolute',
-        left: 10,
-        bottom: 10,
+        marginLeft: 2,
+        marginBottom: 1,
       }}
     >
       SCHEMAS

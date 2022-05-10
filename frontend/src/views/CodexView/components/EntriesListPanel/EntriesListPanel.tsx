@@ -41,7 +41,8 @@ export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
         spacing={2}
         sx={{
           margin: '25px',
-          paddingBottom: '25px',
+          height: '100%',
+          maxHeight: '100%',
         }}
       >
         <SearchBar setSearchPhrase={setSearchPhrase} />

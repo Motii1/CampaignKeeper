@@ -30,10 +30,10 @@ export const NewSchemaButton: React.FC<NewSchemaButtonProps> = props => {
       sx={{
         cursor: 'pointer',
         borderRadius: 20,
+        margin: 1,
+        minHeight: 40,
         height: 40,
         backgroundColor: 'customPalette.accent',
-        position: 'absolute',
-        bottom: 10,
         display: 'flex',
         alignContent: 'center',
         justifyContent: 'center',

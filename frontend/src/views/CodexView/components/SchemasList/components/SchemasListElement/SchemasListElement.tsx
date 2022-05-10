@@ -33,19 +33,21 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
       onClick={onClick}
       sx={{
         backgroundColor: isElementSelected ? 'customPalette.secondary' : 'customPalette.surface',
-        width: 220,
+        width: '100%',
+        minHeight: 30,
         height: 30,
         paddingTop: 1,
-        position: 'relative',
         cursor: 'pointer',
       }}
     >
       <Typography
         sx={{
           color: isElementSelected ? 'customPalette.onSecondary' : 'customPalette.onSurface',
-          fontWeight: 'bold',
-          position: 'absolute',
-          left: 20,
+          fontWeight: isElementSelected ? 'bold' : 'medium',
+          marginLeft: 2,
+          '&:hover': {
+            opacity: 0.85,
+          },
         }}
       >
         {props.schema.title}

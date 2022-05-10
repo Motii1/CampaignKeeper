@@ -31,7 +31,7 @@ export const EntriesListElement: React.FC<EntriesListElementProps> = props => {
           color: 'customPalette.onSurface',
           fontWeight: 'medium',
           '&:hover': {
-            opacity: 0.75,
+            opacity: 0.8,
           },
         }}
       >
