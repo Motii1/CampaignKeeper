@@ -93,7 +93,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
         />
         <Typography
           sx={{
-            color: 'customPalette.accent',
+            color: 'customPalette.onBrown',
             fontWeight: 'medium',
             textAlign: 'left',
             paddingLeft: { xs: 0.7, lg: 1.5 },

@@ -1,8 +1,9 @@
 import { MoreVert } from '@mui/icons-material';
 import { Avatar, Box, Menu, MenuItem, Paper, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { ColorModeContext } from '../../../../../../../App';
 import requestMethods from '../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../axios/useQuery';
 import { RootState, store } from '../../../../../../../store';
@@ -20,16 +21,21 @@ type UserPanelProps = {
 };
 
 export const UserPanel: React.FC<UserPanelProps> = props => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const { username, avatar } = useSelector((state: RootState) => state.user);
   const [menuAnchor, setMenuAnchor] = useState<null | Element>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentDialogTitle, setcurrentDialogTitle] = useState<string>('About');
 
-  const dispatch = useDispatch();
-  const history = useHistory();
+  const colorMode = React.useContext(ColorModeContext);
+  const getThemeText = useCallback(
+    () => (colorMode.mode === 'dark' ? 'Light mode' : 'Dark mode'),
+    [colorMode.mode]
+  );
 
   const { isLoading, status, runQuery } = useQuery(`${AUTH_URL}/logout`, requestMethods.POST);
-
   const handleRunQuery = useCallback(() => {
     if (!isLoading && status) {
       if (status === 200) {
@@ -66,6 +72,12 @@ export const UserPanel: React.FC<UserPanelProps> = props => {
   const handleLogoutClick = async () => {
     handleClose();
     runQuery();
+  };
+
+  const handleThemeClick = () => {
+    colorMode.toggleColorMode();
+    // eslint-disable-next-line no-console
+    console.log(getThemeText());
   };
 
   return (
@@ -149,6 +161,7 @@ export const UserPanel: React.FC<UserPanelProps> = props => {
         disableAutoFocusItem
       >
         <MenuItem onClick={handleSettingsClick}>Settings</MenuItem>
+        <MenuItem onClick={handleThemeClick}>{getThemeText()}</MenuItem>
         <MenuItem onClick={handleAboutClick}>About</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
       </Menu>
