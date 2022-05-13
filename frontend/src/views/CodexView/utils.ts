@@ -30,25 +30,7 @@ export const convertEditFieldToMetadata = (
   return metadata;
 };
 
-export const getMetadataByFieldName = (
-  fieldName: string,
-  metadata: MetadataInstance[]
-): MetadataInstance[] => metadata.filter(element => element.fieldName === fieldName);
-
-const getEntryNameById = (id: string, entries: Entry[]): string => {
-  const entry = entries.find(entry => `${entry.id}` === id);
-  return entry ? entry.title : 'REFERENCE_NOT_FOUND';
-};
-
-export const convertEntriesHashMapToList = (entries: EntriesHashMap): Entry[] => {
-  let entriesAsLists: Entry[] = [];
-  Object.keys(entries).forEach(schemaId => {
-    entriesAsLists = entriesAsLists.concat(entries[schemaId]);
-  });
-  return entriesAsLists;
-};
-
-export const getEditFieldFromMetadata = (
+export const convertMetadataToEntryField = (
   fieldName: string,
   metadata: MetadataInstance[],
   entries: Entry[]
@@ -69,6 +51,24 @@ export const getEntryFromMetadata = (
 ): Entry | null => {
   const entry = entries.find(entry => `${entry.id}` === metadata.value);
   return entry ? entry : null;
+};
+
+export const getMetadataByFieldName = (
+  fieldName: string,
+  metadata: MetadataInstance[]
+): MetadataInstance[] => metadata.filter(element => element.fieldName === fieldName);
+
+const getEntryNameById = (id: string, entries: Entry[]): string => {
+  const entry = entries.find(entry => `${entry.id}` === id);
+  return entry ? entry.title : 'REFERENCE_NOT_FOUND';
+};
+
+export const convertEntriesHashMapToList = (entries: EntriesHashMap): Entry[] => {
+  let entriesAsLists: Entry[] = [];
+  Object.keys(entries).forEach(schemaId => {
+    entriesAsLists = entriesAsLists.concat(entries[schemaId]);
+  });
+  return entriesAsLists;
 };
 
 export const getUpdatedEditField = (

@@ -12,7 +12,7 @@ import { setCurrentEntry } from '../codexViewSlice';
 import {
   convertEditFieldToMetadata,
   convertEntriesHashMapToList,
-  getEditFieldFromMetadata,
+  convertMetadataToEntryField,
 } from '../utils';
 import { EditFieldList } from './components/EditFieldList/EditFieldList';
 
@@ -65,7 +65,7 @@ const createFilledFields = (
   if (entry)
     schema?.fields.forEach(
       fieldName =>
-        (currentFields[fieldName] = getEditFieldFromMetadata(
+        (currentFields[fieldName] = convertMetadataToEntryField(
           fieldName,
           entry.metadataArray,
           entriesAsList

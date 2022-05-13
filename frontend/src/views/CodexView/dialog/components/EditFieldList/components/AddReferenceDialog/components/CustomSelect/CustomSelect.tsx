@@ -22,8 +22,6 @@ export const CustomSelect: React.FC<CustomSelectProps> = props => {
   const handleChange = (event: SelectChangeEvent) => {
     if (props.items) {
       const newValue = props.items.find(item => item.id === event.target.value);
-      // eslint-disable-next-line no-console
-      console.log(event.target.value);
       props.setValue(newValue ? newValue : null);
     }
   };
