@@ -16,13 +16,13 @@ import {
 } from '../utils';
 import { EditFieldList } from './components/EditFieldList/EditFieldList';
 
-export type EntryFieldState = {
+export type EntryFieldMetadata = {
   value: string;
-  ids: string[];
+  id: null | string;
 };
 
-export type EntryFields = {
-  [fieldName: string]: EntryFieldState;
+export type EntryFieldsState = {
+  [fieldName: string]: EntryFieldMetadata[];
 };
 
 type NewEntryData = {
@@ -47,9 +47,11 @@ type CodexDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
-const createEmptyFields = (schema: null | Schema): EntryFields => {
-  const currentFields: EntryFields = {};
-  schema?.fields.forEach(field => (currentFields[field] = { value: '', ids: [] }));
+const createEmptyFields = (schema: null | Schema): EntryFieldsState => {
+  const currentFields: EntryFieldsState = {};
+  schema?.fields.forEach(field => {
+    currentFields[field] = [];
+  });
   return currentFields;
 };
 
@@ -57,8 +59,8 @@ const createFilledFields = (
   schema: null | Schema,
   entry: Entry | null,
   entries: EntriesHashMap
-): EntryFields => {
-  const currentFields: EntryFields = {};
+): EntryFieldsState => {
+  const currentFields: EntryFieldsState = {};
   const entriesAsList: Entry[] = convertEntriesHashMapToList(entries);
   if (entry)
     schema?.fields.forEach(

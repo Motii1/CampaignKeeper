@@ -1,38 +1,29 @@
 import { EntriesHashMap, Entry, MetadataInstance } from './codexSlice';
-import { EntryFieldState } from './dialog/CodexDialog';
+import { EntryFieldMetadata } from './dialog/CodexDialog';
 
 export const convertEditFieldToMetadata = (
-  field: EntryFieldState,
+  fieldMetadata: EntryFieldMetadata[],
   fieldName: string
 ): MetadataInstance[] => {
-  const values = field.value.split('|');
-  const { ids } = field;
-  let isEven = true;
   let index = 0;
   const metadata: MetadataInstance[] = [];
-  values.forEach(value => {
-    if (value === '') isEven = !isEven;
-    else {
-      if (isEven)
+  fieldMetadata.forEach(field => {
+    if (field.value !== '')
+      if (field.id)
+        metadata.push({
+          type: 'id',
+          sequenceNumber: index,
+          value: `${field.id}`,
+          fieldName: fieldName,
+        });
+      else
         metadata.push({
           type: 'string',
           sequenceNumber: index,
-          value: value,
+          value: field.value,
           fieldName: fieldName,
         });
-      else {
-        const id = ids.shift();
-        if (id)
-          metadata.push({
-            type: 'id',
-            sequenceNumber: index,
-            value: `${id}`,
-            fieldName: fieldName,
-          });
-      }
-      index += 1;
-      isEven = !isEven;
-    }
+    index += 1;
   });
   // eslint-disable-next-line no-console
   console.log(metadata);
@@ -61,20 +52,15 @@ export const getEditFieldFromMetadata = (
   fieldName: string,
   metadata: MetadataInstance[],
   entries: Entry[]
-): EntryFieldState => {
+): EntryFieldMetadata[] => {
   const fieldMetadata = getMetadataByFieldName(fieldName, metadata).sort((m1, m2) =>
     m1.sequenceNumber > m2.sequenceNumber ? 1 : m2.sequenceNumber > m1.sequenceNumber ? -1 : 0
   );
-  const fieldString = fieldMetadata
-    .map(metadata =>
-      metadata.type === 'string' ? metadata.value : `|${getEntryNameById(metadata.value, entries)}|`
-    )
-    .join('');
-  const fieldIds = fieldMetadata.map(metadata => metadata.value);
-  return {
-    value: fieldString,
-    ids: fieldIds,
-  };
+  return fieldMetadata.map(metadata => ({
+    value:
+      metadata.type === 'string' ? metadata.value : `${getEntryNameById(metadata.value, entries)}`,
+    id: metadata.type === 'id' ? metadata.value : null,
+  }));
 };
 
 export const getEntryFromMetadata = (
@@ -84,3 +70,26 @@ export const getEntryFromMetadata = (
   const entry = entries.find(entry => `${entry.id}` === metadata.value);
   return entry ? entry : null;
 };
+
+export const getUpdatedEditField = (
+  oldEditField: EntryFieldMetadata[],
+  fieldValue: string
+): EntryFieldMetadata[] => {
+  const newEditField: EntryFieldMetadata[] = [];
+  const newValues = fieldValue.split('|');
+  newValues.forEach(value => {
+    if (value !== '') {
+      const existingMetadata = oldEditField.find(element => element.value === value);
+      if (existingMetadata) newEditField.push(existingMetadata);
+      else
+        newEditField.push({
+          value: value,
+          id: null,
+        });
+    }
+  });
+  return newEditField;
+};
+
+export const convertEditFieldToString = (editField: EntryFieldMetadata[]): string =>
+  editField.map(field => (field.id ? `|${field.value}|` : field.value)).join('');

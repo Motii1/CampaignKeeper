@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store';
 import { CustomDialog } from '../../../../../../components/CustomDialog/CustomDialog';
 import { Entry, Schema } from '../../../../../codexSlice';
-import { EntryFields } from '../../../../CodexDialog';
+import { EntryFieldsState } from '../../../../CodexDialog';
 import { CustomSelect } from './components/CustomSelect/CustomSelect';
 
 export type SelectItem = {
@@ -17,8 +17,8 @@ type AddReferenceDialogProps = {
   currentField: string;
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
-  fields: EntryFields;
-  setFields: (newEntryFields: EntryFields) => void;
+  fields: EntryFieldsState;
+  setFields: (newEntryFields: EntryFieldsState) => void;
 };
 
 const codexItemsToSelectItems = (items: Schema[] | Entry[]): SelectItem[] =>
@@ -33,10 +33,10 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
   const handleOk = () => {
     if (chosenSchema && chosenEntry) {
       const newFields = props.fields;
-      newFields[props.currentField] = {
-        value: newFields[props.currentField].value.concat(`|${chosenEntry.name}|`),
-        ids: newFields[props.currentField].ids.concat(chosenEntry.id),
-      };
+      newFields[props.currentField] = newFields[props.currentField].concat({
+        value: `${chosenEntry.name}`,
+        id: chosenEntry.id,
+      });
       props.setFields({ ...newFields });
       props.setIsOpen(false);
     }
