@@ -6,6 +6,7 @@ import { useQuery } from '../../../../../../axios/useQuery';
 import { RootState } from '../../../../../../store';
 import { CustomDialog } from '../../../../../components/CustomDialog/CustomDialog';
 import { deleteSchema } from '../../../../codexSlice';
+import { resetCurrent } from '../../../../codexViewSlice';
 
 type DeleteSchemaDialogProps = {
   schemaId: null | string;
@@ -36,7 +37,8 @@ export const DeleteSchemaDialog: React.FC<DeleteSchemaDialogProps> = props => {
     if (!isLoading && status) {
       if (status === 200) {
         dispatch(deleteSchema({ schemaId: props.schemaId }));
-        props.setSnackbarSuccess('Schema delted');
+        dispatch(resetCurrent({}));
+        props.setSnackbarSuccess('Schema deleted');
         props.setIsOpen(false);
       } else if (status === 400) {
         props.setSnackbarError('Error during schema deletion');
@@ -64,18 +66,12 @@ export const DeleteSchemaDialog: React.FC<DeleteSchemaDialogProps> = props => {
       title={'Delete schema'}
       isOpen={props.isOpen}
       setIsOpen={props.setIsOpen}
-      onOk={handleOk}
-      onCancel={handleCancel}
+      onOk={canDelete ? handleOk : undefined}
+      onCancel={canDelete ? handleCancel : undefined}
     >
-      {canDelete ? (
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-          {"This action can't be undone."}
-        </Typography>
-      ) : (
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-          {'All entries must be removed from schema before it can be delete it can be deleted.'}
-        </Typography>
-      )}
+      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        {"This action can't be undone."}
+      </Typography>
     </CustomDialog>
   );
 };

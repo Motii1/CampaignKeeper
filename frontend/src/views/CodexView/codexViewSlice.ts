@@ -19,6 +19,7 @@ const codexViewSlice = createSlice({
   reducers: {
     setCurrentSchema: (state, action) => {
       state.currentSchema = action.payload.newSchema;
+      state.currentEntry = null;
     },
     setCurrentEntry: (state, action) => {
       state.currentEntry = action.payload.newEntry;
@@ -30,10 +31,20 @@ const codexViewSlice = createSlice({
     updateCampaignId: (state, action) => {
       state.codexCampaignId = action.payload.campaignId;
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    resetCurrent: (state, _action) => {
+      state.currentSchema = null;
+      state.currentEntry = null;
+    },
   },
 });
 
-export const { setCurrentSchema, setCurrentEntry, setCurrentSchemaAndEntry, updateCampaignId } =
-  codexViewSlice.actions;
+export const {
+  setCurrentSchema,
+  setCurrentEntry,
+  setCurrentSchemaAndEntry,
+  updateCampaignId,
+  resetCurrent,
+} = codexViewSlice.actions;
 
 export default codexViewSlice.reducer;

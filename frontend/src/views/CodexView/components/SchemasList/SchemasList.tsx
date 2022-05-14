@@ -2,6 +2,7 @@ import { Box, Paper, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
+import { CustomSnackbar } from '../../../components/CustomSnackbar/CustomSnackbar';
 import { useSnackbar } from '../../../components/CustomSnackbar/useSnackbar';
 import { DeleteSchemaDialog } from './components/DeleteSchemaDialog/DeleteSchemaDialog';
 import { NewSchemaButton } from './components/NewSchemaButton/NewSchemaButton';
@@ -15,15 +16,16 @@ export const SchemasList: React.FC = () => {
   const [isNewOpen, setIsNewOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [schemaId, setSchemaId] = useState<null | string>(null);
-  const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
+  const { snackbarProperties, setSnackbarSuccess, setSnackbarError } = useSnackbar();
 
   const renderSchemaElements = () =>
     schemas.map(schema => (
       <SchemasListElement
         schema={schema}
-        key={schema.id}
         setSchemaId={setSchemaId}
         setIsOpen={setIsDeleteOpen}
+        setSnackbarError={setSnackbarError}
+        key={schema.id}
       />
     ));
 
@@ -90,6 +92,12 @@ export const SchemasList: React.FC = () => {
         setIsOpen={setIsDeleteOpen}
         setSnackbarSuccess={setSnackbarSuccess}
         setSnackbarError={setSnackbarError}
+      />
+      <CustomSnackbar
+        message={snackbarProperties.message}
+        type={snackbarProperties.type}
+        isOpen={snackbarProperties.isOpen}
+        setIsOpen={snackbarProperties.setIsOpen}
       />
     </Box>
   );

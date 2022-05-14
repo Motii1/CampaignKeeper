@@ -4,17 +4,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../../store';
 import { DeleteMenu } from '../../../../../components/DeleteMenu/DeleteMenu';
 import { Schema } from '../../../../codexSlice';
-import { setCurrentEntry, setCurrentSchema } from '../../../../codexViewSlice';
+import { setCurrentSchema } from '../../../../codexViewSlice';
 
 type SchemaListElementProps = {
   schema: Schema;
   setSchemaId: (newSchemaId: string) => void;
   setIsOpen: (newIsOpen: boolean) => void;
+  setSnackbarError: (message: string) => void;
 };
 
 export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
   const dispatch = useDispatch();
   const { currentSchema } = useSelector((state: RootState) => state.codexView);
+  const { entries } = useSelector((state: RootState) => state.codex);
 
   const [isElementSelected, setIsElementSelected] = useState<boolean>(
     props.schema.id === currentSchema?.id
@@ -27,7 +29,6 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
 
   const onClick = () => {
     dispatch(setCurrentSchema({ newSchema: props.schema }));
-    dispatch(setCurrentEntry({ newEntry: null }));
     setIsElementSelected(true);
   };
 
@@ -44,9 +45,17 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
   };
 
   const handleDelete = () => {
-    props.setSchemaId(props.schema.id);
-    props.setIsOpen(true);
-    setMenuPos(null);
+    if (currentSchema)
+      if (!entries[props.schema.id].length) {
+        dispatch(setCurrentSchema({ newSchema: props.schema }));
+        props.setSchemaId(props.schema.id);
+        props.setIsOpen(true);
+        setMenuPos(null);
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('here');
+        props.setSnackbarError("Can't remove a schema with entries.");
+      }
   };
 
   const handleClose = () => {
