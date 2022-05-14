@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import requestMethods from '../../../axios/requestMethods';
@@ -6,6 +6,7 @@ import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
+import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import { addEntry, EntriesHashMap, Entry, MetadataInstance, Schema } from '../codexSlice';
 import { setCurrentEntry } from '../codexViewSlice';
@@ -87,6 +88,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const [entryTitle, setEntryTitle] = useState<string>('');
   const [entryTitleHelperText, setEntryTitleHelperText] = useState<string>('');
   const [fields, setFields] = useState(createEmptyFields(currentSchema));
+  const [entryImageBase64, setEntryImageBase64] = useState<string | null>(null);
 
   useEffect(() => {
     if (currentEntry) {
@@ -105,12 +107,16 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       setDialogTitle(`Edit ${currentSchema?.title} entry`);
       setFields(createFilledFields(currentSchema, currentEntry, entries));
       setEntryTitle(currentEntry.title);
+      setEntryImageBase64(currentEntry.imageBase64);
     } else {
       setDialogTitle('Create new entry');
       setFields(createEmptyFields(currentSchema));
       setEntryTitle('');
+      setEntryImageBase64(null);
     }
   }, [currentEntry, currentSchema, entries]);
+
+  useEffect(() => resetDialog(), [resetDialog, props.isOpen]);
 
   const {
     isLoading: isLoadingNew,
@@ -167,7 +173,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
                 id: currentEntry.id,
                 schemaId: currentSchema.id,
                 title: entryTitle,
-                imageBase64: 'lorem ipsum',
+                imageBase64: entryImageBase64,
                 metadataArray: currentSchema?.fields
                   .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
                   .flat(),
@@ -196,6 +202,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
     currentEntry,
     dispatch,
     entryTitle,
+    entryImageBase64,
     props,
     resetDialog,
     fields,
@@ -211,7 +218,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
         runQueryNew({
           title: entryTitle,
           schemaId: currentSchema.id.toString(),
-          imageBase64: 'lorem ipsum',
+          imageBase64: entryImageBase64,
           metadataArray: currentSchema.fields
             .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
             .flat(),
@@ -219,7 +226,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       else
         runQueryEdit({
           title: entryTitle,
-          imageBase64: 'lorem ipsum',
+          imageBase64: entryImageBase64,
           metadataArray: currentSchema.fields
             .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
             .flat(),
@@ -228,7 +235,6 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
 
   const handleCancel = () => {
     props.setIsOpen(false);
-    resetDialog();
   };
 
   const handleDelete = () => {
@@ -266,9 +272,8 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
           justifyContent="center"
           alignItems="flex-start"
           spacing={1}
-          sx={{ width: '100%' }}
+          sx={{ width: '80%' }}
         >
-          {/* This one can't be LabeledTextInput due to the footer displaying validation of this component making a gap */}
           <LabeledTextInput
             text={'Title'}
             value={entryTitle}
@@ -282,6 +287,22 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
             <EditFieldList currentSchema={currentSchema} fields={fields} setFields={setFields} />
           ) : null}
         </Stack>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '150px',
+            right: '20px',
+          }}
+        >
+          <ImageUploadField
+            height={380}
+            width={220}
+            image={entryImageBase64}
+            setImage={newImageBase64 => {
+              setEntryImageBase64(newImageBase64);
+            }}
+          />
+        </Box>
       </CustomDialog>
     );
 
