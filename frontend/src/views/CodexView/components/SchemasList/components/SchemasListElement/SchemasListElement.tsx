@@ -34,6 +34,7 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
 
   const handleContextMenu = (event: React.MouseEvent) => {
     event.preventDefault();
+    dispatch(setCurrentSchema({ newSchema: props.schema }));
     setMenuPos(
       menuPos === null
         ? {
@@ -45,13 +46,11 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
   };
 
   const handleDelete = () => {
-    if (currentSchema)
-      if (!entries[props.schema.id].length) {
-        dispatch(setCurrentSchema({ newSchema: props.schema }));
-        props.setSchemaId(props.schema.id);
-        props.setIsOpen(true);
-        setMenuPos(null);
-      } else props.setSnackbarError("Can't remove a schema with entries.");
+    if (!entries[props.schema.id].length) {
+      props.setSchemaId(props.schema.id);
+      props.setIsOpen(true);
+      setMenuPos(null);
+    } else props.setSnackbarError("Can't remove a schema with entries.");
   };
 
   const handleClose = () => {
