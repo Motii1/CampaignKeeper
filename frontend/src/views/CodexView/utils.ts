@@ -25,8 +25,6 @@ export const convertEditFieldToMetadata = (
         });
     index += 1;
   });
-  // eslint-disable-next-line no-console
-  console.log(metadata);
   return metadata;
 };
 

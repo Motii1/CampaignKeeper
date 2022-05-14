@@ -49,6 +49,7 @@ export const FieldTextArea: React.FC<FieldTextAreaProps> = props => (
       }}
       variant="outlined"
       fullWidth
+      multiline
       onChange={props.onChange}
       sx={{
         backgroundColor: 'customPalette.background',
