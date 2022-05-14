@@ -19,39 +19,39 @@ export const EntriesList: React.FC<EntriesListProps> = props => (
       maxHeight: '100%',
     }}
   >
-    {props.entriesToRender.length !== 0 ? (
-      <Paper
-        elevation={6}
+    <Paper
+      elevation={6}
+      sx={{
+        backgroundColor: 'customPalette.surface',
+        borderRadius: 3,
+        overflowY: 'auto',
+        width: '100%',
+        height: 'calc(100vh - 155px)',
+      }}
+    >
+      <Stack
+        direction="column"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        spacing={1.5}
         sx={{
-          backgroundColor: 'customPalette.surface',
-          borderRadius: 3,
-          overflowY: 'auto',
-          width: '100%',
-          height: 'calc(100vh - 155px)',
+          paddingLeft: '25px',
+          paddingTop: '15px',
+          width: 'calc(100% - 25px)',
+          height: 'calc(100% - 15px)',
         }}
       >
-        <Stack
-          direction="column"
-          justifyContent="flex-start"
-          alignItems="flex-start"
-          spacing={1.5}
+        <Typography
+          variant={'h4'}
           sx={{
-            paddingLeft: '25px',
-            paddingTop: '15px',
-            width: 'calc(100% - 25px)',
-            height: 'calc(100% - 15px)',
+            color: 'customPalette.accent',
+            fontWeight: 'medium',
+            textTransform: 'uppercase',
           }}
         >
-          <Typography
-            variant={'h4'}
-            sx={{
-              color: 'customPalette.accent',
-              fontWeight: 'medium',
-              textTransform: 'uppercase',
-            }}
-          >
-            {props.title}
-          </Typography>
+          {props.title}
+        </Typography>
+        {props.entriesToRender.length !== 0 ? (
           <Paper
             elevation={0}
             sx={{
@@ -80,17 +80,17 @@ export const EntriesList: React.FC<EntriesListProps> = props => (
               ))}
             </Stack>
           </Paper>
-        </Stack>
-      </Paper>
-    ) : (
-      <Box
-        sx={{
-          height: 'calc(100vh - 170px)',
-          width: '100%',
-        }}
-      >
-        <EmptyPlaceholder message={'Create an object for this schema, Wordsmith'} />
-      </Box>
-    )}
+        ) : (
+          <Box
+            sx={{
+              height: 'calc(100vh - 170px)',
+              width: '100%',
+            }}
+          >
+            <EmptyPlaceholder message={'Create an object for this schema, Wordsmith'} />
+          </Box>
+        )}
+      </Stack>
+    </Paper>
   </Box>
 );

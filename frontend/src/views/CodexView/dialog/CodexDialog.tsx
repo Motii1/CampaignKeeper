@@ -250,37 +250,41 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
     });
   };
 
-  return (
-    <CustomDialog
-      title={dialogTitle}
-      isOpen={props.isOpen}
-      isLarge={true}
-      setIsOpen={props.setIsOpen}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      onDelete={handleDelete}
-    >
-      <Stack
-        direction="column"
-        justifyContent="center"
-        alignItems="flex-start"
-        spacing={1}
-        sx={{ width: '100%' }}
+  if (currentSchema)
+    return (
+      <CustomDialog
+        title={dialogTitle}
+        isOpen={props.isOpen}
+        isLarge={true}
+        setIsOpen={props.setIsOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        onDelete={handleDelete}
       >
-        {/* This one can't be LabeledTextInput due to the footer displaying validation of this component making a gap */}
-        <LabeledTextInput
-          text={'Title'}
-          value={entryTitle}
-          placeholder={''}
-          helperText={entryTitleHelperText}
-          defaultHelperText={''}
-          onChange={event => handleEntryTitleChange(event)}
-          onBlur={event => handleEntryTitleLeave(event)}
-        />
-        {currentSchema ? (
-          <EditFieldList currentSchema={currentSchema} fields={fields} setFields={setFields} />
-        ) : null}
-      </Stack>
-    </CustomDialog>
-  );
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="flex-start"
+          spacing={1}
+          sx={{ width: '100%' }}
+        >
+          {/* This one can't be LabeledTextInput due to the footer displaying validation of this component making a gap */}
+          <LabeledTextInput
+            text={'Title'}
+            value={entryTitle}
+            placeholder={''}
+            helperText={entryTitleHelperText}
+            defaultHelperText={''}
+            onChange={event => handleEntryTitleChange(event)}
+            onBlur={event => handleEntryTitleLeave(event)}
+          />
+          {currentSchema ? (
+            <EditFieldList currentSchema={currentSchema} fields={fields} setFields={setFields} />
+          ) : null}
+        </Stack>
+      </CustomDialog>
+    );
+
+  props.setIsOpen(false);
+  return null;
 };
