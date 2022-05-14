@@ -49,7 +49,7 @@ export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
         <SearchBar setSearchPhrase={setSearchPhrase} />
         <EntriesList
           title={currentSchema.title}
-          entriesToRender={shownEntries}
+          entriesToRender={shownEntries ? shownEntries : []}
           searchPhrase={searchPhrase}
           setDialogType={props.setDialogType}
         />

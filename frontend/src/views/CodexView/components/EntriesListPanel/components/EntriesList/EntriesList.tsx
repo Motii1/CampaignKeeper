@@ -6,7 +6,7 @@ import { EntriesListElement } from './components/EntriesListElement/EntriesListE
 
 type EntriesListProps = {
   title: string;
-  entriesToRender: Entry[] | null;
+  entriesToRender: Entry[];
   searchPhrase: string;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
@@ -19,7 +19,7 @@ export const EntriesList: React.FC<EntriesListProps> = props => (
       maxHeight: '100%',
     }}
   >
-    {props.entriesToRender ? (
+    {props.entriesToRender.length !== 0 ? (
       <Paper
         elevation={6}
         sx={{

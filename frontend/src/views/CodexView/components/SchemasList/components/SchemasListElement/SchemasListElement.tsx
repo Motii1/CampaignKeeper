@@ -51,11 +51,7 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
         props.setSchemaId(props.schema.id);
         props.setIsOpen(true);
         setMenuPos(null);
-      } else {
-        // eslint-disable-next-line no-console
-        console.log('here');
-        props.setSnackbarError("Can't remove a schema with entries.");
-      }
+      } else props.setSnackbarError("Can't remove a schema with entries.");
   };
 
   const handleClose = () => {
