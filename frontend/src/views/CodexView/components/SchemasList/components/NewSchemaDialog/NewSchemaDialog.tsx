@@ -5,7 +5,6 @@ import requestMethods from '../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../axios/useQuery';
 import { RootState } from '../../../../../../store';
 import { CustomDialog } from '../../../../../components/CustomDialog/CustomDialog';
-import { useSnackbar } from '../../../../../components/CustomSnackbar/useSnackbar';
 import { LabeledTextInput } from '../../../../../components/LabeledTextInput/LabeledTextInput';
 import { addSchema } from '../../../../codexSlice';
 import { Field } from './components/FieldsList/components/Field/Field';
@@ -20,12 +19,13 @@ type SchemaData = {
 type NewSchemaDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
+  setSnackbarSuccess: (message: string) => void;
+  setSnackbarError: (message: string) => void;
 };
 
 export const NewSchemaDialog: React.FC<NewSchemaDialogProps> = props => {
   const dispatch = useDispatch();
-  const { currentCampaignId: campaignId } = useSelector((state: RootState) => state.campaignView);
-  const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
+  const { currentCampaignId } = useSelector((state: RootState) => state.campaignView);
 
   const [name, setName] = useState('');
   const [helperText, setHelperText] = useState<null | string>(null);
@@ -46,27 +46,17 @@ export const NewSchemaDialog: React.FC<NewSchemaDialogProps> = props => {
     if (!isLoading && status) {
       if (status === 200) {
         dispatch(addSchema({ newSchema: data }));
-        setSnackbarSuccess('Schema created');
+        props.setSnackbarSuccess('Schema created');
         props.setIsOpen(false);
         resetDialog();
       } else if (status === 400) {
-        setSnackbarError('Error during schema creation');
+        props.setSnackbarError('Error during schema creation');
       } else if (status === 404) {
-        setSnackbarError("Campaign not found, can't create schema");
+        props.setSnackbarError("Campaign not found, can't create schema");
       }
       resetQuery();
     }
-  }, [
-    data,
-    dispatch,
-    isLoading,
-    props,
-    resetDialog,
-    resetQuery,
-    setSnackbarError,
-    setSnackbarSuccess,
-    status,
-  ]);
+  }, [data, dispatch, isLoading, props, resetDialog, resetQuery, status]);
 
   useEffect(() => {
     handleRunQuery();
@@ -91,7 +81,7 @@ export const NewSchemaDialog: React.FC<NewSchemaDialogProps> = props => {
     if (!helperText)
       runQuery({
         title: name,
-        campaignId: campaignId,
+        campaignId: currentCampaignId,
         fields: fields,
       });
   };

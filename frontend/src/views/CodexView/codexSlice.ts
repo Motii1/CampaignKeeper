@@ -63,6 +63,13 @@ const codexViewSlice = createSlice({
       newEntries[action.payload.newSchema.id] = [];
       state.entries = newEntries;
     },
+    deleteSchema: (state, action) => {
+      const newSchemas = state.schemas.filter(schema => schema.id !== action.payload.schemaId);
+      state.schemas = newSchemas;
+      const newEntries = state.entries;
+      newEntries[action.payload.schemaId] = [];
+      state.entries = newEntries;
+    },
     addEntry: (state, action) => {
       const newEntries = state.entries;
       newEntries[action.payload.schemaId] = newEntries[action.payload.schemaId].concat(
@@ -111,6 +118,6 @@ const codexViewSlice = createSlice({
   },
 });
 
-export const { addSchema, addEntry, editEntry, deleteEntry } = codexViewSlice.actions;
+export const { addSchema, deleteSchema, addEntry, editEntry, deleteEntry } = codexViewSlice.actions;
 
 export default codexViewSlice.reducer;

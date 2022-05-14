@@ -2,6 +2,8 @@ import { Box, Paper, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
+import { useSnackbar } from '../../../components/CustomSnackbar/useSnackbar';
+import { DeleteSchemaDialog } from './components/DeleteSchemaDialog/DeleteSchemaDialog';
 import { NewSchemaButton } from './components/NewSchemaButton/NewSchemaButton';
 import { NewSchemaDialog } from './components/NewSchemaDialog/NewSchemaDialog';
 import { SchemasListElement } from './components/SchemasListElement/SchemasListElement';
@@ -10,10 +12,20 @@ import { SchemasListHeader } from './components/SchemasListHeader/SchemasListHea
 export const SchemasList: React.FC = () => {
   const { schemas } = useSelector((state: RootState) => state.codex);
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isNewOpen, setIsNewOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [schemaId, setSchemaId] = useState<null | string>(null);
+  const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
 
   const renderSchemaElements = () =>
-    schemas.map(schema => <SchemasListElement schema={schema} key={schema.id} />);
+    schemas.map(schema => (
+      <SchemasListElement
+        schema={schema}
+        key={schema.id}
+        setSchemaId={setSchemaId}
+        setIsOpen={setIsDeleteOpen}
+      />
+    ));
 
   return (
     <Box>
@@ -63,10 +75,22 @@ export const SchemasList: React.FC = () => {
               {renderSchemaElements()}
             </Stack>
           </Paper>
-          <NewSchemaButton setIsOpen={setIsOpen} />
+          <NewSchemaButton setIsOpen={setIsNewOpen} />
         </Stack>
       </Paper>
-      <NewSchemaDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+      <NewSchemaDialog
+        isOpen={isNewOpen}
+        setIsOpen={setIsNewOpen}
+        setSnackbarSuccess={setSnackbarSuccess}
+        setSnackbarError={setSnackbarError}
+      />
+      <DeleteSchemaDialog
+        schemaId={schemaId}
+        isOpen={isDeleteOpen}
+        setIsOpen={setIsDeleteOpen}
+        setSnackbarSuccess={setSnackbarSuccess}
+        setSnackbarError={setSnackbarError}
+      />
     </Box>
   );
 };

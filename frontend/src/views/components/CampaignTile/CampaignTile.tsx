@@ -23,18 +23,6 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
 
   const [menuPos, setMenuPos] = useState<null | { mouseX: number; mouseY: number }>(null);
 
-  const handleContextMenu = (event: React.MouseEvent) => {
-    event.preventDefault();
-    setMenuPos(
-      menuPos === null
-        ? {
-            mouseX: event.clientX - 2,
-            mouseY: event.clientY - 4,
-          }
-        : null
-    );
-  };
-
   const handleClick = () => {
     if (props.isClickable) {
       dispatch(
@@ -48,8 +36,16 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
     }
   };
 
-  const handleClose = () => {
-    setMenuPos(null);
+  const handleContextMenu = (event: React.MouseEvent) => {
+    event.preventDefault();
+    setMenuPos(
+      menuPos === null
+        ? {
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+          }
+        : null
+    );
   };
 
   const handleEdit = () => {
@@ -62,6 +58,10 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
     );
     props.setIsOpen(true);
     props.setDialogType(NavBarViewDialog.EditCampaign);
+    setMenuPos(null);
+  };
+
+  const handleClose = () => {
     setMenuPos(null);
   };
 
