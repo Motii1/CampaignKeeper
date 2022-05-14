@@ -1,4 +1,4 @@
-import { Paper, Stack, Typography } from '@mui/material';
+import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
@@ -83,6 +83,22 @@ export const EntryDisplayPanel: React.FC = () => {
           </Stack>
         </Paper>
       </Stack>
+      {currentEntry.imageBase64 ? (
+        <Box
+          component="img"
+          alt="Entry graphic"
+          src={`data:;charset=utf-8;base64,${currentEntry.imageBase64}`}
+          sx={{
+            position: 'absolute',
+            top: '45px',
+            right: '10px',
+            borderRadius: 2,
+            height: 600,
+            width: 400,
+            objectFit: 'cover',
+          }}
+        />
+      ) : null}
     </Paper>
   ) : (
     <EmptyPlaceholder
