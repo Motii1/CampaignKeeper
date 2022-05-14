@@ -10,7 +10,6 @@ import { fetchSchemasAndEntries } from './codexSlice';
 import { updateCampaignId } from './codexViewSlice';
 import { EntriesListPanel } from './components/EntriesListPanel/EntriesListPanel';
 import { EntryDisplayPanel } from './components/EntryDisplayPanel/EntryDisplayPanel';
-import { NewSchemaDialog } from './components/NewSchemaDialog/NewSchemaDialog';
 import { SchemasList } from './components/SchemasList/SchemasList';
 
 export const CodexView: React.FC = () => {
@@ -24,7 +23,6 @@ export const CodexView: React.FC = () => {
   const [isPrimaryOpen, setIsPrimaryOpen] = useState(false);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewEntry);
-  const [isSchemaDialogOpen, setIsSchemaDialogOpen] = useState(false);
 
   useEffect(() => {
     if (currentEntry) setDialogType(NavBarViewDialog.EditEntry);
@@ -47,7 +45,7 @@ export const CodexView: React.FC = () => {
       setIsSecondaryOpen={setIsSecondaryOpen}
     >
       <Box sx={{ height: '100%', width: '100%' }}>
-        <SchemasList setIsOpen={setIsSchemaDialogOpen} />
+        <SchemasList />
         <Box
           sx={{
             height: '100%',
@@ -72,7 +70,6 @@ export const CodexView: React.FC = () => {
             )}
           </Box>
         </Box>
-        <NewSchemaDialog isOpen={isSchemaDialogOpen} setIsOpen={setIsSchemaDialogOpen} />
       </Box>
     </ViewWithNavBarWrapper>
   );

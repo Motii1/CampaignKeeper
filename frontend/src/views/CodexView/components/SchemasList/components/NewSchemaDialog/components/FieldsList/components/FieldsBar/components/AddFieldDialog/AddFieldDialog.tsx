@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { CustomDialog } from '../../../../../../../../../components/CustomDialog/CustomDialog';
-import { LabeledTextInput } from '../../../../../../../../../components/LabeledTextInput/LabeledTextInput';
+import { CustomDialog } from '../../../../../../../../../../../components/CustomDialog/CustomDialog';
+import { LabeledTextInput } from '../../../../../../../../../../../components/LabeledTextInput/LabeledTextInput';
 
 type AddFieldDialogProps = {
   isOpen: boolean;
