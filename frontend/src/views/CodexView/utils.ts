@@ -1,8 +1,8 @@
 import { EntriesHashMap, Entry, MetadataInstance, Schema } from './codexSlice';
-import { EntryFieldMetadata, EntryFieldsState } from './dialog/CodexDialog';
+import { EditFieldMetadata, EditFieldsState } from './dialog/CodexDialog';
 
 export const convertEditFieldToMetadata = (
-  fieldMetadata: EntryFieldMetadata[],
+  fieldMetadata: EditFieldMetadata[],
   fieldName: string
 ): MetadataInstance[] => {
   let index = 0;
@@ -32,7 +32,7 @@ export const convertMetadataToEntryField = (
   fieldName: string,
   metadata: MetadataInstance[],
   entries: Entry[]
-): EntryFieldMetadata[] => {
+): EditFieldMetadata[] => {
   const fieldMetadata = getMetadataByFieldName(fieldName, metadata).sort((m1, m2) =>
     m1.sequenceNumber > m2.sequenceNumber ? 1 : m2.sequenceNumber > m1.sequenceNumber ? -1 : 0
   );
@@ -70,10 +70,10 @@ export const convertEntriesHashMapToList = (entries: EntriesHashMap): Entry[] =>
 };
 
 export const getUpdatedEditField = (
-  oldEditField: EntryFieldMetadata[],
+  oldEditField: EditFieldMetadata[],
   fieldValue: string
-): EntryFieldMetadata[] => {
-  const newEditField: EntryFieldMetadata[] = [];
+): EditFieldMetadata[] => {
+  const newEditField: EditFieldMetadata[] = [];
   const newValues = fieldValue.split('|');
   newValues.forEach(value => {
     if (value !== '') {
@@ -89,11 +89,11 @@ export const getUpdatedEditField = (
   return newEditField;
 };
 
-export const convertEditFieldToString = (editField: EntryFieldMetadata[]): string =>
+export const convertEditFieldToString = (editField: EditFieldMetadata[]): string =>
   editField.map(field => (field.id ? `|${field.value}|` : field.value)).join('');
 
-export const createEmptyFields = (schema: null | Schema): EntryFieldsState => {
-  const currentFields: EntryFieldsState = {};
+export const createEmptyFields = (schema: null | Schema): EditFieldsState => {
+  const currentFields: EditFieldsState = {};
   schema?.fields.forEach(field => {
     currentFields[field] = [];
   });
@@ -104,8 +104,8 @@ export const createFilledFields = (
   schema: null | Schema,
   entry: Entry | null,
   entries: EntriesHashMap
-): EntryFieldsState => {
-  const currentFields: EntryFieldsState = {};
+): EditFieldsState => {
+  const currentFields: EditFieldsState = {};
   const entriesAsList: Entry[] = convertEntriesHashMapToList(entries);
   if (entry)
     schema?.fields.forEach(

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store';
 import { CustomDialog } from '../../../../../../components/CustomDialog/CustomDialog';
 import { Entry, Schema } from '../../../../../codexSlice';
-import { EntryFieldsState } from '../../../../CodexDialog';
+import { EditFieldsState } from '../../../../CodexDialog';
 import { CustomSelect } from './components/CustomSelect/CustomSelect';
 
 export type ReferenceSelectItem = {
@@ -17,8 +17,8 @@ type AddReferenceDialogProps = {
   currentField: string;
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
-  fields: EntryFieldsState;
-  setFields: (newEntryFields: EntryFieldsState) => void;
+  fields: EditFieldsState;
+  setFields: (newEntryFields: EditFieldsState) => void;
 };
 
 const codexItemsToSelectItems = (items: Schema[] | Entry[]): ReferenceSelectItem[] =>

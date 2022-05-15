@@ -2,14 +2,14 @@ import { Box, Stack } from '@mui/material';
 import { useState } from 'react';
 import { Schema } from '../../../codexSlice';
 import { convertEditFieldToString, getUpdatedEditField } from '../../../utils';
-import { EntryFieldsState } from '../../CodexDialog';
+import { EditFieldsState } from '../../CodexDialog';
 import { AddReferenceDialog } from './components/AddReferenceDialog/AddReferenceDialog';
 import { FieldTextArea } from './components/FieldTextArea/FieldTextArea';
 
 type EditFieldListProps = {
   currentSchema: Schema;
-  fields: EntryFieldsState;
-  setFields: (newEntryFields: EntryFieldsState) => void;
+  fields: EditFieldsState;
+  setFields: (newEntryFields: EditFieldsState) => void;
 };
 
 export const EditFieldList: React.FC<EditFieldListProps> = props => {
