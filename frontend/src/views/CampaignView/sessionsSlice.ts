@@ -54,8 +54,8 @@ const sessionsSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(fetchSessions.fulfilled, (state, action) => {
       if (action.payload.status === 200) {
-        state.isSessionsListDownloaded = true;
         state.sessionsList = action.payload.data.sessions;
+        state.isSessionsListDownloaded = true;
       }
     });
   },

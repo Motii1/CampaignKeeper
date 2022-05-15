@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
 import { fetchSchemasAndEntries } from '../CodexView/codexSlice';
+import { resetCurrent } from '../CodexView/codexViewSlice';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
 import { CircleProgress } from '../components/CircleProgress/CircleProgress';
 import { CustomGrid } from '../components/CustomGrid/CustomGrid';
@@ -20,7 +21,7 @@ export const CampaignView: React.FC = () => {
   const { currentCampaignId, currentCampaignName, currentCampaignImageBase64 } = useSelector(
     (state: RootState) => state.campaignView
   );
-  const { sessionsList, isSessionsListDownloaded, sessionsCampaignId } = useSelector(
+  const { sessionsList, sessionsCampaignId, isSessionsListDownloaded } = useSelector(
     (state: RootState) => state.sessions
   );
   const { campaignsList } = useSelector((state: RootState) => state.campaigns);
@@ -47,6 +48,8 @@ export const CampaignView: React.FC = () => {
   } else {
     if (!isSessionsListDownloaded || sessionsCampaignId !== currentCampaignId) {
       dispatch(fetchSessions(currentCampaignId));
+      dispatch(fetchSchemasAndEntries(currentCampaignId));
+      dispatch(resetCurrent({}));
       dispatch(updateCampaignId({ campaignId: currentCampaignId }));
     }
   }
