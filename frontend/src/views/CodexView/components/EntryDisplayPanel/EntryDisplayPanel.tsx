@@ -29,6 +29,24 @@ export const EntryDisplayPanel: React.FC = () => {
     return null;
   };
 
+  const renderEntriesImage = () =>
+    currentEntry?.imageBase64 ? (
+      <Box
+        component="img"
+        alt="Entry graphic"
+        src={`data:;charset=utf-8;base64,${currentEntry.imageBase64}`}
+        sx={{
+          position: 'absolute',
+          top: '45px',
+          right: '10px',
+          borderRadius: 2,
+          height: 600,
+          width: 400,
+          objectFit: 'cover',
+        }}
+      />
+    ) : null;
+
   return currentEntry ? (
     <Paper
       elevation={6}
@@ -83,22 +101,7 @@ export const EntryDisplayPanel: React.FC = () => {
           </Stack>
         </Paper>
       </Stack>
-      {currentEntry.imageBase64 ? (
-        <Box
-          component="img"
-          alt="Entry graphic"
-          src={`data:;charset=utf-8;base64,${currentEntry.imageBase64}`}
-          sx={{
-            position: 'absolute',
-            top: '45px',
-            right: '10px',
-            borderRadius: 2,
-            height: 600,
-            width: 400,
-            objectFit: 'cover',
-          }}
-        />
-      ) : null}
+      {renderEntriesImage()}
     </Paper>
   ) : (
     <EmptyPlaceholder
