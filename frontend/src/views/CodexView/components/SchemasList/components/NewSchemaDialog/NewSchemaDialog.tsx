@@ -91,6 +91,11 @@ export const NewSchemaDialog: React.FC<NewSchemaDialogProps> = props => {
     props.setIsOpen(false);
   };
 
+  const renderFields = () =>
+    fields.map(fieldName => (
+      <Field name={fieldName} key={fieldName} fields={fields} setFields={setFields} />
+    ));
+
   return (
     <CustomDialog
       title={'Create schema'}
@@ -109,9 +114,7 @@ export const NewSchemaDialog: React.FC<NewSchemaDialogProps> = props => {
       />
       <FieldsBar fields={fields} setFields={setFields} />
       <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
-        {fields.map(fieldName => (
-          <Field name={fieldName} key={fieldName} fields={fields} setFields={setFields} />
-        ))}
+        {renderFields()}
       </Stack>
     </CustomDialog>
   );

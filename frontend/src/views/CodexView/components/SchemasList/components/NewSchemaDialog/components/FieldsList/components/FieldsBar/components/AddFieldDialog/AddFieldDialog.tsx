@@ -24,7 +24,7 @@ export const AddFieldDialog: React.FC<AddFieldDialogProps> = props => {
     setHelperText(() => {
       if (newName.length === 0) return "Field name can't be empty";
       if (newName.length > 128) return 'Field name is too long';
-      if (props.fields.includes(newName)) return 'Field name ialready exists';
+      if (props.fields.includes(newName)) return 'Field name already exists';
       return null;
     });
   };
@@ -40,6 +40,7 @@ export const AddFieldDialog: React.FC<AddFieldDialogProps> = props => {
 
   const onCancel = () => {
     props.setIsOpen(false);
+    setHelperText(null);
   };
 
   return (
@@ -55,8 +56,8 @@ export const AddFieldDialog: React.FC<AddFieldDialogProps> = props => {
         placeholder={'Enter new field name'}
         helperText={helperText}
         defaultHelperText={''}
-        onChange={event => handleTextInputChange(event)}
-        onBlur={event => handleTextInputLeave(event)}
+        onChange={handleTextInputChange}
+        onBlur={handleTextInputLeave}
       />
     </CustomDialog>
   );

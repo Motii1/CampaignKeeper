@@ -66,8 +66,8 @@ export const DeleteSchemaDialog: React.FC<DeleteSchemaDialogProps> = props => {
       title={'Delete schema'}
       isOpen={props.isOpen}
       setIsOpen={props.setIsOpen}
-      onOk={canDelete ? handleOk : undefined}
-      onCancel={canDelete ? handleCancel : undefined}
+      onOk={handleOk}
+      onCancel={handleCancel}
     >
       <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
         {"This action can't be undone."}
