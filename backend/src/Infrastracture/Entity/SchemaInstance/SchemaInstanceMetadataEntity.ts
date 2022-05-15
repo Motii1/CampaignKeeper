@@ -20,12 +20,12 @@ export class SchemaInstanceMetadataEntity {
   @Column({ enum: FieldValueType })
   type!: FieldValueType;
 
-  @Column({ type: 'text' })
+  @Column({ length: 'max' })
   value!: string;
 
   @Column()
   sequenceNumber!: number;
 
-  @Column({ type: 'text' })
+  @Column({ length: 'max' })
   fieldName!: string;
 }
