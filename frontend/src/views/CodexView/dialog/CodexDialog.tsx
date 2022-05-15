@@ -8,7 +8,14 @@ import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addEntry, EntriesHashMap, Entry, MetadataInstance, Schema } from '../codexSlice';
+import {
+  addEntry,
+  editEntry,
+  EntriesHashMap,
+  Entry,
+  MetadataInstance,
+  Schema,
+} from '../codexSlice';
 import { setCurrentEntry } from '../codexViewSlice';
 import {
   convertEditFieldToMetadata,
@@ -167,19 +174,17 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
     if (!isLoadingEdit && statusEdit) {
       if (statusEdit === 200) {
         if (currentSchema && currentEntry) {
-          dispatch(
-            setCurrentEntry({
-              newEntry: {
-                id: currentEntry.id,
-                schemaId: currentSchema.id,
-                title: entryTitle,
-                imageBase64: entryImageBase64,
-                metadataArray: currentSchema?.fields
-                  .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
-                  .flat(),
-              },
-            })
-          );
+          const editedEntry = {
+            id: currentEntry.id,
+            schemaId: currentSchema.id,
+            title: entryTitle,
+            imageBase64: entryImageBase64,
+            metadataArray: currentSchema?.fields
+              .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
+              .flat(),
+          };
+          dispatch(setCurrentEntry({ newEntry: editedEntry }));
+          dispatch(editEntry({ schemaId: currentSchema.id, newEntry: editedEntry }));
           props.setSnackbarSuccess('Entry edited');
           props.setIsOpen(false);
           resetDialog();
