@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const { theme } = useSelector((state: RootState) => state.theme);
   dispatch(fetchUserDetails());
   dispatch(fetchCampaigns());
-  dispatch(checkAndSetTheme({ isLight: localStorage.getItem('isLight') }));
+  dispatch(checkAndSetTheme({ storageInfo: localStorage.getItem('isLight') }));
 
   return (
     <BrowserRouter>
