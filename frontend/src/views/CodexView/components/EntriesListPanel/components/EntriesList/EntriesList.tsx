@@ -11,86 +11,93 @@ type EntriesListProps = {
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
-export const EntriesList: React.FC<EntriesListProps> = props => (
-  <Box
-    sx={{
-      width: '100%',
-      height: '100%',
-      maxHeight: '100%',
-    }}
-  >
-    <Paper
-      elevation={6}
+export const EntriesList: React.FC<EntriesListProps> = props => {
+  const renderListElements = () =>
+    props.entriesToRender.map(entry => (
+      <EntriesListElement entry={entry} key={entry.id} setDialogType={props.setDialogType} />
+    ));
+
+  return (
+    <Box
       sx={{
-        backgroundColor: 'customPalette.surface',
-        borderRadius: 3,
-        overflowY: 'auto',
         width: '100%',
-        height: 'calc(100vh - 155px)',
+        height: '100%',
+        maxHeight: '100%',
       }}
     >
-      <Stack
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        spacing={1.5}
+      <Paper
+        elevation={6}
         sx={{
-          paddingLeft: '25px',
-          paddingTop: '15px',
-          width: 'calc(100% - 25px)',
-          height: 'calc(100% - 15px)',
+          backgroundColor: 'customPalette.surface',
+          borderRadius: 3,
+          overflowY: 'auto',
+          width: '100%',
+          height: 'calc(100vh - 155px)',
         }}
       >
-        <Typography
-          variant={'h4'}
+        <Stack
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="flex-start"
+          spacing={1.5}
           sx={{
-            color: 'customPalette.accent',
-            fontWeight: 'medium',
-            textTransform: 'uppercase',
+            paddingLeft: '25px',
+            paddingTop: '15px',
+            width: 'calc(100% - 25px)',
+            height: 'calc(100% - 15px)',
           }}
         >
-          {props.title}
-        </Typography>
-        {props.entriesToRender.length !== 0 ? (
-          <Paper
-            elevation={0}
+          <Typography
+            variant={'h4'}
             sx={{
-              backgroundColor: 'transparent',
-              height: '100%',
-              width: '100%',
-              overflowY: 'auto',
+              color: 'customPalette.accent',
+              fontWeight: 'medium',
+              textTransform: 'uppercase',
             }}
           >
-            <Stack
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              spacing={1}
+            {props.title}
+          </Typography>
+          {props.entriesToRender.length !== 0 ? (
+            <Paper
+              elevation={0}
               sx={{
+                backgroundColor: 'transparent',
+                height: '100%',
                 width: '100%',
-                paddingBottom: '15px',
+                overflowY: 'auto',
               }}
             >
-              {props.entriesToRender.map(entry => (
-                <EntriesListElement
-                  entry={entry}
-                  key={entry.id}
-                  setDialogType={props.setDialogType}
-                />
-              ))}
-            </Stack>
-          </Paper>
-        ) : (
-          <Box
-            sx={{
-              height: 'calc(100vh - 170px)',
-              width: '100%',
-            }}
-          >
-            <EmptyPlaceholder message={'Create an object for this schema, Wordsmith'} />
-          </Box>
-        )}
-      </Stack>
-    </Paper>
-  </Box>
-);
+              <Stack
+                direction="column"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                spacing={1}
+                sx={{
+                  width: '100%',
+                  paddingBottom: '15px',
+                }}
+              >
+                {renderListElements()}
+              </Stack>
+            </Paper>
+          ) : (
+            <Box
+              sx={{
+                height: 'calc(100vh - 170px)',
+                width: '100%',
+              }}
+            >
+              <EmptyPlaceholder
+                message={
+                  props.searchPhrase === ''
+                    ? 'Create an object for this schema, Wordsmith'
+                    : 'No entries matches your query, my liege'
+                }
+              />
+            </Box>
+          )}
+        </Stack>
+      </Paper>
+    </Box>
+  );
+};
