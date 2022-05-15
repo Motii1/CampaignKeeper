@@ -38,6 +38,9 @@ export const CodexSecondaryDialog: React.FC<CodexSecondaryDialogProps> = props =
       } else if (statusDelete === 400) {
         props.setSnackbarError('Error during entry deletion');
         props.setIsOpen(false);
+      } else if (statusDelete === 404) {
+        props.setSnackbarError('Entry not found');
+        props.setIsOpen(false);
       }
       resetQueryDelete();
     }
