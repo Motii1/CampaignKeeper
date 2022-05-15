@@ -8,20 +8,9 @@ import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import {
-  addEntry,
-  editEntry,
-  EntriesHashMap,
-  Entry,
-  MetadataInstance,
-  Schema,
-} from '../codexSlice';
+import { addEntry, editEntry, MetadataInstance } from '../codexSlice';
 import { setCurrentEntry } from '../codexViewSlice';
-import {
-  convertEditFieldToMetadata,
-  convertEntriesHashMapToList,
-  convertMetadataToEntryField,
-} from '../utils';
+import { convertEditFieldToMetadata, createEmptyFields, createFilledFields } from '../utils';
 import { EditFieldList } from './components/EditFieldList/EditFieldList';
 
 export type EntryFieldMetadata = {
@@ -55,38 +44,11 @@ type CodexDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
-const createEmptyFields = (schema: null | Schema): EntryFieldsState => {
-  const currentFields: EntryFieldsState = {};
-  schema?.fields.forEach(field => {
-    currentFields[field] = [];
-  });
-  return currentFields;
-};
-
-const createFilledFields = (
-  schema: null | Schema,
-  entry: Entry | null,
-  entries: EntriesHashMap
-): EntryFieldsState => {
-  const currentFields: EntryFieldsState = {};
-  const entriesAsList: Entry[] = convertEntriesHashMapToList(entries);
-  if (entry)
-    schema?.fields.forEach(
-      fieldName =>
-        (currentFields[fieldName] = convertMetadataToEntryField(
-          fieldName,
-          entry.metadataArray,
-          entriesAsList
-        ))
-    );
-  return currentFields;
-};
-
 export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const dispatch = useDispatch();
-
   const { currentSchema, currentEntry } = useSelector((state: RootState) => state.codexView);
   const { entries } = useSelector((state: RootState) => state.codex);
+
   const [dialogTitle, setDialogTitle] = useState(
     props.dialogType === NavBarViewDialog.NewEntry
       ? 'Create new entry'
@@ -239,6 +201,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   };
 
   const handleCancel = () => {
+    resetDialog();
     props.setIsOpen(false);
   };
 

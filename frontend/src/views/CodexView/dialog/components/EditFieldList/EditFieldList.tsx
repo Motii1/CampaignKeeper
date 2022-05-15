@@ -23,6 +23,18 @@ export const EditFieldList: React.FC<EditFieldListProps> = props => {
     props.setFields({ ...newFields });
   };
 
+  const renderFields = () =>
+    props.currentSchema.fields.map(fieldName => (
+      <FieldTextArea
+        key={fieldName}
+        name={fieldName}
+        value={convertEditFieldToString(props.fields[fieldName])}
+        onChange={event => handleFieldInput(event, fieldName)}
+        setCurrentField={setCurrentField}
+        setIsAddDialogOpen={setIsAddDialogOpen}
+      />
+    ));
+
   return (
     <Box sx={{ width: '100%' }}>
       <Stack
@@ -32,16 +44,7 @@ export const EditFieldList: React.FC<EditFieldListProps> = props => {
         spacing={1}
         sx={{ width: '100%' }}
       >
-        {props.currentSchema.fields.map(fieldName => (
-          <FieldTextArea
-            key={fieldName}
-            name={fieldName}
-            value={convertEditFieldToString(props.fields[fieldName])}
-            onChange={event => handleFieldInput(event, fieldName)}
-            setCurrentField={setCurrentField}
-            setIsAddDialogOpen={setIsAddDialogOpen}
-          />
-        ))}
+        {renderFields()}
       </Stack>
       <AddReferenceDialog
         currentField={currentField}

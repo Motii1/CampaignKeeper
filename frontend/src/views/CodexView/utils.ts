@@ -1,5 +1,5 @@
-import { EntriesHashMap, Entry, MetadataInstance } from './codexSlice';
-import { EntryFieldMetadata } from './dialog/CodexDialog';
+import { EntriesHashMap, Entry, MetadataInstance, Schema } from './codexSlice';
+import { EntryFieldMetadata, EntryFieldsState } from './dialog/CodexDialog';
 
 export const convertEditFieldToMetadata = (
   fieldMetadata: EntryFieldMetadata[],
@@ -91,3 +91,30 @@ export const getUpdatedEditField = (
 
 export const convertEditFieldToString = (editField: EntryFieldMetadata[]): string =>
   editField.map(field => (field.id ? `|${field.value}|` : field.value)).join('');
+
+export const createEmptyFields = (schema: null | Schema): EntryFieldsState => {
+  const currentFields: EntryFieldsState = {};
+  schema?.fields.forEach(field => {
+    currentFields[field] = [];
+  });
+  return currentFields;
+};
+
+export const createFilledFields = (
+  schema: null | Schema,
+  entry: Entry | null,
+  entries: EntriesHashMap
+): EntryFieldsState => {
+  const currentFields: EntryFieldsState = {};
+  const entriesAsList: Entry[] = convertEntriesHashMapToList(entries);
+  if (entry)
+    schema?.fields.forEach(
+      fieldName =>
+        (currentFields[fieldName] = convertMetadataToEntryField(
+          fieldName,
+          entry.metadataArray,
+          entriesAsList
+        ))
+    );
+  return currentFields;
+};

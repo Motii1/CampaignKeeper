@@ -7,14 +7,14 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { SelectItem } from '../../AddReferenceDialog';
+import { ReferenceSelectItem } from '../../AddReferenceDialog';
 
 type CustomSelectProps = {
   name: string;
   id: string;
   label: string;
-  setValue: (newValue: SelectItem | null) => void;
-  items: SelectItem[] | null;
+  setValue: (newValue: ReferenceSelectItem | null) => void;
+  items: ReferenceSelectItem[] | null;
 };
 
 // IMPORTANT: MenuItems need css uplift
