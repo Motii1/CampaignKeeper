@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Routing } from './Routing/Routing';
 import { RootState } from './store';
+import { checkAndSetTheme } from './theme/themeSlice';
 import { fetchUserDetails } from './views/LandingView/userDetailsSlice';
 import { fetchCampaigns } from './views/StartView/campaignsSlice';
 
@@ -14,6 +15,7 @@ export const App: React.FC = () => {
   const { theme } = useSelector((state: RootState) => state.theme);
   dispatch(fetchUserDetails());
   dispatch(fetchCampaigns());
+  dispatch(checkAndSetTheme({ isLight: localStorage.getItem('isLight') }));
 
   return (
     <BrowserRouter>

@@ -78,6 +78,7 @@ export const UserPanel: React.FC<UserPanelProps> = props => {
         isLight: !isLight,
       })
     );
+    localStorage.setItem('isLight', isLight ? 'dark' : 'light');
   };
 
   return (
