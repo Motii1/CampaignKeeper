@@ -1,48 +1,68 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { EventStatus, EventType } from '../../../Domain/Campaign/Event/Event';
 import { SessionEntity } from '../Session/SessionEntity';
+import { CharactersMetadataEntity } from './CharactersMetadataEntity';
+import { DescriptionMetadataEntity } from './DescriptionMetadataEntity';
+import { PlaceMetadataEntity } from './PlaceMetadataEntity';
 
 @Entity({ name: 'event' })
 export class EventEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ length: 64 })
+  @Column({ length: 128 })
   title!: string;
 
-  @Column({ length: 32 })
-  type!: string;
+  @Column({ enum: EventType })
+  type!: EventType;
 
-  @Column({ length: 32 })
-  state!: string;
+  @Column({ enum: EventStatus })
+  status!: EventStatus;
 
-  @Column()
-  location!: string;
+  @OneToMany(() => PlaceMetadataEntity, metadata => metadata.event, {
+    eager: true,
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
+  placeMetadataArray!: PlaceMetadataEntity[];
 
-  @Column()
-  marked!: boolean;
+  @OneToMany(() => DescriptionMetadataEntity, metadata => metadata.event, {
+    eager: true,
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
+  descriptionMetadataArray!: DescriptionMetadataEntity[];
 
-  @Column()
-  description!: string;
+  @OneToMany(() => CharactersMetadataEntity, metadata => metadata.event, {
+    eager: true,
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
+  charactersMetadataArray!: CharactersMetadataEntity[];
 
-  @Column()
-  characters!: string;
-
-  @ManyToMany(() => EventEntity, event => event.parents)
+  @ManyToMany(() => EventEntity, event => event.parents, { cascade: ['remove'] })
   @JoinTable()
   children!: EventEntity[];
 
   @ManyToMany(() => EventEntity, event => event.children)
   parents!: EventEntity[];
 
-  @Column()
-  positionX!: number;
-
-  @Column()
-  positionY!: number;
-
   @ManyToOne(() => SessionEntity, session => session.events, {
     nullable: false,
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'session_id', referencedColumnName: 'id' })
   session!: SessionEntity;
+
+  @Column({ name: 'session_id' })
+  sessionId?: number;
 }
