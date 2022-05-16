@@ -112,6 +112,7 @@ export class EventController implements IController {
   /**
    * @route DELETE /event/{id}
    * @group event - Operations related to event data
+   * @param {EventDeleteDto.model} data.body.required - event delete data
    * @returns {EmptyResponse.model} 200 - Event successfully deleted
    * @returns {Message.model} 400 - Bad format error
    * @returns {EmptyResponse.model} 404 - Event not found
