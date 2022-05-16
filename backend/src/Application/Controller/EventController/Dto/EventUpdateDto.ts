@@ -14,13 +14,13 @@ import { EventStatus, EventType, TextFieldType } from '../../../../Domain/Campai
 import { TextFieldMetadata } from './EventInsertDto';
 
 export type EventUpdateDto = {
-  title: string;
-  type: EventType;
-  status: EventStatus;
-  placeMetadataArray: TextFieldMetadata[];
-  charactersMetadataArray: TextFieldMetadata[];
-  descriptionMetadataArray: TextFieldMetadata[];
-  parentIds: number[];
+  title?: string;
+  type?: EventType;
+  status?: EventStatus;
+  placeMetadataArray?: TextFieldMetadata[];
+  charactersMetadataArray?: TextFieldMetadata[];
+  descriptionMetadataArray?: TextFieldMetadata[];
+  parentIds?: number[];
 };
 
 export const textFieldMetadataDtoSchema = Joi.array().items({

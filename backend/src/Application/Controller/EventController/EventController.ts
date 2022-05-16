@@ -2,12 +2,12 @@ import { Request, Response, Router } from 'express';
 import asyncHandler from 'express-async-handler';
 import { Event, TextFieldMetadata } from '../../../Domain/Campaign/Event/Event';
 import { createEvent, CreateEventError } from '../../../Domain/Campaign/Event/Service/Create';
+import { deleteEvent, DeleteEventError } from '../../../Domain/Campaign/Event/Service/Delete';
 import { updateEvent, UpdateEventError } from '../../../Domain/Campaign/Event/Service/Update';
 import { Session } from '../../../Domain/Campaign/Session/Session';
 import { User } from '../../../Domain/User/User';
 import { findUserCampaignById } from '../../../Infrastracture/Entity/Campaign/CampaignRepository';
 import {
-  deleteEventById,
   findEventById,
   findEventsBySessionIdWithRelations,
 } from '../../../Infrastracture/Entity/Event/EventRepository';
@@ -15,6 +15,7 @@ import { findSessionById } from '../../../Infrastracture/Entity/Session/SessionR
 import { authorization } from '../../Middleware/Auth/Authorization';
 import { extractUserFromCookies } from '../../Util/Authorization';
 import { IController } from '../IController';
+import { EventDeleteDto, eventDeleteDtoSchema } from './Dto/EventDeleteDto';
 import {
   EventInsertDto,
   eventInsertDtoSchema,
@@ -112,14 +113,15 @@ export class EventController implements IController {
    * @route DELETE /event/{id}
    * @group event - Operations related to event data
    * @returns {EmptyResponse.model} 200 - Event successfully deleted
-   * @returns {EmptyResponse.model} 400 - Wrong event id
+   * @returns {Message.model} 400 - Bad format error
    * @returns {EmptyResponse.model} 404 - Event not found
    * @security cookieAuth
    */
   private deleteEventHandler = async (req: Request, res: Response): Promise<void> => {
     const id = Number(req.params.id);
-    if (!this.isIdValid(id)) {
-      res.status(400).json({ message: 'Given id does not match correct format' });
+    const { error, value } = eventDeleteDtoSchema.validate(req.body);
+    if (!this.isIdValid(id) || error) {
+      res.status(400).json({ message: 'Given data does not match correct format' });
       return;
     }
     const user = await extractUserFromCookies(req.cookies);
@@ -134,8 +136,17 @@ export class EventController implements IController {
       res.status(404).json({});
       return;
     }
-    await deleteEventById(id);
-    res.status(200).json({});
+    const dto = value as EventDeleteDto;
+    try {
+      await deleteEvent(dto);
+      res.status(200).json({});
+    } catch (error) {
+      if (error instanceof DeleteEventError) {
+        res.status(400).json({ message: error.message });
+        return;
+      }
+      throw error;
+    }
   };
 
   /**
@@ -169,7 +180,7 @@ export class EventController implements IController {
 
     const dto = value as EventUpdateDto;
     try {
-      await updateEvent(dto);
+      await updateEvent(dto, event, session!, user);
       res.status(200).json({});
     } catch (error) {
       if (error instanceof UpdateEventError) {
@@ -204,7 +215,7 @@ export class EventController implements IController {
       return;
     }
     try {
-      const savedEvent = await createEvent(dto);
+      const savedEvent = await createEvent(dto, session!, user);
       res.status(200).json(this.parseSingleEventDto(savedEvent));
     } catch (error) {
       if (error instanceof CreateEventError) {
