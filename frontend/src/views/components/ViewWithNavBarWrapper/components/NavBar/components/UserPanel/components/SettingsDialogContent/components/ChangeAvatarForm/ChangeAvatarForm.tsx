@@ -60,7 +60,9 @@ export const ChangeAvatarForm: React.FC<ChangeAvatarFormProps> = props => {
 
   return (
     <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
-      <Typography variant="h6">AVATAR</Typography>
+      <Typography variant="h6" sx={{ color: 'customPalette.onSurface' }}>
+        Avatar
+      </Typography>
       <Stack
         direction="column"
         justifyContent="center"

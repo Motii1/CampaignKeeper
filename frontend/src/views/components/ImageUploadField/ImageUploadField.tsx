@@ -68,7 +68,7 @@ export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
           borderRadius: 2,
         }}
       >
-        <Add fontSize="large" />
+        <Add fontSize="large" sx={{ color: 'customPalette.onBackground' }} />
       </Paper>
     </UploadAreaWrapper>
   );

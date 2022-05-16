@@ -73,7 +73,11 @@ export const EntryDisplayPanel: React.FC = () => {
         <ReturnBar />
         <Typography
           variant={'h4'}
-          sx={{ color: 'customPalette.accent', fontWeight: 'medium', marginTop: '25px' }}
+          sx={{
+            color: 'customPalette.onBackgroundSpecial',
+            fontWeight: 'medium',
+            marginTop: '25px',
+          }}
         >
           {currentEntry.title}
         </Typography>
@@ -103,8 +107,8 @@ export const EntryDisplayPanel: React.FC = () => {
               spacing={1}
               sx={{
                 paddingBottom: '15px',
-                minWidth: 'calc(100% - 240px)',
-                maxWidth: 'calc(100% - 240px)',
+                minWidth: 'calc(100% - 250px)',
+                maxWidth: 'calc(100% - 250px)',
               }}
             >
               {renderEntriesFields()}

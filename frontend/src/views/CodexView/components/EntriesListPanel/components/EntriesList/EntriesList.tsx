@@ -50,7 +50,7 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
           <Typography
             variant={'h4'}
             sx={{
-              color: 'customPalette.accent',
+              color: 'customPalette.onBackgroundSpecial',
               fontWeight: 'medium',
               textTransform: 'uppercase',
             }}

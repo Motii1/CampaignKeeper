@@ -42,7 +42,7 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
   return (
     <Paper
       sx={{
-        cursor: 'context-menu',
+        cursor: 'pointer',
         borderRadius: 2.5,
         backgroundColor: 'customPalette.surface',
         height: 40,

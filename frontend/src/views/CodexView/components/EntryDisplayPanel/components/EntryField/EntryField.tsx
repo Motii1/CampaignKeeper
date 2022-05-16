@@ -18,6 +18,7 @@ export const EntryField: React.FC<EntryFieldProps> = props => {
             wordWrap: 'break-word',
             display: 'inline',
             width: 'fit-content',
+            color: 'customPalette.onSurface',
           }}
           key={metadata.sequenceNumber}
         >
@@ -41,7 +42,9 @@ export const EntryField: React.FC<EntryFieldProps> = props => {
         width: '100%',
       }}
     >
-      <Typography variant={'h6'}>{props.fieldName}</Typography>
+      <Typography variant={'h6'} sx={{ color: 'customPalette.onSurface' }}>
+        {props.fieldName}
+      </Typography>
       <Typography sx={{ display: 'inline' }}>{renderValue()}</Typography>
     </Stack>
   );

@@ -101,7 +101,7 @@ export const UserPanel: React.FC<UserPanelProps> = props => {
           <Paper
             elevation={0}
             sx={{
-              backgroundColor: 'customPalette.surface',
+              backgroundColor: 'customPalette.onAccent',
               height: 35,
               width: 35,
               overflow: 'visible',

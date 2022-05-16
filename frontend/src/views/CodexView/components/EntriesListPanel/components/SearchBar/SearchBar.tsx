@@ -30,7 +30,7 @@ export const SearchBar: React.FC<SearchBarProps> = props => {
           height: '100%',
         }}
       >
-        <SearchIcon sx={{ marginLeft: 2, opacity: 0.75 }} />
+        <SearchIcon sx={{ marginLeft: 2, opacity: 0.75, color: 'customPalette.onSurface' }} />
         <TextField
           placeholder="Search"
           onChange={onChange}

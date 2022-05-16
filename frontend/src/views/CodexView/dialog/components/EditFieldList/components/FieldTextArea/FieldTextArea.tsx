@@ -22,7 +22,7 @@ export const FieldTextArea: React.FC<FieldTextAreaProps> = props => (
         {props.name}
       </Typography>
       <Add
-        sx={{ cursor: 'pointer' }}
+        sx={{ cursor: 'pointer', color: 'customPalette.onSurface' }}
         onClick={() => {
           props.setCurrentField(props.name);
           props.setIsAddDialogOpen(true);

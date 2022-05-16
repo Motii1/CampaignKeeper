@@ -69,7 +69,7 @@ export const DeleteSchemaDialog: React.FC<DeleteSchemaDialogProps> = props => {
       onOk={handleOk}
       onCancel={handleCancel}
     >
-      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+      <Typography variant="h6" sx={{ color: 'customPalette.onSurface', fontWeight: 'bold' }}>
         {"This action can't be undone."}
       </Typography>
     </CustomDialog>

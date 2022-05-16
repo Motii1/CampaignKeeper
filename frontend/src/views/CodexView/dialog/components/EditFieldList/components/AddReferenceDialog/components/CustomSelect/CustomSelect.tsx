@@ -47,6 +47,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = props => {
     >
       <Typography
         sx={{
+          color: 'customPalette.onSurface',
           fontWeight: 'normal',
           fontSize: 18,
           paddingLeft: 0.9,

@@ -12,13 +12,13 @@ export const lightTheme = createTheme({
             margin: 0.1,
           },
           '&::-webkit-scrollbar-thumb': {
-            boxShadow: 'inset 0 0 10px 10px #ffffffaa',
+            boxShadow: 'inset 0 0 10px 10px #000000aa',
             border: 'solid 10px transparent',
             borderRadius: '20px',
             minHeight: '40px',
           },
           '&::-webkit-scrollbar-thumb:hover': {
-            boxShadow: 'inset 0 0 10px 10px #ffffffdd',
+            boxShadow: 'inset 0 0 10px 10px #000000dd',
           },
         },
       },
@@ -32,23 +32,31 @@ export const lightTheme = createTheme({
         },
       },
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'Roboto',
+          color: '#262E38',
+        },
+      },
+    },
   },
   palette: {
     customPalette: {
       background: '#ecf8ff',
       surface: '#d0e6fc',
       primary: '#e4f2ff',
-      secondary: '#9eefe2',
+      secondary: '#b5f1e8',
       onBackground: '#303d50',
       onBackgroundSpecial: '#303d50',
       onSurface: '#262E38',
       onPrimary: '#262E38',
       onSecondary: '#242424',
-      error: '#604e57',
-      onError: '#FF8282',
+      error: '#f2d4d4',
+      onError: '#b65757',
       accent: '#facf48',
       onAccent: '#242424',
-      red: '#FF8282',
+      red: '#e97676',
       onRed: '#262E38',
       brown: '#362C28',
       onBrown: '#FFE082',
@@ -98,6 +106,13 @@ export const darkTheme = createTheme({
         root: {
           fontWeight: 'normal',
           fontFamily: ['Roboto', 'cursive'].join(','),
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'Roboto',
         },
       },
     },
