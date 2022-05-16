@@ -25,7 +25,7 @@ export const deleteEventById = async (id: number): Promise<void> => {
   await getRepository(EventEntity).delete({ id });
 };
 
-export const saveEvent = async (event: Event): Promise<Event> => {
+export const saveEvent = async (event: Omit<Event, 'id'>): Promise<Event> => {
   const entity = await getRepository(EventEntity).save(event);
   return mapEntityToDomainObject(entity);
 };

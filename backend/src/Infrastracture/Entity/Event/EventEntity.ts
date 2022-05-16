@@ -49,7 +49,7 @@ export class EventEntity {
   })
   charactersMetadataArray!: CharactersMetadataEntity[];
 
-  @ManyToMany(() => EventEntity, event => event.parents, { cascade: ['remove'] })
+  @ManyToMany(() => EventEntity, event => event.parents)
   @JoinTable()
   children!: EventEntity[];
 
