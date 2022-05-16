@@ -6,6 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { DbAwareColumn } from '../../../Common/Decorator/DbAwareColumn';
 import { SchemaEntity } from '../Schema/SchemaEntity';
 import { SessionEntity } from '../Session/SessionEntity';
 import { UserEntity } from '../User/UserEntity';
@@ -31,7 +32,7 @@ export class CampaignEntity {
   @OneToMany(() => SessionEntity, session => session.campaign, { onDelete: 'CASCADE' })
   sessions!: SessionEntity[];
 
-  @Column({ type: 'varbinary', nullable: true, length: 'max' })
+  @DbAwareColumn({ type: 'varbinary', nullable: true, length: 'max' })
   image!: Buffer | null;
 
   @CreateDateColumn()
