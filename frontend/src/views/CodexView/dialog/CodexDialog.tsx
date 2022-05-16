@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import requestMethods from '../../../axios/requestMethods';
@@ -236,41 +236,46 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
         onDelete={handleDelete}
       >
         <Stack
-          direction="column"
+          direction="row"
           justifyContent="center"
           alignItems="flex-start"
-          spacing={1}
-          sx={{ width: '80%' }}
-        >
-          <LabeledTextInput
-            text={'Title'}
-            value={entryTitle}
-            placeholder={''}
-            helperText={entryTitleHelperText}
-            defaultHelperText={''}
-            onChange={event => handleEntryTitleChange(event)}
-            onBlur={event => handleEntryTitleLeave(event)}
-          />
-          {currentSchema ? (
-            <EditFieldList currentSchema={currentSchema} fields={fields} setFields={setFields} />
-          ) : null}
-        </Stack>
-        <Box
+          spacing={2.7}
           sx={{
-            position: 'absolute',
-            top: '150px',
-            right: '20px',
+            width: '100%',
+            minWidth: '100%',
           }}
         >
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="flex-start"
+            spacing={1}
+            sx={{
+              minWidth: 'calc(100% - 230px)',
+            }}
+          >
+            <LabeledTextInput
+              text={'Title'}
+              value={entryTitle}
+              placeholder={''}
+              helperText={entryTitleHelperText}
+              defaultHelperText={''}
+              onChange={event => handleEntryTitleChange(event)}
+              onBlur={event => handleEntryTitleLeave(event)}
+            />
+            {currentSchema ? (
+              <EditFieldList currentSchema={currentSchema} fields={fields} setFields={setFields} />
+            ) : null}
+          </Stack>
           <ImageUploadField
-            height={380}
-            width={220}
+            height={320}
+            width={200}
             image={entryImageBase64}
             setImage={newImageBase64 => {
               setEntryImageBase64(newImageBase64);
             }}
           />
-        </Box>
+        </Stack>
       </CustomDialog>
     );
 

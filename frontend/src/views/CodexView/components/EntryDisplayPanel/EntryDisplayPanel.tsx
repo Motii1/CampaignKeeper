@@ -36,12 +36,10 @@ export const EntryDisplayPanel: React.FC = () => {
         alt="Entry graphic"
         src={`data:;charset=utf-8;base64,${currentEntry.imageBase64}`}
         sx={{
-          position: 'absolute',
-          top: '45px',
-          right: '10px',
+          marginBottom: '15px',
           borderRadius: 2,
-          height: 600,
-          width: 400,
+          height: 320,
+          width: 200,
           objectFit: 'cover',
         }}
       />
@@ -89,19 +87,32 @@ export const EntryDisplayPanel: React.FC = () => {
           }}
         >
           <Stack
-            direction="column"
-            justifyContent="center"
+            direction="row"
+            justifyContent="start"
             alignItems="flex-start"
-            spacing={1}
+            spacing={2.7}
             sx={{
-              paddingBottom: '15px',
+              width: '100%',
+              minWidth: '100%',
             }}
           >
-            {renderEntriesFields()}
+            <Stack
+              direction="column"
+              justifyContent="center"
+              alignItems="flex-start"
+              spacing={1}
+              sx={{
+                paddingBottom: '15px',
+                minWidth: 'calc(100% - 240px)',
+                maxWidth: 'calc(100% - 240px)',
+              }}
+            >
+              {renderEntriesFields()}
+            </Stack>
+            {renderEntriesImage()}
           </Stack>
         </Paper>
       </Stack>
-      {renderEntriesImage()}
     </Paper>
   ) : (
     <EmptyPlaceholder

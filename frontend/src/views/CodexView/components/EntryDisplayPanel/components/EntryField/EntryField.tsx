@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { Entry, MetadataInstance } from '../../../../codexSlice';
 import { getEntryFromMetadata } from '../../../../utils';
 import { ReferenceChip } from './components/ReferenceChip/ReferenceChip';
@@ -14,7 +14,11 @@ export const EntryField: React.FC<EntryFieldProps> = props => {
     props.data.map(metadata =>
       metadata.type === 'string' ? (
         <Typography
-          sx={{ wordWrap: 'break-word', whiteSpace: 'pre' }}
+          sx={{
+            wordWrap: 'break-word',
+            display: 'inline',
+            width: 'fit-content',
+          }}
           key={metadata.sequenceNumber}
         >
           {metadata.value}
@@ -38,7 +42,7 @@ export const EntryField: React.FC<EntryFieldProps> = props => {
       }}
     >
       <Typography variant={'h6'}>{props.fieldName}</Typography>
-      <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap' }}>{renderValue()}</Box>
+      <Typography sx={{ display: 'inline' }}>{renderValue()}</Typography>
     </Stack>
   );
 };

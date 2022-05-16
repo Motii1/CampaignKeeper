@@ -25,15 +25,22 @@ export const ReferenceChip: React.FC<ReferenceChipProps> = props => {
 
   return props.entry ? (
     <Typography
+      noWrap={true}
       sx={{
         fontWeight: 'bold',
         color: 'customPalette.onAccent',
         backgroundColor: 'customPalette.accent',
-        wordWrap: 'break-word',
         cursor: 'pointer',
-        paddingLeft: '2px',
-        paddingRight: '2px',
+        paddingLeft: '4px',
+        paddingRight: '4px',
+        marginLeft: '2px',
+        marginRight: '2px',
         borderRadius: '5px',
+        width: 'max-content',
+        display: 'inline',
+        '&:hover': {
+          opacity: 0.9,
+        },
       }}
       onClick={handleClick}
     >
