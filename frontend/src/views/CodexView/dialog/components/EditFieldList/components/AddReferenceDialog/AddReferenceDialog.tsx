@@ -56,7 +56,7 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
     >
       <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
         <CustomSelect
-          name="SCHEME"
+          name="Scheme"
           id="schema-select"
           label="Choose schema"
           setValue={setChosenSchema}
@@ -64,7 +64,7 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
         />
         {chosenSchema ? (
           <CustomSelect
-            name="ENTRY"
+            name="Entry"
             id="entry-select"
             label="Choose entry"
             setValue={setChosenEntry}
