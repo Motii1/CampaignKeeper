@@ -28,6 +28,7 @@ const mapTextFieldMetadata = (entities: TextFieldMetadataOption): TextFieldMetad
     id: entity.id,
     value: entity.value,
     sequenceNumber: entity.sequenceNumber,
+    type: entity.type,
   }));
 
 type TextFieldMetadataOption =

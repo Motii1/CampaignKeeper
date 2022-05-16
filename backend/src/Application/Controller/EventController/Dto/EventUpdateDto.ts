@@ -10,7 +10,7 @@
  */
 
 import * as Joi from 'joi';
-import { EventStatus, EventType } from '../../../../Domain/Campaign/Event/Event';
+import { EventStatus, EventType, TextFieldType } from '../../../../Domain/Campaign/Event/Event';
 import { TextFieldMetadata } from './EventInsertDto';
 
 export type EventUpdateDto = {
@@ -26,6 +26,9 @@ export type EventUpdateDto = {
 export const textFieldMetadataDtoSchema = Joi.array().items({
   value: Joi.string().required(),
   sequenceNumber: Joi.number().min(0).required(),
+  type: Joi.string()
+    .valid(...Object.values(TextFieldType))
+    .required(),
 });
 
 export const eventUpdateDtoSchema = Joi.object<EventUpdateDto>({

@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { TextFieldType } from '../../../Domain/Campaign/Event/Event';
 import { EventEntity } from './EventEntity';
 
 @Entity({ name: 'place_metadata' })
@@ -18,6 +19,9 @@ export class PlaceMetadataEntity {
 
   @Column({ length: 'max' })
   value!: string;
+
+  @Column({ enum: TextFieldType })
+  type!: TextFieldType;
 
   @Column()
   sequenceNumber!: number;

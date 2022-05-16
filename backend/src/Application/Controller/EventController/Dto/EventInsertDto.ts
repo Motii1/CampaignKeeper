@@ -2,6 +2,7 @@
  * @typedef TextFieldMetadataDto
  * @property {string} value - value as string type
  * @property {number} sequenceNumber - sequence number
+ * @property {number} type - type of metadata, can be 'id' or 'string'
  */
 /**
  * @typedef EventInsertDto
@@ -16,7 +17,7 @@
  */
 
 import * as Joi from 'joi';
-import { EventStatus, EventType } from '../../../../Domain/Campaign/Event/Event';
+import { EventStatus, EventType, TextFieldType } from '../../../../Domain/Campaign/Event/Event';
 
 export type EventInsertDto = {
   title: string;
@@ -32,11 +33,15 @@ export type EventInsertDto = {
 export type TextFieldMetadata = {
   value: string;
   sequenceNumber: number;
+  type: TextFieldType;
 };
 
 export const textFieldMetadataDtoSchema = Joi.array().items({
   value: Joi.string().required(),
   sequenceNumber: Joi.number().min(0).required(),
+  type: Joi.string()
+    .valid(...Object.values(TextFieldType))
+    .required(),
 });
 
 export const eventInsertDtoSchema = Joi.object<EventInsertDto>({

@@ -242,6 +242,7 @@ export class EventController implements IController {
   private parseTextFieldMetadata = (item: TextFieldMetadata): TextFieldMetadataDto => ({
     value: item.value,
     sequenceNumber: item.sequenceNumber,
+    type: item.type,
   });
 
   getRouter = (): Router => this.router;

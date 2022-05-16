@@ -16,7 +16,13 @@ export type TextFieldMetadata = {
   eventId?: number;
   value: string;
   sequenceNumber: number;
+  type: TextFieldType;
 };
+
+export enum TextFieldType {
+  id = 'id',
+  string = 'string',
+}
 
 export enum EventType {
   Normal = 'normal',
