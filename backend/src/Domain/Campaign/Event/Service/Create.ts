@@ -30,7 +30,8 @@ export const createEvent = async (
     sessionId: dto.sessionId,
     parents,
   };
-  return await saveEvent(event);
+  const savedEvent = await saveEvent(event);
+  return { ...savedEvent, children: [], parents };
 };
 
 export class CreateEventError extends ErrorWrapper {}

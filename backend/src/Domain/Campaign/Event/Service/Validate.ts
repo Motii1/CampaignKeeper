@@ -41,6 +41,9 @@ export const validateTextFieldMetadata = async (
 };
 
 const validateSequenceNumbers = (metadata: TextFieldMetadata[]): void => {
+  if (metadata.length === 0) {
+    return;
+  }
   const seqNumbers = metadata.map(({ sequenceNumber }) => sequenceNumber);
   const uniqueSequenceNumbers = [...new Set(seqNumbers)];
   if (uniqueSequenceNumbers.length !== seqNumbers.length) {

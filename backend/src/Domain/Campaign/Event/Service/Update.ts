@@ -1,6 +1,9 @@
 import { EventUpdateDto } from '../../../../Application/Controller/EventController/Dto/EventUpdateDto';
 import { ErrorWrapper } from '../../../../Common/Type/ErrorWrapper';
-import { saveEvent } from '../../../../Infrastracture/Entity/Event/EventRepository';
+import {
+  findRelatedEvents,
+  saveEvent,
+} from '../../../../Infrastracture/Entity/Event/EventRepository';
 import { User } from '../../../User/User';
 import { Session } from '../../Session/Session';
 import { Event } from '../Event';
@@ -49,7 +52,9 @@ export const updateEvent = async (
     throw new UpdateEventError((error as Error).message);
   }
   // @todo validate graph structure
-  return await saveEvent(toUpdate);
+  const savedEvent = await saveEvent(toUpdate);
+  const relatedEvents = await findRelatedEvents(savedEvent.id);
+  return { ...savedEvent, children: relatedEvents.children, parents: relatedEvents.parents };
 };
 
 export class UpdateEventError extends ErrorWrapper {}

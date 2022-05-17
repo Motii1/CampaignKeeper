@@ -8,6 +8,19 @@ export const findEventById = async (id: number): Promise<Event | null> => {
   return entity ? mapEntityToDomainObject(entity) : null;
 };
 
+export const findRelatedEvents = async (
+  id: number
+): Promise<Required<Pick<Event, 'children' | 'parents'>>> => {
+  const qb = await getRepository(EventEntity).createQueryBuilder('event');
+  qb.leftJoinAndSelect('event.children', 'children');
+  qb.leftJoinAndSelect('event.parents', 'parents');
+  qb.where('event.id = :id', { id });
+
+  const entity = await qb.getOneOrFail();
+  const event = mapEntityToDomainObject(entity);
+  return { children: event.children!, parents: event.parents! };
+};
+
 export const findEventsBySessionIdWithRelations = async (sessionId: number): Promise<Event[]> => {
   const queryBuilder = getRepository(EventEntity).createQueryBuilder('event');
   queryBuilder.leftJoinAndSelect('event.placeMetadataArray', 'placeMetadataArray');
