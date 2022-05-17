@@ -23,30 +23,30 @@ export const updateEvent = async (
     }
 
     if (dto.type) {
-      event.type = dto.type;
+      toUpdate.type = dto.type;
     }
 
     if (dto.title) {
-      event.title = dto.title;
+      toUpdate.title = dto.title;
     }
 
     if (dto.status) {
-      event.status = dto.status;
+      toUpdate.status = dto.status;
     }
 
     if (dto.descriptionMetadataArray) {
       await validateTextFieldMetadata(dto.descriptionMetadataArray, user);
-      event.descriptionMetadataArray = dto.descriptionMetadataArray;
+      toUpdate.descriptionMetadataArray = dto.descriptionMetadataArray;
     }
 
     if (dto.charactersMetadataArray) {
       await validateTextFieldMetadata(dto.charactersMetadataArray, user);
-      event.charactersMetadataArray = dto.charactersMetadataArray;
+      toUpdate.charactersMetadataArray = dto.charactersMetadataArray;
     }
 
     if (dto.placeMetadataArray) {
       await validateTextFieldMetadata(dto.placeMetadataArray, user);
-      event.placeMetadataArray = dto.placeMetadataArray;
+      toUpdate.placeMetadataArray = dto.placeMetadataArray;
     }
   } catch (error) {
     throw new UpdateEventError((error as Error).message);

@@ -37,7 +37,7 @@ export type TextFieldMetadata = {
 };
 
 export const textFieldMetadataDtoSchema = Joi.array().items({
-  value: Joi.string().required(),
+  value: Joi.string().required().allow(''),
   sequenceNumber: Joi.number().min(0).required(),
   type: Joi.string()
     .valid(...Object.values(TextFieldType))
