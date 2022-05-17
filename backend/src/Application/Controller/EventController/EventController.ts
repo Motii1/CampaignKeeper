@@ -10,6 +10,7 @@ import { findUserCampaignById } from '../../../Infrastracture/Entity/Campaign/Ca
 import {
   findEventById,
   findEventsBySessionIdWithRelations,
+  findRelatedEvents,
 } from '../../../Infrastracture/Entity/Event/EventRepository';
 import { findSessionById } from '../../../Infrastracture/Entity/Session/SessionRepository';
 import { authorization } from '../../Middleware/Auth/Authorization';
@@ -77,7 +78,8 @@ export class EventController implements IController {
       return;
     }
 
-    const dto: SingleGetEventListDto = this.parseSingleEventDto(event);
+    const { children, parents } = await findRelatedEvents(event.id);
+    const dto: SingleGetEventListDto = this.parseSingleEventDto({ ...event, children, parents });
     res.status(200).json(dto);
   };
 
@@ -139,7 +141,7 @@ export class EventController implements IController {
     }
     const dto = value as EventDeleteDto;
     try {
-      await deleteEvent(dto);
+      await deleteEvent(event, dto, session!);
       res.status(200).json({});
     } catch (error) {
       if (error instanceof DeleteEventError) {

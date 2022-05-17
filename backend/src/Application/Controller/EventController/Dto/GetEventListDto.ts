@@ -11,14 +11,14 @@
  * @property {Array.<number>} parentIds - array of parents IDs
  * @property {Array.<number>} childrenIds - array of children IDs
  */
-
-import { EventStatus, EventType } from '../../../../Domain/Campaign/Event/Event';
-import { TextFieldMetadata } from './EventInsertDto';
-
 /**
  * @typedef GetEventListDto
  * @property {Array.<SingleGetEventListDto>} events - array of events dto data
  */
+
+import { EventStatus, EventType } from '../../../../Domain/Campaign/Event/Event';
+import { TextFieldMetadata } from './EventInsertDto';
+
 export type SingleGetEventListDto = {
   id: number;
   title: string;
