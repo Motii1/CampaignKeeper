@@ -43,23 +43,23 @@ export const lightTheme = createTheme({
   },
   palette: {
     customPalette: {
-      background: '#ecf8ff',
-      surface: '#d0e6fc',
+      background: '#e9faff',
+      surface: '#d0edfc',
+      surfaceSecondary: '#f2e0f4',
       primary: '#e4f2ff',
-      secondary: '#b5f1e8',
+      secondary: '#f5ebf7',
       onBackground: '#303d50',
-      onBackgroundSpecial: '#303d50',
+      onBackgroundSecondary: '#303d50',
       onSurface: '#262E38',
+      onSurfaceSecondary: '#262E38',
       onPrimary: '#262E38',
       onSecondary: '#242424',
       error: '#f2d4d4',
       onError: '#b65757',
-      accent: '#facf48',
+      accent: '#f5d673',
       onAccent: '#242424',
-      red: '#e97676',
+      red: '#ee7979',
       onRed: '#262E38',
-      brown: '#362C28',
-      onBrown: '#FFE082',
     },
     background: {
       default: '#262E38',
@@ -121,11 +121,13 @@ export const darkTheme = createTheme({
     customPalette: {
       background: '#262E38',
       surface: '#2B3D49',
+      surfaceSecondary: '#362C28',
       primary: '#425C71',
       secondary: '#A5C8E8',
       onBackground: '#f4f4f4',
-      onBackgroundSpecial: '#FFE082',
+      onBackgroundSecondary: '#FFE082',
       onSurface: '#ffffff',
+      onSurfaceSecondary: '#FFE082',
       onPrimary: '#ffffff',
       onSecondary: '#2B3D49',
       error: '#604e57',
@@ -134,8 +136,6 @@ export const darkTheme = createTheme({
       onAccent: '#262E38',
       red: '#FF8282',
       onRed: '#262E38',
-      brown: '#362C28',
-      onBrown: '#FFE082',
     },
     background: {
       default: '#262E38',
@@ -166,11 +166,13 @@ declare module '@mui/material/styles' {
     customPalette?: {
       background?: string;
       surface?: string;
+      surfaceSecondary?: string;
       primary?: string;
       secondary?: string;
       onBackground?: string;
-      onBackgroundSpecial?: string;
+      onBackgroundSecondary?: string;
       onSurface?: string;
+      onSurfaceSecondary?: string;
       onPrimary?: string;
       onSecondary?: string;
       error?: string;
@@ -179,8 +181,6 @@ declare module '@mui/material/styles' {
       onAccent?: string;
       red?: string;
       onRed?: string;
-      brown?: string;
-      onBrown?: string;
     };
   }
   interface ThemeOptions {

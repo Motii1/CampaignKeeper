@@ -74,7 +74,7 @@ export const EntryDisplayPanel: React.FC = () => {
         <Typography
           variant={'h4'}
           sx={{
-            color: 'customPalette.onBackgroundSpecial',
+            color: 'customPalette.onBackgroundSecondary',
             fontWeight: 'medium',
             marginTop: '25px',
           }}

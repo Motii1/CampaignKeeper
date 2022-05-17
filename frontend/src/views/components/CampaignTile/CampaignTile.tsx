@@ -71,7 +71,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
       sx={{
         cursor: cursorType,
         borderRadius: 2.5,
-        backgroundColor: 'customPalette.brown',
+        backgroundColor: 'customPalette.surfaceSecondary',
         height: { xs: 147.7, lg: 211 },
         width: { xs: 259.8, lg: 371.2 },
         padding: 0.66,
@@ -93,7 +93,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
         />
         <Typography
           sx={{
-            color: 'customPalette.onBrown',
+            color: 'customPalette.onSurfaceSecondary',
             fontWeight: 'medium',
             textAlign: 'left',
             paddingLeft: { xs: 0.7, lg: 1.5 },
