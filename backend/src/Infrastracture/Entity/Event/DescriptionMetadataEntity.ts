@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { DbAwareColumn } from '../../../Common/Decorator/DbAwareColumn';
 import { TextFieldType } from '../../../Domain/Campaign/Event/Event';
 import { EventEntity } from './EventEntity';
 
@@ -17,7 +18,7 @@ export class DescriptionMetadataEntity {
   @JoinColumn({ name: 'event_id', referencedColumnName: 'id' })
   event!: EventEntity;
 
-  @Column({ length: 'max' })
+  @DbAwareColumn({ length: 'max' })
   value!: string;
 
   @Column({ enum: TextFieldType })
