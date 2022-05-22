@@ -6,7 +6,7 @@ export type EventNode = {
   y: number;
 };
 
-export const eventNodes: EventNode[] = [
+export const sampleEventNodes: EventNode[] = [
   {
     id: '1',
     title: '1',
