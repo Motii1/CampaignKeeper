@@ -1,21 +1,21 @@
 import Xarrow, { anchorType } from 'react-xarrows';
 
 type EventArrowProps = {
-  id: string;
-  parentId: string;
+  start: string;
+  end: string;
   endAnchor: anchorType;
 };
 
 export const EventArrow: React.FC<EventArrowProps> = props => (
   <Xarrow
-    key={`${props.id}-${props.parentId}`}
-    start={props.parentId}
-    end={props.id}
+    start={props.start}
+    end={props.end}
     color="#ffffff"
     headSize={4}
-    path="straight"
+    path="smooth"
+    curveness={1}
     startAnchor="bottom"
     endAnchor={props.endAnchor}
-    zIndex={0}
+    zIndex={-1}
   />
 );

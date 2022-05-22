@@ -10,9 +10,13 @@ export const EventTile: React.FC<EventTileProps> = props => (
     elevation={6}
     sx={{
       backgroundColor: 'customPalette.accent',
-      width: '50px',
-      height: '30px',
-      zIndex: '1',
+      width: '300px',
+      height: '100px',
+      '& .MuiBox-root': {
+        '& .css-0': {
+          zIndex: '5',
+        },
+      },
     }}
     id={props.id}
   >

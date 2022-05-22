@@ -34,6 +34,7 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
         width: '100%',
         position: 'absolute',
         backgroundColor: 'customPalette.background',
+        zIndex: '-2',
       }}
     >
       <Stack

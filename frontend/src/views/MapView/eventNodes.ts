@@ -6,7 +6,7 @@ export type EventNode = {
   y: number;
 };
 
-export const sampleEventNodes: EventNode[] = [
+export const highGraphNodes: EventNode[] = [
   {
     id: '1',
     title: '1',
@@ -158,6 +158,58 @@ export const sampleEventNodes: EventNode[] = [
     id: '22',
     title: '22',
     parentIDs: ['15', '20'],
+    x: -1,
+    y: -1,
+  },
+];
+
+export const shortGraphNodes: EventNode[] = [
+  {
+    id: '1',
+    title: '1',
+    parentIDs: [],
+    x: -1,
+    y: -1,
+  },
+  {
+    id: '2',
+    title: '2',
+    parentIDs: ['1'],
+    x: -1,
+    y: -1,
+  },
+  {
+    id: '3',
+    title: '3',
+    parentIDs: ['1'],
+    x: -1,
+    y: -1,
+  },
+  {
+    id: '4',
+    title: '4',
+    parentIDs: ['1'],
+    x: -1,
+    y: -1,
+  },
+  {
+    id: '5',
+    title: '5',
+    parentIDs: ['3'],
+    x: -1,
+    y: -1,
+  },
+  {
+    id: '6',
+    title: '6',
+    parentIDs: ['3', '4'],
+    x: -1,
+    y: -1,
+  },
+  {
+    id: '7',
+    title: '7',
+    parentIDs: ['2', '5', '6'],
     x: -1,
     y: -1,
   },
