@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { SnakeNamingStrategy } = require('typeorm-naming-strategies');
 
-module.exports = {
+const defaultConfig = {
   type: 'mssql',
   host: process.env.DB_HOST,
   port: +process.env.DB_PORT,
@@ -34,3 +34,23 @@ module.exports = {
     subscribersDir: 'src/Infrastracture/Subscriber',
   },
 };
+
+const testConfig = {
+  type: 'sqlite',
+  database: ':memory:',
+  synchronize: true,
+  logging: false,
+  entities: ['dist/Infrastracture/Entity/**/*.js', 'src/Infrastracture/Entity/**/*.ts'],
+  migrations: ['dist/Infrastracture/Migration/**/*.js'],
+  subscribers: ['dist/Infrastracture/Subscriber/**/*.js'],
+  cli: {
+    entitiesDir: 'src/Infrastracture/Entity',
+    migrationsDir: 'src/Infrastracture/Migration',
+    subscribersDir: 'src/Infrastracture/Subscriber',
+  },
+  namingStrategy: new SnakeNamingStrategy(),
+};
+
+const selectedConfig = process.env.NODE_ENV === 'test' ? testConfig : defaultConfig;
+
+module.exports = selectedConfig;

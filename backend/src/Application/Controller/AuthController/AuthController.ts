@@ -26,7 +26,7 @@ const USER_IMAGE_DEFAULT_PATH = path.resolve(
   path.join('..', '..', '..', 'Common', 'Image', 'User.png')
 );
 
-enum AuthRoutes {
+export enum AuthRoutes {
   Login = '/login',
   Register = '/register',
   Logout = '/logout',
