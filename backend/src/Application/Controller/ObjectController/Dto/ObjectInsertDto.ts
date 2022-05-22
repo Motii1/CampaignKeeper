@@ -41,7 +41,7 @@ export const objectInsertDtoSchema = Joi.object<ObjectInsertDto>({
       type: Joi.string()
         .valid(...Object.values(FieldValueType))
         .required(),
-      value: Joi.string().required(),
+      value: Joi.string().allow('').required(),
       sequenceNumber: Joi.number().min(0).required(),
       fieldName: Joi.string().required(),
     }),
