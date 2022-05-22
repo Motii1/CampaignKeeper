@@ -11,6 +11,8 @@ export const EventTile: React.FC<EventTileProps> = props => (
     sx={{
       backgroundColor: 'customPalette.accent',
       width: '50px',
+      height: '30px',
+      zIndex: '1',
     }}
     id={props.id}
   >
