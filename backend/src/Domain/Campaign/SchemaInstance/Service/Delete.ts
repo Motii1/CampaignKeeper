@@ -7,7 +7,9 @@ import {
 export const deleteObject = async (id: number): Promise<void> => {
   const references = await countReferencesById(id);
   if (references > 0) {
-    throw new DeleteObjectError('Cannot delete object that is referenced by other objects');
+    throw new DeleteObjectError(
+      'Cannot delete object that is referenced by other objects or events'
+    );
   }
   await deleteSchemaInstanceById(id);
 };

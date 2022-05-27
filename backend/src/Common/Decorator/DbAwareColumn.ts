@@ -21,8 +21,7 @@ export const DbAwareColumn = (columnOptions: ColumnOptions): PropertyDecorator =
   };
   if (columnOptions.type) {
     parsedColumnOptions.type = resolveDbType(columnOptions.type);
-    delete parsedColumnOptions.length;
   }
-
+  delete parsedColumnOptions.length;
   return Column(parsedColumnOptions);
 };
