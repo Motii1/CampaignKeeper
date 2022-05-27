@@ -19,7 +19,7 @@ type StartSecondaryDialogProps = {
 
 export const StartSecondaryDialog: React.FC<StartSecondaryDialogProps> = props => {
   const dispatch = useDispatch();
-  const campaignId = useSelector((state: RootState) => state.startView.campaignId);
+  const campaignId = useSelector((state: RootState) => state.startView.startCampaignId);
 
   const {
     isLoading: isLoadingDelete,
@@ -66,7 +66,7 @@ export const StartSecondaryDialog: React.FC<StartSecondaryDialogProps> = props =
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h6" sx={{ color: 'customPalette.onSurface', fontWeight: 'bold' }}>
           {"This action can't be undone."}
         </Typography>
       </CustomDialog>

@@ -28,7 +28,7 @@ export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
         <Paper
           elevation={2}
           sx={{
-            backgroundColor: 'customPalette.primary',
+            backgroundColor: 'customPalette.background',
             height: props.height ?? '100%',
             width: props.width ?? '100%',
             justifyContent: 'center',
@@ -58,7 +58,7 @@ export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
       <Paper
         elevation={2}
         sx={{
-          backgroundColor: 'customPalette.primary',
+          backgroundColor: 'customPalette.background',
           height: props.height ?? '100%',
           width: props.width ?? '100%',
           display: 'flex',
@@ -68,7 +68,7 @@ export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
           borderRadius: 2,
         }}
       >
-        <Add fontSize="large" />
+        <Add fontSize="large" sx={{ color: 'customPalette.onBackground' }} />
       </Paper>
     </UploadAreaWrapper>
   );

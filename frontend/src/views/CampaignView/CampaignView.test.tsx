@@ -86,7 +86,7 @@ describe('CampaignView tests', () => {
         fireEvent.click(fab);
         expect(screen.getByText('BACK')).toBeInTheDocument();
         expect(screen.getAllByText(/New session/)[0]).toBeInTheDocument();
-        expect(screen.getByText('NAME')).toBeInTheDocument();
+        expect(screen.getByText('Name')).toBeInTheDocument();
         expect(screen.getByText('OK')).toBeInTheDocument();
         expect(screen.getByText('CANCEL')).toBeInTheDocument();
       });

@@ -1,6 +1,7 @@
 import { Fab } from '@mui/material';
 import React from 'react';
 import { CampaignFabContet } from '../../../../CampaignView/fab/CampaignFabContent';
+import { CodexFabContent } from '../../../../CodexView/fab/CodexFabContent';
 import { StartFabContent } from '../../../../StartView/fab/StartFabContent';
 import viewsRoutes from '../../../../viewsRoutes';
 
@@ -17,6 +18,8 @@ export const CustomFab: React.FC<CustomFabProps> = props => {
         return <StartFabContent />;
       case viewsRoutes.CAMPAIGN:
         return <CampaignFabContet />;
+      case viewsRoutes.CODEX:
+        return <CodexFabContent />;
       default:
         return <StartFabContent />;
     }

@@ -115,7 +115,9 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
       onSubmit={handleSubmit}
       sx={{ width: '100%' }}
     >
-      <Typography variant="h6">PASSWORD</Typography>
+      <Typography variant="h6" sx={{ color: 'customPalette.onSurface' }}>
+        Password
+      </Typography>
       <LabeledTextInput
         text="Current password"
         value={currentPassword.value}
@@ -154,7 +156,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
         }
       />
       <Box sx={{ paddingTop: 1 }}>
-        <CustomButton text={'Change'} />
+        <CustomButton content={'Change'} />
       </Box>
     </Stack>
   );

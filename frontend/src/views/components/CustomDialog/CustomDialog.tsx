@@ -1,6 +1,5 @@
-import { Box, Dialog, DialogContent, Stack } from '@mui/material';
+import { Box, Dialog, DialogContent, Paper, Stack } from '@mui/material';
 import { CustomButtonBehavior, CustomButtonType } from '../../../types/types';
-import { useWindowDimensions } from '../../../utils/utils';
 import { CustomButton } from '../CustomButton/CustomButton';
 import { CustomDialogTitle } from './components/CustomDialogTitle/CustomDialogTitle';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
@@ -9,6 +8,7 @@ type CustomDialogProps = {
   title: string;
   isTitleRed?: boolean;
   isOpen: boolean;
+  isLarge?: undefined | boolean;
   setIsOpen: (newState: boolean) => void;
   onOk?: () => void;
   onCancel?: () => void;
@@ -20,8 +20,6 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
   isTitleRed = false,
   ...otherProps
 }) => {
-  const { height: screenHeight } = useWindowDimensions();
-
   const renderButtons = () => {
     if (otherProps.onOk || otherProps.onCancel || otherProps.onDelete)
       return (
@@ -34,7 +32,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
         >
           {otherProps.onDelete ? (
             <CustomButton
-              text="DELETE"
+              content="DELETE"
               behavior={CustomButtonBehavior.Func}
               type={CustomButtonType.Delete}
               onClick={otherProps.onDelete}
@@ -42,7 +40,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           ) : null}
           {otherProps.onCancel ? (
             <CustomButton
-              text="CANCEL"
+              content="CANCEL"
               behavior={CustomButtonBehavior.Func}
               type={CustomButtonType.Primary}
               onClick={otherProps.onCancel}
@@ -50,7 +48,7 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           ) : null}
           {otherProps.onOk ? (
             <CustomButton
-              text="OK"
+              content="OK"
               behavior={CustomButtonBehavior.Func}
               onClick={otherProps.onOk}
             />
@@ -64,9 +62,10 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
   return (
     <Dialog
       open={otherProps.isOpen}
+      maxWidth={false}
       onClose={otherProps.onClose ? otherProps.onClose : () => otherProps.setIsOpen(false)}
       sx={{
-        '& .MuiDialog-paper': {
+        '& .MuiDialog-paperWidthFalse': {
           backgroundColor: 'customPalette.surface',
           borderRadius: 3,
         },
@@ -74,8 +73,9 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
     >
       <DialogContent
         sx={{
-          minWidth: 370,
-          maxHeight: 710,
+          width: otherProps.isLarge ? 1200 : 410,
+          maxWidth: 'calc(100vw - 100px)',
+          maxHeight: 'calc(100vh - 100px)',
           paddingTop: 1.6,
           paddingBottom: 0,
           paddingLeft: 0,
@@ -90,25 +90,32 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
           spacing={1}
           sx={{
             height: '100%',
+            maxHeight: '100%',
             width: '100%',
           }}
         >
           <ReturnBar setOpen={otherProps.setIsOpen} />
           <CustomDialogTitle title={otherProps.title} isTitleRed={isTitleRed} />
-          <Box
+          <Paper
+            elevation={0}
             sx={{
+              backgroundColor: 'transparent',
               width: '100%',
-              maxHeight: screenHeight - 230 + 'px',
+              maxHeight: 'calc(100vh - 270px)',
               overflowY: 'auto',
             }}
           >
             <Box sx={{ paddingLeft: 2.4, paddingRight: 2.4, paddingBlock: 1.4 }}>
               {otherProps.children}
             </Box>
-          </Box>
+          </Paper>
           {renderButtons()}
         </Stack>
       </DialogContent>
     </Dialog>
   );
 };
+
+CustomDialog.defaultProps = {
+  isLarge: false,
+} as Partial<CustomDialogProps>;

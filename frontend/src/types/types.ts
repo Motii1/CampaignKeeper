@@ -21,6 +21,9 @@ export enum NavBarViewDialog {
   EditCampaign,
   NewSession,
   EditSession,
+  NewSchema,
+  NewEntry,
+  EditEntry,
 }
 
 export enum CustomSnackbarType {

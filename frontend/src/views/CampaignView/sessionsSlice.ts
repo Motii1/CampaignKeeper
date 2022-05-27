@@ -2,27 +2,27 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
 
 type Session = {
-  id: number;
+  id: string;
   name: string;
   createdAt: Date;
-  sessionsCampaignId: string;
+  campaignId: string;
 };
 
 type SessionsState = {
   sessionsList: Session[];
   isSessionsListDownloaded: boolean;
-  sessionsCampaignId: number;
+  sessionsCampaignId: string;
 };
 
 const initialState: SessionsState = {
   sessionsList: [],
   isSessionsListDownloaded: false,
-  sessionsCampaignId: -1,
+  sessionsCampaignId: '',
 };
 
 export const fetchSessions = createAsyncThunk(
   'sessions/fetchSessions',
-  async (campaignId: number) => {
+  async (campaignId: string) => {
     const response = await protectedApiClient.get(`api/session/list?campaignId=${campaignId}`);
     return response;
   }
@@ -54,8 +54,8 @@ const sessionsSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(fetchSessions.fulfilled, (state, action) => {
       if (action.payload.status === 200) {
-        state.isSessionsListDownloaded = true;
         state.sessionsList = action.payload.data.sessions;
+        state.isSessionsListDownloaded = true;
       }
     });
   },

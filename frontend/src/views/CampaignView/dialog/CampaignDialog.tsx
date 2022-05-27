@@ -7,7 +7,7 @@ import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { resetState, updateName } from '../campaignViewSlice';
+import { resetState, setSessionName } from '../campaignViewSlice';
 import { addSession, editSession } from '../sessionsSlice';
 
 type NewSessionData = {
@@ -31,9 +31,11 @@ type CampaignDialogProps = {
 export const CampaignDialog: React.FC<CampaignDialogProps> = props => {
   const dispatch = useDispatch();
 
-  const { sessionId, sessionName, campaignId } = useSelector(
-    (state: RootState) => state.campaignView
-  );
+  const {
+    sessionId,
+    sessionName,
+    currentCampaignId: campaignId,
+  } = useSelector((state: RootState) => state.campaignView);
 
   const [title, setTitle] = useState(
     props.dialogType === NavBarViewDialog.NewSession ? 'New session' : 'Edit session'
@@ -124,13 +126,13 @@ export const CampaignDialog: React.FC<CampaignDialogProps> = props => {
   };
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    dispatch(updateName({ name: event.target.value }));
+    dispatch(setSessionName({ name: event.target.value }));
     setHelperText(null);
   };
 
   const handleTextInputLeave = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newName = event.target.value;
-    dispatch(updateName({ name: event.target.value }));
+    dispatch(setSessionName({ name: event.target.value }));
     setHelperText(validateName(newName));
   };
 
@@ -183,7 +185,7 @@ export const CampaignDialog: React.FC<CampaignDialogProps> = props => {
           sx={{ width: '100%' }}
         >
           <LabeledTextInput
-            text={'NAME'}
+            text={'Name'}
             placeholder={'Type here'}
             defaultValue={sessionName}
             helperText={helperText}

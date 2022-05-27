@@ -9,7 +9,7 @@ import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import { addCampaign, editCampaign } from '../campaignsSlice';
-import { resetState, updateImage, updateName } from '../startViewSlice';
+import { resetState, setCurrentImage, setCurrentName } from '../startViewSlice';
 
 export type SingleCampaignData = {
   id: number;
@@ -30,7 +30,7 @@ type StartDialogProps = {
 export const StartDialog: React.FC<StartDialogProps> = props => {
   const dispatch = useDispatch();
 
-  const { campaignId, campaignName, campaignImageBase64 } = useSelector(
+  const { startCampaignId, startCampaignName, startCampaignImageBase64 } = useSelector(
     (state: RootState) => state.startView
   );
 
@@ -77,17 +77,21 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     status: statusEdit,
     runQuery: runQueryEdit,
     resetQuery: resetQueryEdit,
-  } = useQuery<SingleCampaignData>(`api/campaign/${campaignId}`, requestMethods.PATCH);
+  } = useQuery<SingleCampaignData>(`api/campaign/${startCampaignId}`, requestMethods.PATCH);
 
   const handleRunQueryEdit = useCallback(async () => {
     if (!isLoadingEdit && statusEdit) {
       if (statusEdit === 200) {
-        if (campaignImageBase64) {
+        if (startCampaignImageBase64) {
           dispatch(
-            editCampaign({ id: campaignId, name: campaignName, imageBase64: campaignImageBase64 })
+            editCampaign({
+              id: startCampaignId,
+              name: startCampaignName,
+              imageBase64: startCampaignImageBase64,
+            })
           );
         } else {
-          dispatch(editCampaign({ id: campaignId, name: campaignName }));
+          dispatch(editCampaign({ id: startCampaignId, name: startCampaignName }));
         }
         props.setSnackbarSuccess('Campaign edited');
         props.setIsOpen(false);
@@ -106,12 +110,12 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     statusEdit,
     statusNew,
     resetQueryEdit,
-    campaignImageBase64,
+    startCampaignImageBase64,
     props,
     resetDialog,
     dispatch,
-    campaignId,
-    campaignName,
+    startCampaignId,
+    startCampaignName,
   ]);
 
   useEffect(() => {
@@ -133,18 +137,18 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   };
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    dispatch(updateName({ name: event.target.value }));
+    dispatch(setCurrentName({ name: event.target.value }));
     setHelperText(null);
   };
 
   const handleTextInputLeave = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newName = event.target.value;
-    dispatch(updateName({ name: event.target.value }));
+    dispatch(setCurrentName({ name: event.target.value }));
     setHelperText(validateName(newName));
   };
 
   const handleOk = () => {
-    if (validateName(campaignName) === '') {
+    if (validateName(startCampaignName) === '') {
       if (props.dialogType === NavBarViewDialog.NewCampaign) {
         runQueryWithImg(runQueryNew);
       } else {
@@ -154,13 +158,13 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   };
 
   const runQueryWithImg = (runQueryFn: (data?: unknown) => void): void => {
-    if (campaignImageBase64) {
+    if (startCampaignImageBase64) {
       runQueryFn({
-        name: campaignName,
-        imageBase64: campaignImageBase64,
+        name: startCampaignName,
+        imageBase64: startCampaignImageBase64,
       });
     } else {
-      runQueryFn({ name: campaignName });
+      runQueryFn({ name: startCampaignName });
     }
   };
 
@@ -198,9 +202,9 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
           sx={{ width: '100%' }}
         >
           <LabeledTextInput
-            text={'NAME'}
+            text={'Name'}
             placeholder={'Type here'}
-            defaultValue={campaignName}
+            defaultValue={startCampaignName}
             helperText={helperText}
             defaultHelperText={''}
             onChange={event => handleTextInputChange(event)}
@@ -208,10 +212,10 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
           />
           <ImageUploadField
             height={180}
-            width={390}
-            image={campaignImageBase64}
+            width={372}
+            image={startCampaignImageBase64}
             setImage={newImageBase64 => {
-              dispatch(updateImage({ imageBase64: newImageBase64 }));
+              dispatch(setCurrentImage({ imageBase64: newImageBase64 }));
             }}
           />
         </Stack>
