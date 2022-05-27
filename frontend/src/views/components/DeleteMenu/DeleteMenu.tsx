@@ -6,7 +6,6 @@ type DeleteMenuProps = {
   handleClose: () => void;
 };
 
-// TO-DO: remove if edit schema has been implemented
 export const DeleteMenu: React.FC<DeleteMenuProps> = props => (
   <Menu
     open={props.menuPos !== null}

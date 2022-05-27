@@ -45,13 +45,11 @@ export const CampaignView: React.FC = () => {
       );
       dispatch(fetchSchemasAndEntries(lastCampaign.id));
     }
-  } else {
-    if (!isSessionsListDownloaded || sessionsCampaignId !== currentCampaignId) {
-      dispatch(fetchSessions(currentCampaignId));
-      dispatch(fetchSchemasAndEntries(currentCampaignId));
-      dispatch(resetCurrent({}));
-      dispatch(updateCampaignId({ campaignId: currentCampaignId }));
-    }
+  } else if (!isSessionsListDownloaded || sessionsCampaignId !== currentCampaignId) {
+    dispatch(fetchSessions(currentCampaignId));
+    dispatch(fetchSchemasAndEntries(currentCampaignId));
+    dispatch(resetCurrent({}));
+    dispatch(updateCampaignId({ campaignId: currentCampaignId }));
   }
 
   const handleFab = () => {
