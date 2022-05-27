@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { DbAwareColumn } from '../../../Common/Decorator/DbAwareColumn';
 import { FieldValueType } from '../../../Domain/Campaign/SchemaInstance/FieldValueType';
 import { SchemaInstanceEntity } from './SchemaInstanceEntity';
 
@@ -20,12 +21,12 @@ export class SchemaInstanceMetadataEntity {
   @Column({ enum: FieldValueType })
   type!: FieldValueType;
 
-  @Column({ length: 'max' })
+  @DbAwareColumn({ length: 'max' })
   value!: string;
 
   @Column()
   sequenceNumber!: number;
 
-  @Column({ length: 'max' })
+  @DbAwareColumn({ length: 'max' })
   fieldName!: string;
 }
