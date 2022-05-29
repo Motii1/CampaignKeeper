@@ -1,8 +1,11 @@
 import { Paper, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../../types/types';
 import { EditMenu } from '../../../components/EditMenu/EditMenu';
+import { setSessionId } from '../../../MapView/sessionSlice';
+import viewsRoutes from '../../../viewsRoutes';
 import { updateState as updateStateCampaign } from '../../campaignViewSlice';
 
 type SessionTileProps = {
@@ -13,8 +16,14 @@ type SessionTileProps = {
 };
 
 export const SessionTile: React.FC<SessionTileProps> = props => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [menuPos, setMenuPos] = useState<null | { mouseX: number; mouseY: number }>(null);
+
+  const handleClick = () => {
+    dispatch(setSessionId({ currentSessionId: props.sessionId }));
+    history.push(viewsRoutes.MAP);
+  };
 
   const handleContextMenu = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -53,6 +62,7 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
         marginTop: 1.2,
         marginBlock: 1.2,
       }}
+      onClick={handleClick}
       onContextMenu={handleContextMenu}
     >
       <Typography

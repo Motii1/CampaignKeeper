@@ -47,6 +47,9 @@ const sessionSlice = createSlice({
     // setCampaignId
     // setSessionId
     // setIds
+    setSessionId: (state, action) => {
+      state.currentSessionId = action.payload.currentSessionId;
+    },
     updateState: (state, action) => {
       state.isEventsListDownloaded = action.payload.isEventsListDownloaded
         ? action.payload.isEventsListDownloaded
@@ -66,6 +69,6 @@ const sessionSlice = createSlice({
   },
 });
 
-export const { updateState } = sessionSlice.actions;
+export const { setSessionId, updateState } = sessionSlice.actions;
 
 export default sessionSlice.reducer;
