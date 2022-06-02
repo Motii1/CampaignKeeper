@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
 
-type SessionEventFieldMetadata = {
+export type SessionEventFieldMetadata = {
   value: string;
   sequenceNumber: number;
   type: string;
 };
 
-type SessionEvent = {
+export type SessionEvent = {
   id: number;
   title: string;
   sessionId: string;

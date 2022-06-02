@@ -1,8 +1,12 @@
-import { Paper, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
+import { SessionEvent } from '../../../../sessionSlice';
+import { EventDetails } from './components/EventDetails/EventDetails';
+import { EventMenu } from './components/EventMenu/EventMenu';
 
 type EventTileProps = {
   id: string;
   title: string;
+  event?: SessionEvent;
 };
 
 export const EventTile: React.FC<EventTileProps> = props => (
@@ -11,17 +15,22 @@ export const EventTile: React.FC<EventTileProps> = props => (
     sx={{
       backgroundColor: 'customPalette.accent',
       width: '300px',
-      height: '100px',
+      height: '200px',
       '& .MuiBox-root': {
         '& .css-0': {
           zIndex: '5',
         },
       },
+      position: 'relative',
     }}
     id={props.id}
   >
-    <Typography sx={{ fontWeight: 'bold', color: 'customPalette.onAccent', textAlign: 'center' }}>
-      {props.title}
-    </Typography>
+    <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={1}>
+      <Typography sx={{ fontWeight: 'bold', color: 'customPalette.onAccent', marginTop: '5px' }}>
+        {`Event name ${props.title}`}
+      </Typography>
+      <EventDetails />
+    </Stack>
+    <EventMenu />
   </Paper>
 );

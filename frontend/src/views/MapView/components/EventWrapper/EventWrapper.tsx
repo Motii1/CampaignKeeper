@@ -35,6 +35,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
       );
     });
   };
+
   return (
     <Box>
       <EventTile id={props.id} title={props.title} />
