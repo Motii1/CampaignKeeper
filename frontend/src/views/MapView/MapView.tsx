@@ -1,12 +1,35 @@
 import { Stack } from '@mui/material';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
+import viewsRoutes from '../viewsRoutes';
 import { EventWrapper } from './components/EventWrapper/EventWrapper';
 import { EventNode, shortGraphNodes } from './eventNodes';
 import { setYPositions } from './graphExperiments';
+import { fetchEvents } from './sessionSlice';
 
 export const MapView: React.FC = () => {
+  const dispatch = useDispatch();
+  const { currentSessionId, isEventsListDownloaded } = useSelector(
+    (state: RootState) => state.session
+  );
+  const { sessionsList } = useSelector((state: RootState) => state.sessions);
+  const { currentCampaignId } = useSelector((state: RootState) => state.campaignView);
+
+  const history = useHistory();
+
+  if (currentCampaignId === '') history.push(viewsRoutes.CAMPAIGN);
+  else if (!isEventsListDownloaded) {
+    // eslint-disable-next-line no-console
+    console.log('WORKS');
+    const sessionIdForFetching =
+      currentSessionId !== '' ? currentSessionId : sessionsList[sessionsList.length - 1].id;
+    dispatch(fetchEvents(sessionIdForFetching));
+  }
+
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
 
