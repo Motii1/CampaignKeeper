@@ -1,9 +1,12 @@
-import { Box, CircularProgress, Grid, Stack } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
+import { fetchSchemasAndEntries } from '../CodexView/codexSlice';
+import { resetCurrent } from '../CodexView/codexViewSlice';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
+import { CircleProgress } from '../components/CircleProgress/CircleProgress';
 import { CustomGrid } from '../components/CustomGrid/CustomGrid';
 import { EmptyPlaceholder } from '../components/EmptyPlaceholder/EmptyPlaceholder';
 import { QuoteLine } from '../components/QuoteLine/QuoteLine';
@@ -15,12 +18,23 @@ import { fetchSessions, updateCampaignId } from './sessionsSlice';
 
 export const CampaignView: React.FC = () => {
   const dispatch = useDispatch();
-  const { campaignId, campaignName, campaignImageBase64 } = useSelector(
+  const { currentCampaignId, currentCampaignName, currentCampaignImageBase64 } = useSelector(
     (state: RootState) => state.campaignView
   );
-  const campaigns = useSelector((state: RootState) => state.campaigns.campaignsList);
-  if (campaignId === -1) {
-    const lastCampaign = campaigns[campaigns.length - 1];
+  const { sessionsList, sessionsCampaignId, isSessionsListDownloaded } = useSelector(
+    (state: RootState) => state.sessions
+  );
+  const { campaignsList } = useSelector((state: RootState) => state.campaigns);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewSession);
+  const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
+  const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
+
+  useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
+
+  if (currentCampaignId === '') {
+    const lastCampaign = campaignsList[campaignsList.length - 1];
     if (lastCampaign) {
       dispatch(
         updateSelectedCampaignData({
@@ -29,23 +43,14 @@ export const CampaignView: React.FC = () => {
           campaignImageBase64: lastCampaign.imageBase64,
         })
       );
+      dispatch(fetchSchemasAndEntries(lastCampaign.id));
     }
+  } else if (!isSessionsListDownloaded || sessionsCampaignId !== currentCampaignId) {
+    dispatch(fetchSessions(currentCampaignId));
+    dispatch(fetchSchemasAndEntries(currentCampaignId));
+    dispatch(resetCurrent({}));
+    dispatch(updateCampaignId({ campaignId: currentCampaignId }));
   }
-
-  const { sessionsList, isSessionsListDownloaded, sessionsCampaignId } = useSelector(
-    (state: RootState) => state.sessions
-  );
-  if ((!isSessionsListDownloaded || sessionsCampaignId !== campaignId) && campaignId !== -1) {
-    dispatch(fetchSessions(campaignId));
-    dispatch(updateCampaignId({ campaignId: campaignId }));
-  }
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewSession);
-  const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
-  const [quote, setQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
-
-  useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
 
   const handleFab = () => {
     setDialogType(NavBarViewDialog.NewSession);
@@ -80,25 +85,9 @@ export const CampaignView: React.FC = () => {
           </CustomGrid>
         </Box>
       ) : (
-        <Box
-          sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <EmptyPlaceholder message={'Go wild and take a first step, worldshaper'} />
-        </Box>
+        <EmptyPlaceholder message={'Go wild and take a first step, worldshaper'} />
       );
-    return (
-      <CircularProgress
-        size={64}
-        thickness={6}
-        sx={{ color: 'customPalette.onBackground', margin: 'auto' }}
-      />
-    );
+    return <CircleProgress />;
   };
 
   return (
@@ -118,18 +107,8 @@ export const CampaignView: React.FC = () => {
         sx={{ width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden' }}
       >
         <QuoteLine text={quote} />
-        {campaignId === -1 ? (
-          <Box
-            sx={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <EmptyPlaceholder message={"You haven't created any world, wordsmith"} />
-          </Box>
+        {currentCampaignId === '' ? (
+          <EmptyPlaceholder message={"You haven't created any world, wordsmith"} />
         ) : (
           <Box
             component="div"
@@ -150,9 +129,9 @@ export const CampaignView: React.FC = () => {
               sx={{ width: '100%', height: '100%', paddingLeft: 0.8 }}
             >
               <CampaignTile
-                campaignId={campaignId}
-                campaignName={campaignName}
-                campaignImageBase64={campaignImageBase64}
+                campaignId={currentCampaignId}
+                campaignName={currentCampaignName}
+                campaignImageBase64={currentCampaignImageBase64}
                 setIsOpen={setIsOpen}
                 setDialogType={setDialogType}
                 isClickable={false}

@@ -1,6 +1,7 @@
 import { App, ControllerWithRoute } from './Application/App/App';
 import { AuthController } from './Application/Controller/AuthController/AuthController';
 import { CampaignController } from './Application/Controller/CampaignController/CampaignController';
+import { EventController } from './Application/Controller/EventController/EventController';
 import { ObjectController } from './Application/Controller/ObjectController/ObjectController';
 import { OpsController } from './Application/Controller/OpsController/OpsController';
 import { SchemaContoller } from './Application/Controller/SchemaController/SchemaController';
@@ -16,6 +17,7 @@ const controllers: ControllerWithRoute[] = [
   ['/session', new SessionContoller()],
   ['/schema', new SchemaContoller()],
   ['/object', new ObjectController()],
+  ['/event', new EventController()],
 ];
 
 const app = new App(controllers);

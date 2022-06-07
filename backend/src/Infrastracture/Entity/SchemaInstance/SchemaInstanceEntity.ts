@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { DbAwareColumn } from '../../../Common/Decorator/DbAwareColumn';
 import { SchemaEntity } from '../Schema/SchemaEntity';
 import { SchemaInstanceMetadataEntity } from './SchemaInstanceMetadataEntity';
 
@@ -24,6 +25,6 @@ export class SchemaInstanceEntity {
   })
   metadataArray!: SchemaInstanceMetadataEntity[];
 
-  @Column({ type: 'varbinary', nullable: true, length: 'max' })
+  @DbAwareColumn({ type: 'varbinary', nullable: true, length: 'max' })
   image!: Buffer | null;
 }

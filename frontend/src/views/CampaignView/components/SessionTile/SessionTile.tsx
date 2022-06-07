@@ -6,7 +6,7 @@ import { EditMenu } from '../../../components/EditMenu/EditMenu';
 import { updateState as updateStateCampaign } from '../../campaignViewSlice';
 
 type SessionTileProps = {
-  sessionId: number;
+  sessionId: string;
   sessionName: string;
   setIsOpen: (newIsOpen: boolean) => void;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
@@ -42,7 +42,7 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
   return (
     <Paper
       sx={{
-        cursor: 'context-menu',
+        cursor: 'pointer',
         borderRadius: 2.5,
         backgroundColor: 'customPalette.surface',
         height: 40,

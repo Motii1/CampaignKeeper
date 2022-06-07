@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
 
 type Campaign = {
-  id: number;
+  id: string;
   name: string;
   createdAt: Date;
   imageBase64: string;

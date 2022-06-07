@@ -1,33 +1,3 @@
-import { useEffect, useState } from 'react';
-
-type windowDimensions = {
-  width: number;
-  height: number;
-};
-
-export const getWindowDimensions = (): windowDimensions => {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-};
-
-export const useWindowDimensions = (): windowDimensions => {
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowDimensions(getWindowDimensions());
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowDimensions;
-};
-
 export const toBase64 = (file: File): Promise<null | string | ArrayBuffer> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();

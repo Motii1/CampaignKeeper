@@ -1,11 +1,13 @@
 import { MoreVert } from '@mui/icons-material';
 import { Avatar, Box, Menu, MenuItem, Paper, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import requestMethods from '../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../axios/useQuery';
 import { RootState, store } from '../../../../../../../store';
+import { darkTheme, lightTheme } from '../../../../../../../theme/theme';
+import { setTheme } from '../../../../../../../theme/themeSlice';
 import { setError } from '../../../../../../ErrorView/errorSlice';
 import { AUTH_URL } from '../../../../../../LandingView/forms/RegisterForm';
 import viewsRoutes from '../../../../../../viewsRoutes';
@@ -20,16 +22,17 @@ type UserPanelProps = {
 };
 
 export const UserPanel: React.FC<UserPanelProps> = props => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const { username, avatar } = useSelector((state: RootState) => state.user);
+  const { isLight } = useSelector((state: RootState) => state.theme);
+
   const [menuAnchor, setMenuAnchor] = useState<null | Element>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentDialogTitle, setcurrentDialogTitle] = useState<string>('About');
 
-  const dispatch = useDispatch();
-  const history = useHistory();
-
   const { isLoading, status, runQuery } = useQuery(`${AUTH_URL}/logout`, requestMethods.POST);
-
   const handleRunQuery = useCallback(() => {
     if (!isLoading && status) {
       if (status === 200) {
@@ -68,6 +71,16 @@ export const UserPanel: React.FC<UserPanelProps> = props => {
     runQuery();
   };
 
+  const handleThemeClick = () => {
+    dispatch(
+      setTheme({
+        theme: isLight ? darkTheme : lightTheme,
+        isLight: !isLight,
+      })
+    );
+    localStorage.setItem('isLight', isLight ? 'dark' : 'light');
+  };
+
   return (
     <Box sx={{ marginLeft: 'auto' }}>
       <Paper
@@ -88,7 +101,7 @@ export const UserPanel: React.FC<UserPanelProps> = props => {
           <Paper
             elevation={0}
             sx={{
-              backgroundColor: 'customPalette.surface',
+              backgroundColor: 'customPalette.onAccent',
               height: 35,
               width: 35,
               overflow: 'visible',
@@ -149,6 +162,7 @@ export const UserPanel: React.FC<UserPanelProps> = props => {
         disableAutoFocusItem
       >
         <MenuItem onClick={handleSettingsClick}>Settings</MenuItem>
+        <MenuItem onClick={handleThemeClick}>{isLight ? 'Dark mode' : 'Light mode'}</MenuItem>
         <MenuItem onClick={handleAboutClick}>About</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
       </Menu>

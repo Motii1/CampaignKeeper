@@ -61,17 +61,7 @@ export const StartView: React.FC = () => {
           </CustomGrid>
         </Box>
       ) : (
-        <Box
-          sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <EmptyPlaceholder message={'Go wild and start your new journey, worldshaper'} />
-        </Box>
+        <EmptyPlaceholder message={'Go wild and start your new journey, worldshaper'} />
       );
     return (
       <CircularProgress

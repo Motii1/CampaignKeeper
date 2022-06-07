@@ -118,7 +118,7 @@ export const LoginForm: React.FC<FormProps> = props => {
           onChange={event => handleTextFieldChange(event, setPassword)}
           onBlur={event => handleTextFieldLeave(event, setPassword, validatePasswordLogin)}
         />
-        <CustomButton text="Login" />
+        <CustomButton content="Login" />
       </Stack>
       <ChangeFormComponent
         onSubmit={props.onChangeForm}

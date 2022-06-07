@@ -31,6 +31,6 @@ export const ChangeFormComponent: React.FC<ChangeFormComponentProps> = props => 
       <br />
       {props.secondLineText}
     </Typography>
-    <CustomButton text={props.buttonText} type={CustomButtonType.Primary} />
+    <CustomButton content={props.buttonText} type={CustomButtonType.Primary} />
   </Stack>
 );

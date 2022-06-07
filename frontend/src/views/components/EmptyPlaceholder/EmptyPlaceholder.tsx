@@ -1,21 +1,31 @@
 // TO-DO (very low priority): add graphic to text
 
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 type EmptyPlaceholderProps = {
   message: string;
 };
 
 export const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = props => (
-  <Typography
+  <Box
     sx={{
-      color: 'customPalette.onBackground',
-      opacity: 0.8,
-      fontSize: 19,
-      fontWeight: 'bold',
-      textAlign: 'center',
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     }}
   >
-    {props.message}
-  </Typography>
+    <Typography
+      sx={{
+        color: 'customPalette.onBackground',
+        opacity: 0.8,
+        fontSize: 19,
+        fontWeight: 'bold',
+        textAlign: 'center',
+      }}
+    >
+      {props.message}
+    </Typography>
+  </Box>
 );

@@ -8,14 +8,17 @@ import {
   deleteObject,
   DeleteObjectError,
 } from '../../../Domain/Campaign/SchemaInstance/Service/Delete';
-import { updateObject } from '../../../Domain/Campaign/SchemaInstance/Service/Update';
+import {
+  updateObject,
+  UpdateObjectError,
+} from '../../../Domain/Campaign/SchemaInstance/Service/Update';
 import { SchemaValidationError } from '../../../Domain/Campaign/SchemaInstance/Service/Validate';
 import { User } from '../../../Domain/User/User';
 import { findUserCampaignById } from '../../../Infrastracture/Entity/Campaign/CampaignRepository';
 import { findSchemaById } from '../../../Infrastracture/Entity/Schema/SchemaRepository';
 import {
   findSchemaInstanceById,
-  findSchemaInstancesBySchemaId,
+  findSchemaInstances,
 } from '../../../Infrastracture/Entity/SchemaInstance/SchemaInstanceRepository';
 import { authorization } from '../../Middleware/Auth/Authorization';
 import { extractUserFromCookies } from '../../Util/Authorization';
@@ -80,27 +83,39 @@ export class ObjectController implements IController {
   /**
    * @route GET /object/list
    * @group object - Operations related to object data
-   * @param {number} schemaId.query.required - id of schema
+   * @param {number} schemaId.query - id of schema
+   * @param {number} campaignId.query - id of campaign
    * @returns {GetObjectListDto.model} 200 - Success
-   * @returns {EmptyResponse.model} 400 - Wrong data format
-   * @returns {EmptyResponse.model} 404 - Schema not found
+   * @returns {Message.model} 400 - Wrong data format
+   * @returns {Message.model} 404 - Schema or campaign not found
    * @security cookieAuth
    */
   private getObjectsHandler = async (req: Request, res: Response): Promise<void> => {
     const { error, value } = getObjectQuerySchema.validate(req.query);
     if (error) {
-      res.status(400).json({});
+      res.status(400).json({ message: 'Given data does not match correct format ' });
       return;
     }
-    const { schemaId } = value;
+    const { schemaId, campaignId } = value;
+    if (!schemaId && !campaignId) {
+      res.status(400).json({
+        message: 'You have to provide at least one query parameter',
+      });
+      return;
+    }
     const schema = await findSchemaById(schemaId);
     const user = await extractUserFromCookies(req.cookies);
     const permission = await this.permissionsToSchema(schema, user);
-    if (!permission) {
-      res.status(404).json({});
+    if (!permission && schemaId) {
+      res.status(404).json({ message: 'Schema with given id was not found' });
       return;
     }
-    const objects = await findSchemaInstancesBySchemaId(schemaId);
+    const campaign = await findUserCampaignById(campaignId, user);
+    if (!campaign && campaignId) {
+      res.status(404).json({ message: 'Campaign with given id was not found' });
+      return;
+    }
+    const objects = await findSchemaInstances(schemaId, campaignId);
     const dtos = objects.map(this.parseSingleObjectDto);
     res.status(200).json({
       objects: dtos,
@@ -179,13 +194,12 @@ export class ObjectController implements IController {
       await updateObject(dto, object, schema!, user);
       res.status(200).json({});
     } catch (error) {
-      if (error instanceof SchemaValidationError) {
+      if (error instanceof SchemaValidationError || error instanceof UpdateObjectError) {
         res.status(400).json({ message: error.message });
         return;
       }
       throw error;
     }
-    res.status(200).json({});
   };
 
   /**

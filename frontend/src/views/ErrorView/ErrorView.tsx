@@ -26,7 +26,7 @@ export const ErrorView: React.FC = () => {
         <Typography
           variant="h5"
           sx={{
-            color: 'customPalette.onError',
+            color: 'customPalette.red',
             fontWeight: 'regular',
             textAlign: 'center',
             paddingY: 1,

@@ -41,7 +41,7 @@ const validateIds = async (object: SchemaInstance, user: User): Promise<void> =>
   await Promise.all(uniqueIds.map(id => validateSingleId(id, user)));
 };
 
-const validateSingleId = async (id: number, user: User): Promise<void> => {
+export const validateSingleId = async (id: number, user: User): Promise<void> => {
   const object = await findSchemaInstanceById(id);
   if (!object) {
     throwObjectDoesNotExist(id);

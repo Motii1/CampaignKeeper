@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { DbAwareColumn } from '../../../Common/Decorator/DbAwareColumn';
 import { FieldValueType } from '../../../Domain/Campaign/SchemaInstance/FieldValueType';
 import { SchemaInstanceEntity } from './SchemaInstanceEntity';
 
@@ -10,19 +11,22 @@ export class SchemaInstanceMetadataEntity {
   @Column({ name: 'object_id' })
   objectId?: number;
 
-  @ManyToOne(() => SchemaInstanceEntity, { nullable: false, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'object_id' })
+  @ManyToOne(() => SchemaInstanceEntity, object => object.metadataArray, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'object_id', referencedColumnName: 'id' })
   object!: SchemaInstanceEntity;
 
   @Column({ enum: FieldValueType })
   type!: FieldValueType;
 
-  @Column()
+  @DbAwareColumn({ length: 'max' })
   value!: string;
 
   @Column()
   sequenceNumber!: number;
 
-  @Column()
+  @DbAwareColumn({ length: 'max' })
   fieldName!: string;
 }

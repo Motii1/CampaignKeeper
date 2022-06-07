@@ -61,8 +61,8 @@ describe('NavBar tests', () => {
     test('opens Settings dialog', async () => {
       fireEvent.click(screen.getByTestId('MoreVertIcon'));
       fireEvent.click(screen.getByText('Settings'));
-      expect(screen.getByText('AVATAR')).toBeInTheDocument();
-      expect(screen.getByText('PASSWORD')).toBeInTheDocument();
+      expect(screen.getByText('Avatar')).toBeInTheDocument();
+      expect(screen.getByText('Password')).toBeInTheDocument();
     });
 
     test('opens About dialog', async () => {

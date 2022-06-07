@@ -9,7 +9,7 @@ import viewsRoutes from '../../viewsRoutes';
 import { EditMenu } from '../EditMenu/EditMenu';
 
 type CampaignTileProps = {
-  campaignId: number;
+  campaignId: string;
   campaignName: string;
   campaignImageBase64: string;
   setIsOpen: (newIsOpen: boolean) => void;
@@ -22,18 +22,6 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
   const dispatch = useDispatch();
 
   const [menuPos, setMenuPos] = useState<null | { mouseX: number; mouseY: number }>(null);
-
-  const handleContextMenu = (event: React.MouseEvent) => {
-    event.preventDefault();
-    setMenuPos(
-      menuPos === null
-        ? {
-            mouseX: event.clientX - 2,
-            mouseY: event.clientY - 4,
-          }
-        : null
-    );
-  };
 
   const handleClick = () => {
     if (props.isClickable) {
@@ -48,8 +36,16 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
     }
   };
 
-  const handleClose = () => {
-    setMenuPos(null);
+  const handleContextMenu = (event: React.MouseEvent) => {
+    event.preventDefault();
+    setMenuPos(
+      menuPos === null
+        ? {
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+          }
+        : null
+    );
   };
 
   const handleEdit = () => {
@@ -65,13 +61,17 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
     setMenuPos(null);
   };
 
+  const handleClose = () => {
+    setMenuPos(null);
+  };
+
   const cursorType = props.isClickable ? 'pointer' : 'default';
   return (
     <Paper
       sx={{
         cursor: cursorType,
         borderRadius: 2.5,
-        backgroundColor: 'customPalette.brown',
+        backgroundColor: 'customPalette.surfaceSecondary',
         height: { xs: 147.7, lg: 211 },
         width: { xs: 259.8, lg: 371.2 },
         padding: 0.66,
@@ -93,7 +93,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
         />
         <Typography
           sx={{
-            color: 'customPalette.accent',
+            color: 'customPalette.onSurfaceSecondary',
             fontWeight: 'medium',
             textAlign: 'left',
             paddingLeft: { xs: 0.7, lg: 1.5 },
