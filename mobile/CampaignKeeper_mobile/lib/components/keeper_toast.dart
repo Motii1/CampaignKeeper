@@ -1,6 +1,8 @@
 import 'package:campaign_keeper_mobile/components/keeper_fadein.dart';
 import 'package:flutter/material.dart';
 
+// A class that allows creating fake toasts
+// using tricks with a snackbars.
 class KeeperToast {
   static SnackBar createToast({required BuildContext context, required String message}) {
     return SnackBar(

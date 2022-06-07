@@ -2,6 +2,11 @@ import 'package:campaign_keeper_mobile/components/app_bar/keeper_back_button.dar
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:flutter/material.dart';
 
+// This widget provides comfort, modern and scallable action bar
+// that makes navigation easy with a taller smartphone.
+// As required parameters it takes a title, a sliver body.
+// Optionally it takes popup menu, function that runs on pull down refresh
+// And an option to disable the back arrow.
 class KeeperAppBar extends StatelessWidget {
   KeeperAppBar(
       {Key? key,
@@ -20,6 +25,8 @@ class KeeperAppBar extends StatelessWidget {
   final double _expandedHeight = 180.0;
   final double _collapsedHeight = 66;
 
+  // Simple function that determines if navgiation
+  // stack can be popped.
   bool canPop(BuildContext context) {
     final NavigatorState? navigator = Navigator.maybeOf(context);
     return navigator != null && navigator.canPop() && autoLeading;

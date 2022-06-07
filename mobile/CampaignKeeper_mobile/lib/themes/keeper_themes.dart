@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Theme data generator.
 class _DefaultTheme {
   static const double _textColorOpacitySecondary = 0.7;
   static const double _textColorOpacityPrimary = 0.9;
@@ -170,6 +171,7 @@ class _DefaultTheme {
         );
 }
 
+// Apps theme provider.
 class KeeperThemes {
   static const Color _primaryLight = Color(0xfff8bc02);
   static const Color _onPrimaryLight = Color(0xff242424);

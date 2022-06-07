@@ -1,6 +1,7 @@
 import 'package:campaign_keeper_mobile/components/keeper_fadein.dart';
 import 'package:flutter/material.dart';
 
+// Snackbar wrapper.
 class KeeperSnackBars {
   static SnackBar snack(String message) {
     return SnackBar(

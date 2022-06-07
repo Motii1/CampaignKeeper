@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// TODO: add a variable to animate it only once
+// Widget that fades in its content.
 class KeeperFadeIn extends StatefulWidget {
   final Duration duration;
   final Widget child;

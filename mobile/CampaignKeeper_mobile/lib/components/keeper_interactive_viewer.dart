@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+// Simple interactive viewer that lets move
+// drag and scale it's content.
 class KeeperInteractiveViewer extends StatefulWidget {
   const KeeperInteractiveViewer({Key? key, required this.child}) : super(key: key);
   final Widget child;

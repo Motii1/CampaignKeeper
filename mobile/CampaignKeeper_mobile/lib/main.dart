@@ -14,10 +14,15 @@ import 'package:flutter/services.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
+// Classic main method.
 void main() {
   runApp(MainApp());
 }
 
+// Main widget that's a base for a whole app.
+// Keeps current theme, sets statusbar style
+// and adds functionality to hide a keyboard
+// when tapped outside of a input field.
 class MainApp extends StatelessWidget {
   MainApp({Key? key}) : super(key: key);
 

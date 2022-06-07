@@ -10,6 +10,8 @@ import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+// Page representing the account screen with
+// the functionality to change user's avatar
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
 
@@ -22,7 +24,7 @@ class _AccountState extends KeeperState<Account> {
   final ImagePicker picker = ImagePicker();
   final int maxImageSize = 500000;
 
-  void updateEntity() {
+  void refreshEntity() {
     setState(() {
       ent = DataCarrier().get<UserDataEntity>();
     });
@@ -47,7 +49,7 @@ class _AccountState extends KeeperState<Account> {
         var newEntity =
             UserDataEntity.imageBytes(username: "", email: "", imageData: await image!.readAsBytes());
 
-        if (await DataCarrier().update(newEntity: newEntity)) {
+        if (await DataCarrier().patch(newEntity: newEntity)) {
           return;
         }
       }
@@ -63,12 +65,12 @@ class _AccountState extends KeeperState<Account> {
   @override
   void initState() {
     super.initState();
-    DataCarrier().addListener<UserDataEntity>(updateEntity);
+    DataCarrier().addListener<UserDataEntity>(refreshEntity);
   }
 
   @override
   void dispose() {
-    DataCarrier().removeListener<UserDataEntity>(updateEntity);
+    DataCarrier().removeListener<UserDataEntity>(refreshEntity);
     super.dispose();
   }
 

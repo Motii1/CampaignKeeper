@@ -4,12 +4,14 @@ import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_campaign_tile.dart';
 import 'package:campaign_keeper_mobile/components/keeper_toast.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
-import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:flutter/material.dart';
 
+// Page showing users campaigns list.
+// Implements double back to exit with a toast
+// information.
 class Start extends StatefulWidget {
   const Start({Key? key}) : super(key: key);
 
@@ -48,13 +50,9 @@ class _StartState extends KeeperState<Start> {
   }
 
   @override
-  void onResume() async {
-    DataCarrier().refresh<CampaignEntity>();
-  }
-
-  @override
   void onEveryResume() async {
     DataCarrier().refresh<UserDataEntity>();
+    DataCarrier().refresh<CampaignEntity>();
   }
 
   @override
