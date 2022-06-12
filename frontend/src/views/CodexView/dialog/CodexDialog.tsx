@@ -13,15 +13,6 @@ import { setCurrentEntry } from '../codexViewSlice';
 import { convertEditFieldToMetadata, createEmptyFields, createFilledFields } from '../utils';
 import { EditFieldList } from './components/EditFieldList/EditFieldList';
 
-export type EditFieldMetadata = {
-  value: string;
-  id: null | string;
-};
-
-export type EditFieldsState = {
-  [fieldName: string]: EditFieldMetadata[];
-};
-
 type NewEntryData = {
   title: string;
   schemaId: string;

@@ -24,6 +24,8 @@ export enum NavBarViewDialog {
   NewSchema,
   NewEntry,
   EditEntry,
+  NewEvent,
+  EditEvent,
 }
 
 export enum CustomSnackbarType {
@@ -31,3 +33,12 @@ export enum CustomSnackbarType {
   Success,
   Error,
 }
+
+export type EditFieldMetadata = {
+  value: string;
+  id: null | string;
+};
+
+export type EditFieldsState = {
+  [fieldName: string]: EditFieldMetadata[];
+};

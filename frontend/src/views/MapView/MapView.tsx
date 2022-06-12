@@ -31,7 +31,7 @@ export const MapView: React.FC = () => {
   }
 
   const [isOpen, setIsOpen] = useState(false);
-  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
+  const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewEvent);
 
   const eventNodes = setYPositions(shortGraphNodes);
 

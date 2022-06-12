@@ -1,8 +1,8 @@
 import { Box, Stack } from '@mui/material';
 import { useState } from 'react';
+import { EditFieldsState } from '../../../../../types/types';
 import { Schema } from '../../../codexSlice';
 import { convertEditFieldToString, getUpdatedEditField } from '../../../utils';
-import { EditFieldsState } from '../../CodexDialog';
 import { AddReferenceDialog } from './components/AddReferenceDialog/AddReferenceDialog';
 import { FieldTextArea } from './components/FieldTextArea/FieldTextArea';
 

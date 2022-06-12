@@ -1,5 +1,5 @@
+import { EditFieldMetadata, EditFieldsState } from '../../types/types';
 import { EntriesHashMap, Entry, MetadataInstance, Schema } from './codexSlice';
-import { EditFieldMetadata, EditFieldsState } from './dialog/CodexDialog';
 
 export const convertEditFieldToMetadata = (
   fieldMetadata: EditFieldMetadata[],

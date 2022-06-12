@@ -3,9 +3,9 @@ import { Stack } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store';
+import { EditFieldsState } from '../../../../../../../types/types';
 import { CustomDialog } from '../../../../../../components/CustomDialog/CustomDialog';
 import { Entry, Schema } from '../../../../../codexSlice';
-import { EditFieldsState } from '../../../../CodexDialog';
 import { CustomSelect } from './components/CustomSelect/CustomSelect';
 
 export type ReferenceSelectItem = {
