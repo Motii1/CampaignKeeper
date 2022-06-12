@@ -2,10 +2,10 @@
 import { Stack } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../../../store';
-import { EditFieldsState } from '../../../../../../../types/types';
-import { CustomDialog } from '../../../../../../components/CustomDialog/CustomDialog';
-import { Entry, Schema } from '../../../../../codexSlice';
+import { RootState } from '../../../store';
+import { ReferenceFieldsState } from '../../../types/types';
+import { Entry, Schema } from '../../CodexView/codexSlice';
+import { CustomDialog } from '../CustomDialog/CustomDialog';
 import { CustomSelect } from './components/CustomSelect/CustomSelect';
 
 export type ReferenceSelectItem = {
@@ -17,8 +17,8 @@ type AddReferenceDialogProps = {
   currentField: string;
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
-  fields: EditFieldsState;
-  setFields: (newEntryFields: EditFieldsState) => void;
+  fields: ReferenceFieldsState;
+  setFields: (newEntryFields: ReferenceFieldsState) => void;
 };
 
 const codexItemsToSelectItems = (items: Schema[] | Entry[]): ReferenceSelectItem[] =>
@@ -30,6 +30,12 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
   const [chosenSchema, setChosenSchema] = useState<ReferenceSelectItem | null>(null);
   const [chosenEntry, setChosenEntry] = useState<ReferenceSelectItem | null>(null);
 
+  const clearDialog = () => {
+    setChosenSchema(null);
+    setChosenEntry(null);
+    props.setIsOpen(false);
+  };
+
   const handleOk = () => {
     if (chosenSchema && chosenEntry) {
       const newFields = props.fields;
@@ -39,6 +45,7 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
       });
       props.setFields({ ...newFields });
       props.setIsOpen(false);
+      clearDialog();
     }
   };
 

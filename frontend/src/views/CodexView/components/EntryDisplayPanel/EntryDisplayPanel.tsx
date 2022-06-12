@@ -1,8 +1,8 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
+import { convertEntriesHashMapToList, getMetadataByFieldName } from '../../../../utils/utils';
 import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
-import { convertEntriesHashMapToList, getMetadataByFieldName } from '../../utils';
 import { EntryField } from './components/EntryField/EntryField';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
 

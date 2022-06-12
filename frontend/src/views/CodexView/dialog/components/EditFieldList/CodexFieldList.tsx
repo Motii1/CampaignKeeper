@@ -1,25 +1,28 @@
 import { Box, Stack } from '@mui/material';
 import { useState } from 'react';
-import { EditFieldsState } from '../../../../../types/types';
+import { ReferenceFieldsState } from '../../../../../types/types';
+import {
+  convertReferenceFieldToString,
+  getUpdatedReferenceField,
+} from '../../../../../utils/utils';
+import { AddReferenceDialog } from '../../../../components/AddReferenceDialog/AddReferenceDialog';
+import { FieldTextArea } from '../../../../components/FieldTextArea/FieldTextArea';
 import { Schema } from '../../../codexSlice';
-import { convertEditFieldToString, getUpdatedEditField } from '../../../utils';
-import { AddReferenceDialog } from './components/AddReferenceDialog/AddReferenceDialog';
-import { FieldTextArea } from './components/FieldTextArea/FieldTextArea';
 
-type EditFieldListProps = {
+type CodexFieldListProps = {
   currentSchema: Schema;
-  fields: EditFieldsState;
-  setFields: (newEntryFields: EditFieldsState) => void;
+  fields: ReferenceFieldsState;
+  setFields: (newEntryFields: ReferenceFieldsState) => void;
 };
 
-export const EditFieldList: React.FC<EditFieldListProps> = props => {
+export const CodexFieldList: React.FC<CodexFieldListProps> = props => {
   const [currentField, setCurrentField] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   const handleFieldInput = (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
     const newValue = event.target.value;
     const newFields = props.fields;
-    newFields[fieldName] = getUpdatedEditField(newFields[fieldName], newValue);
+    newFields[fieldName] = getUpdatedReferenceField(newFields[fieldName], newValue);
     props.setFields({ ...newFields });
   };
 
@@ -28,7 +31,7 @@ export const EditFieldList: React.FC<EditFieldListProps> = props => {
       <FieldTextArea
         key={fieldName}
         name={fieldName}
-        value={convertEditFieldToString(props.fields[fieldName])}
+        value={convertReferenceFieldToString(props.fields[fieldName])}
         onChange={event => handleFieldInput(event, fieldName)}
         setCurrentField={setCurrentField}
         setIsAddDialogOpen={setIsAddDialogOpen}

@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
+import { getEntryFromMetadata } from '../../../../../../utils/utils';
 import { Entry, MetadataInstance } from '../../../../codexSlice';
-import { getEntryFromMetadata } from '../../../../utils';
 import { ReferenceChip } from './components/ReferenceChip/ReferenceChip';
 
 type EntryFieldProps = {

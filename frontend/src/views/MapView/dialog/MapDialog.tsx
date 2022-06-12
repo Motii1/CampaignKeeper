@@ -2,8 +2,10 @@
 import { Stack } from '@mui/material';
 import { useState } from 'react';
 import { NavBarViewDialog } from '../../../types/types';
+import { createEmptyEventFields } from '../../../utils/utils';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
+import { MapFieldList } from './components/MapFieldList/MapFieldList';
 
 type CodexDialogProps = {
   isOpen: boolean;
@@ -20,8 +22,12 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
     props.dialogType === NavBarViewDialog.NewEvent ? 'Create new event' : `Edit event`
   );
 
+  const referenceFieldNames = ['Place', 'Characters', 'Description'];
   const [eventTitle, setEventTitle] = useState<string>('');
   const [eventTitleHelperText, setEventTitleHelperText] = useState<string>('');
+  const [referenceFields, setReferenceFields] = useState(
+    createEmptyEventFields(referenceFieldNames)
+  );
 
   const handleEventTitleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setEventTitle(event.target.value);
@@ -45,7 +51,7 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
     <CustomDialog
       title={dialogTitle}
       isOpen={props.isOpen}
-      isLarge={true}
+      isLarge={false}
       setIsOpen={props.setIsOpen}
       onOk={handleOk}
       onCancel={handleCancel}
@@ -78,6 +84,11 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
             defaultHelperText={''}
             onChange={event => handleEventTitleChange(event)}
             onBlur={event => handleEventTitleLeave(event)}
+          />
+          <MapFieldList
+            fieldNames={referenceFieldNames}
+            fields={referenceFields}
+            setFields={setReferenceFields}
           />
         </Stack>
       </Stack>

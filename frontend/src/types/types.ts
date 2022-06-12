@@ -34,11 +34,11 @@ export enum CustomSnackbarType {
   Error,
 }
 
-export type EditFieldMetadata = {
+export type ReferenceFieldMetadata = {
   value: string;
   id: null | string;
 };
 
-export type EditFieldsState = {
-  [fieldName: string]: EditFieldMetadata[];
+export type ReferenceFieldsState = {
+  [fieldName: string]: ReferenceFieldMetadata[];
 };
