@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Stack } from '@mui/material';
 import { useState } from 'react';
@@ -5,6 +6,7 @@ import { NavBarViewDialog } from '../../../types/types';
 import { createEmptyEventFields } from '../../../utils/utils';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
+import { EventSelect } from './components/EventSelect/EventSelect';
 import { MapFieldList } from './components/MapFieldList/MapFieldList';
 
 type CodexDialogProps = {
@@ -17,14 +19,18 @@ type CodexDialogProps = {
 };
 
 export const MapDialog: React.FC<CodexDialogProps> = props => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [dialogTitle, _setDialogTitle] = useState(
     props.dialogType === NavBarViewDialog.NewEvent ? 'Create new event' : `Edit event`
   );
 
   const referenceFieldNames = ['Place', 'Characters', 'Description'];
+  const possibleType = ['Normal', 'Fight'];
+  const possibleStatus = ['None', 'Done', 'Omitted'];
+
   const [eventTitle, setEventTitle] = useState<string>('');
   const [eventTitleHelperText, setEventTitleHelperText] = useState<string>('');
+  const [_type, setType] = useState<string>(possibleType[0]);
+  const [_status, setStatus] = useState<string>(possibleStatus[0]);
   const [referenceFields, setReferenceFields] = useState(
     createEmptyEventFields(referenceFieldNames)
   );
@@ -84,6 +90,20 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
             defaultHelperText={''}
             onChange={event => handleEventTitleChange(event)}
             onBlur={event => handleEventTitleLeave(event)}
+          />
+          <EventSelect
+            title="Type"
+            id="event-type-select"
+            label="Choose event type"
+            setValue={setType}
+            items={possibleType}
+          />
+          <EventSelect
+            title="Status"
+            id="event-status-select"
+            label="Choose event status"
+            setValue={setStatus}
+            items={possibleStatus}
           />
           <MapFieldList
             fieldNames={referenceFieldNames}

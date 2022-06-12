@@ -6,7 +6,7 @@ import { RootState } from '../../../store';
 import { ReferenceFieldsState } from '../../../types/types';
 import { Entry, Schema } from '../../CodexView/codexSlice';
 import { CustomDialog } from '../CustomDialog/CustomDialog';
-import { CustomSelect } from './components/CustomSelect/CustomSelect';
+import { AddReferenceSelect } from './components/AddReferenceSelect/AddReferenceSelect';
 
 export type ReferenceSelectItem = {
   name: string;
@@ -50,7 +50,7 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
   };
 
   const handleCancel = () => {
-    props.setIsOpen(false);
+    clearDialog();
   };
 
   return (
@@ -62,7 +62,7 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
       onCancel={handleCancel}
     >
       <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
-        <CustomSelect
+        <AddReferenceSelect
           name="Scheme"
           id="schema-select"
           label="Choose schema"
@@ -70,7 +70,7 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
           items={codexItemsToSelectItems(schemas)}
         />
         {chosenSchema ? (
-          <CustomSelect
+          <AddReferenceSelect
             name="Entry"
             id="entry-select"
             label="Choose entry"
