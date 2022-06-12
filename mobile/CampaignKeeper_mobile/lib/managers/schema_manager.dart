@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/types/types.dart';
 import 'package:collection/collection.dart';
@@ -11,6 +13,11 @@ class SchemaManager extends BaseManager<SchemaEntity> {
   Map<int, List<SchemaEntity>> _map = {};
 
   SchemaManager();
+
+  @override
+  void initialize() {
+    DataCarrier().addListener<CampaignEntity>(_checkIntegrity);
+  }
 
   @override
   void attach(SchemaEntity entity) {
@@ -140,5 +147,17 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     };
 
     return data;
+  }
+
+  void _checkIntegrity() {
+    var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
+
+    _map.forEach((key, _) {
+      if (!campaigns.contains(key)) {
+        _map.remove(key);
+      }
+    });
+
+    _cacheAll();
   }
 }

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
@@ -11,6 +13,11 @@ class SessionManager extends BaseManager<SessionEntity> {
   Map<int, List<SessionEntity>> _map = {};
 
   SessionManager();
+
+  @override
+  void initialize() {
+    DataCarrier().addListener<CampaignEntity>(_checkIntegrity);
+  }
 
   @override
   void attach(SessionEntity entity) {
@@ -140,5 +147,17 @@ class SessionManager extends BaseManager<SessionEntity> {
     };
 
     return data;
+  }
+
+  void _checkIntegrity() {
+    var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
+
+    _map.forEach((key, _) {
+      if (!campaigns.contains(key)) {
+        _map.remove(key);
+      }
+    });
+
+    _cacheAll();
   }
 }

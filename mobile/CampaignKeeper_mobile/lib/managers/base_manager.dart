@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // A hollow class used as a base for proper managers
 // due to a lack of interfaces in dart.
 class BaseManager<T> extends ChangeNotifier {
+  void initialize() {}
+
   // Attaches given entity to the local base and caches it.
   // Might also update server.
   void attach(T entity) {

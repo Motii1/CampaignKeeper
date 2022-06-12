@@ -83,7 +83,10 @@ class _LoadingState extends State<Loading> {
     super.didChangeDependencies();
     if (!_loaded) {
       _loaded = true;
+
+      DataCarrier().initialize();
       await loadAssets();
+
       autoLogin();
     }
   }
