@@ -8,7 +8,7 @@ export type SessionEventFieldMetadata = {
 };
 
 export type SessionEvent = {
-  id: number;
+  id: string;
   title: string;
   sessionId: string;
   type: string;

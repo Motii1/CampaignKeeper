@@ -2,12 +2,16 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Stack } from '@mui/material';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { createEmptyEventFields } from '../../../utils/utils';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import { EventSelect } from './components/EventSelect/EventSelect';
 import { MapFieldList } from './components/MapFieldList/MapFieldList';
+import { Parent } from './components/Parent/Parent';
+import { ParentsBar } from './components/ParentsBar/ParentsBar';
 
 type CodexDialogProps = {
   isOpen: boolean;
@@ -19,6 +23,8 @@ type CodexDialogProps = {
 };
 
 export const MapDialog: React.FC<CodexDialogProps> = props => {
+  const { eventsList } = useSelector((state: RootState) => state.session);
+
   const [dialogTitle, _setDialogTitle] = useState(
     props.dialogType === NavBarViewDialog.NewEvent ? 'Create new event' : `Edit event`
   );
@@ -29,6 +35,7 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
 
   const [eventTitle, setEventTitle] = useState<string>('');
   const [eventTitleHelperText, setEventTitleHelperText] = useState<string>('');
+  const [parentsIds, setParentsIds] = useState<string[]>([]);
   const [_type, setType] = useState<string>(possibleType[0]);
   const [_status, setStatus] = useState<string>(possibleStatus[0]);
   const [referenceFields, setReferenceFields] = useState(
@@ -52,6 +59,19 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
   const handleOk = () => {};
   const handleCancel = () => {};
   const handleDelete = () => {};
+
+  const renderParents = () =>
+    parentsIds.map(parentId => (
+      <Parent
+        key={parentId}
+        name={
+          parentId === 'root' ? 'Start' : eventsList.find(event => event.id === parentId)?.title
+        }
+        id={parentId}
+        parents={parentsIds}
+        setParents={setParentsIds}
+      />
+    ));
 
   return (
     <CustomDialog
@@ -91,6 +111,8 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
             onChange={event => handleEventTitleChange(event)}
             onBlur={event => handleEventTitleLeave(event)}
           />
+          <ParentsBar parents={parentsIds} setParents={setParentsIds} />
+          {renderParents()}
           <EventSelect
             title="Type"
             id="event-type-select"
