@@ -2,11 +2,11 @@ import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_campaign_tile.dart';
-import 'package:campaign_keeper_mobile/components/keeper_toast.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
+import 'package:campaign_keeper_mobile/services/keeper_toast.dart';
 import 'package:flutter/material.dart';
 
 // Page showing users campaigns list.
@@ -61,8 +61,7 @@ class _StartState extends KeeperState<Start> {
       return false;
     } else {
       isPopExit = true;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(KeeperToast.createToast(context: context, message: "Press back again to exit"));
+      KeeperToast.show("Press back again to exit");
       Future.delayed(Duration(seconds: 1, milliseconds: 300), () {
         isPopExit = false;
       });

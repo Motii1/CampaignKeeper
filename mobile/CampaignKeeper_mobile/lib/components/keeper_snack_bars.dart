@@ -1,14 +1,11 @@
-import 'package:campaign_keeper_mobile/components/keeper_fadein.dart';
+//import 'package:campaign_keeper_mobile/components/keeper_fadein.dart';
 import 'package:flutter/material.dart';
 
 // Snackbar wrapper.
 class KeeperSnackBars {
   static SnackBar snack(String message) {
     return SnackBar(
-      content: KeeperFadeIn(
-        duration: Duration(milliseconds: 100),
-        child: Text(message),
-      ),
+      content: Text(message),
       dismissDirection: DismissDirection.horizontal,
     );
   }
