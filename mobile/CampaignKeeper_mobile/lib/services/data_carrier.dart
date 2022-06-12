@@ -1,4 +1,5 @@
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/managers/campaign_manager.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
@@ -6,6 +7,7 @@ import 'package:campaign_keeper_mobile/managers/session_manager.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
+import 'package:campaign_keeper_mobile/managers/schema_manager.dart';
 import 'package:flutter/material.dart';
 
 // Service used throught the whole app to unify
@@ -20,11 +22,12 @@ class DataCarrier {
 
   Map<Type, BaseManager> _managers = new Map();
 
-  // Hardcoded managers addition to the DataCarrier.
+  // Hardcoded managers initialization to the DataCarrier.
   DataCarrier._internal() {
     _managers[UserDataEntity] = new UserDataManager();
     _managers[CampaignEntity] = new CampaignManager();
     _managers[SessionEntity] = new SessionManager();
+    _managers[SchemaEntity] = new SchemaManager();
   }
 
   void addListener<T>(VoidCallback listener) {

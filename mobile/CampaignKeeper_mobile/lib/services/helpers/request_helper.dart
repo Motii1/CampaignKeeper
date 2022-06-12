@@ -31,13 +31,29 @@ class RequestHelper extends ChangeNotifier {
   }
 
   // Returns pair of a respond status and a string json
-  Future<Response> get({required String endpoint, bool isAutoLogin = true, bool isSilent = false}) async {
+  Future<Response> get(
+      {required String endpoint,
+      List<RequestParameter>? params,
+      bool isAutoLogin = true,
+      bool isSilent = false}) async {
+    var buffer = StringBuffer();
+
+    buffer.write(endpoint);
+
+    if (params != null) {
+      params.forEach((element) {
+        buffer.write(element.parameter);
+      });
+    }
+
+    String address = buffer.toString();
+
     Map<String, String> headers = {"Cookie": isCookieValid() ? _cookie.toString() : ""};
     var response;
     try {
       response = await DependenciesHelper()
           .client
-          .get(Uri.parse("${AppPrefs().url}$endpoint"), headers: headers)
+          .get(Uri.parse("${AppPrefs().url}$address"), headers: headers)
           .timeout(Duration(seconds: AppPrefs().timeout));
     } on TimeoutException catch (_) {
       if (!isSilent) {

@@ -1,25 +1,25 @@
 import 'dart:convert';
-import 'package:collection/collection.dart';
-import 'package:campaign_keeper_mobile/entities/session_ent.dart';
-import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/types/types.dart';
+import 'package:collection/collection.dart';
+import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
+import 'package:campaign_keeper_mobile/managers/base_manager.dart';
+import 'package:campaign_keeper_mobile/services/cache_util.dart';
 
-class SessionManager extends BaseManager<SessionEntity> {
-  static const String _key = "Session";
-  Map<int, List<SessionEntity>> _map = {};
+class SchemaManager extends BaseManager<SchemaEntity> {
+  static const String _key = "Schema";
+  Map<int, List<SchemaEntity>> _map = {};
 
-  SessionManager();
+  SchemaManager();
 
   @override
-  void attach(SessionEntity entity) {
+  void attach(SchemaEntity entity) {
     _attach(entity);
     _cacheAll();
   }
 
   @override
-  SessionEntity? get({int groupId = -1, int entId = -1}) {
+  SchemaEntity? get({int groupId = -1, int entId = -1}) {
     for (var key in _map.keys) {
       var list = _map[key];
       if (list != null) {
@@ -35,7 +35,7 @@ class SessionManager extends BaseManager<SessionEntity> {
   }
 
   @override
-  List<SessionEntity> getList({int groupId = -1}) {
+  List<SchemaEntity> getList({int groupId = -1}) {
     var list = _map[groupId];
 
     return list ?? [];
@@ -57,12 +57,12 @@ class SessionManager extends BaseManager<SessionEntity> {
 
     if (online) {
       Response userResponse = await RequestHelper().get(
-          endpoint: SessionEntity.endpoint, params: [RequestParameter(name: "campaignId", value: groupId)]);
+          endpoint: SchemaEntity.endpoint, params: [RequestParameter(name: "campaignId", value: groupId)]);
 
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
-        List<SessionEntity> newEntities = [];
+        List<SchemaEntity> newEntities = [];
         Map responseData = json.decode(userResponse.data!);
-        responseData['sessions'].forEach((data) {
+        responseData['schemas'].forEach((data) {
           newEntities.add(_decodeEntity(data));
         });
 
@@ -100,7 +100,7 @@ class SessionManager extends BaseManager<SessionEntity> {
     _cacheAll();
   }
 
-  void _attach(SessionEntity entity) {
+  void _attach(SchemaEntity entity) {
     int campaignId = entity.campaignId;
     if (_map[campaignId] == null) {
       _map[campaignId] = [];
@@ -122,21 +122,21 @@ class SessionManager extends BaseManager<SessionEntity> {
     CacheUtil().add(_key, json.encode(data));
   }
 
-  SessionEntity _decodeEntity(Map data) {
+  SchemaEntity _decodeEntity(Map data) {
     int id = data['id'];
     int campaignId = data['campaignId'];
-    String name = data['name'];
-    DateTime createdAt = DateTime.parse(data['createdAt']);
+    String title = data['title'];
+    List<String> fields = (data['fields'] as List<dynamic>).map((e) => e as String).toList();
 
-    return SessionEntity(id: id, campaignId: campaignId, name: name, createdAt: createdAt);
+    return SchemaEntity(id: id, campaignId: campaignId, title: title, fields: fields);
   }
 
-  Map _encodeEntity(SessionEntity entity) {
+  Map _encodeEntity(SchemaEntity entity) {
     Map data = {
       "id": entity.id,
       "campaignId": entity.campaignId,
-      "name": entity.name,
-      "createdAt": entity.createdAt.toString(),
+      "title": entity.title,
+      "fields": entity.fields,
     };
 
     return data;

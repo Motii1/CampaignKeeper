@@ -79,7 +79,7 @@ class KeeperSearchBar extends StatelessWidget {
                             child: SizedBox(
                               width: constraints.biggest.width,
                               child: Padding(
-                                padding: EdgeInsets.only(bottom: 55, left: 14, right: 14),
+                                padding: EdgeInsets.only(bottom: 60, left: 14, right: 14),
                                 child: Text(
                                   title,
                                   style: TextStyle(

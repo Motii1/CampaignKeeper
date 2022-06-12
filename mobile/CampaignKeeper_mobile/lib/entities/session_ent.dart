@@ -7,7 +7,12 @@ class SessionEntity {
   String name;
   DateTime createdAt;
 
-  SessionEntity({required this.id, required this.campaignId, required this.name, required this.createdAt});
+  SessionEntity({
+    required this.id,
+    required this.campaignId,
+    required this.name,
+    required this.createdAt,
+  });
 
   bool equals(SessionEntity other) {
     return id == other.id &&
