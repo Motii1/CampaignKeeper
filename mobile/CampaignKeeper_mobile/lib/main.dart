@@ -1,4 +1,5 @@
 import 'package:campaign_keeper_mobile/pages/account.dart';
+import 'package:campaign_keeper_mobile/pages/objects.dart';
 import 'package:campaign_keeper_mobile/pages/session_map.dart';
 import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +56,9 @@ class MainApp extends StatelessWidget {
                 "/search": (context) => Search(searchController: settings.arguments as BaseSearchController),
                 "/login": (context) => Login(),
                 "/start": (context) => Start(),
-                "/start/campaign": (context) => Campaign(campaignID: settings.arguments as int),
-                "/start/campaign/session_map": (context) => SessionMap(sessionID: settings.arguments as int),
+                "/start/campaign": (context) => Campaign(campaignId: settings.arguments as int),
+                "/start/campaign/session_map": (context) => SessionMap(sessionId: settings.arguments as int),
+                "/start/campaign/objects": (context) => Objects(schemaId: settings.arguments as int),
               };
               WidgetBuilder builder = routes[settings.name]!;
               return MaterialPageRoute(builder: (ctx) => builder(ctx));

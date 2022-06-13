@@ -34,6 +34,7 @@ class _SearchState extends State<Search> {
     return _SearchScaffold(
       searchTextController: searchTextController,
       searchFocusNode: searchFocusNode,
+      heroTag: widget.searchController.heroTag,
       onChanged: onSearchChanged,
       onClear: () {
         searchTextController.clear();
@@ -64,12 +65,14 @@ class _SearchScaffold extends StatelessWidget {
       required this.body,
       required this.searchTextController,
       required this.searchFocusNode,
+      required this.heroTag,
       required this.onChanged,
       required this.onClear})
       : super(key: key);
   final body;
   final searchTextController;
   final searchFocusNode;
+  final heroTag;
   final void Function(String) onChanged;
   final void Function() onClear;
   final border = OutlineInputBorder(
@@ -81,7 +84,7 @@ class _SearchScaffold extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         flexibleSpace: Hero(
-          tag: 'search',
+          tag: heroTag,
           flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
             animation.addStatusListener((status) {
               if (status == AnimationStatus.completed) {

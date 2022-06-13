@@ -18,6 +18,7 @@ class KeeperSearchBar extends StatelessWidget {
       this.popup,
       this.onRefresh,
       this.autoLeading = true,
+      this.heroTag = 'search',
       this.searchController})
       : super(key: key);
 
@@ -26,9 +27,11 @@ class KeeperSearchBar extends StatelessWidget {
   final bool autoLeading;
   final KeeperPopup? popup;
   final Future<void> Function()? onRefresh;
+  final String heroTag;
+  final BaseSearchController? searchController;
+
   final double _expandedHeight = 180.0;
   final double _collapsedHeight = 60;
-  final BaseSearchController? searchController;
 
   // Simple function checking if navigation stack
   // can be popped.
@@ -97,7 +100,11 @@ class KeeperSearchBar extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SearchBar(autoLeading: autoLeading, popup: popup, searchController: searchController),
+                        SearchBar(
+                            autoLeading: autoLeading,
+                            popup: popup,
+                            heroTag: heroTag,
+                            searchController: searchController),
                       ],
                     );
                   },
@@ -136,11 +143,14 @@ class KeeperSearchBar extends StatelessWidget {
 // that will be used at a search page when bar
 // is pressed.
 class SearchBar extends StatelessWidget {
-  const SearchBar({Key? key, this.autoLeading = true, this.popup, this.searchController}) : super(key: key);
+  const SearchBar(
+      {Key? key, this.autoLeading = true, this.popup, this.searchController, this.heroTag = 'search'})
+      : super(key: key);
 
   final bool autoLeading;
   final KeeperPopup? popup;
   final BaseSearchController? searchController;
+  final String heroTag;
 
   // Simple function checking if navigation stack
   // can be popped.
@@ -154,7 +164,7 @@ class SearchBar extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.fromLTRB(8, 0, 8, 10),
         child: Hero(
-          tag: 'search',
+          tag: heroTag,
           child: SafeArea(
             child: Material(
               color: Theme.of(context).colorScheme.surface,

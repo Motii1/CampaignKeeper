@@ -17,30 +17,30 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 // Page showing a basic campaign info - list of sessions
 // and a codex with ability to search.
 class Campaign extends StatefulWidget {
-  Campaign({Key? key, required this.campaignID}) : super(key: key);
-  final int campaignID;
+  Campaign({Key? key, required this.campaignId}) : super(key: key);
+  final int campaignId;
 
   @override
   State<Campaign> createState() => _CampaignState();
 }
 
 class _CampaignState extends KeeperState<Campaign> {
-  late CampaignEntity? campaign = DataCarrier().get(entId: widget.campaignID);
-  late List<SessionEntity> sessions = DataCarrier().getList(groupId: widget.campaignID);
-  late List<SchemaEntity> schemas = DataCarrier().getList(groupId: widget.campaignID);
-  late BaseSearchController sessionSearch = SessionSearchController(campaignId: widget.campaignID);
-  late BaseSearchController schemaSearch = SchemaSearchController(campaignId: widget.campaignID);
+  late CampaignEntity? campaign = DataCarrier().get(entId: widget.campaignId);
+  late List<SessionEntity> sessions = DataCarrier().getList(groupId: widget.campaignId);
+  late List<SchemaEntity> schemas = DataCarrier().getList(groupId: widget.campaignId);
+  late BaseSearchController sessionSearch = SessionSearchController(campaignId: widget.campaignId);
+  late BaseSearchController schemaSearch = SchemaSearchController(campaignId: widget.campaignId);
   int currentPage = 0;
 
   Future<void> onRefresh() async {
     await DataCarrier().refresh<UserDataEntity>();
     await DataCarrier().refresh<CampaignEntity>();
-    await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignID);
-    await DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignID);
+    await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
+    await DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
   }
 
   Future<void> onCampaignRefresh() async {
-    CampaignEntity? entity = DataCarrier().get(entId: widget.campaignID);
+    CampaignEntity? entity = DataCarrier().get(entId: widget.campaignId);
     if (entity == null) {
       returnTo('/start');
     } else {
@@ -52,18 +52,22 @@ class _CampaignState extends KeeperState<Campaign> {
 
   Future<void> onSessionRefresh() async {
     setState(() {
-      sessions = DataCarrier().getList(groupId: widget.campaignID);
+      sessions = DataCarrier().getList(groupId: widget.campaignId);
     });
   }
 
   Future<void> onSchemaRefresh() async {
     setState(() {
-      schemas = DataCarrier().getList(groupId: widget.campaignID);
+      schemas = DataCarrier().getList(groupId: widget.campaignId);
     });
   }
 
   void openSession(int id) async {
     Navigator.pushNamed(context, '/start/campaign/session_map', arguments: id);
+  }
+
+  void openSchema(int id) async {
+    Navigator.pushNamed(context, '/start/campaign/objects', arguments: id);
   }
 
   Widget buildBody() {
@@ -85,7 +89,7 @@ class _CampaignState extends KeeperState<Campaign> {
           (context, index) => KeeperSchemaTile(
             entity: schemas[index],
             onTap: () {
-              // TODO: Open schema screen
+              openSchema(schemas[index].id);
             },
           ),
           childCount: schemas.length,
@@ -106,8 +110,8 @@ class _CampaignState extends KeeperState<Campaign> {
 
   @override
   void onEveryResume() async {
-    await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignID);
-    await DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignID);
+    await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
+    await DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
   }
 
   @override
@@ -122,8 +126,8 @@ class _CampaignState extends KeeperState<Campaign> {
     DataCarrier().addListener<SessionEntity>(onSessionRefresh);
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);
     DataCarrier().refresh<CampaignEntity>();
-    DataCarrier().refresh<SessionEntity>(groupId: widget.campaignID);
-    DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignID);
+    DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
+    DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
   }
 
   @override

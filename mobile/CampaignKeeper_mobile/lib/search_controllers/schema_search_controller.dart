@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class SchemaSearchController extends BaseSearchController<SchemaEntity> {
   int campaignId;
 
-  SchemaSearchController({required this.campaignId});
+  SchemaSearchController({required this.campaignId, String heroTag = 'search'}) : super(heroTag: heroTag);
 
   @override
   List filterEntities(String input) {
