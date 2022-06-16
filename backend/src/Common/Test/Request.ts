@@ -6,7 +6,7 @@ import { MOCKED_AUTH_TOKEN } from './Token';
 export const makeAuthorizedTestRequest = (
   app: App,
   url: string,
-  requestTypeKey: 'post' | 'get' | 'delete' | 'put'
+  requestTypeKey: 'post' | 'get' | 'delete' | 'put' | 'patch'
 ) =>
   request(app.getRouter())
     [requestTypeKey](url)

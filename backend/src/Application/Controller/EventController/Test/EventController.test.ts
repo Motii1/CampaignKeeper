@@ -4,7 +4,9 @@ import { dropDb, initDb } from '../../../../Common/Test/Database';
 import { makeAuthorizedTestRequest } from '../../../../Common/Test/Request';
 import { insertMockedSession } from '../../../../Common/Test/Session';
 import { insertMockedUser } from '../../../../Common/Test/Token';
+import { EventStatus, EventType } from '../../../../Domain/Campaign/Event/Event';
 import { EventInsertDto } from '../Dto/EventInsertDto';
+import { EventUpdateDto } from '../Dto/EventUpdateDto';
 import {
   BASE_ENDPOINT,
   createGraphRoot,
@@ -14,6 +16,7 @@ import {
   MOCKED_ROOT_ID,
   readGraph,
   testApp,
+  updateEvent,
 } from './common';
 
 describe('EventController', () => {
@@ -122,6 +125,45 @@ describe('EventController', () => {
         }),
         expect.objectContaining({ ...childLeaf, parentIds: [root.id] }),
         expect.objectContaining({ ...childLeaf, parentIds: [root.id] }),
+      ])
+    );
+  });
+
+  it('should correctly update event', async () => {
+    const root = await createGraphRoot();
+    const children: EventInsertDto = {
+      ...MOCKED_EVENT_INSERT_BASE,
+      parentIds: [MOCKED_ROOT_ID],
+    };
+    const childrenResponse = await insertEvent(children);
+    const leaf: EventInsertDto = {
+      ...MOCKED_EVENT_INSERT_BASE,
+      parentIds: [childrenResponse.body.id],
+    };
+    const leafResponse = await insertEvent(leaf);
+
+    const updateDto: EventUpdateDto = {
+      title: leaf.title,
+      status: EventStatus.None,
+      type: EventType.Normal,
+      charactersMetadataArray: [],
+      descriptionMetadataArray: [],
+      placeMetadataArray: [],
+      parentIds: [root.id],
+    };
+    const response = await updateEvent(leafResponse.body.id, updateDto);
+    expect(response.status).toEqual(200);
+
+    const graphResponse = await readGraph();
+    expect(graphResponse.status).toEqual(200);
+    expect(graphResponse.body.events).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          ...root,
+          childrenIds: [childrenResponse.body.id, leafResponse.body.id],
+        }),
+        expect.objectContaining({ ...response.body, parentIds: [root.id], childrenIds: [] }),
+        expect.objectContaining({ ...children, parentIds: [root.id], childrenIds: [] }),
       ])
     );
   });

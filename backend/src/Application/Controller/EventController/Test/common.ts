@@ -4,6 +4,7 @@ import { EventStatus, EventType, TextFieldType } from '../../../../Domain/Campai
 import { App } from '../../../App/App';
 import { EventDeleteDto } from '../Dto/EventDeleteDto';
 import { EventInsertDto } from '../Dto/EventInsertDto';
+import { EventUpdateDto } from '../Dto/EventUpdateDto';
 import { EventController, EventRoutes } from '../EventController';
 
 export const BASE_ENDPOINT = '/api/event';
@@ -44,3 +45,6 @@ export const deleteEvent = async (id: number, newParentId?: number) => {
   }
   return await request;
 };
+
+export const updateEvent = async (id: number, event: EventUpdateDto) =>
+  await makeAuthorizedTestRequest(testApp, `${BASE_ENDPOINT}/${id}`, 'patch').send(event);
