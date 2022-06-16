@@ -2,6 +2,7 @@ import { makeAuthorizedTestRequest } from '../../../../Common/Test/Request';
 import { MOCKED_SESSION_ID } from '../../../../Common/Test/Session';
 import { EventStatus, EventType, TextFieldType } from '../../../../Domain/Campaign/Event/Event';
 import { App } from '../../../App/App';
+import { EventDeleteDto } from '../Dto/EventDeleteDto';
 import { EventInsertDto } from '../Dto/EventInsertDto';
 import { EventController, EventRoutes } from '../EventController';
 
@@ -34,3 +35,12 @@ export const createGraphRoot = async () => {
 
 export const insertEvent = async (event: EventInsertDto = MOCKED_EVENT_INSERT_BASE) =>
   await makeAuthorizedTestRequest(testApp, BASE_ENDPOINT, 'post').send(event);
+
+export const deleteEvent = async (id: number, newParentId?: number) => {
+  const request = makeAuthorizedTestRequest(testApp, `${BASE_ENDPOINT}/${id}`, 'delete');
+  if (newParentId) {
+    const dto: EventDeleteDto = { parentId: newParentId };
+    request.send(dto);
+  }
+  return await request;
+};
