@@ -11,7 +11,7 @@ export class SchemaInstanceEntity {
   @Column({ name: 'schema_id' })
   schemaId?: number;
 
-  @ManyToOne(() => SchemaEntity, { nullable: false })
+  @ManyToOne(() => SchemaEntity, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'schema_id' })
   schema!: SchemaEntity;
 
