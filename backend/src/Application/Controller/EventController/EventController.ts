@@ -25,7 +25,7 @@ import {
 import { EventUpdateDto, eventUpdateDtoSchema } from './Dto/EventUpdateDto';
 import { SingleGetEventListDto } from './Dto/GetEventListDto';
 
-enum EventRoutes {
+export enum EventRoutes {
   Graph = '/graph',
 }
 
