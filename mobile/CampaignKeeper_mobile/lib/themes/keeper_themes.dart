@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Theme data generator.
 class _DefaultTheme {
   static const double _textColorOpacitySecondary = 0.7;
   static const double _textColorOpacityPrimary = 0.9;
@@ -106,9 +107,11 @@ class _DefaultTheme {
       caption: textColor,
     ),
     cardTheme: CardTheme(
-        shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(_radius)),
-    )),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(_radius)),
+      ),
+      elevation: 0,
+    ),
     snackBarTheme: SnackBarThemeData(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(_radius)),
@@ -170,8 +173,9 @@ class _DefaultTheme {
         );
 }
 
+// Apps theme provider.
 class KeeperThemes {
-  static const Color _primaryLight = Color(0xfff8bc02);
+  static const Color _primaryLight = Color(0xfff0c84c);
   static const Color _onPrimaryLight = Color(0xff242424);
 
   static final Color _secondaryLight = Color(0xff09efc9);
@@ -180,8 +184,8 @@ class KeeperThemes {
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  static const Color _light = Color(0xffd0e6fc);
-  static const Color _lighterLight = Color(0xffecf8ff);
+  static const Color _light = Color(0xffe1edfa);
+  static const Color _lighterLight = Color.fromARGB(255, 241, 250, 255);
 
   static const Color _primaryDark = Color(0xffffe082);
   static const Color _onPrimaryDark = Color(0xff242424);

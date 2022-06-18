@@ -6,6 +6,8 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/main.dart';
 
+// Used to store any information that are app specific
+// not related to the account and tthe service.
 class AppPrefs {
   static final AppPrefs _app = AppPrefs._internal();
   final String milestone = "Eden Prime";
@@ -20,6 +22,7 @@ class AppPrefs {
   int _debugLoginTimeout = 0;
   ThemeMode _theme = ThemeMode.dark;
 
+  // Getter for a server api url.
   String get url {
     if (debug) {
       return _debugUrl;
@@ -28,11 +31,13 @@ class AppPrefs {
     }
   }
 
+  // Setter for a server api url.
   set url(String value) {
     _debugUrl = value;
     _cachePrefs();
   }
 
+  // Getter for a http request timeout.
   int get timeout {
     if (debug) {
       return _debugTimeout;
@@ -41,11 +46,13 @@ class AppPrefs {
     }
   }
 
+  // Setter for a http request timeout.
   set timeout(int value) {
     _debugTimeout = value;
     _cachePrefs();
   }
 
+  // Getter for a http login request timeout.
   int get loginTimeout {
     if (debug) {
       return _debugLoginTimeout;
@@ -54,6 +61,7 @@ class AppPrefs {
     }
   }
 
+  // Setter for a http login timeout.
   set loginTimeout(int value) {
     _debugLoginTimeout = value;
     _cachePrefs();
@@ -67,6 +75,7 @@ class AppPrefs {
     _debugLoginTimeout = _loginTimeout;
   }
 
+  // Loads cached user settings and applies a theme.
   Future<void> refresh(BuildContext context) async {
     var val = await CacheUtil().get(_key);
 
@@ -90,6 +99,7 @@ class AppPrefs {
     setTheme(context, _theme, true);
   }
 
+  // Applies a theme to the app.
   void setTheme(BuildContext context, ThemeMode theme, [bool force = false]) {
     if (theme != _theme || force) {
       _theme = theme;
@@ -99,8 +109,10 @@ class AppPrefs {
     _cachePrefs();
   }
 
+  // Gets current theme.
   ThemeMode getTheme(BuildContext context) => _theme;
 
+  // Gets android devices sdk version.
   Future<int> getSdkVersion() async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 

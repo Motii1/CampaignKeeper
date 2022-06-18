@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// Widget used as a header in ordinary lists
+// like settings page.
 class KeeperListHeader extends StatelessWidget {
   final String title;
   const KeeperListHeader({Key? key, required this.title}) : super(key: key);

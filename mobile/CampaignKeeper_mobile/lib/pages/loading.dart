@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+// Page responsible for loading basic functionality.
+// It's main task is to auto login user - either
+// by doing an api request or by loading cached
+// information if api is not available. If neither can
+// succeed user is transfered to the login page.
 class Loading extends StatefulWidget {
   @override
   _LoadingState createState() => _LoadingState();

@@ -15,7 +15,10 @@
     "run:dev:watch": "npm run copy-images && npm run start",
     "start:dev:watch": "tsc-watch --outDir ./dist --onSuccess \"npm run run:dev:watch\"",
     "lint": "eslint \"./src/**/*.{ts,js}\"",
-    "format": "npm run lint -- --fix"
+    "format": "npm run lint -- --fix",
+    "migration:generate": "typeorm migration:generate -n",
+    "migration:run": "typeorm migration:run",
+    "migration:revert": "typeorm migration:revert"
   },
   "repository": {
     "type": "git",

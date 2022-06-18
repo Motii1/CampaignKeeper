@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
+// Entity representing an user data.
 class UserDataEntity {
   static const String endpoint = "/api/user/details";
   static const String imageEndpoint = "/api/user/image";
@@ -17,6 +18,7 @@ class UserDataEntity {
     this.imageData = imageData;
   }
 
+  // Named constructor that uses bytes list as an image source.
   UserDataEntity.imageBytes(
       {required this.username, required this.email, this.password, required Uint8List imageData}) {
     String base = base64.encode(imageData);
@@ -25,6 +27,7 @@ class UserDataEntity {
 
   String? get imageData => _imageData;
 
+  // A setter that also updates an cached image.
   void set imageData(String? value) {
     _imageData = value;
 

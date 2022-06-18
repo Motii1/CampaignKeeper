@@ -4,6 +4,10 @@ import 'package:campaign_keeper_mobile/search_controllers/base_search_controller
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Widget that places a floating search bar above it's child.
+// As arguments it takes an option for displaying
+// back arrow button, an popup, it's child and a search controller
+// that will be used at the search page.
 class KeeperFloatingSearch extends StatelessWidget {
   const KeeperFloatingSearch(
       {Key? key, this.autoLeading = true, this.popup, this.searchController, required this.child})

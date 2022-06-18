@@ -7,6 +7,8 @@ import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:http/http.dart' as http;
 
+// Helper used to simplify http requests.
+// Also allows to retrieve last connection status.
 class RequestHelper extends ChangeNotifier {
   static final RequestHelper _helper = RequestHelper._internal();
 

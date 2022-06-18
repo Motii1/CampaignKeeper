@@ -4,6 +4,7 @@ import 'package:campaign_keeper_mobile/components/keeper_logo_card.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:flutter/material.dart';
 
+// Simple page representing an about screen.
 class About extends StatefulWidget {
   const About({Key? key}) : super(key: key);
 

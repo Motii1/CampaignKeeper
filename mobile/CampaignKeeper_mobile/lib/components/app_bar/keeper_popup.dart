@@ -2,6 +2,7 @@ import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 
+// Widget representing popup using users avatar as a button.
 class KeeperPopup extends StatefulWidget {
   KeeperPopup({Key? key, required this.itemBuilder, this.onSelected, this.padding}) : super(key: key);
 
@@ -12,6 +13,7 @@ class KeeperPopup extends StatefulWidget {
   @override
   _KeeperPopupState createState() => _KeeperPopupState();
 
+  // A function returning a popup with most common options.
   static KeeperPopup settings(BuildContext context) {
     return KeeperPopup(
       itemBuilder: (BuildContext context) => [
@@ -34,6 +36,8 @@ class KeeperPopup extends StatefulWidget {
 class _KeeperPopupState extends State<KeeperPopup> {
   Image? userImage = DataCarrier().get<UserDataEntity>()?.image;
 
+  // Function run when user details are refreshed.
+  // It sets a new avatar as an button.
   void refreshUserImage() {
     setState(() {
       userImage = DataCarrier().get<UserDataEntity>()?.image;

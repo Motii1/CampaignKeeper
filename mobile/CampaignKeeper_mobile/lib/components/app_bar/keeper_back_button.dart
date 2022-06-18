@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// Widget representing back arrow button.
+// It can take custom padding and size constraints.
 class KeeperBackButton extends StatelessWidget {
   const KeeperBackButton({Key? key, this.padding, this.constraints}) : super(key: key);
   final EdgeInsets? padding;

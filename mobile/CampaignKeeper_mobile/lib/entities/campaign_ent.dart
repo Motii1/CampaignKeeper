@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
+// Entity representing an campaign.
 class CampaignEntity {
   static const String endpoint = "/api/campaign/list";
 
@@ -17,6 +18,7 @@ class CampaignEntity {
 
   String? get imageData => _imageData;
 
+  // A setter that also updates an cached image.
   void set imageData(String? value) {
     _imageData = value;
 

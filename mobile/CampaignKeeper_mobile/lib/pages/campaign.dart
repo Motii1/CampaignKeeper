@@ -12,6 +12,8 @@ import 'package:campaign_keeper_mobile/search_controllers/campaign_search_contro
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+// Page showing a basic campaign info - list of sessions
+// and a codex with ability to search.
 class Campaign extends StatefulWidget {
   Campaign({Key? key, required this.campaignID}) : super(key: key);
   final int campaignID;
@@ -85,13 +87,14 @@ class _CampaignState extends KeeperState<Campaign> {
   }
 
   @override
-  void onResume() async {
-    DataCarrier().refresh<CampaignEntity>();
-    if (currentPage == 0) {
-      await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignID);
-    } else {
-      //TODO: Refresh codex here
-    }
+  void onEveryResume() async {
+    await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignID);
+    //TODO: Refresh codex here
+  }
+
+  @override
+  void onReturn() async {
+    onCampaignRefresh();
   }
 
   @override
