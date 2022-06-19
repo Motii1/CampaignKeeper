@@ -8,7 +8,7 @@ type EventWrapperProps = {
   parentIDs: string[];
 };
 
-// TO-DO: EventTiles should be shove ABOVE EventArrows
+// TO-DO: EventTiles should be shown ABOVE EventArrows
 export const EventWrapper: React.FC<EventWrapperProps> = props => {
   const numberOfArrows = props.parentIDs.length;
   const a1 =
@@ -17,6 +17,19 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
   for (let i = 1; i < numberOfArrows; i++) arrowsEndOffsets.push(a1 + i * 20);
 
   const renderArrows = () => {
+    if (props.parentIDs.length === 0)
+      return (
+        <EventArrow
+          key={`${props.id}-root`}
+          start="root-node"
+          end={props.id}
+          endAnchor={{
+            position: 'top',
+            offset: { x: 0 },
+          }}
+        />
+      );
+
     let currentArrow = 0;
 
     return props.parentIDs.map(parentId => {

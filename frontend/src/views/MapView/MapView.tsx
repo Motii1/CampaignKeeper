@@ -7,6 +7,7 @@ import { NavBarViewDialog } from '../../types/types';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import viewsRoutes from '../viewsRoutes';
 import { EventWrapper } from './components/EventWrapper/EventWrapper';
+import { RootNode } from './components/RootNode/RootNode';
 import { EventNode, shortGraphNodes } from './eventNodes';
 import { setYPositions } from './graphExperiments';
 import { fetchEvents } from './sessionSlice';
@@ -55,6 +56,7 @@ export const MapView: React.FC = () => {
         spacing={8}
         sx={{ marginTop: '50px' }}
       >
+        <RootNode />
         {rowIndexes.map(index => renderRow(eventNodes.filter(node => node.y === index)))}
       </Stack>
     );
