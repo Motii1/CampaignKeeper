@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { SessionEvent } from '../../../../sessionSlice';
+import { SessionEvent } from '../../../../../../sessionSlice';
 import { EventDetails } from './components/EventDetails/EventDetails';
 import { EventMenu } from './components/EventMenu/EventMenu';
 

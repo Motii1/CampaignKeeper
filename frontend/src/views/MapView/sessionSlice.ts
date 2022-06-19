@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
+import { setYPos } from './graphExperiments';
 
 export type EventFieldMetadata = {
   value: string;
@@ -7,7 +8,7 @@ export type EventFieldMetadata = {
   type: string;
 };
 
-export type SessionEvent = {
+export interface SessionEvent {
   id: string;
   title: string;
   sessionId: string;
@@ -18,10 +19,15 @@ export type SessionEvent = {
   charactersMetadataArray: EventFieldMetadata[];
   parentIds: string[];
   childrenIds: string[];
-};
+}
+
+export interface SessionEventWithPos extends SessionEvent {
+  x: number;
+  y: number;
+}
 
 type SessionState = {
-  eventsList: SessionEvent[];
+  eventsList: SessionEventWithPos[];
   isEventsListDownloaded: boolean;
   currentSessionId: string;
 };
@@ -67,7 +73,13 @@ const sessionSlice = createSlice({
     builder.addCase(fetchEvents.fulfilled, (state, action) => {
       if (action.payload.status === 200) {
         state.isEventsListDownloaded = true;
-        state.eventsList = action.payload.data.events;
+        const eventsFromAPI = action.payload.data.events;
+        eventsFromAPI.forEach((event: SessionEventWithPos) => {
+          event.x = -1;
+          event.y = -1;
+        });
+        setYPos(eventsFromAPI);
+        state.eventsList = eventsFromAPI;
       }
     });
   },

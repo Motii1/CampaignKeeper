@@ -1,23 +1,37 @@
 /* eslint-disable no-console */
-import { EventNode } from './eventNodes';
+import { SessionEventWithPos } from './sessionSlice';
 
-const getParents = (node: EventNode, allNodes: EventNode[]): EventNode[] =>
-  allNodes.filter(element => node.parentIDs.includes(element.id));
+type EventPositionInfo = {
+  id: string;
+  parentIds: string[];
+  x: number;
+  y: number;
+};
 
-const checkAllParents = (node: EventNode, nodes: EventNode[]) =>
-  nodes.map(element => element.id).some(element => node.parentIDs.includes(element));
+const getParents = (node: EventPositionInfo, allNodes: EventPositionInfo[]): EventPositionInfo[] =>
+  allNodes.filter(element => node.parentIds.includes(element.id));
 
-const getHighestY = (nodes: EventNode[]) => Math.max(...nodes.map(node => node.y));
+const checkAllParents = (node: EventPositionInfo, nodes: EventPositionInfo[]) =>
+  nodes.map(element => element.id).some(id => node.parentIds.includes(id));
 
-export const setYPositions = (eventNodes: EventNode[]): EventNode[] => {
+const getHighestY = (nodes: EventPositionInfo[]) => Math.max(...nodes.map(node => node.y));
+
+export const setYPos = (events: SessionEventWithPos[]): SessionEventWithPos[] => {
   // deep copy of eventNodes
-  const oldNodes = JSON.parse(JSON.stringify(eventNodes));
-  const newNodes: EventNode[] = [];
-  console.log(oldNodes);
+  // TO-DO: export trimming to external func
+  const trimmedEventNodes: EventPositionInfo[] = events.map((eventNode: SessionEventWithPos) => ({
+    id: eventNode.id,
+    parentIds: eventNode.parentIds,
+    x: eventNode.x,
+    y: eventNode.y,
+  }));
+  const oldNodes: EventPositionInfo[] = JSON.parse(JSON.stringify(trimmedEventNodes));
+  const newNodes: EventPositionInfo[] = [];
+
   while (oldNodes.length > 0) {
     const node = oldNodes.shift();
     if (node) {
-      if (node.parentIDs.length === 0) {
+      if (node.parentIds.length === 0) {
         node.y = 0;
         newNodes.push(node);
       } else {
@@ -29,7 +43,14 @@ export const setYPositions = (eventNodes: EventNode[]): EventNode[] => {
       }
     }
   }
-  return newNodes;
+
+  events.forEach(event => {
+    const positionNode = newNodes.find(node => node.id === event.id);
+    if (positionNode) event.y = positionNode.y;
+  });
+
+  console.log(events);
+  return events;
 };
 
 // export const convertEventNodeArrayToRows
