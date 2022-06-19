@@ -49,7 +49,6 @@ export const setYPos = (events: SessionEventWithPos[]): SessionEventWithPos[] =>
     if (positionNode) event.y = positionNode.y;
   });
 
-  console.log(events);
   return events;
 };
 

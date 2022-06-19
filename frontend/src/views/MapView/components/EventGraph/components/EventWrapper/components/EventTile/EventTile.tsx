@@ -1,12 +1,11 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { SessionEvent } from '../../../../../../sessionSlice';
+import { SessionEventWithPos } from '../../../../../../sessionSlice';
 import { EventDetails } from './components/EventDetails/EventDetails';
 import { EventMenu } from './components/EventMenu/EventMenu';
 
 type EventTileProps = {
   id: string;
-  title: string;
-  event?: SessionEvent;
+  event: SessionEventWithPos;
 };
 
 export const EventTile: React.FC<EventTileProps> = props => (
@@ -14,8 +13,8 @@ export const EventTile: React.FC<EventTileProps> = props => (
     elevation={6}
     sx={{
       backgroundColor: 'customPalette.accent',
-      width: '300px',
-      height: '200px',
+      width: '400px',
+      minHeight: '200px',
       '& .MuiBox-root': {
         '& .css-0': {
           zIndex: '5',
@@ -27,9 +26,13 @@ export const EventTile: React.FC<EventTileProps> = props => (
   >
     <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={1}>
       <Typography sx={{ fontWeight: 'bold', color: 'customPalette.onAccent', marginTop: '5px' }}>
-        {`Event name ${props.title}`}
+        {props.event.title}
       </Typography>
-      <EventDetails />
+      <EventDetails
+        place={props.event.placeMetadataArray}
+        characters={props.event.charactersMetadataArray}
+        description={props.event.descriptionMetadataArray}
+      />
     </Stack>
     <EventMenu />
   </Paper>

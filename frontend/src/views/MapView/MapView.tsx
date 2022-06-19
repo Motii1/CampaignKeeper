@@ -6,7 +6,7 @@ import { NavBarViewDialog } from '../../types/types';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import viewsRoutes from '../viewsRoutes';
 import { EventGraph } from './components/EventGraph/EventGraph';
-import { fetchEvents } from './sessionSlice';
+import { fetchEvents, setSessionId } from './sessionSlice';
 
 export const MapView: React.FC = () => {
   const dispatch = useDispatch();
@@ -23,6 +23,7 @@ export const MapView: React.FC = () => {
     const sessionIdForFetching =
       currentSessionId !== '' ? currentSessionId : sessionsList[sessionsList.length - 1].id;
     dispatch(fetchEvents(sessionIdForFetching));
+    dispatch(setSessionId({ currentSessionId: sessionIdForFetching }));
   }
 
   const [isOpen, setIsOpen] = useState(false);

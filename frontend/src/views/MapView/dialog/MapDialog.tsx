@@ -134,9 +134,7 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
       parentIds.map(parentId => (
         <Parent
           key={parentId}
-          name={
-            parentId === 'root' ? 'Start' : eventsList.find(event => event.id === parentId)?.title
-          }
+          name={eventsList.find(event => event.id === parentId)?.title}
           id={parentId}
           parents={parentIds}
           setParents={setParentIds}

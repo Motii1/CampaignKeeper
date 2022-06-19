@@ -12,7 +12,7 @@ export const EventGraph: React.FC = () => {
   const renderRow = (nodes: SessionEventWithPos[]) => (
     <Stack key={nodes[0].y} direction="row" justifyContent="center" alignItems="center" spacing={4}>
       {nodes.map(node => (
-        <EventWrapper key={node.id} id={node.id} title={node.title} parentIds={node.parentIds} />
+        <EventWrapper key={`event-node-key-${node.id}`} event={node} />
       ))}
     </Stack>
   );

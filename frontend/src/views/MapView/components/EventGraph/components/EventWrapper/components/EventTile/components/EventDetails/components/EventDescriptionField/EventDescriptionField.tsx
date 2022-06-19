@@ -1,43 +1,61 @@
-/* eslint-disable no-console */
 import { Box, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../../../../../../store';
 import { convertEntriesHashMapToList } from '../../../../../../../../../../../../utils/utils';
 import { EventFieldMetadata } from '../../../../../../../../../../sessionSlice';
-import { EntryReferenceChip } from './components/EntryReferenceChip/EntryReferenceChip';
-import { EntryTextChip } from './components/EntryTextChip/EntryTextChip';
+import { ReferenceChip } from './ReferenceChip/ReferenceChip';
 
-type EventDetailsFieldProps = {
+type EventDescriptionFieldProps = {
   title: string;
   data: EventFieldMetadata[];
 };
 
-export const EventDetailsField: React.FC<EventDetailsFieldProps> = props => {
+export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props => {
   const { schemas, entries } = useSelector((state: RootState) => state.codex);
 
-  const renderEntries = () => {
+  const renderValue = () => {
     const sortedData = [...props.data];
     sortedData.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
     return sortedData.map(metadata => {
       if (metadata.type === 'string')
-        return <EntryTextChip key={metadata.sequenceNumber} title={metadata.value} />;
+        return (
+          <Typography
+            sx={{
+              wordWrap: 'break-word',
+              display: 'inline',
+              width: 'fit-content',
+              color: 'customPalette.onSurface',
+            }}
+            key={metadata.sequenceNumber}
+          >
+            {metadata.value}
+          </Typography>
+        );
 
       const entry = convertEntriesHashMapToList(entries).find(
         element => element.id.toString() === metadata.value
       );
       const schema = schemas.find(element => element.id === entry?.id);
       if (schema && entry)
-        return <EntryReferenceChip key={entry.id} entry={entry} schema={schema} />;
+        return <ReferenceChip entry={entry} schema={schema} key={metadata.sequenceNumber} />;
       return null;
     });
   };
 
   return (
-    <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0.5}>
+    <Stack
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="flex-start"
+      spacing={1}
+      sx={{
+        width: '100%',
+      }}
+    >
       <Typography variant="subtitle1" sx={{ color: 'customPalette.accent' }}>
         {props.title}
       </Typography>
-      <Box sx={{ display: 'inline' }}>{renderEntries()}</Box>
+      <Box sx={{ display: 'inline' }}>{renderValue()}</Box>
     </Stack>
   );
 };

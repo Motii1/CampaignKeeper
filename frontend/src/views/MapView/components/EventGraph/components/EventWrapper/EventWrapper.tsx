@@ -1,30 +1,27 @@
 import { Box } from '@mui/material';
+import { SessionEventWithPos } from '../../../../sessionSlice';
 import { EventArrow } from './components/EventArrow/EventArrow';
 import { EventTile } from './components/EventTile/EventTile';
 
 type EventWrapperProps = {
-  id: string;
-  title: string;
-  parentIds: string[];
+  event: SessionEventWithPos;
 };
 
 // TO-DO: EventTiles should be shown ABOVE EventArrows
 export const EventWrapper: React.FC<EventWrapperProps> = props => {
-  const numberOfArrows = props.parentIds.length;
+  const numberOfArrows = props.event.parentIds.length;
   const a1 =
     numberOfArrows % 2 === 0 ? 0.5 * numberOfArrows * -10 : 0.5 * numberOfArrows * -20 + 10;
   const arrowsEndOffsets = [a1];
   for (let i = 1; i < numberOfArrows; i++) arrowsEndOffsets.push(a1 + i * 20);
 
   const renderArrows = () => {
-    // eslint-disable-next-line no-console
-    console.log(props.id, props.parentIds);
-    if (props.parentIds.length === 0)
+    if (props.event.parentIds.length === 0)
       return (
         <EventArrow
-          key={`${props.id}-root`}
+          key={`${props.event.id}-root`}
           start="root-node"
-          end={`event-${props.id}`}
+          end={`event-${props.event.id}`}
           endAnchor={{
             position: 'top',
             offset: { x: 0 },
@@ -34,14 +31,14 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
 
     let currentArrow = 0;
 
-    return props.parentIds.map(parentId => {
+    return props.event.parentIds.map(parentId => {
       const offset = arrowsEndOffsets[currentArrow];
       currentArrow++;
       return (
         <EventArrow
-          key={`${props.id}-${parentId}`}
+          key={`${props.event.id}-${parentId}`}
           start={`event-${parentId}`}
-          end={`event-${props.id}`}
+          end={`event-${props.event.id}`}
           endAnchor={{
             position: 'top',
             offset: { x: offset },
@@ -53,7 +50,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
 
   return (
     <Box>
-      <EventTile id={`event-${props.id}`} title={props.title} />
+      <EventTile id={`event-${props.event.id}`} event={props.event} />
       {renderArrows()}
     </Box>
   );
