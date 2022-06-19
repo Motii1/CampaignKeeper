@@ -1,7 +1,7 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
-import { convertEntriesHashMapToList, getMetadataByFieldName } from '../../../../utils/utils';
+import { convertEntriesHashMapToList, getCodexMetadataByFieldName } from '../../../../utils/utils';
 import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
 import { EntryField } from './components/EntryField/EntryField';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
@@ -14,7 +14,7 @@ export const EntryDisplayPanel: React.FC = () => {
     if (currentEntry) {
       const entriesAsList = convertEntriesHashMapToList(entries);
       const fields = currentSchema?.fields.map(fieldName =>
-        getMetadataByFieldName(fieldName, currentEntry.metadataArray)
+        getCodexMetadataByFieldName(fieldName, currentEntry.metadataArray)
       );
       if (fields)
         return fields.map(field => (

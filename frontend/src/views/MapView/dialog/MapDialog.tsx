@@ -1,17 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Stack } from '@mui/material';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Stack, Typography } from '@mui/material';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import requestMethods from '../../../axios/requestMethods';
+import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
-import { createEmptyEventFields } from '../../../utils/utils';
+import { convertReferenceFieldToEventMetadata, createEmptyEventFields } from '../../../utils/utils';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
+import { addEvent, SessionEvent } from '../sessionSlice';
 import { EventSelect } from './components/EventSelect/EventSelect';
 import { MapFieldList } from './components/MapFieldList/MapFieldList';
 import { Parent } from './components/Parent/Parent';
 import { ParentsBar } from './components/ParentsBar/ParentsBar';
+
+// type NewEventData = {
+//   title: string;
+//   sessionId: string;
+//   type: string;
+//   status: string;
+//   placeMetadataArray: EventFieldMetadata[];
+//   descriptionMetadataArray: EventFieldMetadata[];
+//   charactersMetadataArray: EventFieldMetadata[];
+//   parentIds: string[];
+// };
 
 type CodexDialogProps = {
   isOpen: boolean;
@@ -23,24 +37,59 @@ type CodexDialogProps = {
 };
 
 export const MapDialog: React.FC<CodexDialogProps> = props => {
-  const { eventsList } = useSelector((state: RootState) => state.session);
+  const dispatch = useDispatch();
+  const { eventsList, currentSessionId } = useSelector((state: RootState) => state.session);
 
   const [dialogTitle, _setDialogTitle] = useState(
     props.dialogType === NavBarViewDialog.NewEvent ? 'Create new event' : `Edit event`
   );
 
-  const referenceFieldNames = ['Place', 'Characters', 'Description'];
-  const possibleType = ['Normal', 'Fight'];
-  const possibleStatus = ['None', 'Done', 'Omitted'];
+  const referenceFieldNames = useMemo(() => ['Place', 'Characters', 'Description'], []);
+  const possibleType = useMemo(() => ['Normal', 'Fight'], []);
+  const possibleStatus = useMemo(() => ['None', 'Done', 'Omitted'], []);
 
   const [eventTitle, setEventTitle] = useState<string>('');
   const [eventTitleHelperText, setEventTitleHelperText] = useState<string>('');
-  const [parentsIds, setParentsIds] = useState<string[]>([]);
-  const [_type, setType] = useState<string>(possibleType[0]);
-  const [_status, setStatus] = useState<string>(possibleStatus[0]);
+  const [parentIds, setParentIds] = useState<string[]>([]);
+  const [type, setType] = useState<string>(possibleType[0]);
+  const [status, setStatus] = useState<string>(possibleStatus[0]);
   const [referenceFields, setReferenceFields] = useState(
     createEmptyEventFields(referenceFieldNames)
   );
+
+  const {
+    isLoading: isLoadingNew,
+    data: dataNew,
+    status: statusNew,
+    runQuery: runQueryNew,
+    resetQuery: resetQueryNew,
+  } = useQuery<SessionEvent>(`/api/event`, requestMethods.POST);
+
+  const resetDialog = useCallback(() => {
+    setEventTitle('');
+    setEventTitleHelperText('');
+    setParentIds([]);
+    setType(possibleType[0]);
+    setStatus(possibleStatus[0]);
+    setReferenceFields(createEmptyEventFields(referenceFieldNames));
+  }, [possibleStatus, possibleType, referenceFieldNames]);
+
+  const handleRunQueryNew = useCallback(() => {
+    if (!isLoadingNew && statusNew) {
+      if (statusNew === 200) {
+        dispatch(addEvent({ newEvent: dataNew }));
+        props.setSnackbarSuccess('Event created');
+        props.setIsOpen(false);
+        resetDialog();
+      } else if (statusNew === 400) props.setSnackbarError('Error during event creation');
+
+      resetQueryNew();
+    }
+  }, [dataNew, dispatch, isLoadingNew, props, resetDialog, resetQueryNew, statusNew]);
+
+  useEffect(() => {
+    handleRunQueryNew();
+  }, [handleRunQueryNew]);
 
   const handleEventTitleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setEventTitle(event.target.value);
@@ -56,22 +105,51 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
     });
   };
 
-  const handleOk = () => {};
-  const handleCancel = () => {};
+  const handleOk = () => {
+    if (eventTitleHelperText === '')
+      runQueryNew({
+        title: eventTitle,
+        sessionId: currentSessionId,
+        type: type.toLowerCase(),
+        status: status.toLowerCase(),
+        placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
+        descriptionMetadataArray: convertReferenceFieldToEventMetadata(
+          referenceFields['Description']
+        ),
+        charactersMetadataArray: convertReferenceFieldToEventMetadata(
+          referenceFields['Characters']
+        ),
+        parentIds: parentIds,
+      });
+  };
+
+  const handleCancel = () => {
+    props.setIsOpen(false);
+    resetDialog();
+  };
   const handleDelete = () => {};
 
   const renderParents = () =>
-    parentsIds.map(parentId => (
-      <Parent
-        key={parentId}
-        name={
-          parentId === 'root' ? 'Start' : eventsList.find(event => event.id === parentId)?.title
-        }
-        id={parentId}
-        parents={parentsIds}
-        setParents={setParentsIds}
-      />
-    ));
+    parentIds.length > 0 ? (
+      parentIds.map(parentId => (
+        <Parent
+          key={parentId}
+          name={
+            parentId === 'root' ? 'Start' : eventsList.find(event => event.id === parentId)?.title
+          }
+          id={parentId}
+          parents={parentIds}
+          setParents={setParentIds}
+        />
+      ))
+    ) : (
+      <Typography
+        variant="subtitle2"
+        sx={{ color: 'customPalette.onSurface', fontStyle: 'italic', paddingLeft: '5px' }}
+      >
+        Events without parents will be children of start
+      </Typography>
+    );
 
   return (
     <CustomDialog
@@ -81,7 +159,7 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
       setIsOpen={props.setIsOpen}
       onOk={handleOk}
       onCancel={handleCancel}
-      onDelete={handleDelete}
+      onDelete={props.dialogType === NavBarViewDialog.EditEvent ? handleDelete : undefined}
     >
       <Stack
         direction="row"
@@ -111,21 +189,21 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
             onChange={event => handleEventTitleChange(event)}
             onBlur={event => handleEventTitleLeave(event)}
           />
-          <ParentsBar parents={parentsIds} setParents={setParentsIds} />
+          <ParentsBar parents={parentIds} setParents={setParentIds} />
           {renderParents()}
           <EventSelect
             title="Type"
             id="event-type-select"
-            label="Choose event type"
             setValue={setType}
             items={possibleType}
+            defaultValue={type}
           />
           <EventSelect
             title="Status"
             id="event-status-select"
-            label="Choose event status"
             setValue={setStatus}
             items={possibleStatus}
+            defaultValue={status}
           />
           <MapFieldList
             fieldNames={referenceFieldNames}

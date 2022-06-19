@@ -4,9 +4,9 @@ import { CustomSelect } from '../../../../components/CustomSelect/CustomSelect';
 type EventSelectProps = {
   id: string;
   title: string;
-  label: string;
   setValue: (newValue: string) => void;
   items: string[];
+  defaultValue?: string;
 };
 
 export const EventSelect: React.FC<EventSelectProps> = props => {
@@ -14,7 +14,7 @@ export const EventSelect: React.FC<EventSelectProps> = props => {
     props.setValue(event.target.value);
   };
 
-  const renderValue = (value: string) => (value !== '' ? value : props.label);
+  const renderValue = (value: string) => value;
 
   const renderItems = () =>
     props.items.map(item => (
@@ -34,7 +34,12 @@ export const EventSelect: React.FC<EventSelectProps> = props => {
       <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface', paddingLeft: 1 }}>
         {props.title}
       </Typography>
-      <CustomSelect labelId={props.id} handleChange={handleChange} renderValue={renderValue}>
+      <CustomSelect
+        labelId={props.id}
+        handleChange={handleChange}
+        renderValue={renderValue}
+        defaultValue={props.defaultValue}
+      >
         {renderItems()}
       </CustomSelect>
     </Stack>

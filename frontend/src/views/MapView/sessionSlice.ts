@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
 
-export type SessionEventFieldMetadata = {
+export type EventFieldMetadata = {
   value: string;
   sequenceNumber: number;
   type: string;
@@ -13,9 +13,9 @@ export type SessionEvent = {
   sessionId: string;
   type: string;
   status: string;
-  placeMetadataArray: SessionEventFieldMetadata[];
-  descriptionMetadataArray: SessionEventFieldMetadata[];
-  charactersMetadataArray: SessionEventFieldMetadata[];
+  placeMetadataArray: EventFieldMetadata[];
+  descriptionMetadataArray: EventFieldMetadata[];
+  charactersMetadataArray: EventFieldMetadata[];
   parentIds: string[];
   childrenIds: string[];
 };
@@ -33,7 +33,7 @@ const initialState: SessionState = {
 };
 
 export const fetchEvents = createAsyncThunk('session/fetchEvents', async (sessionId: string) => {
-  const response = await protectedApiClient.get(`api/graph/${sessionId}`);
+  const response = await protectedApiClient.get(`api/event/graph/${sessionId}`);
   return response;
 });
 
@@ -41,7 +41,6 @@ const sessionSlice = createSlice({
   name: 'session',
   initialState,
   reducers: {
-    // addEvent
     // removeEvent
     // editEvent
     // setCampaignId
@@ -58,6 +57,11 @@ const sessionSlice = createSlice({
         ? action.payload.currentSessionId
         : state.currentSessionId;
     },
+    addEvent: (state, action) => {
+      const currentEventsList = state.eventsList;
+      const newEventList = currentEventsList.concat(action.payload.newEvent);
+      state.eventsList = newEventList;
+    },
   },
   extraReducers: builder => {
     builder.addCase(fetchEvents.fulfilled, (state, action) => {
@@ -69,6 +73,6 @@ const sessionSlice = createSlice({
   },
 });
 
-export const { setSessionId, updateState } = sessionSlice.actions;
+export const { addEvent, setSessionId, updateState } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

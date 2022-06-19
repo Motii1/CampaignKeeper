@@ -1,5 +1,11 @@
 import { ReferenceFieldMetadata, ReferenceFieldsState } from '../types/types';
-import { EntriesHashMap, Entry, MetadataInstance, Schema } from '../views/CodexView/codexSlice';
+import {
+  CodexMetadataInstance,
+  EntriesHashMap,
+  Entry,
+  Schema,
+} from '../views/CodexView/codexSlice';
+import { EventFieldMetadata } from '../views/MapView/sessionSlice';
 
 export const toBase64 = (file: File): Promise<null | string | ArrayBuffer> =>
   new Promise((resolve, reject) => {
@@ -15,12 +21,12 @@ export const convertImageToBase64 = async (file: File): Promise<string> => {
   return imageAsBase64.split(',')[1];
 };
 
-export const convertReferenceFieldToMetadata = (
+export const convertReferenceFieldToCodexMetadata = (
   fieldMetadata: ReferenceFieldMetadata[],
   fieldName: string
-): MetadataInstance[] => {
+): CodexMetadataInstance[] => {
   let index = 0;
-  const metadata: MetadataInstance[] = [];
+  const metadata: CodexMetadataInstance[] = [];
   fieldMetadata.forEach(field => {
     if (field.value !== '')
       if (field.id)
@@ -42,12 +48,36 @@ export const convertReferenceFieldToMetadata = (
   return metadata;
 };
 
+export const convertReferenceFieldToEventMetadata = (
+  fieldMetadata: ReferenceFieldMetadata[]
+): EventFieldMetadata[] => {
+  let index = 0;
+  const metadata: EventFieldMetadata[] = [];
+  fieldMetadata.forEach(field => {
+    if (field.value !== '')
+      if (field.id)
+        metadata.push({
+          type: 'id',
+          sequenceNumber: index,
+          value: `${field.id}`,
+        });
+      else
+        metadata.push({
+          type: 'string',
+          sequenceNumber: index,
+          value: field.value,
+        });
+    index += 1;
+  });
+  return metadata;
+};
+
 export const convertMetadataToEntryField = (
   fieldName: string,
-  metadata: MetadataInstance[],
+  metadata: CodexMetadataInstance[],
   entries: Entry[]
 ): ReferenceFieldMetadata[] => {
-  const fieldMetadata = getMetadataByFieldName(fieldName, metadata).sort((m1, m2) =>
+  const fieldMetadata = getCodexMetadataByFieldName(fieldName, metadata).sort((m1, m2) =>
     m1.sequenceNumber > m2.sequenceNumber ? 1 : m2.sequenceNumber > m1.sequenceNumber ? -1 : 0
   );
   return fieldMetadata.map(metadata => ({
@@ -58,17 +88,17 @@ export const convertMetadataToEntryField = (
 };
 
 export const getEntryFromMetadata = (
-  metadata: MetadataInstance,
+  metadata: CodexMetadataInstance,
   entries: Entry[]
 ): Entry | null => {
   const entry = entries.find(entry => `${entry.id}` === metadata.value);
   return entry ? entry : null;
 };
 
-export const getMetadataByFieldName = (
+export const getCodexMetadataByFieldName = (
   fieldName: string,
-  metadata: MetadataInstance[]
-): MetadataInstance[] => metadata.filter(element => element.fieldName === fieldName);
+  metadata: CodexMetadataInstance[]
+): CodexMetadataInstance[] => metadata.filter(element => element.fieldName === fieldName);
 
 const getEntryNameById = (id: string, entries: Entry[]): string => {
   const entry = entries.find(entry => `${entry.id}` === id);

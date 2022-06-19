@@ -1,11 +1,11 @@
 import { Stack, Typography } from '@mui/material';
 import { getEntryFromMetadata } from '../../../../../../utils/utils';
-import { Entry, MetadataInstance } from '../../../../codexSlice';
+import { CodexMetadataInstance, Entry } from '../../../../codexSlice';
 import { ReferenceChip } from './components/ReferenceChip/ReferenceChip';
 
 type EntryFieldProps = {
   fieldName: string;
-  data: MetadataInstance[];
+  data: CodexMetadataInstance[];
   entries: Entry[];
 };
 

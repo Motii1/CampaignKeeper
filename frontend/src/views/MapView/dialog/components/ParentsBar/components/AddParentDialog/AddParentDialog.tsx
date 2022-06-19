@@ -49,12 +49,7 @@ export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
           {event.title}
         </MenuItem>
       ));
-    if (!props.parents.includes('root'))
-      possibleParents.unshift(
-        <MenuItem value="root" key="root">
-          Start
-        </MenuItem>
-      );
+
     return possibleParents;
   };
 
