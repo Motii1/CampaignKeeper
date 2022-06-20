@@ -34,7 +34,7 @@ class _CampaignState extends KeeperState<Campaign> {
 
   Future<void> onRefresh() async {
     await DataCarrier().refresh<UserDataEntity>();
-    await DataCarrier().refresh<CampaignEntity>();
+    DataCarrier().refresh<CampaignEntity>();
     await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
     await DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
   }

@@ -32,7 +32,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   Future<bool> refresh({int groupId = -1, bool online = true}) async {
     if (_entities.isEmpty) {
       String? cache = await CacheUtil().get(_key);
-      if (cache != null) {
+      if (cache != null && cache.isNotEmpty) {
         List cacheData = json.decode(cache);
 
         _entities = cacheData.map((e) => _decodeEntity(e)).toList();

@@ -2,6 +2,7 @@ import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_search_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_object_tile.dart';
+import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
@@ -23,7 +24,8 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
 
   Future<void> onRefresh() async {
     await DataCarrier().refresh<UserDataEntity>();
-    await DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
+    DataCarrier().refresh<CampaignEntity>();
+    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
     await DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
   }
 
