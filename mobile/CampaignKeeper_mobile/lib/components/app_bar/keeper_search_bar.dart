@@ -87,10 +87,9 @@ class KeeperSearchBar extends StatelessWidget {
                                   title,
                                   style: TextStyle(
                                     color: Theme.of(context)
-                                        .appBarTheme
-                                        .titleTextStyle!
-                                        .color
-                                        ?.withOpacity(expandedPercent),
+                                        .colorScheme
+                                        .onBackground
+                                        .withOpacity(expandedPercent),
                                     overflow: TextOverflow.ellipsis,
                                     fontSize: 27 + expandedPercent * 2,
                                     fontWeight: FontWeight.w500,
@@ -197,7 +196,7 @@ class SearchBar extends StatelessWidget {
                       child: Text(
                         "Search",
                         style: TextStyle(
-                          color: Theme.of(context).appBarTheme.titleTextStyle!.color?.withOpacity(0.75),
+                          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.75),
                           fontSize: 19,
                           fontWeight: FontWeight.w400,
                         ),

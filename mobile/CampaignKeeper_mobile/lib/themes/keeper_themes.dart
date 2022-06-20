@@ -20,8 +20,6 @@ class _DefaultTheme {
 
   final Brightness brightness;
 
-  final MaterialColor swatch;
-
   final TextStyle textColor;
   final TextStyle textColorTitle;
 
@@ -56,7 +54,6 @@ class _DefaultTheme {
     primaryColor: primary,
     primaryColorLight: primary,
     primaryColorDark: primaryDark,
-    primarySwatch: swatch,
     scaffoldBackgroundColor: background,
     toggleableActiveColor: primary,
     cardColor: surface,
@@ -153,19 +150,7 @@ class _DefaultTheme {
     required this.onSecondary,
     required this.onError,
     required this.brightness,
-  })  : swatch = MaterialColor(primary.value, <int, Color>{
-          50: primary,
-          100: primary,
-          200: primary,
-          300: primary,
-          400: primary,
-          500: primary,
-          600: primary,
-          700: primary,
-          800: primary,
-          900: primary,
-        }),
-        textColor = TextStyle(
+  })  : textColor = TextStyle(
           color: onBackground.withOpacity(_textColorOpacitySecondary),
         ),
         textColorTitle = TextStyle(
@@ -175,22 +160,22 @@ class _DefaultTheme {
 
 // Apps theme provider.
 class KeeperThemes {
-  static const Color _primaryLight = Color(0xfff0c84c);
+  static const Color _primaryLight = Color.fromARGB(255, 167, 205, 247);
   static const Color _onPrimaryLight = Color(0xff242424);
 
-  static final Color _secondaryLight = Color(0xff09efc9);
+  static final Color _secondaryLight = Color.fromARGB(255, 254, 156, 226);
   static const Color _onSecondaryLight = Color(0xff242424);
 
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  static const Color _light = Color(0xffe1edfa);
-  static const Color _lighterLight = Color.fromARGB(255, 241, 250, 255);
+  static const Color _light = Color.fromARGB(255, 211, 232, 255);
+  static const Color _lighterLight = Color.fromARGB(255, 230, 243, 250);
 
   static const Color _primaryDark = Color(0xffffe082);
   static const Color _onPrimaryDark = Color(0xff242424);
 
-  static const Color _secondaryDark = Color(0xffa5c8e8);
+  static const Color _secondaryDark = Color.fromARGB(255, 36, 223, 248);
   static const Color _onSecondaryDark = Color(0xff242424);
 
   static const Color _errorDark = Colors.redAccent;
