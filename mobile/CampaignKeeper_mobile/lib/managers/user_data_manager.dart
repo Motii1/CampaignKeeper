@@ -71,7 +71,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
           var newEntity = UserDataEntity(
             username: responseData["username"],
             email: responseData["email"],
-            imageData: responseData["imageData"],
+            imageData: responseData["image"],
             password: _entity!.password,
           );
 
@@ -102,13 +102,14 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   @override
   void clear() {
     _entity = null;
+    CacheUtil().deleteSecure();
   }
 
   UserDataEntity? _decodeEntity(Map data) {
     String? username = data["username"];
     String? email = data["email"];
     String? password = data["password"];
-    String? imageData = data["imageData"];
+    String? imageData = data["image"];
 
     if (username != null && email != null) {
       UserDataEntity ent =
@@ -125,7 +126,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
       "username": ent.username,
       "email": ent.email,
       "password": ent.password,
-      "imageData": ent.imageData,
+      "image": ent.imageData,
     };
 
     return data;

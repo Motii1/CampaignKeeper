@@ -40,7 +40,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
       }
     }
 
-    if (online && groupId > -1) {
+    if (online) {
       Response userResponse = await RequestHelper().get(endpoint: CampaignEntity.endpoint);
 
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {

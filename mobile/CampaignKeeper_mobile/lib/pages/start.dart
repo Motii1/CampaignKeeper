@@ -24,7 +24,7 @@ class _StartState extends KeeperState<Start> {
   bool isPopExit = false;
 
   Future<void> onRefresh() async {
-    DataCarrier().refresh<UserDataEntity>();
+    await DataCarrier().refresh<UserDataEntity>();
     await DataCarrier().refresh<CampaignEntity>();
   }
 
@@ -47,6 +47,11 @@ class _StartState extends KeeperState<Start> {
 
   void openCampaign(int id) async {
     Navigator.pushNamed(context, '/start/campaign', arguments: id);
+  }
+
+  @override
+  void onReturn() async {
+    DataCarrier().refresh<CampaignEntity>();
   }
 
   @override
