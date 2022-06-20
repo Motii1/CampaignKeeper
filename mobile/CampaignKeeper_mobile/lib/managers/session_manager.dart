@@ -15,11 +15,6 @@ class SessionManager extends BaseManager<SessionEntity> {
   SessionManager();
 
   @override
-  void initialize() {
-    DataCarrier().addListener<CampaignEntity>(_checkIntegrity);
-  }
-
-  @override
   void attach(SessionEntity entity) {
     _attach(entity);
     _cacheAll();
@@ -116,7 +111,25 @@ class SessionManager extends BaseManager<SessionEntity> {
     _map[campaignId]!.add(entity);
   }
 
+  void _checkIntegrity() {
+    if (_map.isNotEmpty) {
+      var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
+
+      if (campaigns.isNotEmpty) {
+        var keys = _map.keys;
+
+        keys.forEach((key) {
+          if (!campaigns.contains(key)) {
+            _map.remove(key);
+          }
+        });
+      }
+    }
+  }
+
   void _cacheAll() {
+    _checkIntegrity();
+
     var data = [];
     _map.forEach(
       (_, list) {
@@ -147,19 +160,5 @@ class SessionManager extends BaseManager<SessionEntity> {
     };
 
     return data;
-  }
-
-  void _checkIntegrity() {
-    if (_map.isNotEmpty) {
-      var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
-
-      _map.forEach((key, _) {
-        if (!campaigns.contains(key)) {
-          _map.remove(key);
-        }
-      });
-
-      _cacheAll();
-    }
   }
 }

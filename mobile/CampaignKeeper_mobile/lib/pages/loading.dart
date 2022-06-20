@@ -84,7 +84,6 @@ class _LoadingState extends State<Loading> {
     if (!_loaded) {
       _loaded = true;
 
-      DataCarrier().initialize();
       await loadAssets();
 
       autoLogin();

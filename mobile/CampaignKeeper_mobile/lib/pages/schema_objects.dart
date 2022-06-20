@@ -7,15 +7,15 @@ import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class Objects extends StatefulWidget {
-  const Objects({Key? key, required this.schemaId}) : super(key: key);
+class SchemaObjects extends StatefulWidget {
+  const SchemaObjects({Key? key, required this.schemaId}) : super(key: key);
   final int schemaId;
 
   @override
-  State<Objects> createState() => _ObjectsState();
+  State<SchemaObjects> createState() => _SchemaObjectsState();
 }
 
-class _ObjectsState extends KeeperState<Objects> {
+class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   late SchemaEntity? schema = DataCarrier().get(entId: widget.schemaId);
 
   Future<void> onRefresh() async {

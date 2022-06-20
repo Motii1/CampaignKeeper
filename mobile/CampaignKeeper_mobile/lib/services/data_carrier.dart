@@ -30,12 +30,6 @@ class DataCarrier {
     _managers[SchemaEntity] = new SchemaManager();
   }
 
-  void initialize() {
-    _managers.forEach((_, manager) {
-      manager.initialize();
-    });
-  }
-
   void addListener<T>(VoidCallback listener) {
     if (_managers.containsKey(T)) {
       _managers[T]!.addListener(listener);
