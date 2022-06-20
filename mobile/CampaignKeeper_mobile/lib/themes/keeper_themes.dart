@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class _DefaultTheme {
   static const double _textColorOpacitySecondary = 0.7;
   static const double _textColorOpacityPrimary = 0.9;
-  static const double _radius = 10.0;
+  static const double _radius = 12.5;
+  static const double _inputRadius = 10;
 
   final Color surface;
   final Color background;
@@ -68,22 +69,22 @@ class _DefaultTheme {
         color: error,
       ),
       border: UnderlineInputBorder(
-          borderRadius:
-              BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(_inputRadius), topRight: Radius.circular(_inputRadius)),
           borderSide: BorderSide(
             color: onBackground,
             width: 1.8,
           )),
       enabledBorder: UnderlineInputBorder(
-          borderRadius:
-              BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(_inputRadius), topRight: Radius.circular(_inputRadius)),
           borderSide: BorderSide(
             color: onBackground,
             width: 1.8,
           )),
       errorBorder: UnderlineInputBorder(
-        borderRadius:
-            BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(_inputRadius), topRight: Radius.circular(_inputRadius)),
         borderSide: BorderSide(
           color: error,
           width: 1.8,
@@ -135,6 +136,13 @@ class _DefaultTheme {
     ),
     highlightColor: onSurface.withOpacity(0.05),
     splashColor: onSurface.withOpacity(0.1),
+    popupMenuTheme: PopupMenuThemeData(
+      elevation: 0.75,
+      color: Color.alphaBlend(surface.withAlpha(125), background),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+    ),
   );
 
   _DefaultTheme({
