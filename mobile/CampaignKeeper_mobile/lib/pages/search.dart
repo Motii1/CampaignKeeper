@@ -52,7 +52,7 @@ class _SearchState extends State<Search> {
           : ListView.builder(
               itemCount: entities.length,
               itemBuilder: (context, id) {
-                return widget.searchController.createWidget(entities[id]);
+                return widget.searchController.createWidget(context, entities[id]);
               },
             ),
     );

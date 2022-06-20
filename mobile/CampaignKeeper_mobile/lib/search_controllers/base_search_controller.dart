@@ -13,7 +13,7 @@ class BaseSearchController<T> {
     throw UnimplementedError();
   }
 
-  Widget createWidget(Object entity) {
+  Widget createWidget(BuildContext context, Object entity) {
     throw UnimplementedError();
   }
 }

@@ -18,7 +18,7 @@ class CampaignSearchController extends BaseSearchController<CampaignEntity> {
   }
 
   @override
-  Widget createWidget(Object entity) {
+  Widget createWidget(BuildContext context, Object entity) {
     return KeeperCampaignTile(entity: entity as CampaignEntity);
   }
 }

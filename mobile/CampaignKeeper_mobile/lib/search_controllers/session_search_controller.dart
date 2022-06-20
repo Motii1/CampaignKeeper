@@ -20,7 +20,7 @@ class SessionSearchController extends BaseSearchController<SessionEntity> {
   }
 
   @override
-  Widget createWidget(Object entity) {
+  Widget createWidget(BuildContext context, Object entity) {
     return KeeperSessionTile(entity: entity as SessionEntity);
   }
 }

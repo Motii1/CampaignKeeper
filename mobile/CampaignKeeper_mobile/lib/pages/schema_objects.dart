@@ -1,6 +1,7 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_search_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
+import 'package:campaign_keeper_mobile/components/tiles/keeper_object_tile.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
@@ -51,6 +52,21 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
           color: Theme.of(context).colorScheme.onBackground,
           size: 40.0,
           lineWidth: 5.0,
+        ),
+      );
+    }
+
+    if (objects.length > 0) {
+      return SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => KeeperObjectTile(
+            entity: objects[index],
+            onTap: () {
+              //TODO: Open an object explorer
+              print("should open an object");
+            },
+          ),
+          childCount: objects.length,
         ),
       );
     }

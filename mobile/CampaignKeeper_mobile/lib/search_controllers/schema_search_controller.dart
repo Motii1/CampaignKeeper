@@ -20,7 +20,14 @@ class SchemaSearchController extends BaseSearchController<SchemaEntity> {
   }
 
   @override
-  Widget createWidget(Object entity) {
-    return KeeperSchemaTile(entity: entity as SchemaEntity);
+  Widget createWidget(BuildContext context, Object entity) {
+    var schemaEnt = entity as SchemaEntity;
+
+    return KeeperSchemaTile(
+      entity: schemaEnt,
+      onTap: () {
+        Navigator.of(context).pushReplacementNamed('/start/campaign/schema_objects', arguments: schemaEnt.id);
+      },
+    );
   }
 }
