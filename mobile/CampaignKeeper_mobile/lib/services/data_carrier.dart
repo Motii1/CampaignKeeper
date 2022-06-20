@@ -1,8 +1,10 @@
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/managers/campaign_manager.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
+import 'package:campaign_keeper_mobile/managers/object_manager.dart';
 import 'package:campaign_keeper_mobile/managers/session_manager.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
@@ -28,6 +30,7 @@ class DataCarrier {
     _managers[CampaignEntity] = new CampaignManager();
     _managers[SessionEntity] = new SessionManager();
     _managers[SchemaEntity] = new SchemaManager();
+    _managers[ObjectEntity] = new ObjectManager();
   }
 
   void addListener<T>(VoidCallback listener) {

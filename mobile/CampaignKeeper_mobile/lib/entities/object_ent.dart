@@ -8,7 +8,7 @@ class ObjectEntity {
   int id;
   int schemaId;
   String title;
-  List<FieldValue> fields;
+  List<FieldValue> values;
 
   Image? _imageCache;
   String? _imageData;
@@ -17,7 +17,7 @@ class ObjectEntity {
       {required this.id,
       required this.schemaId,
       required this.title,
-      required this.fields,
+      required this.values,
       String? imageData}) {
     this.imageData = imageData;
   }
@@ -38,4 +38,26 @@ class ObjectEntity {
   }
 
   Image? get image => _imageCache;
+
+  bool equals(ObjectEntity other) {
+    return id == other.id &&
+        schemaId == other.schemaId &&
+        title == other.title &&
+        imageData == other.imageData &&
+        _valuesEquals(other.values);
+  }
+
+  bool _valuesEquals(List<FieldValue> other) {
+    if (values.length == other.length) {
+      for (int i = 0; i < values.length; i++) {
+        if (!values[i].equals(other[i])) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
+  }
 }

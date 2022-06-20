@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
-import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
@@ -11,8 +11,6 @@ import 'package:campaign_keeper_mobile/services/cache_util.dart';
 class SchemaManager extends BaseManager<SchemaEntity> {
   static const String _key = "Schema";
   Map<int, List<SchemaEntity>> _map = {};
-
-  SchemaManager();
 
   @override
   void attach(SchemaEntity entity) {
@@ -137,9 +135,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     var data = [];
     _map.forEach(
       (_, list) {
-        list.forEach((element) {
-          data.add(_encodeEntity(element));
-        });
+        data.addAll(list.map((e) => _encodeEntity(e)));
       },
     );
 

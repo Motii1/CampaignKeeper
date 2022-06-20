@@ -96,9 +96,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
 
   void _cacheAll() {
     var data = [];
-    _entities.forEach((ent) {
-      data.add(_encodeEntity(ent));
-    });
+    data.addAll(_entities.map((e) => _encodeEntity(e)));
 
     CacheUtil().add(_key, json.encode(data));
   }
