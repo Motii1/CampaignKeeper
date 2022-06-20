@@ -21,14 +21,11 @@ class ObjectManager extends BaseManager<ObjectEntity> {
 
   @override
   ObjectEntity? get({int groupId = -1, int entId = -1}) {
-    for (var key in _map.keys) {
-      var list = _map[key];
-      if (list != null) {
-        var res = list.firstWhereOrNull((ent) => ent.id == entId);
+    for (var list in _map.values) {
+      var res = list.firstWhereOrNull((ent) => ent.id == entId);
 
-        if (res != null) {
-          return res;
-        }
+      if (res != null) {
+        return res;
       }
     }
 
@@ -61,11 +58,9 @@ class ObjectManager extends BaseManager<ObjectEntity> {
           .get(endpoint: ObjectEntity.endpoint, params: [RequestParameter(name: "schemaId", value: groupId)]);
 
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
-        List<ObjectEntity> newEntities = [];
         Map responseData = json.decode(userResponse.data!);
-        var dataList = responseData['objects'] as List<dynamic>;
-
-        newEntities.addAll(dataList.map((e) => _decodeEntity(e)));
+        List<ObjectEntity> newEntities =
+            (responseData['objects'] as List).map((e) => _decodeEntity(e)).toList();
 
         if (_isEqual(groupId, newEntities)) {
           return false;
@@ -135,13 +130,19 @@ class ObjectManager extends BaseManager<ObjectEntity> {
       var schemas = DataCarrier().getList<SchemaEntity>().map((e) => e.id).toList();
 
       if (schemas.isNotEmpty) {
-        var keys = _map.keys;
-
-        keys.forEach((key) {
+        for (var key in _map.keys) {
           if (!schemas.contains(key)) {
             _map.remove(key);
           }
-        });
+        }
+
+        // var keys = _map.keys;
+
+        // keys.forEach((key) {
+        //   if (!schemas.contains(key)) {
+        //     _map.remove(key);
+        //   }
+        // });
       }
     }
   }

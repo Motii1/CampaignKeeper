@@ -45,24 +45,17 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
   @override
   List<UserDataEntity> getList({int groupId = -1}) {
-    List<UserDataEntity> entities = [];
-
-    if (_entity != null) {
-      entities.add(_entity!);
-    }
-
-    return entities;
+    return _entity == null ? [] : [_entity!];
   }
 
   @override
   Future<bool> refresh({int groupId = -1, bool online = true}) async {
-    UserDataEntity? newEntity;
-
     if (_entity == null) {
       String? cache = await CacheUtil().getSecure(_key);
 
       if (cache != null) {
-        newEntity = _decodeEntity(json.decode(cache));
+        _entity = _decodeEntity(json.decode(cache));
+        notifyListeners();
       }
     }
 
@@ -73,24 +66,24 @@ class UserDataManager extends BaseManager<UserDataEntity> {
         Map responseData = json.decode(userResponse.data!);
 
         if (_entity == null) {
-          newEntity = new UserDataEntity(
-              username: responseData["username"],
-              email: responseData["email"],
-              imageData: responseData["image"]);
+          throw Exception("It's impossible to get successful response without user data.");
         } else {
-          if (_entity!.username != responseData["username"]) {
-            _entity!.username = responseData["username"];
-            newEntity = _entity!;
-          }
+          var newEntity = UserDataEntity(
+            username: responseData["username"],
+            email: responseData["email"],
+            imageData: responseData["imageData"],
+            password: _entity!.password,
+          );
 
-          if (_entity!.email != responseData["email"]) {
-            _entity!.email = responseData["email"];
-            newEntity = _entity!;
-          }
+          if (!_entity!.equals(newEntity)) {
+            _entity = newEntity;
 
-          if (_entity!.imageData != responseData["image"]) {
-            _entity!.imageData = responseData["image"];
-            newEntity = _entity!;
+            notifyListeners();
+
+            Map data = _encodeEntity(_entity!);
+            CacheUtil().addSecure(_key, json.encode(data));
+
+            return true;
           }
         }
       } else if (userResponse.status == ResponseStatus.IncorrectData) {
@@ -101,17 +94,6 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
         return false;
       }
-    }
-
-    if (newEntity != null) {
-      _entity = newEntity;
-
-      notifyListeners();
-
-      Map data = _encodeEntity(_entity!);
-      CacheUtil().addSecure(_key, json.encode(data));
-
-      return true;
     }
 
     return false;

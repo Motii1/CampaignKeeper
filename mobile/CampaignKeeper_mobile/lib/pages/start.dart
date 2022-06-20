@@ -73,11 +73,13 @@ class _StartState extends KeeperState<Start> {
   void initState() {
     super.initState();
     DataCarrier().addListener<CampaignEntity>(onCampaignRefresh);
+    DataCarrier().addListener<UserDataEntity>(onUserDetailsRefresh);
   }
 
   @override
   void dispose() {
     DataCarrier().removeListener<CampaignEntity>(onCampaignRefresh);
+    DataCarrier().removeListener<UserDataEntity>(onUserDetailsRefresh);
     super.dispose();
   }
 

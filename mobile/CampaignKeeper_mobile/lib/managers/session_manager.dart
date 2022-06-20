@@ -22,14 +22,11 @@ class SessionManager extends BaseManager<SessionEntity> {
 
   @override
   SessionEntity? get({int groupId = -1, int entId = -1}) {
-    for (var key in _map.keys) {
-      var list = _map[key];
-      if (list != null) {
-        var res = list.firstWhereOrNull((ent) => ent.id == entId);
+    for (var list in _map.values) {
+      var res = list.firstWhereOrNull((ent) => ent.id == entId);
 
-        if (res != null) {
-          return res;
-        }
+      if (res != null) {
+        return res;
       }
     }
 
@@ -62,22 +59,23 @@ class SessionManager extends BaseManager<SessionEntity> {
           endpoint: SessionEntity.endpoint, params: [RequestParameter(name: "campaignId", value: groupId)]);
 
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
-        List<SessionEntity> newEntities = [];
         Map responseData = json.decode(userResponse.data!);
-        responseData['sessions'].forEach((data) {
-          newEntities.add(_decodeEntity(data));
-        });
+        List<SessionEntity> newEntities =
+            (responseData['sessions'] as List).map((e) => _decodeEntity(e)).toList();
 
         if (_isEqual(groupId, newEntities)) {
           return false;
         }
 
         _map[groupId] = newEntities;
+
         notifyListeners();
         _cacheAll();
+
         return true;
       } else if (userResponse.status == ResponseStatus.IncorrectData) {
         _map[groupId]?.clear();
+
         notifyListeners();
         _cacheAll();
       }
@@ -120,13 +118,19 @@ class SessionManager extends BaseManager<SessionEntity> {
       var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
 
       if (campaigns.isNotEmpty) {
-        var keys = _map.keys;
-
-        keys.forEach((key) {
+        for (var key in _map.keys) {
           if (!campaigns.contains(key)) {
             _map.remove(key);
           }
-        });
+        }
+
+        // var keys = _map.keys;
+
+        // keys.forEach((key) {
+        //   if (!campaigns.contains(key)) {
+        //     _map.remove(key);
+        //   }
+        // });
       }
     }
   }

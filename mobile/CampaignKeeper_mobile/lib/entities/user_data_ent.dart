@@ -40,4 +40,11 @@ class UserDataEntity {
   }
 
   Image get image => _imageCache;
+
+  bool equals(UserDataEntity other) {
+    return username == other.username &&
+        email == other.email &&
+        imageData == other.imageData &&
+        password == other.password;
+  }
 }
