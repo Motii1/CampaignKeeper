@@ -68,18 +68,8 @@ class SchemaManager extends BaseManager<SchemaEntity> {
           newEntities.add(_decodeEntity(data));
         });
 
-        if (newEntities.length == _map[groupId]?.length) {
-          bool isEqual = true;
-          for (int i = 0; i < newEntities.length; i++) {
-            if (!newEntities[i].equals(_map[groupId]![i])) {
-              isEqual = false;
-              i = newEntities.length;
-            }
-          }
-
-          if (isEqual) {
-            return false;
-          }
+        if (_isEqual(groupId, newEntities)) {
+          return false;
         }
 
         _map[groupId] = newEntities;
@@ -109,6 +99,20 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     }
 
     _map[campaignId]!.add(entity);
+  }
+
+  bool _isEqual(int groupId, List<SchemaEntity> newEntities) {
+    if (newEntities.length == _map[groupId]?.length) {
+      for (int i = 0; i < newEntities.length; i++) {
+        if (!newEntities[i].equals(_map[groupId]![i])) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
   }
 
   void _checkIntegrity() {
