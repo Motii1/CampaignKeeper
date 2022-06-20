@@ -23,7 +23,7 @@ export class init1655396703116 implements MigrationInterface {
       `CREATE TABLE "session" ("id" int NOT NULL IDENTITY(1,1), "name" nvarchar(128), "campaign_id" int NOT NULL, "created_at" datetime2 NOT NULL CONSTRAINT "DF_bf57d260f46519649f6ebc6a55b" DEFAULT getdate(), CONSTRAINT "PK_f55da76ac1c3ac420f444d2ff11" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "user" ("id" int NOT NULL IDENTITY(1,1), "username" nvarchar(64) NOT NULL, "password_hash" nvarchar(255) NOT NULL, "email" nvarchar(255) NOT NULL, "image" varbinary, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`
+      `CREATE TABLE "user" ("id" int NOT NULL IDENTITY(1,1), "username" nvarchar(64) NOT NULL, "password_hash" nvarchar(255) NOT NULL, "email" nvarchar(255) NOT NULL, "image" varbinary(max), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE UNIQUE INDEX "IDX_78a916df40e02a9deb1c4b75ed" ON "user" ("username") `
@@ -32,13 +32,13 @@ export class init1655396703116 implements MigrationInterface {
       `CREATE UNIQUE INDEX "IDX_e12875dfb3b1d92d7d7c5377e2" ON "user" ("email") `
     );
     await queryRunner.query(
-      `CREATE TABLE "campaign" ("id" int NOT NULL IDENTITY(1,1), "name" nvarchar(128) NOT NULL, "image" varbinary, "created_at" datetime2 NOT NULL CONSTRAINT "DF_5142ffc8d7958cd2e4e67ecd820" DEFAULT getdate(), "user_id" int NOT NULL, CONSTRAINT "PK_0ce34d26e7f2eb316a3a592cdc4" PRIMARY KEY ("id"))`
+      `CREATE TABLE "campaign" ("id" int NOT NULL IDENTITY(1,1), "name" nvarchar(128) NOT NULL, "image" varbinary(max), "created_at" datetime2 NOT NULL CONSTRAINT "DF_5142ffc8d7958cd2e4e67ecd820" DEFAULT getdate(), "user_id" int NOT NULL, CONSTRAINT "PK_0ce34d26e7f2eb316a3a592cdc4" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "schema_instance_metadata" ("id" int NOT NULL IDENTITY(1,1), "object_id" int NOT NULL, "type" nvarchar(255) CONSTRAINT CHK_2df37da5e4d4aeb1f8c9d97cda_ENUM CHECK(type IN ('id','string')) NOT NULL, "value" nvarchar(255) NOT NULL, "sequence_number" int NOT NULL, "field_name" nvarchar(255) NOT NULL, CONSTRAINT "PK_cfcaba6cd494c6e0a8d68144342" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "schema_instance" ("id" int NOT NULL IDENTITY(1,1), "schema_id" int NOT NULL, "title" nvarchar(128) NOT NULL, "image" varbinary, CONSTRAINT "PK_27c7ae0810b3b0a587cd294b943" PRIMARY KEY ("id"))`
+      `CREATE TABLE "schema_instance" ("id" int NOT NULL IDENTITY(1,1), "schema_id" int NOT NULL, "title" nvarchar(128) NOT NULL, "image" varbinary(max), CONSTRAINT "PK_27c7ae0810b3b0a587cd294b943" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "event_children_event" ("event_id_1" int NOT NULL, "event_id_2" int NOT NULL, CONSTRAINT "PK_620e1df4cbaeddc45900be558c7" PRIMARY KEY ("event_id_1", "event_id_2"))`
