@@ -3,7 +3,7 @@ import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
 class ObjectEntity {
-  static const String endpoint = "api/object/list";
+  static const String endpoint = "/api/object/list";
 
   int id;
   int schemaId;

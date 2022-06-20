@@ -56,7 +56,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
       }
     }
 
-    if (online) {
+    if (online && groupId > -1) {
       Response userResponse = await RequestHelper()
           .get(endpoint: ObjectEntity.endpoint, params: [RequestParameter(name: "schemaId", value: groupId)]);
 
@@ -163,7 +163,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
       'schemaId': entity.schemaId,
       'title': entity.title,
       'imageBase64': entity.imageData,
-      'metadataArray': entity.values.map((e) => FieldValue.encode(e)),
+      'metadataArray': entity.values.map((e) => FieldValue.encode(e)).toList(),
     };
 
     return data;

@@ -55,7 +55,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
       }
     }
 
-    if (online) {
+    if (online && groupId > -1) {
       Response userResponse = await RequestHelper().get(
           endpoint: SchemaEntity.endpoint, params: [RequestParameter(name: "campaignId", value: groupId)]);
 

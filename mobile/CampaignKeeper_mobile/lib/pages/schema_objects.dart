@@ -1,6 +1,7 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_search_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
+import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
@@ -17,11 +18,12 @@ class SchemaObjects extends StatefulWidget {
 
 class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   late SchemaEntity? schema = DataCarrier().get(entId: widget.schemaId);
+  late List<ObjectEntity> objects = DataCarrier().getList(groupId: schema?.id ?? -1);
 
   Future<void> onRefresh() async {
     await DataCarrier().refresh<UserDataEntity>();
     await DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    // TODO: Refresh objects from schema
+    await DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
   }
 
   Future<void> onSchemaRefresh() async {
@@ -33,6 +35,12 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
         schema = entity;
       });
     }
+  }
+
+  Future<void> onObjectsRefresh() async {
+    setState(() {
+      objects = DataCarrier().getList(groupId: schema?.id ?? -1);
+    });
   }
 
   Widget sliverList() {
@@ -72,12 +80,15 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   void initState() {
     super.initState();
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);
+    DataCarrier().addListener<ObjectEntity>(onObjectsRefresh);
     DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
+    DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
   }
 
   @override
   void dispose() {
     DataCarrier().removeListener<SchemaEntity>(onSchemaRefresh);
+    DataCarrier().removeListener<ObjectEntity>(onObjectsRefresh);
     super.dispose();
   }
 

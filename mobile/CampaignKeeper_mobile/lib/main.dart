@@ -60,7 +60,8 @@ class MainApp extends StatelessWidget {
                 "/search": (context) => Search(searchController: settings.arguments as BaseSearchController),
                 "/start/campaign": (context) => Campaign(campaignId: settings.arguments as int),
                 "/start/campaign/session_map": (context) => SessionMap(sessionId: settings.arguments as int),
-                "/start/campaign/objects": (context) => SchemaObjects(schemaId: settings.arguments as int),
+                "/start/campaign/schema_objects": (context) =>
+                    SchemaObjects(schemaId: settings.arguments as int),
               };
               WidgetBuilder builder = routes[settings.name]!;
               return MaterialPageRoute(builder: (ctx) => builder(ctx));

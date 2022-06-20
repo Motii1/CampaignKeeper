@@ -61,7 +61,8 @@ class RequestHelper extends ChangeNotifier {
       }
 
       return Response(ResponseStatus.TimeOut, null, null);
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      print(e);
       if (!isSilent) {
         _changeStatus(false);
       }

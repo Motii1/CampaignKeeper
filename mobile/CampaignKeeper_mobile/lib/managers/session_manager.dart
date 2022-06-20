@@ -57,7 +57,7 @@ class SessionManager extends BaseManager<SessionEntity> {
       }
     }
 
-    if (online) {
+    if (online && groupId > -1) {
       Response userResponse = await RequestHelper().get(
           endpoint: SessionEntity.endpoint, params: [RequestParameter(name: "campaignId", value: groupId)]);
 

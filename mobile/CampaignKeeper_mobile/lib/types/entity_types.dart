@@ -23,28 +23,28 @@ class FieldValue {
 
   static Map encode(FieldValue value) {
     var data = {
-      "type": value.type == FieldValueType.Text ? "text" : "id",
-      "sequenceNumber": value.sequence,
-      "value": value.type == FieldValueType.Text ? value.text : value.id,
-      "fieldName": value.fieldName,
+      'type': value.type == FieldValueType.Text ? "string" : "id",
+      'sequenceNumber': value.sequence,
+      'value': value.type == FieldValueType.Text ? value.text : value.id,
+      'fieldName': value.fieldName,
     };
 
     return data;
   }
 
   static FieldValue decode(Map data) {
-    if (!data.containsKey("type") ||
-        !data.containsKey("sequenceNumber") ||
-        !data.containsKey("value") ||
-        !data.containsKey("fieldName")) {
+    if (!data.containsKey('type') ||
+        !data.containsKey('sequenceNumber') ||
+        !data.containsKey('value') ||
+        !data.containsKey('fieldName')) {
       throw Exception("Wrong FieldValue data map.");
     }
 
-    var type = data["type"] == "text" ? FieldValueType.Text : FieldValueType.Id;
-    var sequence = data["sequenceNumber"];
-    var text = type == FieldValueType.Text ? data["value"] : "";
-    var id = type == FieldValueType.Id ? data["value"] : 0;
-    var fieldName = data["fieldName"];
+    FieldValueType type = data['type'] == "string" ? FieldValueType.Text : FieldValueType.Id;
+    int sequence = data['sequenceNumber'];
+    String text = type == FieldValueType.Text ? data['value'] : "";
+    int id = type == FieldValueType.Id ? int.parse(data['value'].toString()) : 0;
+    String fieldName = data['fieldName'];
 
     if (type == FieldValueType.Text) {
       return FieldValue(type: type, sequence: sequence, fieldName: fieldName, text: text);

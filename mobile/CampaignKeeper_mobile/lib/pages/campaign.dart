@@ -67,7 +67,7 @@ class _CampaignState extends KeeperState<Campaign> {
   }
 
   void openSchema(int id) async {
-    Navigator.pushNamed(context, '/start/campaign/objects', arguments: id);
+    Navigator.pushNamed(context, '/start/campaign/schema_objects', arguments: id);
   }
 
   Widget buildBody() {
