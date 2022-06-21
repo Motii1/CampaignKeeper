@@ -63,25 +63,34 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
     }
   }
 
-  Widget getFields() {
-    if (schema == null || object == null) {
+  Widget objectItemBuilder(BuildContext context, int index) {
+    if (index == 0) {
+      return KeeperImageTile(image: object?.image);
+    } else if (index == 1) {
+      return VisibilityDetector(
+        key: Key('object-title'),
+        child: KeeperTitleTile(title: object?.title ?? ""),
+        onVisibilityChanged: (visibilityInfo) {
+          bool shouldTitleBeVisible = visibilityInfo.visibleFraction <= 0.4;
+
+          if (isTitleVisible != shouldTitleBeVisible && this.mounted) {
+            setState(() {
+              isTitleVisible = shouldTitleBeVisible;
+            });
+          }
+        },
+      );
+    } else if (schema != null && schema!.fields.length >= index - 2) {
+      var fieldName = schema!.fields[index - 2];
+      var values = object!.values.where((e) => e.fieldName == fieldName).toList()
+        ..sort(((a, b) => a.sequence.compareTo(b.sequence)));
+
+      return KeeperFieldTile(fieldName: fieldName, values: values);
+    } else {
       return Center(
         child: Text("Error"),
       );
     }
-
-    List<Widget> children = [];
-
-    schema!.fields.forEach((field) {
-      var values = object!.values.where((e) => e.fieldName == field).toList()
-        ..sort(((a, b) => a.sequence.compareTo(b.sequence)));
-      children.add(KeeperFieldTile(fieldName: field, values: values));
-    });
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: children,
-    );
   }
 
   @override
@@ -98,7 +107,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
   @override
   void initState() {
     super.initState();
-    VisibilityDetectorController.instance.updateInterval = Duration(milliseconds: 200);
+    VisibilityDetectorController.instance.updateInterval = Duration(milliseconds: 350);
     scrollController.addListener(scrollListener);
     DataCarrier().addListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);
@@ -119,7 +128,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
     return Scaffold(
       appBar: AppBar(
         title: AnimatedOpacity(
-          duration: Duration(milliseconds: 200),
+          duration: Duration(milliseconds: 150),
           opacity: isTitleVisible ? 1.0 : 0.0,
           child: Text(object?.title ?? ""),
         ),
@@ -130,28 +139,11 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
         color: Theme.of(context).colorScheme.onBackground,
         strokeWidth: 2.5,
         onRefresh: onRefresh,
-        child: ListView(
+        child: ListView.builder(
+          physics: AlwaysScrollableScrollPhysics(),
           controller: scrollController,
-          children: [
-            KeeperImageTile(image: object?.image),
-            VisibilityDetector(
-              key: Key('object-title'),
-              child: KeeperTitleTile(title: object?.title ?? ""),
-              onVisibilityChanged: (visibilityInfo) {
-                bool shouldTitleBeVisible = visibilityInfo.visibleFraction <= 0.4;
-
-                if (isTitleVisible != shouldTitleBeVisible && this.mounted) {
-                  setState(() {
-                    isTitleVisible = shouldTitleBeVisible;
-                  });
-                }
-              },
-            ),
-            getFields(),
-            SizedBox(
-              height: 55,
-            ),
-          ],
+          itemBuilder: objectItemBuilder,
+          itemCount: schema != null ? schema!.fields.length + 2 : 2,
         ),
       ),
     );
