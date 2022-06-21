@@ -143,6 +143,17 @@ class _DefaultTheme {
         borderRadius: BorderRadius.circular(20),
       ),
     ),
+    radioTheme: RadioThemeData(
+      fillColor: MaterialStateColor.resolveWith(
+        (states) {
+          if (states.contains(MaterialState.selected)) {
+            return Color.alphaBlend(onBackground.withAlpha(90), primary);
+          }
+
+          return onBackground;
+        },
+      ),
+    ),
   );
 
   _DefaultTheme({

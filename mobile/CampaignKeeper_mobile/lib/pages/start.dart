@@ -21,7 +21,7 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends KeeperState<Start> {
-  var controller = KeeperSliverReplacerController();
+  final controller = KeeperSliverReplacerController();
   List<CampaignEntity> entities = DataCarrier().getList<CampaignEntity>();
   bool isPopExit = false;
 
@@ -78,6 +78,11 @@ class _StartState extends KeeperState<Start> {
   void onEveryResume() async {
     DataCarrier().refresh<UserDataEntity>();
     DataCarrier().refresh<CampaignEntity>();
+  }
+
+  @override
+  void onReturn() async {
+    onRefresh();
   }
 
   @override

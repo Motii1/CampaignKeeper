@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_search_bar.dart';
+import 'package:campaign_keeper_mobile/components/keeper_anim_sliver_replacer.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_object_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
@@ -19,6 +20,7 @@ class SchemaObjects extends StatefulWidget {
 }
 
 class _SchemaObjectsState extends KeeperState<SchemaObjects> {
+  final controller = KeeperSliverReplacerController();
   late SchemaEntity? schema = DataCarrier().get(entId: widget.schemaId);
   late List<ObjectEntity> objects = DataCarrier().getList(groupId: schema?.id ?? -1);
 
@@ -41,9 +43,8 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   }
 
   Future<void> onObjectsRefresh() async {
-    setState(() {
-      objects = DataCarrier().getList(groupId: schema?.id ?? -1);
-    });
+    objects = DataCarrier().getList(groupId: schema?.id ?? -1);
+    controller.replace(sliverList());
   }
 
   Widget sliverList() {
@@ -85,6 +86,12 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   }
 
   @override
+  void onReturn() async {
+    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
+    DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
+  }
+
+  @override
   void onEveryResume() {
     DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
   }
@@ -112,7 +119,10 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
         title: schema?.title ?? "",
         popup: KeeperPopup.settings(context),
         onRefresh: onRefresh,
-        sliver: sliverList(),
+        sliver: KeeperAnimatedSliverReplacer(
+          controller: controller,
+          sliver: sliverList(),
+        ),
         heroTag: "search_objects",
       ),
     );

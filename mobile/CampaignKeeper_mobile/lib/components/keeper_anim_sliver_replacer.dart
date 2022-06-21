@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
 
+enum KeeperSliverReplacerType {
+  Animate,
+  Instant,
+}
+
 class KeeperSliverReplacerController extends ChangeNotifier {
+  var _type = KeeperSliverReplacerType.Animate;
   Widget? awaitingWidget;
 
+  KeeperSliverReplacerType get type => _type;
+
   void replace(Widget child) {
+    _type = KeeperSliverReplacerType.Animate;
+    awaitingWidget = child;
+    notifyListeners();
+  }
+
+  void replaceInstant(Widget child) {
+    _type = KeeperSliverReplacerType.Instant;
     awaitingWidget = child;
     notifyListeners();
   }
@@ -24,7 +39,7 @@ class _KeeperAnimatedSliverReplacerState extends State<KeeperAnimatedSliverRepla
   late Widget child = widget.sliver;
   late final AnimationController controller = AnimationController(
     value: 1.0,
-    duration: const Duration(milliseconds: 125),
+    duration: const Duration(milliseconds: 110),
     vsync: this,
   );
   late final Animation<double> animation = CurvedAnimation(
@@ -33,8 +48,16 @@ class _KeeperAnimatedSliverReplacerState extends State<KeeperAnimatedSliverRepla
   );
 
   void _onControllerChanged() {
-    if (widget.controller.awaitingWidget != null) {
-      controller.reverse();
+    var awaitingWidget = widget.controller.awaitingWidget;
+
+    if (awaitingWidget != null) {
+      if (widget.controller.type == KeeperSliverReplacerType.Animate) {
+        controller.reverse();
+      } else {
+        setState(() {
+          child = awaitingWidget;
+        });
+      }
     }
   }
 

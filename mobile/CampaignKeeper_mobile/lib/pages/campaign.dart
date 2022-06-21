@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_search_bar.dart';
+import 'package:campaign_keeper_mobile/components/keeper_anim_sliver_replacer.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_schema_tile.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_session_tile.dart';
@@ -25,6 +26,7 @@ class Campaign extends StatefulWidget {
 }
 
 class _CampaignState extends KeeperState<Campaign> {
+  final controller = KeeperSliverReplacerController();
   late CampaignEntity? campaign = DataCarrier().get(entId: widget.campaignId);
   late List<SessionEntity> sessions = DataCarrier().getList(groupId: widget.campaignId);
   late List<SchemaEntity> schemas = DataCarrier().getList(groupId: widget.campaignId);
@@ -33,8 +35,8 @@ class _CampaignState extends KeeperState<Campaign> {
   int currentPage = 0;
 
   Future<void> onRefresh() async {
-    await DataCarrier().refresh<UserDataEntity>();
-    DataCarrier().refresh<CampaignEntity>();
+    DataCarrier().refresh<UserDataEntity>();
+    await DataCarrier().refresh<CampaignEntity>();
     await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
     await DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
   }
@@ -51,15 +53,13 @@ class _CampaignState extends KeeperState<Campaign> {
   }
 
   Future<void> onSessionRefresh() async {
-    setState(() {
-      sessions = DataCarrier().getList(groupId: widget.campaignId);
-    });
+    sessions = DataCarrier().getList(groupId: widget.campaignId);
+    controller.replace(buildBody());
   }
 
   Future<void> onSchemaRefresh() async {
-    setState(() {
-      schemas = DataCarrier().getList(groupId: widget.campaignId);
-    });
+    schemas = DataCarrier().getList(groupId: widget.campaignId);
+    controller.replace(buildBody());
   }
 
   void openSession(int id) async {
@@ -109,6 +109,13 @@ class _CampaignState extends KeeperState<Campaign> {
   }
 
   @override
+  void onReturn() async {
+    DataCarrier().refresh<CampaignEntity>();
+    DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
+    DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
+  }
+
+  @override
   void onEveryResume() async {
     await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
     await DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
@@ -150,12 +157,17 @@ class _CampaignState extends KeeperState<Campaign> {
                     lineWidth: 5.0,
                   ),
                 )
-              : buildBody()),
+              : KeeperAnimatedSliverReplacer(
+                  controller: controller,
+                  sliver: buildBody(),
+                )),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
             currentPage = index;
           });
+
+          controller.replaceInstant(buildBody());
         },
         selectedIndex: currentPage,
         destinations: [
