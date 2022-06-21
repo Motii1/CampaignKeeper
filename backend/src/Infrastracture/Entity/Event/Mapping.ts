@@ -27,6 +27,7 @@ const mapEntityToDomainObjectWithoutGraphRelations = (entity: EventEntity): Part
   status: entity.status,
   type: entity.type,
   title: entity.title,
+  displayStatus: entity.displayStatus,
 });
 
 const mapTextFieldMetadata = (entities: TextFieldMetadataOption): TextFieldMetadata[] =>

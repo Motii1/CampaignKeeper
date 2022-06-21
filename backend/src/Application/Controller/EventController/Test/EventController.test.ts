@@ -4,7 +4,11 @@ import { dropDb, initDb } from '../../../../Common/Test/Database';
 import { makeAuthorizedTestRequest } from '../../../../Common/Test/Request';
 import { insertMockedSession } from '../../../../Common/Test/Session';
 import { insertMockedUser } from '../../../../Common/Test/Token';
-import { EventStatus, EventType } from '../../../../Domain/Campaign/Event/Event';
+import {
+  EventDisplayStatus,
+  EventStatus,
+  EventType,
+} from '../../../../Domain/Campaign/Event/Event';
 import { EventInsertDto } from '../Dto/EventInsertDto';
 import { EventUpdateDto } from '../Dto/EventUpdateDto';
 import {
@@ -150,6 +154,7 @@ describe('EventController', () => {
       descriptionMetadataArray: [],
       placeMetadataArray: [],
       parentIds: [root.id],
+      displayStatus: EventDisplayStatus.Collapsed,
     };
     const response = await updateEvent(leafResponse.body.id, updateDto);
     expect(response.status).toEqual(200);

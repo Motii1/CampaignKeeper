@@ -8,7 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { EventStatus, EventType } from '../../../Domain/Campaign/Event/Event';
+import { EventDisplayStatus, EventStatus, EventType } from '../../../Domain/Campaign/Event/Event';
 import { SessionEntity } from '../Session/SessionEntity';
 import { CharactersMetadataEntity } from './CharactersMetadataEntity';
 import { DescriptionMetadataEntity } from './DescriptionMetadataEntity';
@@ -27,6 +27,9 @@ export class EventEntity {
 
   @Column({ enum: EventStatus })
   status!: EventStatus;
+
+  @Column({ enum: EventDisplayStatus, default: EventDisplayStatus.Shown })
+  displayStatus!: EventDisplayStatus;
 
   @OneToMany(() => PlaceMetadataEntity, metadata => metadata.event, {
     eager: true,

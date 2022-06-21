@@ -5,6 +5,7 @@
  * @property {number} sessionId - id of session
  * @property {string} type - event type, can be 'normal' or 'fight'
  * @property {string} status - event status, can be: 'none', 'done', 'omitted'
+ * @property {string} displayStatus - display status can be: 'shown', 'collapsed', 'hidden'
  * @property {Array.<TextFieldMetadataDto>} placeMetadataArray - place textfield metadata representation
  * @property {Array.<TextFieldMetadataDto>} descriptionMetadataArray - description textfield metadata representation
  * @property {Array.<TextFieldMetadataDto>} charactersMetadataArray - characters textfield metadata representation
@@ -16,7 +17,11 @@
  * @property {Array.<SingleGetEventListDto>} events - array of events dto data
  */
 
-import { EventStatus, EventType } from '../../../../Domain/Campaign/Event/Event';
+import {
+  EventDisplayStatus,
+  EventStatus,
+  EventType,
+} from '../../../../Domain/Campaign/Event/Event';
 import { TextFieldMetadata } from './EventInsertDto';
 
 export type SingleGetEventListDto = {
@@ -30,4 +35,5 @@ export type SingleGetEventListDto = {
   descriptionMetadataArray: TextFieldMetadata[];
   parentIds: number[];
   childrenIds: number[];
+  displayStatus: EventDisplayStatus;
 };

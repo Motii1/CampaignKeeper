@@ -3,7 +3,7 @@ import { ErrorWrapper } from '../../../../Common/Type/ErrorWrapper';
 import { saveEvent } from '../../../../Infrastracture/Entity/Event/EventRepository';
 import { User } from '../../../User/User';
 import { Session } from '../../Session/Session';
-import { Event } from '../Event';
+import { Event, EventDisplayStatus } from '../Event';
 import { validateRelatedEventsWithLoad, validateTextFields } from './Validate';
 
 export const createEvent = async (
@@ -29,6 +29,7 @@ export const createEvent = async (
     placeMetadataArray: dto.placeMetadataArray,
     sessionId: dto.sessionId,
     parents,
+    displayStatus: EventDisplayStatus.Shown,
   };
   const savedEvent = await saveEvent(event);
   return { ...savedEvent, children: [], parents };
