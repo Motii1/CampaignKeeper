@@ -1,9 +1,5 @@
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
-
-enum KeeperSliverReplacerType {
-  Animate,
-  Instant,
-}
 
 class KeeperSliverReplacerController extends ChangeNotifier {
   var _type = KeeperSliverReplacerType.Animate;

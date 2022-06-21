@@ -36,6 +36,8 @@ class _DefaultTheme {
       iconTheme: IconThemeData(
         color: onBackground.withOpacity(_textColorOpacitySecondary),
       ),
+      shadowColor:
+          brightness == Brightness.light ? Colors.black.withOpacity(0.25) : Colors.white.withOpacity(0.075),
     ),
     backgroundColor: background,
     colorScheme: ColorScheme(
@@ -137,7 +139,7 @@ class _DefaultTheme {
     splashColor: onSurface.withOpacity(0.1),
     popupMenuTheme: PopupMenuThemeData(
       elevation: 0.75,
-      color: Color.alphaBlend(surface.withAlpha(125), background),
+      color: Color.alphaBlend(surface.withAlpha(155), background),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),

@@ -53,3 +53,8 @@ class FieldValue {
     }
   }
 }
+
+enum KeeperSliverReplacerType {
+  Animate,
+  Instant,
+}

@@ -61,7 +61,19 @@ class RequestHelper extends ChangeNotifier {
       }
 
       return Response(ResponseStatus.TimeOut, null, null);
-    } on Exception catch (e) {
+    } on SocketException catch (_) {
+      if (!isSilent) {
+        _changeStatus(false);
+      }
+
+      return Response(ResponseStatus.Error, null, null);
+    } on Exception catch (_) {
+      if (!isSilent) {
+        _changeStatus(false);
+      }
+
+      return Response(ResponseStatus.Error, null, null);
+    } catch (e) {
       print(e);
       if (!isSilent) {
         _changeStatus(false);
@@ -109,7 +121,13 @@ class RequestHelper extends ChangeNotifier {
     } on TimeoutException catch (_) {
       _changeStatus(false);
       return Response(ResponseStatus.TimeOut, null, null);
+    } on SocketException catch (_) {
+      _changeStatus(false);
+      return Response(ResponseStatus.Error, null, null);
     } on Exception catch (_) {
+      _changeStatus(false);
+      return Response(ResponseStatus.Error, null, null);
+    } catch (_) {
       _changeStatus(false);
       return Response(ResponseStatus.Error, null, null);
     }
@@ -157,7 +175,7 @@ class RequestHelper extends ChangeNotifier {
       streamResponse = await request.send().timeout(Duration(seconds: AppPrefs().timeout));
     } on TimeoutException catch (_) {
       return Response(ResponseStatus.TimeOut, null, null);
-    } on Exception catch (_) {
+    } catch (_) {
       return Response(ResponseStatus.Error, null, null);
     }
 

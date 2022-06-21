@@ -98,7 +98,7 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   }
 
   @override
-  void onEveryResume() {
+  void onEveryResume() async {
     DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
   }
 

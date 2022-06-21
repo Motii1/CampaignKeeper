@@ -19,9 +19,11 @@ class ObjectExplorer extends StatefulWidget {
 }
 
 class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
+  final scrollController = ScrollController();
   late ObjectEntity? object = DataCarrier().get(entId: widget.objectId);
   late SchemaEntity? schema = DataCarrier().get(entId: object?.schemaId ?? -1);
   bool isTitleVisible = false;
+  bool isScrolledToTop = true;
 
   Future<void> onRefresh() async {
     DataCarrier().refresh<UserDataEntity>();
@@ -45,6 +47,20 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
     setState(() {
       schema = DataCarrier().get(entId: object?.schemaId ?? -1);
     });
+  }
+
+  void scrollListener() {
+    if (scrollController.offset <= scrollController.position.minScrollExtent && !isScrolledToTop) {
+      setState(() {
+        isScrolledToTop = true;
+      });
+    } else {
+      if (scrollController.offset > 5.0 && isScrolledToTop) {
+        setState(() {
+          isScrolledToTop = false;
+        });
+      }
+    }
   }
 
   Widget getFields() {
@@ -75,7 +91,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
   }
 
   @override
-  void onResume() {
+  void onResume() async {
     DataCarrier().refresh<ObjectEntity>(groupId: object?.schemaId ?? -1);
   }
 
@@ -83,6 +99,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
   void initState() {
     super.initState();
     VisibilityDetectorController.instance.updateInterval = Duration(milliseconds: 200);
+    scrollController.addListener(scrollListener);
     DataCarrier().addListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);
     DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
@@ -91,6 +108,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
 
   @override
   void dispose() {
+    scrollController.removeListener(scrollListener);
     DataCarrier().removeListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().removeListener<SchemaEntity>(onSchemaRefresh);
     super.dispose();
@@ -106,12 +124,14 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
           child: Text(object?.title ?? ""),
         ),
         actions: [KeeperPopup.settings(context)],
+        elevation: isScrolledToTop ? 0 : 5,
       ),
       body: RefreshIndicator(
         color: Theme.of(context).colorScheme.onBackground,
         strokeWidth: 2.5,
         onRefresh: onRefresh,
         child: ListView(
+          controller: scrollController,
           children: [
             KeeperImageTile(image: object?.image),
             VisibilityDetector(

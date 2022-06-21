@@ -9,23 +9,23 @@ class KeeperFieldTile extends StatelessWidget {
   final String fieldName;
   final List<FieldValue> values;
 
-  InlineSpan formatValue(BuildContext context, FieldValue value, {bool background = false}) {
+  InlineSpan formatValue(BuildContext context, FieldValue value, {bool isBackground = false}) {
     if (value.type == FieldValueType.Id) {
       return TextSpan(
         text: DataCarrier().get<ObjectEntity>(entId: value.id)?.title ?? "Error",
         style: TextStyle(
-            color: background ? Colors.transparent : Theme.of(context).colorScheme.onPrimary,
-            fontSize: 15.5,
+            color: isBackground ? Colors.transparent : Theme.of(context).colorScheme.onPrimary,
+            fontSize: (17.5 * MediaQuery.textScaleFactorOf(context)) - 2,
             fontWeight: FontWeight.w500,
             background: Paint()
               ..color = Theme.of(context).colorScheme.primary
               ..strokeCap = StrokeCap.round
               ..strokeJoin = StrokeJoin.round
               ..strokeWidth = 5
-              ..style = background ? PaintingStyle.fill : PaintingStyle.stroke),
+              ..style = isBackground ? PaintingStyle.fill : PaintingStyle.stroke),
         recognizer: TapGestureRecognizer()
           ..onTap = () {
-            if (!background) {
+            if (!isBackground) {
               Navigator.of(context)
                   .pushNamed('/start/campaign/schema_objects/object_explorer', arguments: value.id);
             }
@@ -35,11 +35,6 @@ class KeeperFieldTile extends StatelessWidget {
 
     return TextSpan(
       text: value.text,
-      style: !background
-          ? null
-          : TextStyle(
-              color: Colors.transparent,
-            ),
     );
   }
 
@@ -71,9 +66,9 @@ class KeeperFieldTile extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 17.5,
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Colors.transparent,
                       ),
-                      children: values.map((e) => formatValue(context, e, background: true)).toList(),
+                      children: values.map((e) => formatValue(context, e, isBackground: true)).toList(),
                     ),
                   ),
                   RichText(
