@@ -116,19 +116,13 @@ class SchemaManager extends BaseManager<SchemaEntity> {
       var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
 
       if (campaigns.isNotEmpty) {
-        for (var key in _map.keys) {
+        var keys = List.from(_map.keys);
+
+        keys.forEach((key) {
           if (!campaigns.contains(key)) {
             _map.remove(key);
           }
-        }
-
-        // var keys = _map.keys;
-
-        // keys.forEach((key) {
-        //   if (!campaigns.contains(key)) {
-        //     _map.remove(key);
-        //   }
-        // });
+        });
       }
     }
   }

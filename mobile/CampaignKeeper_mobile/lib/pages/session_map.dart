@@ -47,11 +47,6 @@ class _SessionMapState extends KeeperState<SessionMap> {
   }
 
   @override
-  void onReturn() {
-    onSessionRefresh();
-  }
-
-  @override
   void initState() {
     super.initState();
     DataCarrier().addListener<SessionEntity>(onSessionRefresh);

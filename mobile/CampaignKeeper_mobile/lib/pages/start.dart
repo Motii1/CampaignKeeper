@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
+import 'package:campaign_keeper_mobile/components/keeper_anim_sliver_replacer.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_campaign_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
@@ -20,7 +21,8 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends KeeperState<Start> {
-  List<CampaignEntity> _entities = DataCarrier().getList<CampaignEntity>();
+  var controller = KeeperSliverReplacerController();
+  List<CampaignEntity> entities = DataCarrier().getList<CampaignEntity>();
   bool isPopExit = false;
 
   Future<void> onRefresh() async {
@@ -39,19 +41,37 @@ class _StartState extends KeeperState<Start> {
     }
   }
 
+  Widget getSliverList() {
+    return SliverList(
+        delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+      return KeeperCampaignTile(
+          entity: entities[index],
+          onTap: () {
+            openCampaign(entities[index].id);
+          });
+    }, childCount: entities.length));
+  }
+
+  Widget getSliverFiller() {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Center(
+        child: Text(
+          "There's nothing here.\nStart new adventures on our website!",
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
   void onCampaignRefresh() {
-    setState(() {
-      _entities = DataCarrier().getList<CampaignEntity>();
-    });
+    entities = DataCarrier().getList<CampaignEntity>();
+
+    controller.replace(entities.isEmpty ? getSliverFiller() : getSliverList());
   }
 
   void openCampaign(int id) async {
     Navigator.pushNamed(context, '/start/campaign', arguments: id);
-  }
-
-  @override
-  void onReturn() async {
-    DataCarrier().refresh<CampaignEntity>();
   }
 
   @override
@@ -96,24 +116,10 @@ class _StartState extends KeeperState<Start> {
         title: "Campaigns",
         popup: KeeperPopup.settings(context),
         onRefresh: onRefresh,
-        sliver: _entities.isEmpty
-            ? SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(
-                  child: Text(
-                    "There's nothing here.\nStart new adventures on our website!",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              )
-            : SliverList(
-                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                return KeeperCampaignTile(
-                    entity: _entities[index],
-                    onTap: () {
-                      openCampaign(_entities[index].id);
-                    });
-              }, childCount: _entities.length)),
+        sliver: KeeperAnimatedSliverReplacer(
+          controller: controller,
+          sliver: entities.isEmpty ? getSliverFiller() : getSliverList(),
+        ),
       ),
     );
   }

@@ -115,11 +115,6 @@ class _CampaignState extends KeeperState<Campaign> {
   }
 
   @override
-  void onReturn() async {
-    onCampaignRefresh();
-  }
-
-  @override
   void initState() {
     super.initState();
     DataCarrier().addListener<CampaignEntity>(onCampaignRefresh);

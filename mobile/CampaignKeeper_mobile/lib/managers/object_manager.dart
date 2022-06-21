@@ -130,19 +130,13 @@ class ObjectManager extends BaseManager<ObjectEntity> {
       var schemas = DataCarrier().getList<SchemaEntity>().map((e) => e.id).toList();
 
       if (schemas.isNotEmpty) {
-        for (var key in _map.keys) {
+        var keys = List.from(_map.keys);
+
+        keys.forEach((key) {
           if (!schemas.contains(key)) {
             _map.remove(key);
           }
-        }
-
-        // var keys = _map.keys;
-
-        // keys.forEach((key) {
-        //   if (!schemas.contains(key)) {
-        //     _map.remove(key);
-        //   }
-        // });
+        });
       }
     }
   }

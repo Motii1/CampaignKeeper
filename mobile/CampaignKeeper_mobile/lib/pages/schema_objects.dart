@@ -23,9 +23,9 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   late List<ObjectEntity> objects = DataCarrier().getList(groupId: schema?.id ?? -1);
 
   Future<void> onRefresh() async {
-    await DataCarrier().refresh<UserDataEntity>();
+    DataCarrier().refresh<UserDataEntity>();
     DataCarrier().refresh<CampaignEntity>();
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
+    await DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
     await DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
   }
 
@@ -87,11 +87,6 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   @override
   void onEveryResume() {
     DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-  }
-
-  @override
-  void onReturn() {
-    onSchemaRefresh();
   }
 
   @override
