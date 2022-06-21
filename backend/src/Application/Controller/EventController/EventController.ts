@@ -251,6 +251,7 @@ export class EventController implements IController {
     type: event.type,
     childrenIds: event.children!.map(({ id }) => id),
     parentIds: event.parents!.map(({ id }) => id),
+    displayStatus: event.displayStatus,
   });
 
   private parseTextFieldMetadata = (item: TextFieldMetadata): TextFieldMetadataDto => ({
