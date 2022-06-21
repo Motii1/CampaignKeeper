@@ -3,6 +3,7 @@
  * @property {string} title - title
  * @property {string} type - event type, can be 'normal' or 'fight'
  * @property {string} status - event status, can be: 'none', 'done', 'omitted'
+ * @property {string} displayStatus - display status, can be: 'shown', 'hidden', 'collapsed'
  * @property {Array.<TextFieldMetadataDto>} placeMetadataArray - place textfield metadata representation
  * @property {Array.<TextFieldMetadataDto>} descriptionMetadataArray - description textfield metadata representation
  * @property {Array.<TextFieldMetadataDto>} charactersMetadataArray - characters textfield metadata representation
@@ -10,13 +11,19 @@
  */
 
 import * as Joi from 'joi';
-import { EventStatus, EventType, TextFieldType } from '../../../../Domain/Campaign/Event/Event';
+import {
+  EventDisplayStatus,
+  EventStatus,
+  EventType,
+  TextFieldType,
+} from '../../../../Domain/Campaign/Event/Event';
 import { TextFieldMetadata } from './EventInsertDto';
 
 export type EventUpdateDto = {
   title?: string;
   type?: EventType;
   status?: EventStatus;
+  displayStatus?: EventDisplayStatus;
   placeMetadataArray?: TextFieldMetadata[];
   charactersMetadataArray?: TextFieldMetadata[];
   descriptionMetadataArray?: TextFieldMetadata[];
@@ -39,4 +46,5 @@ export const eventUpdateDtoSchema = Joi.object<EventUpdateDto>({
   descriptionMetadataArray: textFieldMetadataDtoSchema,
   charactersMetadataArray: textFieldMetadataDtoSchema,
   parentIds: Joi.array().items(Joi.number().positive()),
+  displayStatus: Joi.string().valid(...Object.values(EventDisplayStatus)),
 });

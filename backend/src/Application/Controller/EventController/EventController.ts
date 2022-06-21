@@ -84,7 +84,7 @@ export class EventController implements IController {
   };
 
   /**
-   * @route GET /graph/{sessionId}
+   * @route GET /event/graph/{sessionId}
    * @group event - Operations related to event data
    * @returns {GetEventListDto.model} 200 - Success
    * @returns {EmptyResponse.model} 400 - Wrong data format
