@@ -7,6 +7,7 @@ import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
+import 'package:campaign_keeper_mobile/search_controllers/object_search_controller.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -20,7 +21,9 @@ class SchemaObjects extends StatefulWidget {
 }
 
 class _SchemaObjectsState extends KeeperState<SchemaObjects> {
+  static const heroTag = 'search_objects';
   final controller = KeeperSliverReplacerController();
+  late final searchController = ObjectSearchController(schemaId: widget.schemaId, heroTag: heroTag);
   late SchemaEntity? schema = DataCarrier().get(entId: widget.schemaId);
   late List<ObjectEntity> objects = DataCarrier().getList(groupId: schema?.id ?? -1);
 
@@ -123,7 +126,8 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
           controller: controller,
           sliver: sliverList(),
         ),
-        heroTag: "search_objects",
+        searchController: searchController,
+        heroTag: heroTag,
       ),
     );
   }
