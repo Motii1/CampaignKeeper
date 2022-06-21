@@ -26,8 +26,8 @@ class ObjectSearchController extends BaseSearchController<ObjectEntity> {
     return KeeperObjectTile(
       entity: objectEnt,
       onTap: () {
-        //Navigator.of(context).pushReplacementNamed('/start/campaign/schema_objects', arguments: schemaEnt.id);
-        print("Nope");
+        Navigator.of(context)
+            .pushReplacementNamed('/start/campaign/schema_objects/object_explorer', arguments: objectEnt.id);
       },
     );
   }

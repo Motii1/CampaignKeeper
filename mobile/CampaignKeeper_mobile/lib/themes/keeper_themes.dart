@@ -27,7 +27,6 @@ class _DefaultTheme {
   late ThemeData theme = ThemeData(
     appBarTheme: AppBarTheme(
       elevation: 0.0,
-      centerTitle: true,
       backgroundColor: background,
       titleTextStyle: TextStyle(
         fontSize: 20,
@@ -188,8 +187,8 @@ class KeeperThemes {
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  static const Color _light = Color(0xffd4e7f7);
-  static const Color _lighterLight = Color.fromARGB(255, 230, 243, 250);
+  static const Color _light = Color(0xffdce9f5);
+  static const Color _lighterLight = Color(0xffeef6fa);
 
   static const Color _primaryDark = Color(0xffffe082);
   static const Color _onPrimaryDark = Color(0xff242424);

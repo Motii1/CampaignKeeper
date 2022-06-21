@@ -50,6 +50,10 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
     controller.replace(sliverList());
   }
 
+  void openObject(int id) async {
+    Navigator.pushNamed(context, '/start/campaign/schema_objects/object_explorer', arguments: id);
+  }
+
   Widget sliverList() {
     if (schema == null) {
       return SliverFillRemaining(
@@ -68,8 +72,7 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
           (context, index) => KeeperObjectTile(
             entity: objects[index],
             onTap: () {
-              //TODO: Open an object explorer
-              print("should open an object");
+              openObject(objects[index].id);
             },
           ),
           childCount: objects.length,

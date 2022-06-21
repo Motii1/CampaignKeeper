@@ -16,6 +16,7 @@ class KeeperObjectTile extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 18,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
       onTap: onTap,

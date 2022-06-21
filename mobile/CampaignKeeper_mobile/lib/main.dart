@@ -1,4 +1,5 @@
 import 'package:campaign_keeper_mobile/pages/account.dart';
+import 'package:campaign_keeper_mobile/pages/object_explorer.dart';
 import 'package:campaign_keeper_mobile/pages/schema_objects.dart';
 import 'package:campaign_keeper_mobile/pages/session_map.dart';
 import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
@@ -46,27 +47,38 @@ class MainApp extends StatelessWidget {
             theme: _theme,
             darkTheme: _themeDark,
             themeMode: mode,
-            initialRoute: "/",
+            initialRoute: '/',
             routes: {
-              "/": (context) => Loading(),
-              "/settings": (context) => Settings(),
-              "/settings/account": (context) => Account(),
-              "/settings/about": (context) => About(),
-              "/login": (context) => Login(),
-              "/start": (context) => Start(),
+              '/': (context) => Loading(),
+              '/settings': (context) => Settings(),
+              '/settings/account': (context) => Account(),
+              '/settings/about': (context) => About(),
+              '/login': (context) => Login(),
+              '/start': (context) => Start(),
             },
             onGenerateRoute: (RouteSettings settings) {
               var routes = <String, WidgetBuilder>{
-                "/search": (context) => Search(searchController: settings.arguments as BaseSearchController),
-                "/start/campaign": (context) => Campaign(campaignId: settings.arguments as int),
-                "/start/campaign/session_map": (context) => SessionMap(sessionId: settings.arguments as int),
-                "/start/campaign/schema_objects": (context) =>
+                '/search': (context) => Search(searchController: settings.arguments as BaseSearchController),
+                '/start/campaign': (context) => Campaign(campaignId: settings.arguments as int),
+                '/start/campaign/session_map': (context) => SessionMap(sessionId: settings.arguments as int),
+                '/start/campaign/schema_objects': (context) =>
                     SchemaObjects(schemaId: settings.arguments as int),
+                '/start/campaign/schema_objects/object_explorer': (context) =>
+                    ObjectExplorer(objectId: settings.arguments as int),
               };
               WidgetBuilder builder = routes[settings.name]!;
               return MaterialPageRoute(builder: (ctx) => builder(ctx));
             },
             navigatorObservers: [routeObserver],
+            builder: (context, child) {
+              return ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  physics: BouncingScrollPhysics(),
+                  overscroll: false,
+                ),
+                child: child!,
+              );
+            },
           ),
         );
       },
