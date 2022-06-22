@@ -6,13 +6,13 @@ import { NavBarViewDialog } from '../../types/types';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import viewsRoutes from '../viewsRoutes';
 import { EventGraph } from './components/EventGraph/EventGraph';
-import { fetchEvents, setSessionId } from './sessionSlice';
+import { fetchEvents } from './eventsSlice';
+import { setSessionId } from './mapViewSlice';
 
 export const MapView: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentSessionId, isEventsListDownloaded } = useSelector(
-    (state: RootState) => state.session
-  );
+  const { currentSessionId } = useSelector((state: RootState) => state.mapView);
+  const { isEventsListDownloaded } = useSelector((state: RootState) => state.events);
   const { sessionsList } = useSelector((state: RootState) => state.sessions);
   const { currentCampaignId } = useSelector((state: RootState) => state.campaignView);
 
@@ -22,12 +22,17 @@ export const MapView: React.FC = () => {
   else if (!isEventsListDownloaded) {
     const sessionIdForFetching =
       currentSessionId !== '' ? currentSessionId : sessionsList[sessionsList.length - 1].id;
-    dispatch(fetchEvents(sessionIdForFetching));
     dispatch(setSessionId({ currentSessionId: sessionIdForFetching }));
+    dispatch(fetchEvents(sessionIdForFetching));
   }
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewEvent);
+
+  const handleFab = () => {
+    setDialogType(NavBarViewDialog.NewEntry);
+    setIsOpen(true);
+  };
 
   return (
     <ViewWithNavBarWrapper
@@ -35,8 +40,9 @@ export const MapView: React.FC = () => {
       setIsPrimaryOpen={setIsOpen}
       primaryDialogType={dialogType}
       setPrimaryDialogType={setDialogType}
+      handleFab={handleFab}
     >
-      <EventGraph />
+      <EventGraph setIsOpen={setIsOpen} setDialogType={setDialogType} />
     </ViewWithNavBarWrapper>
   );
 };

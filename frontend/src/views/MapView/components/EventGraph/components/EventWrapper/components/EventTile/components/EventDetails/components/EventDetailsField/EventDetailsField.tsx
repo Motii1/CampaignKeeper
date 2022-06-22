@@ -3,7 +3,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../../../../../../store';
 import { convertEntriesHashMapToList } from '../../../../../../../../../../../../utils/utils';
-import { EventFieldMetadata } from '../../../../../../../../../../sessionSlice';
+import { EventFieldMetadata } from '../../../../../../../../../../eventsSlice';
 import { EntryReferenceChip } from './components/EntryReferenceChip/EntryReferenceChip';
 import { EntryTextChip } from './components/EntryTextChip/EntryTextChip';
 

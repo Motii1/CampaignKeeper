@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../../types/types';
 import { EditMenu } from '../../../components/EditMenu/EditMenu';
-import { setSessionId } from '../../../MapView/sessionSlice';
+import { resetState as resetEventsState } from '../../../MapView/eventsSlice';
+import { setSessionId } from '../../../MapView/mapViewSlice';
 import viewsRoutes from '../../../viewsRoutes';
 import { updateState as updateStateCampaign } from '../../campaignViewSlice';
 
@@ -22,6 +23,7 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
 
   const handleClick = () => {
     dispatch(setSessionId({ currentSessionId: props.sessionId }));
+    dispatch(resetEventsState({}));
     history.push(viewsRoutes.MAP);
   };
 

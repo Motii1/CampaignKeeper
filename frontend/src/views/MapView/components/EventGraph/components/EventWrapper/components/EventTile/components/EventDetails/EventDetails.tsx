@@ -1,5 +1,5 @@
 import { Paper, Stack } from '@mui/material';
-import { EventFieldMetadata } from '../../../../../../../../sessionSlice';
+import { EventFieldMetadata } from '../../../../../../../../eventsSlice';
 import { EventDescriptionField } from './components/EventDescriptionField/EventDescriptionField';
 import { EventDetailsDivider } from './components/EventDetailsDivider/EventDetailsDivider';
 import { EventDetailsField } from './components/EventDetailsField/EventDetailsField';

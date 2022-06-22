@@ -1,11 +1,14 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { SessionEventWithPos } from '../../../../../../sessionSlice';
+import { NavBarViewDialog } from '../../../../../../../../types/types';
+import { SessionEventWithPos } from '../../../../../../eventsSlice';
 import { EventDetails } from './components/EventDetails/EventDetails';
 import { EventMenu } from './components/EventMenu/EventMenu';
 
 type EventTileProps = {
   id: string;
   event: SessionEventWithPos;
+  setIsOpen: (newIsOpen: boolean) => void;
+  setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
 export const EventTile: React.FC<EventTileProps> = props => (
@@ -34,6 +37,10 @@ export const EventTile: React.FC<EventTileProps> = props => (
         description={props.event.descriptionMetadataArray}
       />
     </Stack>
-    <EventMenu />
+    <EventMenu
+      event={props.event}
+      setIsOpen={props.setIsOpen}
+      setDialogType={props.setDialogType}
+    />
   </Paper>
 );

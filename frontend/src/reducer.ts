@@ -7,7 +7,8 @@ import codexReducer from './views/CodexView/codexSlice';
 import codexViewReducer from './views/CodexView/codexViewSlice';
 import errorReducer from './views/ErrorView/errorSlice';
 import userDetailsReducer from './views/LandingView/userDetailsSlice';
-import sessionReducer from './views/MapView/sessionSlice';
+import eventsSlice from './views/MapView/eventsSlice';
+import mapViewReducer from './views/MapView/mapViewSlice';
 import campaignsReducer from './views/StartView/campaignsSlice';
 import startViewReducer from './views/StartView/startViewSlice';
 
@@ -21,7 +22,8 @@ export const appReducer = combineReducers({
   sessions: sessionsReducer,
   codexView: codexViewReducer,
   codex: codexReducer,
-  session: sessionReducer,
+  events: eventsSlice,
+  mapView: mapViewReducer,
 });
 
 const rootReducer = (state: RootState | undefined, action: AnyAction): RootState => {

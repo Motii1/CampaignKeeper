@@ -36,7 +36,7 @@ export const CustomFab: React.FC<CustomFabProps> = props => {
       sx={{
         color: 'customPalette.onAccent',
         backgroundColor: 'customPalette.accent',
-        position: 'absolute',
+        position: 'fixed',
         bottom: 20,
         right: 20,
         '&.MuiButtonBase-root:hover': {

@@ -7,10 +7,14 @@ import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
-import { convertReferenceFieldToEventMetadata, createEmptyEventFields } from '../../../utils/utils';
+import {
+  convertReferenceFieldToEventMetadata,
+  createEmptyEventFields,
+  createFilledEventFields,
+} from '../../../utils/utils';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addEvent, SessionEvent } from '../sessionSlice';
+import { addEvent, SessionEvent } from '../eventsSlice';
 import { EventSelect } from './components/EventSelect/EventSelect';
 import { MapFieldList } from './components/MapFieldList/MapFieldList';
 import { Parent } from './components/Parent/Parent';
@@ -27,7 +31,7 @@ import { ParentsBar } from './components/ParentsBar/ParentsBar';
 //   parentIds: string[];
 // };
 
-type CodexDialogProps = {
+type MapDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
   dialogType: NavBarViewDialog;
@@ -36,18 +40,20 @@ type CodexDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
-export const MapDialog: React.FC<CodexDialogProps> = props => {
+export const MapDialog: React.FC<MapDialogProps> = props => {
   const dispatch = useDispatch();
-  const { eventsList, currentSessionId } = useSelector((state: RootState) => state.session);
+  const { currentSessionId, currentEvent } = useSelector((state: RootState) => state.mapView);
+  const { eventsList } = useSelector((state: RootState) => state.events);
+  const { entries } = useSelector((state: RootState) => state.codex);
 
-  const [dialogTitle, _setDialogTitle] = useState(
-    props.dialogType === NavBarViewDialog.NewEvent ? 'Create new event' : `Edit event`
-  );
-
+  // TO-DO: move to another file?
+  const possibleType = useMemo(() => ['normal', 'fight'], []);
+  const possibleStatus = useMemo(() => ['none', 'done', 'omitted'], []);
   const referenceFieldNames = useMemo(() => ['Place', 'Characters', 'Description'], []);
-  const possibleType = useMemo(() => ['Normal', 'Fight'], []);
-  const possibleStatus = useMemo(() => ['None', 'Done', 'Omitted'], []);
 
+  const [dialogTitle, setDialogTitle] = useState(
+    props.dialogType === NavBarViewDialog.NewEvent ? 'Create new event' : 'Edit event'
+  );
   const [eventTitle, setEventTitle] = useState<string>('');
   const [eventTitleHelperText, setEventTitleHelperText] = useState<string>('');
   const [parentIds, setParentIds] = useState<string[]>([]);
@@ -56,6 +62,28 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
   const [referenceFields, setReferenceFields] = useState(
     createEmptyEventFields(referenceFieldNames)
   );
+
+  useEffect(() => {
+    if (props.dialogType === NavBarViewDialog.NewEvent) {
+      setDialogTitle('Create new event');
+      setEventTitle('');
+      setEventTitleHelperText('');
+      setParentIds([]);
+      setType(possibleType[0]);
+      setStatus(possibleStatus[0]);
+      setReferenceFields(createEmptyEventFields(referenceFieldNames));
+    } else {
+      if (currentEvent) {
+        setDialogTitle('Edit event');
+        setEventTitle(currentEvent.title);
+        setEventTitleHelperText('');
+        setParentIds(currentEvent.parentIds);
+        setType(currentEvent.type.charAt(0).toUpperCase() + currentEvent.type.slice(1));
+        setStatus(currentEvent.status.charAt(0).toUpperCase() + currentEvent.status.slice(1));
+        setReferenceFields(createFilledEventFields(referenceFieldNames, currentEvent, entries));
+      } else props.setIsOpen(false);
+    }
+  }, [currentEvent, entries, possibleStatus, possibleType, props, referenceFieldNames]);
 
   const {
     isLoading: isLoadingNew,
@@ -110,8 +138,8 @@ export const MapDialog: React.FC<CodexDialogProps> = props => {
       runQueryNew({
         title: eventTitle,
         sessionId: currentSessionId,
-        type: type.toLowerCase(),
-        status: status.toLowerCase(),
+        type: type,
+        status: status,
         placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
         descriptionMetadataArray: convertReferenceFieldToEventMetadata(
           referenceFields['Description']

@@ -35,7 +35,8 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
         position: 'absolute',
         backgroundColor: 'customPalette.background',
         zIndex: '-2',
-        overflow: 'scroll',
+        overflowX: 'auto',
+        overflowY: 'auto',
       }}
     >
       <Stack
@@ -60,7 +61,6 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
             height: '100%',
             maxHeight: '100%',
             width: '100%',
-            overflow: 'hidden',
           }}
         >
           {props.children}

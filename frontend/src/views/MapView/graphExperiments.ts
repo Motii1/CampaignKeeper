@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { SessionEventWithPos } from './sessionSlice';
+import { SessionEventWithPos } from './eventsSlice';
 
 type EventPositionInfo = {
   id: string;

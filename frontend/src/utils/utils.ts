@@ -5,7 +5,7 @@ import {
   Entry,
   Schema,
 } from '../views/CodexView/codexSlice';
-import { EventFieldMetadata } from '../views/MapView/sessionSlice';
+import { EventFieldMetadata, SessionEvent } from '../views/MapView/eventsSlice';
 
 export const toBase64 = (file: File): Promise<null | string | ArrayBuffer> =>
   new Promise((resolve, reject) => {
@@ -72,12 +72,27 @@ export const convertReferenceFieldToEventMetadata = (
   return metadata;
 };
 
-export const convertMetadataToEntryField = (
+const convertMetadataToEntryField = (
   fieldName: string,
   metadata: CodexMetadataInstance[],
   entries: Entry[]
 ): ReferenceFieldMetadata[] => {
   const fieldMetadata = getCodexMetadataByFieldName(fieldName, metadata).sort((m1, m2) =>
+    m1.sequenceNumber > m2.sequenceNumber ? 1 : m2.sequenceNumber > m1.sequenceNumber ? -1 : 0
+  );
+  return fieldMetadata.map(metadata => ({
+    value:
+      metadata.type === 'string' ? metadata.value : `${getEntryNameById(metadata.value, entries)}`,
+    id: metadata.type === 'id' ? metadata.value : null,
+  }));
+};
+
+const convertMetadataToEventField = (
+  metadata: EventFieldMetadata[],
+  entries: Entry[]
+): ReferenceFieldMetadata[] => {
+  const fieldMetadata = [...metadata];
+  fieldMetadata.sort((m1, m2) =>
     m1.sequenceNumber > m2.sequenceNumber ? 1 : m2.sequenceNumber > m1.sequenceNumber ? -1 : 0
   );
   return fieldMetadata.map(metadata => ({
@@ -168,5 +183,29 @@ export const createFilledCodexFields = (
           entriesAsList
         ))
     );
+  return currentFields;
+};
+
+export const createFilledEventFields = (
+  fieldNames: string[],
+  event: SessionEvent,
+  entries: EntriesHashMap
+): ReferenceFieldsState => {
+  const currentFields: ReferenceFieldsState = {};
+  const entriesAsList: Entry[] = convertEntriesHashMapToList(entries);
+
+  currentFields[fieldNames[0]] = convertMetadataToEventField(
+    event.placeMetadataArray,
+    entriesAsList
+  );
+  currentFields[fieldNames[1]] = convertMetadataToEventField(
+    event.charactersMetadataArray,
+    entriesAsList
+  );
+  currentFields[fieldNames[2]] = convertMetadataToEventField(
+    event.descriptionMetadataArray,
+    entriesAsList
+  );
+
   return currentFields;
 };

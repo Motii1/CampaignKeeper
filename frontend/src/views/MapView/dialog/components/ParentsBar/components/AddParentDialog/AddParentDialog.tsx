@@ -13,7 +13,7 @@ type AddParentDialogProps = {
 };
 
 export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
-  const { eventsList } = useSelector((state: RootState) => state.session);
+  const { eventsList } = useSelector((state: RootState) => state.events);
 
   const [selectedParent, setSelectedParent] = useState<null | string>(null);
 

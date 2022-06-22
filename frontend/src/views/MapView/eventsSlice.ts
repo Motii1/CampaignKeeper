@@ -26,16 +26,14 @@ export interface SessionEventWithPos extends SessionEvent {
   y: number;
 }
 
-type SessionState = {
-  eventsList: SessionEventWithPos[];
+type EventsState = {
   isEventsListDownloaded: boolean;
-  currentSessionId: string;
+  eventsList: SessionEventWithPos[];
 };
 
-const initialState: SessionState = {
-  eventsList: [],
+const initialState: EventsState = {
   isEventsListDownloaded: false,
-  currentSessionId: '',
+  eventsList: [],
 };
 
 export const fetchEvents = createAsyncThunk('session/fetchEvents', async (sessionId: string) => {
@@ -43,36 +41,31 @@ export const fetchEvents = createAsyncThunk('session/fetchEvents', async (sessio
   return response;
 });
 
-const sessionSlice = createSlice({
+const eventsSlice = createSlice({
   name: 'session',
   initialState,
   reducers: {
     // removeEvent
     // editEvent
-    // setCampaignId
-    // setSessionId
-    // setIds
-    setSessionId: (state, action) => {
-      state.currentSessionId = action.payload.currentSessionId;
-    },
-    updateState: (state, action) => {
-      state.isEventsListDownloaded = action.payload.isEventsListDownloaded
-        ? action.payload.isEventsListDownloaded
-        : state.isEventsListDownloaded;
-      state.currentSessionId = action.payload.currentSessionId
-        ? action.payload.currentSessionId
-        : state.currentSessionId;
-    },
     addEvent: (state, action) => {
       const currentEventsList = state.eventsList;
       const newEventList = currentEventsList.concat(action.payload.newEvent);
+      newEventList.forEach((event: SessionEventWithPos) => {
+        event.x = -1;
+        event.y = -1;
+      });
+      setYPos(newEventList);
       state.eventsList = newEventList;
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    resetState: (state, _action) => {
+      state.isEventsListDownloaded = false;
+      state.eventsList = [];
     },
   },
   extraReducers: builder => {
     builder.addCase(fetchEvents.fulfilled, (state, action) => {
       if (action.payload.status === 200) {
-        state.isEventsListDownloaded = true;
         const eventsFromAPI = action.payload.data.events;
         eventsFromAPI.forEach((event: SessionEventWithPos) => {
           event.x = -1;
@@ -80,11 +73,12 @@ const sessionSlice = createSlice({
         });
         setYPos(eventsFromAPI);
         state.eventsList = eventsFromAPI;
+        state.isEventsListDownloaded = true;
       }
     });
   },
 });
 
-export const { addEvent, setSessionId, updateState } = sessionSlice.actions;
+export const { addEvent, resetState } = eventsSlice.actions;
 
-export default sessionSlice.reducer;
+export default eventsSlice.reducer;

@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import requestMethods from '../../../axios/requestMethods';
@@ -184,42 +184,40 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   };
 
   return (
-    <Box>
-      <CustomDialog
-        title={title}
-        isOpen={props.isOpen}
-        setIsOpen={props.setIsOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        onDelete={props.dialogType === NavBarViewDialog.EditCampaign ? handleDelete : undefined}
-        onClose={handleClose}
+    <CustomDialog
+      title={title}
+      isOpen={props.isOpen}
+      setIsOpen={props.setIsOpen}
+      onOk={handleOk}
+      onCancel={handleCancel}
+      onDelete={props.dialogType === NavBarViewDialog.EditCampaign ? handleDelete : undefined}
+      onClose={handleClose}
+    >
+      <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="flex-start"
+        spacing={1}
+        sx={{ width: '100%' }}
       >
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="flex-start"
-          spacing={1}
-          sx={{ width: '100%' }}
-        >
-          <LabeledTextInput
-            text={'Name'}
-            placeholder={'Type here'}
-            defaultValue={startCampaignName}
-            helperText={helperText}
-            defaultHelperText={''}
-            onChange={event => handleTextInputChange(event)}
-            onBlur={event => handleTextInputLeave(event)}
-          />
-          <ImageUploadField
-            height={180}
-            width={372}
-            image={startCampaignImageBase64}
-            setImage={newImageBase64 => {
-              dispatch(setCurrentImage({ imageBase64: newImageBase64 }));
-            }}
-          />
-        </Stack>
-      </CustomDialog>
-    </Box>
+        <LabeledTextInput
+          text={'Name'}
+          placeholder={'Type here'}
+          defaultValue={startCampaignName}
+          helperText={helperText}
+          defaultHelperText={''}
+          onChange={event => handleTextInputChange(event)}
+          onBlur={event => handleTextInputLeave(event)}
+        />
+        <ImageUploadField
+          height={180}
+          width={372}
+          image={startCampaignImageBase64}
+          setImage={newImageBase64 => {
+            dispatch(setCurrentImage({ imageBase64: newImageBase64 }));
+          }}
+        />
+      </Stack>
+    </CustomDialog>
   );
 };

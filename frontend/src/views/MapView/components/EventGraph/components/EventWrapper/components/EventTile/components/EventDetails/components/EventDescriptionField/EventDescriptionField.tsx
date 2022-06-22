@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../../../../../../store';
 import { convertEntriesHashMapToList } from '../../../../../../../../../../../../utils/utils';
-import { EventFieldMetadata } from '../../../../../../../../../../sessionSlice';
+import { EventFieldMetadata } from '../../../../../../../../../../eventsSlice';
 import { ReferenceChip } from './ReferenceChip/ReferenceChip';
 
 type EventDescriptionFieldProps = {

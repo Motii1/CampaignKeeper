@@ -1,10 +1,13 @@
 import { Box } from '@mui/material';
-import { SessionEventWithPos } from '../../../../sessionSlice';
+import { NavBarViewDialog } from '../../../../../../types/types';
+import { SessionEventWithPos } from '../../../../eventsSlice';
 import { EventArrow } from './components/EventArrow/EventArrow';
 import { EventTile } from './components/EventTile/EventTile';
 
 type EventWrapperProps = {
   event: SessionEventWithPos;
+  setIsOpen: (newIsOpen: boolean) => void;
+  setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
 // TO-DO: EventTiles should be shown ABOVE EventArrows
@@ -50,7 +53,12 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
 
   return (
     <Box>
-      <EventTile id={`event-${props.event.id}`} event={props.event} />
+      <EventTile
+        id={`event-${props.event.id}`}
+        event={props.event}
+        setIsOpen={props.setIsOpen}
+        setDialogType={props.setDialogType}
+      />
       {renderArrows()}
     </Box>
   );
