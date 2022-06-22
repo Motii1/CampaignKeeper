@@ -12,6 +12,8 @@ import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+// Page displaying a list of objects corresponding
+// to a particular schema.
 class SchemaObjects extends StatefulWidget {
   const SchemaObjects({Key? key, required this.schemaId}) : super(key: key);
   final int schemaId;

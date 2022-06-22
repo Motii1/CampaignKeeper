@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+// Entity representing a schema.
 class SchemaEntity {
   static const String endpoint = "/api/schema/list";
 

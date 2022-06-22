@@ -1,8 +1,11 @@
+// Enum representing if a FieldValue is a plain text
+// or a link to another object.
 enum FieldValueType {
   Text,
   Id,
 }
 
+// Class representing part of an objects field.
 class FieldValue {
   FieldValueType type;
   int sequence;
@@ -54,6 +57,8 @@ class FieldValue {
   }
 }
 
+// Used by KeeperSliverReplacer to determine if
+// a change should or shouldn't be animated.
 enum KeeperSliverReplacerType {
   Animate,
   Instant,

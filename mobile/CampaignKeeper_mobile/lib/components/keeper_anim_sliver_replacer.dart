@@ -1,25 +1,33 @@
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
+// Controller for KeeperAnimatedSliverReplacer that allows for interaction.
 class KeeperSliverReplacerController extends ChangeNotifier {
   var _type = KeeperSliverReplacerType.Animate;
-  Widget? awaitingWidget;
+  Widget? _awaitingWidget;
+
+  Widget? get awaitingWidget => _awaitingWidget;
 
   KeeperSliverReplacerType get type => _type;
 
+  // Notifies all subscribers that they should replace
+  // their children with an animation.
   void replace(Widget child) {
     _type = KeeperSliverReplacerType.Animate;
-    awaitingWidget = child;
+    _awaitingWidget = child;
     notifyListeners();
   }
 
+  // Notifies all subscribers that they should replace
+  // their children without an animation.
   void replaceInstant(Widget child) {
     _type = KeeperSliverReplacerType.Instant;
-    awaitingWidget = child;
+    _awaitingWidget = child;
     notifyListeners();
   }
 }
 
+// Widget that allows to replace their sliver child with a fade out/in animation.
 class KeeperAnimatedSliverReplacer extends StatefulWidget {
   KeeperAnimatedSliverReplacer({Key? key, required this.controller, required this.sliver}) : super(key: key);
 
@@ -35,7 +43,7 @@ class _KeeperAnimatedSliverReplacerState extends State<KeeperAnimatedSliverRepla
   late Widget child = widget.sliver;
   late final AnimationController controller = AnimationController(
     value: 1.0,
-    duration: const Duration(milliseconds: 110),
+    duration: const Duration(milliseconds: 140),
     vsync: this,
   );
   late final Animation<double> animation = CurvedAnimation(
@@ -70,8 +78,6 @@ class _KeeperAnimatedSliverReplacerState extends State<KeeperAnimatedSliverRepla
             child = awaitingWidget;
           });
         }
-
-        widget.controller.awaitingWidget = null;
 
         controller.forward();
       }

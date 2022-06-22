@@ -10,6 +10,7 @@ import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+// Page displaying a single object.
 class ObjectExplorer extends StatefulWidget {
   const ObjectExplorer({Key? key, required this.objectId}) : super(key: key);
   final int objectId;
@@ -71,7 +72,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
         key: Key('object-title'),
         child: KeeperTitleTile(title: object?.title ?? ""),
         onVisibilityChanged: (visibilityInfo) {
-          bool shouldTitleBeVisible = visibilityInfo.visibleFraction <= 0.4;
+          bool shouldTitleBeVisible = visibilityInfo.visibleFraction <= 0.5;
 
           if (isTitleVisible != shouldTitleBeVisible && this.mounted) {
             setState(() {
@@ -107,7 +108,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
   @override
   void initState() {
     super.initState();
-    VisibilityDetectorController.instance.updateInterval = Duration(milliseconds: 350);
+    VisibilityDetectorController.instance.updateInterval = Duration(milliseconds: 400);
     scrollController.addListener(scrollListener);
     DataCarrier().addListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);

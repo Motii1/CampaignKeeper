@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
+// Entity representing an object.
 class ObjectEntity {
   static const String endpoint = "/api/object/list";
 
@@ -24,6 +25,7 @@ class ObjectEntity {
 
   String? get imageData => _imageData;
 
+  // A setter that also updates an cached image.
   void set imageData(String? value) {
     _imageData = value == "" ? null : value;
 

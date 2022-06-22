@@ -4,11 +4,14 @@ import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+// Lisr element presenting FieldValues with a header.
 class KeeperFieldTile extends StatelessWidget {
   const KeeperFieldTile({Key? key, required this.fieldName, required this.values}) : super(key: key);
   final String fieldName;
   final List<FieldValue> values;
 
+  // isBackground determines if chips should be drawn with a rectangle backrgound
+  // or just rounded outline, as Flutter can't do both at the same time.
   InlineSpan formatValue(BuildContext context, FieldValue value, {bool isBackground = false}) {
     if (value.type == FieldValueType.Id) {
       return TextSpan(

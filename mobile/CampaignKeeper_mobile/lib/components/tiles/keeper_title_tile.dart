@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// List element presenting a centered title.
 class KeeperTitleTile extends StatelessWidget {
   const KeeperTitleTile({Key? key, required this.title}) : super(key: key);
   final String title;
