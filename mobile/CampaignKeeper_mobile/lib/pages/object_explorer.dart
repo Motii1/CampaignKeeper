@@ -129,7 +129,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
     return Scaffold(
       appBar: AppBar(
         title: AnimatedOpacity(
-          duration: Duration(milliseconds: 150),
+          duration: Duration(milliseconds: 120),
           opacity: isTitleVisible ? 1.0 : 0.0,
           child: Text(object?.title ?? ""),
         ),
