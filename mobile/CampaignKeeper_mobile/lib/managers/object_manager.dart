@@ -99,46 +99,32 @@ class ObjectManager extends BaseManager<ObjectEntity> {
   }
 
   bool _isEqual(int groupId, List<ObjectEntity> newEntities) {
-    if (newEntities.length == _map[groupId]?.length) {
-      for (int i = 0; i < newEntities.length; i++) {
-        if (!newEntities[i].equals(_map[groupId]![i])) {
-          return false;
-        }
-      }
-
-      return true;
+    if (newEntities.length != _map[groupId]?.length) {
+      return false;
     }
 
-    return false;
+    for (int i = 0; i < newEntities.length; i++) {
+      if (!newEntities[i].equals(_map[groupId]![i])) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   void _cacheAll() {
-    _checkIntegrity();
-
+    var schemas = DataCarrier().getList<SchemaEntity>().map((e) => e.id).toList();
     var data = [];
+
     _map.forEach(
-      (_, list) {
-        data.addAll(list.map((e) => _encodeEntity(e)));
+      (key, list) {
+        if (schemas.contains(key)) {
+          data.addAll(list.map((e) => _encodeEntity(e)));
+        }
       },
     );
 
     CacheUtil().add(_key, json.encode(data));
-  }
-
-  void _checkIntegrity() {
-    if (_map.isNotEmpty) {
-      var schemas = DataCarrier().getList<SchemaEntity>().map((e) => e.id).toList();
-
-      if (schemas.isNotEmpty) {
-        var keys = List.from(_map.keys);
-
-        keys.forEach((key) {
-          if (!schemas.contains(key)) {
-            _map.remove(key);
-          }
-        });
-      }
-    }
   }
 
   ObjectEntity _decodeEntity(Map data) {

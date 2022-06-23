@@ -68,17 +68,17 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   }
 
   bool _isEqual(List<CampaignEntity> newEntities) {
-    if (newEntities.length == _entities.length) {
-      for (int i = 0; i < newEntities.length; i++) {
-        if (!newEntities[i].equals(_entities[i])) {
-          return false;
-        }
-      }
-
-      return true;
+    if (newEntities.length != _entities.length) {
+      return false;
     }
 
-    return false;
+    for (int i = 0; i < newEntities.length; i++) {
+      if (!newEntities[i].equals(_entities[i])) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   void _cacheAll() {

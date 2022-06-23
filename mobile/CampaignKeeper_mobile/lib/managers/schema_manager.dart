@@ -98,42 +98,28 @@ class SchemaManager extends BaseManager<SchemaEntity> {
   }
 
   bool _isEqual(int groupId, List<SchemaEntity> newEntities) {
-    if (newEntities.length == _map[groupId]?.length) {
-      for (int i = 0; i < newEntities.length; i++) {
-        if (!newEntities[i].equals(_map[groupId]![i])) {
-          return false;
-        }
-      }
-
-      return true;
+    if (newEntities.length != _map[groupId]?.length) {
+      return false;
     }
 
-    return false;
-  }
-
-  void _checkIntegrity() {
-    if (_map.isNotEmpty) {
-      var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
-
-      if (campaigns.isNotEmpty) {
-        var keys = List.from(_map.keys);
-
-        keys.forEach((key) {
-          if (!campaigns.contains(key)) {
-            _map.remove(key);
-          }
-        });
+    for (int i = 0; i < newEntities.length; i++) {
+      if (!newEntities[i].equals(_map[groupId]![i])) {
+        return false;
       }
     }
+
+    return true;
   }
 
   void _cacheAll() {
-    _checkIntegrity();
-
+    var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
     var data = [];
+
     _map.forEach(
-      (_, list) {
-        data.addAll(list.map((e) => _encodeEntity(e)));
+      (key, list) {
+        if (campaigns.contains(key)) {
+          data.addAll(list.map((e) => _encodeEntity(e)));
+        }
       },
     );
 

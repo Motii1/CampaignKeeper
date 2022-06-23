@@ -100,17 +100,17 @@ class SessionManager extends BaseManager<SessionEntity> {
   }
 
   bool _isEqual(int groupId, List<SessionEntity> newEntities) {
-    if (newEntities.length == _map[groupId]?.length) {
-      for (int i = 0; i < newEntities.length; i++) {
-        if (!newEntities[i].equals(_map[groupId]![i])) {
-          return false;
-        }
-      }
-
-      return true;
+    if (newEntities.length != _map[groupId]?.length) {
+      return false;
     }
 
-    return false;
+    for (int i = 0; i < newEntities.length; i++) {
+      if (!newEntities[i].equals(_map[groupId]![i])) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   void _checkIntegrity() {
@@ -130,12 +130,14 @@ class SessionManager extends BaseManager<SessionEntity> {
   }
 
   void _cacheAll() {
-    _checkIntegrity();
-
+    var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
     var data = [];
+
     _map.forEach(
-      (_, list) {
-        data.addAll(list.map((e) => _encodeEntity(e)));
+      (key, list) {
+        if (campaigns.contains(key)) {
+          data.addAll(list.map((e) => _encodeEntity(e)));
+        }
       },
     );
 
