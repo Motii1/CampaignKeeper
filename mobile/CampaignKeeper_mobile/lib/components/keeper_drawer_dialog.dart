@@ -55,13 +55,12 @@ class KeeperDrawerDialog extends StatefulWidget {
 
 class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTickerProviderStateMixin {
   static const shadowDuration = Duration(milliseconds: 200);
-  double safeSpace = 0;
-  double drawerMaxHeight = 250;
+  final drawerKey = GlobalKey();
+  final stackKey = GlobalKey();
   late bool isDrawerOpen = widget.controller.isDrawerOpen;
   late String title = widget.controller.title;
   late List<KeeperDrawerTile> items = widget.controller.items;
 
-  final drawerKey = GlobalKey();
   late final controller = AnimationController(
     vsync: this,
     duration: Duration(milliseconds: 200),
@@ -89,13 +88,11 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   }
 
   void onDragUpdate(DragUpdateDetails details) {
-    double direction = details.delta.direction;
-    direction = direction == 0.0 ? 0.0 : direction / direction.abs();
-    double distance = details.delta.distance * direction;
+    double maxHeight = stackKey.currentContext?.size?.height ?? MediaQuery.of(context).size.height;
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
 
-    if (details.globalPosition.dy > drawerMaxHeight + safeSpace - drawerHeight + 15) {
-      controller.value -= 0.85 * distance / drawerHeight;
+    if (details.globalPosition.dy > maxHeight - drawerHeight + 15) {
+      controller.value -= 0.95 * (details.primaryDelta ?? 0) / drawerHeight;
     }
   }
 
@@ -125,45 +122,41 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: ((context, constraints) {
-      safeSpace = MediaQuery.of(context).padding.top + 25;
-      drawerMaxHeight = constraints.biggest.height - safeSpace;
-
-      return Stack(
-        alignment: AlignmentDirectional.bottomCenter,
-        fit: StackFit.expand,
-        children: [
-          Container(
-            color: Colors.black,
-          ),
-          AnimatedOpacity(
-            duration: shadowDuration,
-            opacity: isDrawerOpen ? 0.8 : 1.0,
-            child: widget.child,
-          ),
-          Visibility(
-              visible: isDrawerOpen,
-              child: GestureDetector(
-                onTap: (() {
-                  widget.controller.closeDrawer();
-                }),
-                child: Container(
-                  color: Colors.transparent,
-                ),
-              )),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: SlideTransition(
-              position: offsetAnimation,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(
-                    height: safeSpace,
-                  ),
-                  GestureDetector(
+    return Stack(
+      key: stackKey,
+      alignment: AlignmentDirectional.bottomCenter,
+      fit: StackFit.expand,
+      children: [
+        Container(
+          color: Colors.black,
+        ),
+        AnimatedOpacity(
+          duration: shadowDuration,
+          opacity: isDrawerOpen ? 0.8 : 1.0,
+          child: widget.child,
+        ),
+        Visibility(
+            visible: isDrawerOpen,
+            child: GestureDetector(
+              onTap: (() {
+                widget.controller.closeDrawer();
+              }),
+              child: Container(
+                color: Colors.transparent,
+              ),
+            )),
+        SlideTransition(
+          position: offsetAnimation,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).padding.top + 25,
+              ),
+              Flexible(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: GestureDetector(
                     onVerticalDragUpdate: onDragUpdate,
                     onVerticalDragEnd: onDragEnd,
                     child: Material(
@@ -172,30 +165,29 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
                       borderRadius:
                           BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           _DrawerHandler(),
                           KeeperTitleTile(title: title),
-                          ListView(
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            physics: AlwaysScrollableScrollPhysics(),
-                            children: items,
-                          ),
-                          SizedBox(
-                            height: 15,
+                          Flexible(
+                            child: ListView(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              children: items,
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      );
-    }));
+        ),
+      ],
+    );
   }
 }
 
