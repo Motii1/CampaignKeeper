@@ -31,7 +31,7 @@ class KeeperDrawerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: (() {
         context.findAncestorWidgetOfExactType<KeeperDrawerDialog>()?.controller.closeDrawer();
 
@@ -63,7 +63,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
 
   late final controller = AnimationController(
     vsync: this,
-    duration: Duration(milliseconds: 200),
+    duration: Duration(milliseconds: 250),
   );
   late final offsetAnimation = Tween<Offset>(
     begin: Offset(0.0, 1.0),
@@ -92,14 +92,14 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
 
     if (details.globalPosition.dy > maxHeight - drawerHeight + 15) {
-      controller.value -= 0.95 * (details.primaryDelta ?? 0) / drawerHeight;
+      controller.value -= (details.primaryDelta ?? 0) / maxHeight;
     }
   }
 
   void onDragEnd(DragEndDetails details) {
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
 
-    if (controller.value > 1.0 - 50 / drawerHeight) {
+    if (controller.value > 1.0 - 60 / drawerHeight) {
       int value = (drawerHeight * (1.0 - controller.value)).toInt() * 4;
       controller.animateTo(1.0, duration: Duration(milliseconds: value));
     } else {
@@ -151,7 +151,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).padding.top + 25,
+                height: MediaQuery.of(context).padding.top + 30,
               ),
               Flexible(
                 child: Align(
@@ -197,7 +197,7 @@ class _DrawerHandler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 22, bottom: 9),
+      padding: EdgeInsets.only(top: 14, bottom: 10),
       child: Center(
         child: Material(
           color: Theme.of(context).colorScheme.onBackground,
