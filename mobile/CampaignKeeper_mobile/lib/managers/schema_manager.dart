@@ -117,7 +117,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
 
     _map.forEach(
       (key, list) {
-        if (campaigns.contains(key)) {
+        if (campaigns.isEmpty || campaigns.contains(key)) {
           data.addAll(list.map((e) => _encodeEntity(e)));
         }
       },

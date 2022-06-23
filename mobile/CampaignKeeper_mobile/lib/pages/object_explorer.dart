@@ -108,7 +108,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
   @override
   void initState() {
     super.initState();
-    VisibilityDetectorController.instance.updateInterval = Duration(milliseconds: 400);
+    VisibilityDetectorController.instance.updateInterval = Duration(milliseconds: 300);
     scrollController.addListener(scrollListener);
     DataCarrier().addListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);

@@ -135,7 +135,7 @@ class SessionManager extends BaseManager<SessionEntity> {
 
     _map.forEach(
       (key, list) {
-        if (campaigns.contains(key)) {
+        if (campaigns.isEmpty || campaigns.contains(key)) {
           data.addAll(list.map((e) => _encodeEntity(e)));
         }
       },

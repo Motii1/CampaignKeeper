@@ -99,7 +99,7 @@ class RequestHelper extends ChangeNotifier {
         if (isAutoLogin && !isCookieValid()) {
           ResponseStatus loginResponse = await LoginHelper().autoLogin();
           if (loginResponse == ResponseStatus.Success) {
-            return await get(endpoint: endpoint, isAutoLogin: false);
+            return await get(endpoint: endpoint, params: params, isAutoLogin: false);
           }
         }
 

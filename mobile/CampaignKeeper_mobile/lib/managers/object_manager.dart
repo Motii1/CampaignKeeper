@@ -118,7 +118,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
 
     _map.forEach(
       (key, list) {
-        if (schemas.contains(key)) {
+        if (schemas.isEmpty || schemas.contains(key)) {
           data.addAll(list.map((e) => _encodeEntity(e)));
         }
       },
