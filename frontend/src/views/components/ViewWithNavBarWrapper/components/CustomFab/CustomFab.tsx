@@ -36,6 +36,7 @@ export const CustomFab: React.FC<CustomFabProps> = props => {
       sx={{
         color: 'customPalette.onAccent',
         backgroundColor: 'customPalette.accent',
+        boxShadow: '0px 0px',
         position: 'fixed',
         bottom: 20,
         right: 20,

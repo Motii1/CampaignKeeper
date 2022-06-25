@@ -8,6 +8,7 @@ type EditMenuProps = {
 
 export const EditMenu: React.FC<EditMenuProps> = props => (
   <Menu
+    elevation={1}
     open={props.menuPos !== null}
     onClose={props.handleClose}
     anchorReference="anchorPosition"

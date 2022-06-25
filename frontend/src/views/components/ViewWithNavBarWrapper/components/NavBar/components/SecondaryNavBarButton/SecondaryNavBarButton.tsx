@@ -19,6 +19,7 @@ export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props
     return (
       <Paper elevation={0} sx={outerPaperStyle} onClick={props.onClick} square>
         <Paper
+          elevation={0}
           sx={{
             backgroundColor: 'customPalette.accent',
             borderRadius: 5,

@@ -32,7 +32,7 @@ export const SchemasList: React.FC = () => {
   return (
     <Box>
       <Paper
-        elevation={6}
+        elevation={0}
         square
         sx={{
           backgroundColor: 'customPalette.surface',

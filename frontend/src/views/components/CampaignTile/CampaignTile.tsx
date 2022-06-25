@@ -68,10 +68,11 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
   const cursorType = props.isClickable ? 'pointer' : 'default';
   return (
     <Paper
+      elevation={0}
       sx={{
         cursor: cursorType,
         borderRadius: 2.5,
-        backgroundColor: 'customPalette.surfaceSecondary',
+        backgroundColor: 'customPalette.tertiary',
         height: { xs: 147.7, lg: 211 },
         width: { xs: 259.8, lg: 371.2 },
         padding: 0.66,
@@ -93,7 +94,7 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
         />
         <Typography
           sx={{
-            color: 'customPalette.onSurfaceSecondary',
+            color: 'customPalette.onTertiary',
             fontWeight: 'medium',
             textAlign: 'left',
             paddingLeft: { xs: 0.7, lg: 1.5 },

@@ -145,6 +145,7 @@ export const UserPanel: React.FC<UserPanelProps> = props => {
         </Stack>
       </Paper>
       <Menu
+        elevation={1}
         id="user-menu"
         anchorEl={menuAnchor}
         open={Boolean(menuAnchor)}

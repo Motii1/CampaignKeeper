@@ -2,6 +2,7 @@ import { Paper, Typography } from '@mui/material';
 
 export const SchemasListHeader: React.FC = () => (
   <Paper
+    elevation={0}
     square
     sx={{
       backgroundColor: 'customPalette.primary',

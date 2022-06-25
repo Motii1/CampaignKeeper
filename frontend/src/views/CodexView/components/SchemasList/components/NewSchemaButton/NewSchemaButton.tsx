@@ -26,6 +26,7 @@ export const NewSchemaButton: React.FC<NewSchemaButtonProps> = props => {
 
   return (
     <Paper
+      elevation={0}
       onClick={onClick}
       sx={{
         cursor: 'pointer',

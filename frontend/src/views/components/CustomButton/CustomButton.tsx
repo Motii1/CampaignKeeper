@@ -20,8 +20,8 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
     backgroundColor = 'customPalette.accent';
     color = 'customPalette.onAccent';
   } else if (type === CustomButtonType.Primary) {
-    backgroundColor = 'customPalette.primary';
-    color = 'customPalette.onPrimary';
+    backgroundColor = 'customPalette.background';
+    color = 'customPalette.onBackground';
   } else {
     backgroundColor = 'customPalette.red';
     color = 'customPalette.onRed';
@@ -42,7 +42,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   switch (behavior) {
     case CustomButtonBehavior.Upload:
       return (
-        <Button variant="contained" component="span" sx={standardButtonSx}>
+        <Button variant="contained" disableElevation component="span" sx={standardButtonSx}>
           {otherProps.content}
         </Button>
       );

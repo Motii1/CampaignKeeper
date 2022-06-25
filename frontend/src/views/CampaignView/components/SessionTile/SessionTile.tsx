@@ -52,6 +52,7 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
 
   return (
     <Paper
+      elevation={0}
       sx={{
         cursor: 'pointer',
         borderRadius: 2.5,

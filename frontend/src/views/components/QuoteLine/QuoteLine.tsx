@@ -22,7 +22,7 @@ export const QuoteLine: React.FC<QuoteLineProps> = props => (
       align="center"
       variant="h6"
       sx={{
-        color: 'customPalette.onBackgroundSecondary',
+        color: 'customPalette.onBackgroundVariant',
         fontStyle: 'italic',
         padding: 1,
         paddingTop: 7,

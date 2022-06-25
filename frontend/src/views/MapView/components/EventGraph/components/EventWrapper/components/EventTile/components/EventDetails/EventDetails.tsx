@@ -13,7 +13,7 @@ type EventDetailsProps = {
 export const EventDetails: React.FC<EventDetailsProps> = props => (
   <Paper
     sx={{
-      backgroundColor: 'customPalette.surfaceSecondary',
+      backgroundColor: 'customPalette.tertiary',
       margin: '5px',
       width: '390px',
     }}

@@ -25,7 +25,7 @@ export const NavBar: React.FC<NavBarProps> = props => {
   const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(props.currentView);
 
   return (
-    <Paper elevation={6} square sx={{ backgroundColor: 'customPalette.surface', height: 50 }}>
+    <Paper elevation={0} square sx={{ backgroundColor: 'customPalette.surface', height: 50 }}>
       <Stack
         direction="row"
         spacing={0}

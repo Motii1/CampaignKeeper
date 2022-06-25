@@ -7,7 +7,7 @@ type CustomDialogTitleProps = {
 
 export const CustomDialogTitle: React.FC<CustomDialogTitleProps> = props => {
   const sx = {
-    color: props.isTitleRed ? 'customPalette.red' : 'customPalette.onBackgroundSecondary',
+    color: props.isTitleRed ? 'customPalette.red' : 'customPalette.onBackgroundVariant',
     fontWeight: 'medium',
     letterSpacing: 0.5,
     paddingTop: 0.6,
