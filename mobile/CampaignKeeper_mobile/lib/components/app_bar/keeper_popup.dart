@@ -73,9 +73,6 @@ class _KeeperPopupState extends State<KeeperPopup> {
           itemBuilder: widget.itemBuilder,
           onSelected: widget.onSelected,
           offset: const Offset(0, 35),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
         ),
       ),
     );

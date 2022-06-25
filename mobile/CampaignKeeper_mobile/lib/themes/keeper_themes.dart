@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class _DefaultTheme {
   static const double _textColorOpacitySecondary = 0.7;
   static const double _textColorOpacityPrimary = 0.9;
-  static const double _radius = 10.0;
+  static const double _radius = 12.5;
+  static const double _inputRadius = 10;
 
   final Color surface;
   final Color background;
@@ -20,15 +21,12 @@ class _DefaultTheme {
 
   final Brightness brightness;
 
-  final MaterialColor swatch;
-
   final TextStyle textColor;
   final TextStyle textColorTitle;
 
   late ThemeData theme = ThemeData(
     appBarTheme: AppBarTheme(
       elevation: 0.0,
-      centerTitle: true,
       backgroundColor: background,
       titleTextStyle: TextStyle(
         fontSize: 20,
@@ -38,6 +36,8 @@ class _DefaultTheme {
       iconTheme: IconThemeData(
         color: onBackground.withOpacity(_textColorOpacitySecondary),
       ),
+      shadowColor:
+          brightness == Brightness.light ? Colors.black.withOpacity(0.25) : Colors.white.withOpacity(0.075),
     ),
     backgroundColor: background,
     colorScheme: ColorScheme(
@@ -56,7 +56,6 @@ class _DefaultTheme {
     primaryColor: primary,
     primaryColorLight: primary,
     primaryColorDark: primaryDark,
-    primarySwatch: swatch,
     scaffoldBackgroundColor: background,
     toggleableActiveColor: primary,
     cardColor: surface,
@@ -71,22 +70,22 @@ class _DefaultTheme {
         color: error,
       ),
       border: UnderlineInputBorder(
-          borderRadius:
-              BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(_inputRadius), topRight: Radius.circular(_inputRadius)),
           borderSide: BorderSide(
             color: onBackground,
             width: 1.8,
           )),
       enabledBorder: UnderlineInputBorder(
-          borderRadius:
-              BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(_inputRadius), topRight: Radius.circular(_inputRadius)),
           borderSide: BorderSide(
             color: onBackground,
             width: 1.8,
           )),
       errorBorder: UnderlineInputBorder(
-        borderRadius:
-            BorderRadius.only(topLeft: Radius.circular(_radius), topRight: Radius.circular(_radius)),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(_inputRadius), topRight: Radius.circular(_inputRadius)),
         borderSide: BorderSide(
           color: error,
           width: 1.8,
@@ -138,6 +137,24 @@ class _DefaultTheme {
     ),
     highlightColor: onSurface.withOpacity(0.05),
     splashColor: onSurface.withOpacity(0.1),
+    popupMenuTheme: PopupMenuThemeData(
+      elevation: 0.75,
+      color: Color.alphaBlend(surface.withAlpha(155), background),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+    ),
+    radioTheme: RadioThemeData(
+      fillColor: MaterialStateColor.resolveWith(
+        (states) {
+          if (states.contains(MaterialState.selected)) {
+            return Color.alphaBlend(onBackground.withAlpha(90), primary);
+          }
+
+          return onBackground;
+        },
+      ),
+    ),
   );
 
   _DefaultTheme({
@@ -153,19 +170,7 @@ class _DefaultTheme {
     required this.onSecondary,
     required this.onError,
     required this.brightness,
-  })  : swatch = MaterialColor(primary.value, <int, Color>{
-          50: primary,
-          100: primary,
-          200: primary,
-          300: primary,
-          400: primary,
-          500: primary,
-          600: primary,
-          700: primary,
-          800: primary,
-          900: primary,
-        }),
-        textColor = TextStyle(
+  })  : textColor = TextStyle(
           color: onBackground.withOpacity(_textColorOpacitySecondary),
         ),
         textColorTitle = TextStyle(
@@ -175,22 +180,22 @@ class _DefaultTheme {
 
 // Apps theme provider.
 class KeeperThemes {
-  static const Color _primaryLight = Color(0xfff0c84c);
+  static const Color _primaryLight = Color.fromARGB(255, 167, 205, 247);
   static const Color _onPrimaryLight = Color(0xff242424);
 
-  static final Color _secondaryLight = Color(0xff09efc9);
+  static final Color _secondaryLight = Color.fromARGB(255, 254, 156, 226);
   static const Color _onSecondaryLight = Color(0xff242424);
 
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  static const Color _light = Color(0xffe1edfa);
-  static const Color _lighterLight = Color.fromARGB(255, 241, 250, 255);
+  static const Color _light = Color(0xffdce9f5);
+  static const Color _lighterLight = Color(0xffeef6fa);
 
   static const Color _primaryDark = Color(0xffffe082);
   static const Color _onPrimaryDark = Color(0xff242424);
 
-  static const Color _secondaryDark = Color(0xffa5c8e8);
+  static const Color _secondaryDark = Color.fromARGB(255, 36, 223, 248);
   static const Color _onSecondaryDark = Color(0xff242424);
 
   static const Color _errorDark = Colors.redAccent;

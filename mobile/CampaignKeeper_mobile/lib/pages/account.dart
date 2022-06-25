@@ -6,7 +6,7 @@ import 'package:campaign_keeper_mobile/components/list/keeper_list_tile.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
-import 'package:campaign_keeper_mobile/types/types.dart';
+import 'package:campaign_keeper_mobile/types/http_types.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

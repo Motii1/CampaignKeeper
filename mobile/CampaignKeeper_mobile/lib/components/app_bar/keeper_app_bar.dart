@@ -78,7 +78,7 @@ class KeeperAppBar extends StatelessWidget {
                                 child: Text(
                                   title,
                                   style: TextStyle(
-                                    color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                                    color: Theme.of(context).colorScheme.onBackground,
                                     fontSize: 23 + (increasePercent * 6),
                                     fontWeight: FontWeight.w500,
                                   ),

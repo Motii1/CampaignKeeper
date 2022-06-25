@@ -5,6 +5,8 @@ import 'package:campaign_keeper_mobile/search_controllers/base_search_controller
 import 'package:flutter/material.dart';
 
 class CampaignSearchController extends BaseSearchController<CampaignEntity> {
+  CampaignSearchController({String heroTag = 'search'}) : super(heroTag: heroTag);
+
   @override
   List filterEntities(String input) {
     List list = DataCarrier()
@@ -16,7 +18,7 @@ class CampaignSearchController extends BaseSearchController<CampaignEntity> {
   }
 
   @override
-  Widget createWidget(Object entity) {
+  Widget createWidget(BuildContext context, Object entity) {
     return KeeperCampaignTile(entity: entity as CampaignEntity);
   }
 }

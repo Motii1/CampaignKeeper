@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:campaign_keeper_mobile/types/types.dart';
+import 'package:campaign_keeper_mobile/types/http_types.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
@@ -31,13 +31,29 @@ class RequestHelper extends ChangeNotifier {
   }
 
   // Returns pair of a respond status and a string json
-  Future<Response> get({required String endpoint, bool isAutoLogin = true, bool isSilent = false}) async {
+  Future<Response> get(
+      {required String endpoint,
+      List<RequestParameter>? params,
+      bool isAutoLogin = true,
+      bool isSilent = false}) async {
+    var buffer = StringBuffer();
+
+    buffer.write(endpoint);
+
+    if (params != null) {
+      params.forEach((element) {
+        buffer.write(element.parameter);
+      });
+    }
+
+    String address = buffer.toString();
+
     Map<String, String> headers = {"Cookie": isCookieValid() ? _cookie.toString() : ""};
     var response;
     try {
       response = await DependenciesHelper()
           .client
-          .get(Uri.parse("${AppPrefs().url}$endpoint"), headers: headers)
+          .get(Uri.parse("${AppPrefs().url}$address"), headers: headers)
           .timeout(Duration(seconds: AppPrefs().timeout));
     } on TimeoutException catch (_) {
       if (!isSilent) {
@@ -45,7 +61,20 @@ class RequestHelper extends ChangeNotifier {
       }
 
       return Response(ResponseStatus.TimeOut, null, null);
+    } on SocketException catch (_) {
+      if (!isSilent) {
+        _changeStatus(false);
+      }
+
+      return Response(ResponseStatus.Error, null, null);
     } on Exception catch (_) {
+      if (!isSilent) {
+        _changeStatus(false);
+      }
+
+      return Response(ResponseStatus.Error, null, null);
+    } catch (e) {
+      print(e);
       if (!isSilent) {
         _changeStatus(false);
       }
@@ -70,7 +99,7 @@ class RequestHelper extends ChangeNotifier {
         if (isAutoLogin && !isCookieValid()) {
           ResponseStatus loginResponse = await LoginHelper().autoLogin();
           if (loginResponse == ResponseStatus.Success) {
-            return await get(endpoint: endpoint, isAutoLogin: false);
+            return await get(endpoint: endpoint, params: params, isAutoLogin: false);
           }
         }
 
@@ -92,7 +121,13 @@ class RequestHelper extends ChangeNotifier {
     } on TimeoutException catch (_) {
       _changeStatus(false);
       return Response(ResponseStatus.TimeOut, null, null);
+    } on SocketException catch (_) {
+      _changeStatus(false);
+      return Response(ResponseStatus.Error, null, null);
     } on Exception catch (_) {
+      _changeStatus(false);
+      return Response(ResponseStatus.Error, null, null);
+    } catch (_) {
       _changeStatus(false);
       return Response(ResponseStatus.Error, null, null);
     }
@@ -140,7 +175,7 @@ class RequestHelper extends ChangeNotifier {
       streamResponse = await request.send().timeout(Duration(seconds: AppPrefs().timeout));
     } on TimeoutException catch (_) {
       return Response(ResponseStatus.TimeOut, null, null);
-    } on Exception catch (_) {
+    } catch (_) {
       return Response(ResponseStatus.Error, null, null);
     }
 

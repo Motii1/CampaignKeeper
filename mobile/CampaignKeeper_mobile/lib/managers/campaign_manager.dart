@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
-import 'package:campaign_keeper_mobile/types/types.dart';
+import 'package:campaign_keeper_mobile/types/http_types.dart';
 
 class CampaignManager extends BaseManager<CampaignEntity> {
   static const String _key = "Campaign";
@@ -13,22 +14,13 @@ class CampaignManager extends BaseManager<CampaignEntity> {
 
   @override
   void attach(CampaignEntity entity) {
-    if (_entities.any((element) => element.id == entity.id)) {
-      throw Exception("Attach campaign entity failed due to duplicate");
-    }
-
     _entities.add(entity);
-
     _cacheAll();
   }
 
   @override
   CampaignEntity? get({int groupId = -1, int entId = -1}) {
-    if (_entities.any((element) => element.id == entId)) {
-      return _entities.firstWhere((element) => element.id == entId);
-    } else {
-      return null;
-    }
+    return _entities.firstWhereOrNull((element) => element.id == entId);
   }
 
   @override
@@ -40,39 +32,24 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   Future<bool> refresh({int groupId = -1, bool online = true}) async {
     if (_entities.isEmpty) {
       String? cache = await CacheUtil().get(_key);
-      if (cache != null) {
+      if (cache != null && cache.isNotEmpty) {
         List cacheData = json.decode(cache);
-        cacheData.forEach((data) {
-          _entities.add(_decodeEntity(data));
-        });
 
+        _entities = cacheData.map((e) => _decodeEntity(e)).toList();
         notifyListeners();
       }
     }
 
     if (online) {
-      List<CampaignEntity> newEntities = [];
       Response userResponse = await RequestHelper().get(endpoint: CampaignEntity.endpoint);
 
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
-        newEntities.clear();
-        responseData['campaigns'].forEach((data) {
-          newEntities.add(_decodeEntity(data));
-        });
+        List<CampaignEntity> newEntities =
+            (responseData['campaigns'] as List).map((e) => _decodeEntity(e)).toList();
 
-        if (newEntities.length == _entities.length) {
-          bool isEqual = true;
-          for (int i = 0; i < newEntities.length; i++) {
-            if (!newEntities[i].equals(_entities[i])) {
-              isEqual = false;
-              i = newEntities.length;
-            }
-          }
-
-          if (isEqual) {
-            return false;
-          }
+        if (_isEqual(newEntities)) {
+          return false;
         }
 
         _entities = newEntities;
@@ -90,11 +67,22 @@ class CampaignManager extends BaseManager<CampaignEntity> {
     _entities.clear();
   }
 
+  bool _isEqual(List<CampaignEntity> newEntities) {
+    if (newEntities.length != _entities.length) {
+      return false;
+    }
+
+    for (int i = 0; i < newEntities.length; i++) {
+      if (!newEntities[i].equals(_entities[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   void _cacheAll() {
-    var data = [];
-    _entities.forEach((ent) {
-      data.add(_encodeEntity(ent));
-    });
+    var data = _entities.map((e) => _encodeEntity(e)).toList();
 
     CacheUtil().add(_key, json.encode(data));
   }
