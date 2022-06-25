@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class SessionSearchController extends BaseSearchController<SessionEntity> {
   int campaignId;
 
-  SessionSearchController({required this.campaignId});
+  SessionSearchController({required this.campaignId, String heroTag = 'search'}) : super(heroTag: heroTag);
 
   @override
   List filterEntities(String input) {
@@ -20,7 +20,7 @@ class SessionSearchController extends BaseSearchController<SessionEntity> {
   }
 
   @override
-  Widget createWidget(Object entity) {
+  Widget createWidget(BuildContext context, Object entity) {
     return KeeperSessionTile(entity: entity as SessionEntity);
   }
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:campaign_keeper_mobile/types/types.dart';
+import 'package:campaign_keeper_mobile/types/http_types.dart';
 
 // Helper that handles login and logout functionality.
 class LoginHelper {

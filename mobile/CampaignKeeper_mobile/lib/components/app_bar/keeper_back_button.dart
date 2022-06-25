@@ -18,7 +18,7 @@ class KeeperBackButton extends StatelessWidget {
       icon: Icon(
         Icons.arrow_back,
         size: 23.5,
-        color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.65),
       ),
     );
   }

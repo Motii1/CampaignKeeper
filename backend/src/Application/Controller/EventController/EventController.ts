@@ -84,7 +84,7 @@ export class EventController implements IController {
   };
 
   /**
-   * @route GET /graph/{sessionId}
+   * @route GET /event/graph/{sessionId}
    * @group event - Operations related to event data
    * @returns {GetEventListDto.model} 200 - Success
    * @returns {EmptyResponse.model} 400 - Wrong data format
@@ -251,6 +251,7 @@ export class EventController implements IController {
     type: event.type,
     childrenIds: event.children!.map(({ id }) => id),
     parentIds: event.parents!.map(({ id }) => id),
+    displayStatus: event.displayStatus,
   });
 
   private parseTextFieldMetadata = (item: TextFieldMetadata): TextFieldMetadataDto => ({

@@ -9,6 +9,7 @@ export type Event = {
   sessionId?: number;
   children?: Event[];
   parents?: Event[];
+  displayStatus: EventDisplayStatus;
 };
 
 export type TextFieldMetadata = {
@@ -33,4 +34,10 @@ export enum EventStatus {
   Done = 'done',
   Omitted = 'omitted',
   None = 'none',
+}
+
+export enum EventDisplayStatus {
+  Shown = 'shown',
+  Hidden = 'hidden',
+  Collapsed = 'collapsed',
 }

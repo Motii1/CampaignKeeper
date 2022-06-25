@@ -5,7 +5,7 @@ WORKDIR /app
 FROM base as front
 
 COPY frontend/ ./
-RUN npm ci
+RUN npm i
 RUN npm run build
 
 FROM base as back

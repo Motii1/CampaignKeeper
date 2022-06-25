@@ -18,6 +18,25 @@ class Response {
   Response(this.status, this.data, this.dataBytes);
 }
 
+// Wrapper for a http request parameter
+class RequestParameter {
+  String name;
+  Object value;
+
+  RequestParameter({required this.name, required this.value});
+
+  String get parameter {
+    var buffer = new StringBuffer();
+
+    buffer.write("?");
+    buffer.write(name);
+    buffer.write("=");
+    buffer.write(value);
+
+    return buffer.toString();
+  }
+}
+
 // Enumerator for a file media type in a http
 // request. Currently only image uploading
 // is supported.

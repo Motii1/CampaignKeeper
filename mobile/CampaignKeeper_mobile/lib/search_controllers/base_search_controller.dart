@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class BaseSearchController<T> {
+  final String heroTag;
+
+  BaseSearchController({required this.heroTag});
+
   Type getEntityType() {
     return T;
   }
@@ -9,7 +13,7 @@ class BaseSearchController<T> {
     throw UnimplementedError();
   }
 
-  Widget createWidget(Object entity) {
+  Widget createWidget(BuildContext context, Object entity) {
     throw UnimplementedError();
   }
 }

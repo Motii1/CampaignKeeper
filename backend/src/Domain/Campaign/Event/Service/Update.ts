@@ -22,6 +22,10 @@ export const updateEvent = async (
       toUpdate.parents = parents;
     }
 
+    if (dto.displayStatus) {
+      toUpdate.displayStatus = dto.displayStatus;
+    }
+
     if (dto.type) {
       toUpdate.type = dto.type;
     }

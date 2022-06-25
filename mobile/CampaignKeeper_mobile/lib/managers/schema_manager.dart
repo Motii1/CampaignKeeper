@@ -1,27 +1,25 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
-import 'package:collection/collection.dart';
-import 'package:campaign_keeper_mobile/entities/session_ent.dart';
-import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
+import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
+import 'package:campaign_keeper_mobile/managers/base_manager.dart';
+import 'package:campaign_keeper_mobile/services/cache_util.dart';
 
-class SessionManager extends BaseManager<SessionEntity> {
-  static const String _key = "Session";
-  Map<int, List<SessionEntity>> _map = {};
-
-  SessionManager();
+class SchemaManager extends BaseManager<SchemaEntity> {
+  static const String _key = "Schema";
+  Map<int, List<SchemaEntity>> _map = {};
 
   @override
-  void attach(SessionEntity entity) {
+  void attach(SchemaEntity entity) {
     _attach(entity);
     _cacheAll();
   }
 
   @override
-  SessionEntity? get({int groupId = -1, int entId = -1}) {
+  SchemaEntity? get({int groupId = -1, int entId = -1}) {
     for (var list in _map.values) {
       var res = list.firstWhereOrNull((ent) => ent.id == entId);
 
@@ -34,7 +32,7 @@ class SessionManager extends BaseManager<SessionEntity> {
   }
 
   @override
-  List<SessionEntity> getList({int groupId = -1}) {
+  List<SchemaEntity> getList({int groupId = -1}) {
     var list = _map[groupId];
 
     return list ?? [];
@@ -56,12 +54,12 @@ class SessionManager extends BaseManager<SessionEntity> {
 
     if (online && groupId > -1) {
       Response userResponse = await RequestHelper().get(
-          endpoint: SessionEntity.endpoint, params: [RequestParameter(name: "campaignId", value: groupId)]);
+          endpoint: SchemaEntity.endpoint, params: [RequestParameter(name: "campaignId", value: groupId)]);
 
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
-        List<SessionEntity> newEntities =
-            (responseData['sessions'] as List).map((e) => _decodeEntity(e)).toList();
+        List<SchemaEntity> newEntities =
+            (responseData['schemas'] as List).map((e) => _decodeEntity(e)).toList();
 
         if (_isEqual(groupId, newEntities)) {
           return false;
@@ -90,7 +88,7 @@ class SessionManager extends BaseManager<SessionEntity> {
     _cacheAll();
   }
 
-  void _attach(SessionEntity entity) {
+  void _attach(SchemaEntity entity) {
     int campaignId = entity.campaignId;
     if (_map[campaignId] == null) {
       _map[campaignId] = [];
@@ -99,7 +97,7 @@ class SessionManager extends BaseManager<SessionEntity> {
     _map[campaignId]!.add(entity);
   }
 
-  bool _isEqual(int groupId, List<SessionEntity> newEntities) {
+  bool _isEqual(int groupId, List<SchemaEntity> newEntities) {
     if (newEntities.length != _map[groupId]?.length) {
       return false;
     }
@@ -111,22 +109,6 @@ class SessionManager extends BaseManager<SessionEntity> {
     }
 
     return true;
-  }
-
-  void _checkIntegrity() {
-    if (_map.isNotEmpty) {
-      var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
-
-      if (campaigns.isNotEmpty) {
-        var keys = List.from(_map.keys);
-
-        keys.forEach((key) {
-          if (!campaigns.contains(key)) {
-            _map.remove(key);
-          }
-        });
-      }
-    }
   }
 
   void _cacheAll() {
@@ -144,21 +126,21 @@ class SessionManager extends BaseManager<SessionEntity> {
     CacheUtil().add(_key, json.encode(data));
   }
 
-  SessionEntity _decodeEntity(Map data) {
+  SchemaEntity _decodeEntity(Map data) {
     int id = data['id'];
     int campaignId = data['campaignId'];
-    String name = data['name'];
-    DateTime createdAt = DateTime.parse(data['createdAt']);
+    String title = data['title'];
+    List<String> fields = (data['fields'] as List<dynamic>).map((e) => e as String).toList();
 
-    return SessionEntity(id: id, campaignId: campaignId, name: name, createdAt: createdAt);
+    return SchemaEntity(id: id, campaignId: campaignId, title: title, fields: fields);
   }
 
-  Map _encodeEntity(SessionEntity entity) {
+  Map _encodeEntity(SchemaEntity entity) {
     Map data = {
       "id": entity.id,
       "campaignId": entity.campaignId,
-      "name": entity.name,
-      "createdAt": entity.createdAt.toString(),
+      "title": entity.title,
+      "fields": entity.fields,
     };
 
     return data;

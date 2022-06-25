@@ -14,15 +14,15 @@ import 'package:graphview/GraphView.dart';
 // Allows to show details of a particular event or
 // use a FAB to show the first, root one.
 class SessionMap extends StatefulWidget {
-  const SessionMap({Key? key, required this.sessionID}) : super(key: key);
-  final int sessionID;
+  const SessionMap({Key? key, required this.sessionId}) : super(key: key);
+  final int sessionId;
 
   @override
   State<SessionMap> createState() => _SessionMapState();
 }
 
 class _SessionMapState extends KeeperState<SessionMap> {
-  late SessionEntity? session = DataCarrier().get(entId: widget.sessionID);
+  late SessionEntity? session = DataCarrier().get(entId: widget.sessionId);
   var eventFacade = FakeEventFacade();
 
   Future<void> onRefresh() async {
@@ -31,7 +31,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
   }
 
   Future<void> onSessionRefresh() async {
-    SessionEntity? entity = DataCarrier().get(entId: widget.sessionID);
+    SessionEntity? entity = DataCarrier().get(entId: widget.sessionId);
     if (entity == null) {
       returnTo('/start');
     } else {
@@ -44,11 +44,6 @@ class _SessionMapState extends KeeperState<SessionMap> {
   @override
   void onEveryResume() {
     DataCarrier().refresh<SessionEntity>(groupId: session?.campaignId ?? -1);
-  }
-
-  @override
-  void onReturn() {
-    onSessionRefresh();
   }
 
   @override

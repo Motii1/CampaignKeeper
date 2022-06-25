@@ -3,7 +3,7 @@ import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
-import 'package:campaign_keeper_mobile/types/types.dart';
+import 'package:campaign_keeper_mobile/types/http_types.dart';
 
 class UserDataManager extends BaseManager<UserDataEntity> {
   static const String _key = "UserData";
@@ -45,24 +45,17 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
   @override
   List<UserDataEntity> getList({int groupId = -1}) {
-    List<UserDataEntity> entities = [];
-
-    if (_entity != null) {
-      entities.add(_entity!);
-    }
-
-    return entities;
+    return _entity == null ? [] : [_entity!];
   }
 
   @override
   Future<bool> refresh({int groupId = -1, bool online = true}) async {
-    UserDataEntity? newEntity;
-
     if (_entity == null) {
       String? cache = await CacheUtil().getSecure(_key);
 
       if (cache != null) {
-        newEntity = _decodeEntity(json.decode(cache));
+        _entity = _decodeEntity(json.decode(cache));
+        notifyListeners();
       }
     }
 
@@ -73,24 +66,24 @@ class UserDataManager extends BaseManager<UserDataEntity> {
         Map responseData = json.decode(userResponse.data!);
 
         if (_entity == null) {
-          newEntity = new UserDataEntity(
-              username: responseData["username"],
-              email: responseData["email"],
-              imageData: responseData["image"]);
+          throw Exception("It's impossible to get successful response without user data.");
         } else {
-          if (_entity!.username != responseData["username"]) {
-            _entity!.username = responseData["username"];
-            newEntity = _entity!;
-          }
+          var newEntity = UserDataEntity(
+            username: responseData["username"],
+            email: responseData["email"],
+            imageData: responseData["image"],
+            password: _entity!.password,
+          );
 
-          if (_entity!.email != responseData["email"]) {
-            _entity!.email = responseData["email"];
-            newEntity = _entity!;
-          }
+          if (!_entity!.equals(newEntity)) {
+            _entity = newEntity;
 
-          if (_entity!.imageData != responseData["image"]) {
-            _entity!.imageData = responseData["image"];
-            newEntity = _entity!;
+            notifyListeners();
+
+            Map data = _encodeEntity(_entity!);
+            CacheUtil().addSecure(_key, json.encode(data));
+
+            return true;
           }
         }
       } else if (userResponse.status == ResponseStatus.IncorrectData) {
@@ -103,30 +96,20 @@ class UserDataManager extends BaseManager<UserDataEntity> {
       }
     }
 
-    if (newEntity != null) {
-      _entity = newEntity;
-
-      notifyListeners();
-
-      Map data = _encodeEntity(_entity!);
-      CacheUtil().addSecure(_key, json.encode(data));
-
-      return true;
-    }
-
     return false;
   }
 
   @override
   void clear() {
     _entity = null;
+    CacheUtil().deleteSecure();
   }
 
   UserDataEntity? _decodeEntity(Map data) {
     String? username = data["username"];
     String? email = data["email"];
     String? password = data["password"];
-    String? imageData = data["imageData"];
+    String? imageData = data["image"];
 
     if (username != null && email != null) {
       UserDataEntity ent =
@@ -143,7 +126,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
       "username": ent.username,
       "email": ent.email,
       "password": ent.password,
-      "imageData": ent.imageData,
+      "image": ent.imageData,
     };
 
     return data;
