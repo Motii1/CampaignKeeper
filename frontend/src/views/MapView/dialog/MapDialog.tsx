@@ -64,6 +64,8 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
   );
 
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log(props.dialogType === NavBarViewDialog.NewEvent);
     if (props.dialogType === NavBarViewDialog.NewEvent) {
       setDialogTitle('Create new event');
       setEventTitle('');
@@ -72,16 +74,14 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
       setType(possibleType[0]);
       setStatus(possibleStatus[0]);
       setReferenceFields(createEmptyEventFields(referenceFieldNames));
-    } else {
-      if (currentEvent) {
-        setDialogTitle('Edit event');
-        setEventTitle(currentEvent.title);
-        setEventTitleHelperText('');
-        setParentIds(currentEvent.parentIds);
-        setType(currentEvent.type.charAt(0).toUpperCase() + currentEvent.type.slice(1));
-        setStatus(currentEvent.status.charAt(0).toUpperCase() + currentEvent.status.slice(1));
-        setReferenceFields(createFilledEventFields(referenceFieldNames, currentEvent, entries));
-      }
+    } else if (currentEvent) {
+      setDialogTitle('Edit event');
+      setEventTitle(currentEvent.title);
+      setEventTitleHelperText('');
+      setParentIds(currentEvent.parentIds);
+      setType(currentEvent.type.charAt(0).toUpperCase() + currentEvent.type.slice(1));
+      setStatus(currentEvent.status.charAt(0).toUpperCase() + currentEvent.status.slice(1));
+      setReferenceFields(createFilledEventFields(referenceFieldNames, currentEvent, entries));
     }
   }, [currentEvent, entries, possibleStatus, possibleType, props, referenceFieldNames]);
 
@@ -155,7 +155,10 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
     props.setIsOpen(false);
     resetDialog();
   };
-  const handleDelete = () => {};
+
+  const handleDelete = () => {
+    props.setIsSecondaryOpen(true);
+  };
 
   const renderParents = () =>
     parentIds.length > 0 ? (

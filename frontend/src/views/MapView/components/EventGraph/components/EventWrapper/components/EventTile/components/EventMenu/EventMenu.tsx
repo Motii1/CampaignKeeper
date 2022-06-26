@@ -20,7 +20,7 @@ export const EventMenu: React.FC<EventMenuProps> = props => {
 
   const handleEditIcon = () => {
     dispatch(setCurrentEvent({ currentEvent: props.event }));
-    props.setDialogType(NavBarViewDialog.EditEntry);
+    props.setDialogType(NavBarViewDialog.EditEvent);
     props.setIsOpen(true);
   };
 
