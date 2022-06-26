@@ -190,8 +190,6 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
   };
 
   const handleOk = () => {
-    // eslint-disable-next-line no-console
-    console.log(eventType, eventStatus);
     if (eventTitleHelperText === '')
       if (props.dialogType === NavBarViewDialog.NewEvent)
         runQueryNew({

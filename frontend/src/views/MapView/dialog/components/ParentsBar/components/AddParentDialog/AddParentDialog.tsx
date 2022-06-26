@@ -15,7 +15,7 @@ type AddParentDialogProps = {
 export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
   const { eventsList } = useSelector((state: RootState) => state.events);
 
-  const [selectedParent, setSelectedParent] = useState<null | string>(null);
+  const [selectedParent, setSelectedParent] = useState<string | undefined>(undefined);
 
   const onOk = () => {
     if (selectedParent) {
@@ -26,7 +26,7 @@ export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
   };
 
   const onCancel = () => {
-    setSelectedParent(null);
+    setSelectedParent(undefined);
     props.setIsOpen(false);
   };
 
@@ -34,12 +34,13 @@ export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
     setSelectedParent(event.target.value);
   };
 
-  const renderValue = (value: string) =>
-    value === 'root'
-      ? 'Start'
-      : value !== ''
-      ? eventsList.find(event => event.id === value)?.title
-      : 'Choose parent';
+  const renderValue = (value: string) => {
+    const newValue =
+      value !== '' ? eventsList.find(event => event.id === value)?.title : 'Choose parent';
+    // eslint-disable-next-line no-console
+    console.log(`->${value}<-`);
+    return newValue;
+  };
 
   const renderItems = () => {
     const possibleParents = eventsList
@@ -64,6 +65,7 @@ export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
       <CustomSelect
         labelId={'event-parent-select'}
         handleChange={handleChange}
+        value={selectedParent}
         renderValue={renderValue}
       >
         {renderItems()}
