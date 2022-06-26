@@ -42,7 +42,7 @@ export const EntryField: React.FC<EntryFieldProps> = props => {
         width: '100%',
       }}
     >
-      <Typography variant="h5" sx={{ color: 'customPalette.onSurface' }}>
+      <Typography variant="h5" sx={{ color: 'customPalette.onSurface', fontWeight: 'medium' }}>
         {props.fieldName}
       </Typography>
       <Box sx={{ display: 'inline' }}>{renderValue()}</Box>
