@@ -26,12 +26,13 @@ export const MapView: React.FC = () => {
     dispatch(fetchEvents(sessionIdForFetching));
   }
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewEvent);
+  const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
 
   const handleFab = () => {
-    setDialogType(NavBarViewDialog.NewEntry);
     setIsOpen(true);
+    setDialogType(NavBarViewDialog.NewEntry);
   };
 
   return (
@@ -40,6 +41,8 @@ export const MapView: React.FC = () => {
       setIsPrimaryOpen={setIsOpen}
       primaryDialogType={dialogType}
       setPrimaryDialogType={setDialogType}
+      isSecondaryOpen={isSecondaryOpen}
+      setIsSecondaryOpen={setIsSecondaryOpen}
       handleFab={handleFab}
     >
       <EventGraph setIsOpen={setIsOpen} setDialogType={setDialogType} />

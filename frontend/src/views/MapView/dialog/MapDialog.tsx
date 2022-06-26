@@ -81,7 +81,7 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
         setType(currentEvent.type.charAt(0).toUpperCase() + currentEvent.type.slice(1));
         setStatus(currentEvent.status.charAt(0).toUpperCase() + currentEvent.status.slice(1));
         setReferenceFields(createFilledEventFields(referenceFieldNames, currentEvent, entries));
-      } else props.setIsOpen(false);
+      }
     }
   }, [currentEvent, entries, possibleStatus, possibleType, props, referenceFieldNames]);
 
