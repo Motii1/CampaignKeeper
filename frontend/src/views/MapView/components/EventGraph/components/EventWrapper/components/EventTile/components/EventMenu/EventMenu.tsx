@@ -1,4 +1,3 @@
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { Stack, Typography } from '@mui/material';
@@ -6,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { NavBarViewDialog } from '../../../../../../../../../../types/types';
 import { SessionEventWithPos } from '../../../../../../../../eventsSlice';
 import { setCurrentEvent } from '../../../../../../../../mapViewSlice';
+import { StatusIcon } from './components/StatusIcon/StatusIcon';
 
 type EventMenuProps = {
   title: string;
@@ -56,10 +56,7 @@ export const EventMenu: React.FC<EventMenuProps> = props => {
         fontSize="small"
         sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
       />
-      <CheckBoxOutlinedIcon
-        fontSize="small"
-        sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-      />
+      <StatusIcon event={props.event} />
     </Stack>
   );
 };

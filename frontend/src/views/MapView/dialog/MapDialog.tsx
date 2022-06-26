@@ -20,7 +20,7 @@ import { MapFieldList } from './components/MapFieldList/MapFieldList';
 import { Parent } from './components/Parent/Parent';
 import { ParentsBar } from './components/ParentsBar/ParentsBar';
 
-type EditEventData = {
+export type EditEventData = {
   title: string;
   type: string;
   status: string;
@@ -179,6 +179,7 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
     setEventTitle(event.target.value);
     setEventTitleHelperText('');
   };
+
   const handleEventTitleLeave = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newTitle = event.target.value;
     setEventTitle(newTitle);
