@@ -14,6 +14,7 @@ export interface SessionEvent {
   sessionId: string;
   type: string;
   status: string;
+  displayStatus: string;
   placeMetadataArray: EventFieldMetadata[];
   descriptionMetadataArray: EventFieldMetadata[];
   charactersMetadataArray: EventFieldMetadata[];

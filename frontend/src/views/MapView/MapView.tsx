@@ -31,8 +31,8 @@ export const MapView: React.FC = () => {
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
 
   const handleFab = () => {
+    setDialogType(NavBarViewDialog.NewEvent);
     setIsOpen(true);
-    setDialogType(NavBarViewDialog.NewEntry);
   };
 
   return (
