@@ -12,13 +12,13 @@ type EventWrapperProps = {
 
 // TO-DO: EventTiles should be shown ABOVE EventArrows
 export const EventWrapper: React.FC<EventWrapperProps> = props => {
-  const numberOfArrows = props.event.parentIds.length;
-  const a1 =
-    numberOfArrows % 2 === 0 ? 0.5 * numberOfArrows * -10 : 0.5 * numberOfArrows * -20 + 10;
-  const arrowsEndOffsets = [a1];
-  for (let i = 1; i < numberOfArrows; i++) arrowsEndOffsets.push(a1 + i * 20);
-
   const renderArrows = () => {
+    const numberOfArrows = props.event.parentIds.length;
+    const a1 =
+      numberOfArrows % 2 === 0 ? 0.5 * numberOfArrows * -10 : 0.5 * numberOfArrows * -20 + 10;
+    const arrowsEndOffsets = [a1];
+    for (let i = 1; i < numberOfArrows; i++) arrowsEndOffsets.push(a1 + i * 20);
+
     if (props.event.parentIds.length === 0)
       return (
         <EventArrow
@@ -48,7 +48,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
     });
   };
 
-  return (
+  return props.event.displayStatus === 'shown' || props.event.displayStatus === 'collapsed' ? (
     <Box>
       <EventTile
         id={`event-${props.event.id}`}
@@ -58,5 +58,5 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
       />
       {renderArrows()}
     </Box>
-  );
+  ) : null;
 };

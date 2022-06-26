@@ -1,6 +1,5 @@
-import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
-import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import requestMethods from '../../../../../../../../../../../../axios/requestMethods';
@@ -8,19 +7,18 @@ import { useQuery } from '../../../../../../../../../../../../axios/useQuery';
 import { EditEventData } from '../../../../../../../../../../dialog/MapDialog';
 import { editEvent, SessionEventWithPos } from '../../../../../../../../../../eventsSlice';
 
-type StatusIconProps = {
+type DisplayStatusIconProps = {
   event: SessionEventWithPos;
 };
 
-export const StatusIcon: React.FC<StatusIconProps> = props => {
+export const DisplayStatusIcon: React.FC<DisplayStatusIconProps> = props => {
   const dispatch = useDispatch();
 
-  const [eventStatus, setEventStatus] = useState(props.event.status);
+  const [displayStatus, setDisplayStatus] = useState(props.event.displayStatus);
 
   const setNewStatus = () => {
-    if (eventStatus === 'none') setEventStatus('done');
-    else if (eventStatus === 'done') setEventStatus('omitted');
-    else setEventStatus('none');
+    if (displayStatus === 'shown') setDisplayStatus('collapsed');
+    else setDisplayStatus('shown');
   };
 
   const {
@@ -35,12 +33,12 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
       if (statusStatus === 200)
         dispatch(
           editEvent({
-            updatedEvent: { ...props.event, status: eventStatus },
+            updatedEvent: { ...props.event, displayStatus: displayStatus },
           })
         );
       resetQueryStatus();
     }
-  }, [dispatch, eventStatus, isLoadingStatus, props.event, resetQueryStatus, statusStatus]);
+  }, [dispatch, displayStatus, isLoadingStatus, props.event, resetQueryStatus, statusStatus]);
 
   useEffect(() => {
     handleRunQueryStatus();
@@ -51,8 +49,8 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
     runQueryStatus({
       title: props.event.title,
       type: props.event.type,
-      status: eventStatus,
-      displayStatus: props.event.displayStatus,
+      status: props.event.status,
+      displayStatus: displayStatus,
       placeMetadataArray: props.event.placeMetadataArray,
       descriptionMetadataArray: props.event.descriptionMetadataArray,
       charactersMetadataArray: props.event.charactersMetadataArray,
@@ -60,28 +58,20 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
     });
   };
 
-  if (eventStatus === 'none')
+  if (displayStatus === 'shown')
     return (
-      <CheckBoxOutlineBlankOutlinedIcon
+      <VisibilityOutlinedIcon
         fontSize="small"
         onClick={handleClick}
         sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
       />
     );
-  if (eventStatus === 'done')
-    return (
-      <CheckBoxOutlinedIcon
-        fontSize="small"
-        onClick={handleClick}
-        sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-      />
-    );
-  else
-    return (
-      <IndeterminateCheckBoxOutlinedIcon
-        fontSize="small"
-        onClick={handleClick}
-        sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-      />
-    );
+
+  return (
+    <VisibilityOffOutlinedIcon
+      fontSize="small"
+      onClick={handleClick}
+      sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
+    />
+  );
 };

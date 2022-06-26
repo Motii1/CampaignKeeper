@@ -1,10 +1,10 @@
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { Stack, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { NavBarViewDialog } from '../../../../../../../../../../types/types';
 import { SessionEventWithPos } from '../../../../../../../../eventsSlice';
 import { setCurrentEvent } from '../../../../../../../../mapViewSlice';
+import { DisplayStatusIcon } from './components/DisplayStatusIcon/DisplayStatusIcon';
 import { StatusIcon } from './components/StatusIcon/StatusIcon';
 
 type EventMenuProps = {
@@ -52,10 +52,7 @@ export const EventMenu: React.FC<EventMenuProps> = props => {
         fontSize="small"
         sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
       />
-      <VisibilityOutlinedIcon
-        fontSize="small"
-        sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-      />
+      <DisplayStatusIcon event={props.event} />
       <StatusIcon event={props.event} />
     </Stack>
   );

@@ -18,7 +18,7 @@ export const EventTile: React.FC<EventTileProps> = props => (
       backgroundColor: 'customPalette.accent',
       borderRadius: 2,
       width: '400px',
-      minHeight: '200px',
+      minHeight: props.event.displayStatus === 'shown' ? '200px' : '30px',
       '& .MuiBox-root': {
         '& .css-0': {
           zIndex: '5',
@@ -43,11 +43,13 @@ export const EventTile: React.FC<EventTileProps> = props => (
         setIsOpen={props.setIsOpen}
         setDialogType={props.setDialogType}
       />
-      <EventDetails
-        place={props.event.placeMetadataArray}
-        characters={props.event.charactersMetadataArray}
-        description={props.event.descriptionMetadataArray}
-      />
+      {props.event.displayStatus === 'shown' ? (
+        <EventDetails
+          place={props.event.placeMetadataArray}
+          characters={props.event.charactersMetadataArray}
+          description={props.event.descriptionMetadataArray}
+        />
+      ) : null}
     </Stack>
   </Paper>
 );
