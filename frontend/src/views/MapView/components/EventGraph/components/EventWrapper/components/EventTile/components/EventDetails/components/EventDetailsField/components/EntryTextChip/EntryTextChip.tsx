@@ -10,8 +10,8 @@ export const EntryTextChip: React.FC<EntryTextChipProps> = props => (
     variant="subtitle2"
     sx={{
       fontWeight: 'bold',
-      color: 'customPalette.onSecondary',
-      backgroundColor: 'customPalette.secondary',
+      color: 'customPalette.background',
+      backgroundColor: 'customPalette.onBackground',
       paddingLeft: '6px',
       paddingRight: '6px',
       marginLeft: '2px',

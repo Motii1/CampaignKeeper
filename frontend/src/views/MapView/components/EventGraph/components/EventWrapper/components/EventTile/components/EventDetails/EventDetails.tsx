@@ -1,7 +1,6 @@
 import { Paper, Stack } from '@mui/material';
 import { EventFieldMetadata } from '../../../../../../../../eventsSlice';
 import { EventDescriptionField } from './components/EventDescriptionField/EventDescriptionField';
-import { EventDetailsDivider } from './components/EventDetailsDivider/EventDetailsDivider';
 import { EventDetailsField } from './components/EventDetailsField/EventDetailsField';
 
 type EventDetailsProps = {
@@ -12,23 +11,17 @@ type EventDetailsProps = {
 
 export const EventDetails: React.FC<EventDetailsProps> = props => (
   <Paper
+    elevation={0}
     sx={{
       backgroundColor: 'customPalette.tertiary',
-      margin: '5px',
-      width: '390px',
+      width: 'calc(100% - 14px)',
+      borderRadius: 1.5,
+      padding: '7px',
     }}
   >
-    <Stack
-      direction="column"
-      justifyContent="center"
-      alignItems="flex-start"
-      spacing={1}
-      sx={{ margin: '4px' }}
-    >
+    <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
       <EventDetailsField title={'Place'} data={props.place} />
-      <EventDetailsDivider />
       <EventDetailsField title={'Characters'} data={props.characters} />
-      <EventDetailsDivider />
       <EventDescriptionField title={'Description'} data={props.description} />
     </Stack>
   </Paper>

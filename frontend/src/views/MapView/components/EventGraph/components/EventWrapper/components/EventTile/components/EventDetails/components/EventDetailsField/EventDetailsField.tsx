@@ -34,7 +34,7 @@ export const EventDetailsField: React.FC<EventDetailsFieldProps> = props => {
 
   return (
     <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0.5}>
-      <Typography variant="subtitle1" sx={{ color: 'customPalette.accent' }}>
+      <Typography sx={{ color: 'customPalette.onBackgroundVariant', fontWeight: 'medium' }}>
         {props.title}
       </Typography>
       <Box sx={{ display: 'inline' }}>{renderEntries()}</Box>

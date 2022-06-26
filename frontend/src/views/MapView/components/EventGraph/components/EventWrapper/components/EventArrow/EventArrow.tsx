@@ -1,4 +1,6 @@
+import { useSelector } from 'react-redux';
 import Xarrow, { anchorType } from 'react-xarrows';
+import { RootState } from '../../../../../../../../store';
 
 type EventArrowProps = {
   start: string;
@@ -6,16 +8,21 @@ type EventArrowProps = {
   endAnchor: anchorType;
 };
 
-export const EventArrow: React.FC<EventArrowProps> = props => (
-  <Xarrow
-    start={props.start}
-    end={props.end}
-    color="#ffffff"
-    headSize={4}
-    path="smooth"
-    curveness={1}
-    startAnchor="bottom"
-    endAnchor={props.endAnchor}
-    zIndex={-1}
-  />
-);
+export const EventArrow: React.FC<EventArrowProps> = props => {
+  const { isLight } = useSelector((state: RootState) => state.theme);
+
+  return (
+    <Xarrow
+      start={props.start}
+      end={props.end}
+      color={isLight ? '#303d50' : '#ffffff'}
+      lineColor={isLight ? '#303d50' : '#ffffff'}
+      headSize={4}
+      path="smooth"
+      curveness={1}
+      startAnchor="bottom"
+      endAnchor={props.endAnchor}
+      zIndex={-1}
+    />
+  );
+};
