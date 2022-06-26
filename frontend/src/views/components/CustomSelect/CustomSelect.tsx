@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 type CustomSelectProps = {
   labelId: string;
-  defaultValue?: string;
+  value?: string;
   handleChange: (event: SelectChangeEvent) => void;
   renderValue: (value: string) => ReactNode;
 };
@@ -13,7 +13,8 @@ export const CustomSelect: React.FC<CustomSelectProps> = props => (
     <Select
       labelId={props.labelId}
       onChange={props.handleChange}
-      defaultValue={props.defaultValue ?? ''}
+      value={props.value ?? ''}
+      defaultValue=""
       size="small"
       variant="outlined"
       displayEmpty

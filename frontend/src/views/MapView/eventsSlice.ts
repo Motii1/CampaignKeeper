@@ -58,6 +58,18 @@ const eventsSlice = createSlice({
       setYPos(newEventList);
       state.eventsList = newEventList;
     },
+    editEvent: (state, action) => {
+      const currentEventsList = state.eventsList.filter(
+        event => event.id !== action.payload.updatedEvent.id
+      );
+      const newEventList = currentEventsList.concat(action.payload.updatedEvent);
+      newEventList.forEach((event: SessionEventWithPos) => {
+        event.x = -1;
+        event.y = -1;
+      });
+      setYPos(newEventList);
+      state.eventsList = newEventList;
+    },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resetState: (state, _action) => {
       state.isEventsListDownloaded = false;
@@ -80,6 +92,6 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { addEvent, resetState } = eventsSlice.actions;
+export const { addEvent, editEvent, resetState } = eventsSlice.actions;
 
 export default eventsSlice.reducer;

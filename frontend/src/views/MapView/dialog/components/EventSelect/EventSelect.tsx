@@ -4,9 +4,9 @@ import { CustomSelect } from '../../../../components/CustomSelect/CustomSelect';
 type EventSelectProps = {
   id: string;
   title: string;
+  value: string;
   setValue: (newValue: string) => void;
   items: string[];
-  defaultValue?: string;
 };
 
 export const EventSelect: React.FC<EventSelectProps> = props => {
@@ -36,9 +36,9 @@ export const EventSelect: React.FC<EventSelectProps> = props => {
       </Typography>
       <CustomSelect
         labelId={props.id}
+        value={props.value}
         handleChange={handleChange}
         renderValue={renderValue}
-        defaultValue={props.defaultValue}
       >
         {renderItems()}
       </CustomSelect>

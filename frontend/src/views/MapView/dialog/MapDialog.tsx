@@ -14,22 +14,22 @@ import {
 } from '../../../utils/utils';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addEvent, SessionEvent } from '../eventsSlice';
+import { addEvent, editEvent, EventFieldMetadata, SessionEvent } from '../eventsSlice';
 import { EventSelect } from './components/EventSelect/EventSelect';
 import { MapFieldList } from './components/MapFieldList/MapFieldList';
 import { Parent } from './components/Parent/Parent';
 import { ParentsBar } from './components/ParentsBar/ParentsBar';
 
-// type NewEventData = {
-//   title: string;
-//   sessionId: string;
-//   type: string;
-//   status: string;
-//   placeMetadataArray: EventFieldMetadata[];
-//   descriptionMetadataArray: EventFieldMetadata[];
-//   charactersMetadataArray: EventFieldMetadata[];
-//   parentIds: string[];
-// };
+type EditEventData = {
+  title: string;
+  type: string;
+  status: string;
+  displayStatus: string;
+  placeMetadataArray: EventFieldMetadata[];
+  descriptionMetadataArray: EventFieldMetadata[];
+  charactersMetadataArray: EventFieldMetadata[];
+  parentIds: string[];
+};
 
 type MapDialogProps = {
   isOpen: boolean;
@@ -57,30 +57,28 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
   const [eventTitle, setEventTitle] = useState<string>('');
   const [eventTitleHelperText, setEventTitleHelperText] = useState<string>('');
   const [parentIds, setParentIds] = useState<string[]>([]);
-  const [type, setType] = useState<string>(possibleType[0]);
-  const [status, setStatus] = useState<string>(possibleStatus[0]);
+  const [eventType, setEventType] = useState<string>(possibleType[0]);
+  const [eventStatus, setEventStatus] = useState<string>(possibleStatus[0]);
   const [referenceFields, setReferenceFields] = useState(
     createEmptyEventFields(referenceFieldNames)
   );
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(props.dialogType === NavBarViewDialog.NewEvent);
     if (props.dialogType === NavBarViewDialog.NewEvent) {
       setDialogTitle('Create new event');
       setEventTitle('');
       setEventTitleHelperText('');
       setParentIds([]);
-      setType(possibleType[0]);
-      setStatus(possibleStatus[0]);
+      setEventType(possibleType[0]);
+      setEventStatus(possibleStatus[0]);
       setReferenceFields(createEmptyEventFields(referenceFieldNames));
     } else if (currentEvent) {
       setDialogTitle('Edit event');
       setEventTitle(currentEvent.title);
       setEventTitleHelperText('');
       setParentIds(currentEvent.parentIds);
-      setType(currentEvent.type.charAt(0).toUpperCase() + currentEvent.type.slice(1));
-      setStatus(currentEvent.status.charAt(0).toUpperCase() + currentEvent.status.slice(1));
+      setEventType(currentEvent.type);
+      setEventStatus(currentEvent.status);
       setReferenceFields(createFilledEventFields(referenceFieldNames, currentEvent, entries));
     }
   }, [currentEvent, entries, possibleStatus, possibleType, props, referenceFieldNames]);
@@ -97,8 +95,8 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
     setEventTitle('');
     setEventTitleHelperText('');
     setParentIds([]);
-    setType(possibleType[0]);
-    setStatus(possibleStatus[0]);
+    setEventType(possibleType[0]);
+    setEventStatus(possibleStatus[0]);
     setReferenceFields(createEmptyEventFields(referenceFieldNames));
   }, [possibleStatus, possibleType, referenceFieldNames]);
 
@@ -119,6 +117,64 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
     handleRunQueryNew();
   }, [handleRunQueryNew]);
 
+  const {
+    isLoading: isLoadingEdit,
+    status: statusEdit,
+    runQuery: runQueryEdit,
+    resetQuery: resetQueryEdit,
+  } = useQuery<EditEventData>(`/api/event/${currentEvent?.id}`, requestMethods.PATCH);
+
+  const handleRunQueryEdit = useCallback(() => {
+    if (!isLoadingEdit && statusEdit) {
+      if (statusEdit === 200) {
+        dispatch(
+          editEvent({
+            updatedEvent: {
+              id: currentEvent?.id,
+              title: eventTitle,
+              sessionId: currentEvent?.sessionId,
+              type: eventType,
+              status: eventStatus,
+              displayStatus: currentEvent?.displayStatus,
+              placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
+              descriptionMetadataArray: convertReferenceFieldToEventMetadata(
+                referenceFields['Description']
+              ),
+              charactersMetadataArray: convertReferenceFieldToEventMetadata(
+                referenceFields['Characters']
+              ),
+              parentIds: parentIds,
+              childrenIds: currentEvent?.childrenIds,
+            },
+          })
+        );
+        props.setSnackbarSuccess('Event edited');
+        props.setIsOpen(false);
+        resetDialog();
+      } else if (statusNew === 400) props.setSnackbarError('Error during editing event');
+
+      resetQueryEdit();
+    }
+  }, [
+    currentEvent,
+    dispatch,
+    eventStatus,
+    eventTitle,
+    eventType,
+    isLoadingEdit,
+    parentIds,
+    props,
+    referenceFields,
+    resetDialog,
+    resetQueryEdit,
+    statusEdit,
+    statusNew,
+  ]);
+
+  useEffect(() => {
+    handleRunQueryEdit();
+  }, [handleRunQueryEdit]);
+
   const handleEventTitleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setEventTitle(event.target.value);
     setEventTitleHelperText('');
@@ -134,21 +190,39 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
   };
 
   const handleOk = () => {
+    // eslint-disable-next-line no-console
+    console.log(eventType, eventStatus);
     if (eventTitleHelperText === '')
-      runQueryNew({
-        title: eventTitle,
-        sessionId: currentSessionId,
-        type: type,
-        status: status,
-        placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
-        descriptionMetadataArray: convertReferenceFieldToEventMetadata(
-          referenceFields['Description']
-        ),
-        charactersMetadataArray: convertReferenceFieldToEventMetadata(
-          referenceFields['Characters']
-        ),
-        parentIds: parentIds,
-      });
+      if (props.dialogType === NavBarViewDialog.NewEvent)
+        runQueryNew({
+          title: eventTitle,
+          sessionId: currentSessionId,
+          type: eventType,
+          status: eventStatus,
+          placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
+          descriptionMetadataArray: convertReferenceFieldToEventMetadata(
+            referenceFields['Description']
+          ),
+          charactersMetadataArray: convertReferenceFieldToEventMetadata(
+            referenceFields['Characters']
+          ),
+          parentIds: parentIds,
+        });
+      else
+        runQueryEdit({
+          title: eventTitle,
+          type: eventType,
+          status: eventStatus,
+          displayStatus: currentEvent?.displayStatus,
+          placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
+          descriptionMetadataArray: convertReferenceFieldToEventMetadata(
+            referenceFields['Description']
+          ),
+          charactersMetadataArray: convertReferenceFieldToEventMetadata(
+            referenceFields['Characters']
+          ),
+          parentIds: parentIds,
+        });
   };
 
   const handleCancel = () => {
@@ -223,16 +297,16 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
           <EventSelect
             title="Type"
             id="event-type-select"
-            setValue={setType}
+            value={eventType}
+            setValue={setEventType}
             items={possibleType}
-            defaultValue={type}
           />
           <EventSelect
             title="Status"
             id="event-status-select"
-            setValue={setStatus}
+            value={eventStatus}
+            setValue={setEventStatus}
             items={possibleStatus}
-            defaultValue={status}
           />
           <MapFieldList
             fieldNames={referenceFieldNames}
