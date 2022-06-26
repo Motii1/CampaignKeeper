@@ -29,6 +29,7 @@ export const lightTheme = createTheme({
           color: '#15191f',
           fontWeight: 'normal',
           fontFamily: ['Roboto', 'cursive'].join(','),
+          textTransform: 'capitalize',
         },
       },
     },
@@ -37,6 +38,16 @@ export const lightTheme = createTheme({
         root: {
           fontFamily: 'Roboto',
           color: '#262E38',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 0.4)',
+          '&:hover': {
+            boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 1)',
+          },
         },
       },
     },
@@ -106,6 +117,7 @@ export const darkTheme = createTheme({
         root: {
           fontWeight: 'normal',
           fontFamily: ['Roboto', 'cursive'].join(','),
+          textTransform: 'capitalize',
         },
       },
     },

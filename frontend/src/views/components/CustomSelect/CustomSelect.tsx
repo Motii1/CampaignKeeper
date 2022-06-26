@@ -24,10 +24,10 @@ export const CustomSelect: React.FC<CustomSelectProps> = props => (
         sx: {
           '& .MuiMenu-paper': {
             backgroundColor: 'customPalette.background',
-            marginTop: '-2px',
+            marginTop: 0.5,
             marginRight: '1px',
-            borderRadius: '0px 0px 5px 5px',
-            boxShadow: 'none',
+            borderRadius: '5px',
+            boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 1)',
           },
         },
       }}
@@ -50,6 +50,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = props => (
         '& .MuiSelect-icon': {
           color: 'customPalette.onBackground',
         },
+        textTransform: 'capitalize',
       }}
     >
       {props.children}
