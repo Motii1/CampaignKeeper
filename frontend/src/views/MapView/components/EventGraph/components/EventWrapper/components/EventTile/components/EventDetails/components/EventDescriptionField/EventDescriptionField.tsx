@@ -52,7 +52,7 @@ export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props
         width: '100%',
       }}
     >
-      <Typography variant="subtitle1" sx={{ color: 'customPalette.accent' }}>
+      <Typography sx={{ color: 'customPalette.onBackgroundVariant', fontWeight: 'medium' }}>
         {props.title}
       </Typography>
       <Box sx={{ display: 'inline' }}>{renderValue()}</Box>

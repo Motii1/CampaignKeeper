@@ -25,10 +25,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
           key={`${props.event.id}-root`}
           start="root-node"
           end={`event-${props.event.id}`}
-          endAnchor={{
-            position: 'top',
-            offset: { x: 0 },
-          }}
+          endAnchor="top"
         />
       );
 

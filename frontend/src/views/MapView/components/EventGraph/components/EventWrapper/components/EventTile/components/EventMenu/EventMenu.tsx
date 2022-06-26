@@ -1,13 +1,14 @@
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { NavBarViewDialog } from '../../../../../../../../../../types/types';
 import { SessionEventWithPos } from '../../../../../../../../eventsSlice';
 import { setCurrentEvent } from '../../../../../../../../mapViewSlice';
 
 type EventMenuProps = {
+  title: string;
   event: SessionEventWithPos;
   setIsOpen: (newIsOpen: boolean) => void;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
@@ -26,11 +27,26 @@ export const EventMenu: React.FC<EventMenuProps> = props => {
   return (
     <Stack
       direction="row"
-      justifyContent="flex-end"
+      justifyContent="center"
       alignItems="center"
       spacing={1}
-      sx={{ position: 'absolute', right: '6px', top: '6px' }}
+      sx={{ width: '100%', minHeight: 20, paddingBottom: 0.7 }}
     >
+      <Typography
+        sx={{
+          textAlign: 'center',
+          width: '230px',
+          marginLeft: '70px',
+          color: 'customPalette.onAccent',
+          fontWeight: 'bold',
+          height: '100%',
+          display: 'inline-block',
+          verticalAlign: 'middle',
+          lineHeight: 'normal',
+        }}
+      >
+        {props.title}
+      </Typography>
       <EditOutlinedIcon
         onClick={handleEditIcon}
         fontSize="small"

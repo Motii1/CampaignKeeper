@@ -47,7 +47,7 @@ export const lightTheme = createTheme({
       surface: '#e1ebf5',
       primary: '#e8f0f7',
       secondary: '#f5ebf7',
-      tertiary: '#daeff0',
+      tertiary: '#dceff0',
       onBackground: '#303d50',
       onBackgroundVariant: '#446182',
       onSurface: '#262E38',
