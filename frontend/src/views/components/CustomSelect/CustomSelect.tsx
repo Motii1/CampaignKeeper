@@ -13,8 +13,8 @@ export const CustomSelect: React.FC<CustomSelectProps> = props => (
     <Select
       labelId={props.labelId}
       onChange={props.handleChange}
-      value={props.value ?? ''}
-      defaultValue=""
+      //value={props.value ?? ''}
+      defaultValue={props.value ?? ''}
       size="small"
       variant="outlined"
       displayEmpty
