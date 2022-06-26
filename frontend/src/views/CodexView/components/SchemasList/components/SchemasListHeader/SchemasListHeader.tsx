@@ -5,7 +5,7 @@ export const SchemasListHeader: React.FC = () => (
     elevation={0}
     square
     sx={{
-      backgroundColor: 'customPalette.primary',
+      backgroundColor: 'transparent',
       minHeight: 100,
       height: 100,
       width: 220,
@@ -19,6 +19,7 @@ export const SchemasListHeader: React.FC = () => (
         fontWeight: 'bold',
         marginLeft: 2,
         marginBottom: 1,
+        opacity: 0.7,
       }}
     >
       SCHEMAS

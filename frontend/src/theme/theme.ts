@@ -43,11 +43,11 @@ export const lightTheme = createTheme({
   },
   palette: {
     customPalette: {
-      background: '#eef6fa',
-      surface: '#dce9f5',
-      primary: '#e5eff7',
+      background: '#f4f9fb',
+      surface: '#e1ebf5',
+      primary: '#e8f0f7',
       secondary: '#f5ebf7',
-      tertiary: '#d5e8e6',
+      tertiary: '#daeff0',
       onBackground: '#303d50',
       onBackgroundVariant: '#446182',
       onSurface: '#262E38',

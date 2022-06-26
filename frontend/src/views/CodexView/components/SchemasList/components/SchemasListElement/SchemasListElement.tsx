@@ -63,20 +63,26 @@ export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
       elevation={0}
       onClick={onClick}
       sx={{
-        backgroundColor: isElementSelected ? 'customPalette.accent' : 'customPalette.surface',
+        backgroundColor: isElementSelected ? 'customPalette.primary' : 'transparent',
         width: '100%',
-        minHeight: 30,
-        height: 30,
-        paddingTop: 1,
+        minHeight: 33,
+        height: 33,
+        borderRadius: '0px 50px 50px 0px',
+        marginTop: 0.3,
+        marginBottom: 0.2,
+        marginRight: 2,
         cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
       }}
       onContextMenu={handleContextMenu}
     >
       <Typography
         sx={{
-          color: isElementSelected ? 'customPalette.onAccent' : 'customPalette.onSurface',
+          color: isElementSelected ? 'customPalette.onPrimary' : 'customPalette.onBackground',
+          fontSize: 15,
           fontWeight: isElementSelected ? 'bold' : 'medium',
-          marginLeft: isElementSelected ? 3 : 2,
+          marginLeft: isElementSelected ? 4 : 3.5,
           '&:hover': {
             opacity: 0.85,
           },

@@ -158,6 +158,7 @@ export const UserPanel: React.FC<UserPanelProps> = props => {
           '& .MuiPaper-root': {
             backgroundColor: 'customPalette.primary',
             borderRadius: 4,
+            boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 1)',
           },
         }}
         disableAutoFocusItem
