@@ -36,12 +36,15 @@ export const CustomFab: React.FC<CustomFabProps> = props => {
       sx={{
         color: 'customPalette.onAccent',
         backgroundColor: 'customPalette.accent',
-        boxShadow: '0px 0px',
+        boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 1)',
         position: 'fixed',
         bottom: 20,
         right: 20,
         '&.MuiButtonBase-root:hover': {
           bgcolor: 'customPalette.accent',
+        },
+        '&.MuiFab-extended:focus': {
+          boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 1)',
         },
       }}
     >

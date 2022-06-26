@@ -1,12 +1,33 @@
 import { Paper, Typography } from '@mui/material';
 
 export const RootNode: React.FC = () => (
-  <Paper id="root-node" elevation={24} sx={{ backgroundColor: 'customPalette.accent' }}>
-    <Typography
-      variant="h4"
-      sx={{ color: 'customPalette.onAccent', fontWeight: 'bold', padding: '10px' }}
+  <Paper
+    id="root-node"
+    elevation={0}
+    sx={{
+      backgroundColor: 'customPalette.accent',
+      borderRadius: 3,
+      padding: 0.5,
+    }}
+  >
+    <Paper
+      elevation={0}
+      sx={{
+        backgroundColor: 'customPalette.tertiary',
+        borderRadius: 2,
+      }}
     >
-      START
-    </Typography>
+      <Typography
+        sx={{
+          color: 'customPalette.onSurface',
+          fontSize: 20,
+          fontWeight: 'bold',
+          padding: '5px 14px',
+          textTransform: 'uppercase',
+        }}
+      >
+        START
+      </Typography>
+    </Paper>
   </Paper>
 );
