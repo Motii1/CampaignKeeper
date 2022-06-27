@@ -12,33 +12,35 @@ type EventWrapperProps = {
 
 // TO-DO: EventTiles should be shown ABOVE EventArrows
 export const EventWrapper: React.FC<EventWrapperProps> = props => {
-  const renderArrows = () => {
+  const renderRootArrow = () => (
+    <EventArrow
+      key={`${props.event.id}-root-node`}
+      start={'root-node'}
+      end={`event-${props.event.id}`}
+      endAnchor={{
+        position: 'top',
+        offset: { x: 0 },
+      }}
+    />
+  );
+
+  const renderChildArrows = () => {
     const numberOfArrows = props.event.parentIds.length;
     const a1 =
       numberOfArrows % 2 === 0 ? 0.5 * numberOfArrows * -10 : 0.5 * numberOfArrows * -20 + 10;
     const arrowsEndOffsets = [a1];
     for (let i = 1; i < numberOfArrows; i++) arrowsEndOffsets.push(a1 + i * 20);
 
-    if (props.event.parentIds.length === 0)
-      return (
-        <EventArrow
-          key={`${props.event.id}-root`}
-          start="root-node"
-          end={`event-${props.event.id}`}
-          endAnchor="top"
-        />
-      );
-
     let currentArrow = 0;
 
-    return props.event.parentIds.map(parentId => {
+    return props.event.childrenIds.map(childId => {
       const offset = arrowsEndOffsets[currentArrow];
       currentArrow++;
       return (
         <EventArrow
-          key={`${props.event.id}-${parentId}`}
-          start={`event-${parentId}`}
-          end={`event-${props.event.id}`}
+          key={`${props.event.id}-${childId}`}
+          start={`event-${props.event.id}`}
+          end={`event-${childId}`}
           endAnchor={{
             position: 'top',
             offset: { x: offset },
@@ -50,13 +52,14 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
 
   return props.event.displayStatus === 'shown' || props.event.displayStatus === 'collapsed' ? (
     <Box>
+      {props.event.parentIds.length === 0 ? renderRootArrow() : null}
       <EventTile
         id={`event-${props.event.id}`}
         event={props.event}
         setIsOpen={props.setIsOpen}
         setDialogType={props.setDialogType}
       />
-      {renderArrows()}
+      {props.event.displayStatus === 'shown' ? renderChildArrows() : null}
     </Box>
   ) : null;
 };

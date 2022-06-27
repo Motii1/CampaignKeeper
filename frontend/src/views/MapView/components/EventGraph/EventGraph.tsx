@@ -16,7 +16,13 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
   const { isEventsListDownloaded, eventsList } = useSelector((state: RootState) => state.events);
 
   const renderRow = (nodes: SessionEventWithPos[]) => (
-    <Stack key={nodes[0].y} direction="row" justifyContent="center" alignItems="center" spacing={4}>
+    <Stack
+      key={nodes[0].y}
+      direction="row"
+      justifyContent="center"
+      alignItems="flex-start"
+      spacing={4}
+    >
       {nodes.map(node => (
         <EventWrapper
           key={`event-node-key-${node.id}`}
