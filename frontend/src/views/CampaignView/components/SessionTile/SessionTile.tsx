@@ -65,10 +65,10 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
         marginTop: 1.2,
         marginBlock: 1.2,
       }}
-      onClick={handleClick}
       onContextMenu={handleContextMenu}
     >
       <Typography
+        onClick={handleClick}
         sx={{
           color: 'customPalette.onSurface',
           fontWeight: 'medium',
