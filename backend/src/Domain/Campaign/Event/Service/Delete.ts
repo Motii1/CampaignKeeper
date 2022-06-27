@@ -23,16 +23,21 @@ export const deleteEvent = async (
     return await deleteEventById(eventToDelete.id);
   }
 
+  if (!dto.parentId) {
+    throw new DeleteEventError(
+      'New parent id must be provided for deletion of events that have children!'
+    );
+  }
+
   let newParent: Event | null = null;
   try {
-    newParent = dto.parentId ? await validateNewParentAndLoad(dto.parentId, session) : null;
+    newParent = await validateNewParentAndLoad(dto.parentId, session);
   } catch (error) {
     throw new DeleteEventError((error as Error).message);
   }
-
-  if (dto.parentId) {
-    await saveEvent({ ...newParent, children } as Event);
-  }
+  const { children: newParentChildren } = await findRelatedEvents(newParent.id);
+  await saveEvent({ ...newParent, children: [...newParentChildren, ...children] } as Event);
+  await saveEvent({ ...eventToDelete, children: [] });
   await deleteEventById(eventToDelete.id);
 };
 
