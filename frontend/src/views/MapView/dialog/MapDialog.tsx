@@ -103,6 +103,8 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
   const handleRunQueryNew = useCallback(() => {
     if (!isLoadingNew && statusNew) {
       if (statusNew === 200) {
+        // eslint-disable-next-line no-console
+        console.log(dataNew);
         dispatch(addEvent({ newEvent: dataNew }));
         props.setSnackbarSuccess('Event created');
         props.setIsOpen(false);
