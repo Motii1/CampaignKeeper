@@ -7,6 +7,7 @@ export const lightTheme = createTheme({
         root: {
           '&::-webkit-scrollbar': {
             width: '26px',
+            height: '26px',
           },
           '&::-webkit-scrollbar-track': {
             margin: 0.1,
@@ -96,6 +97,7 @@ export const darkTheme = createTheme({
         root: {
           '&::-webkit-scrollbar': {
             width: '26px',
+            height: '26px',
           },
           '&::-webkit-scrollbar-track': {
             margin: 0.1,

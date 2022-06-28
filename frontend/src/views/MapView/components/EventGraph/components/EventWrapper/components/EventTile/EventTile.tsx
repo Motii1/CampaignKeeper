@@ -1,4 +1,4 @@
-import { Paper, Stack } from '@mui/material';
+import { Box, Paper, Stack } from '@mui/material';
 import { NavBarViewDialog } from '../../../../../../../../types/types';
 import { SessionEventWithPos } from '../../../../../../eventsSlice';
 import { EventDetails } from './components/EventDetails/EventDetails';
@@ -18,7 +18,7 @@ export const EventTile: React.FC<EventTileProps> = props => (
       backgroundColor: 'customPalette.accent',
       borderRadius: 2,
       width: '400px',
-      minHeight: props.event.displayStatus === 'shown' ? '200px' : '30px',
+      //minHeight: props.event.displayStatus === 'shown' ? '200px' : '30px',
       '& .MuiBox-root': {
         '& .css-0': {
           zIndex: '5',
@@ -44,11 +44,19 @@ export const EventTile: React.FC<EventTileProps> = props => (
         setDialogType={props.setDialogType}
       />
       {props.event.displayStatus === 'shown' ? (
-        <EventDetails
-          place={props.event.placeMetadataArray}
-          characters={props.event.charactersMetadataArray}
-          description={props.event.descriptionMetadataArray}
-        />
+        <Box
+          sx={{
+            maxHeight: props.event.displayStatus === 'shown' ? 'min-content' : '0px',
+            width: '100%',
+            paddingTop: 0.7,
+          }}
+        >
+          <EventDetails
+            place={props.event.placeMetadataArray}
+            characters={props.event.charactersMetadataArray}
+            description={props.event.descriptionMetadataArray}
+          />
+        </Box>
       ) : null}
     </Stack>
   </Paper>

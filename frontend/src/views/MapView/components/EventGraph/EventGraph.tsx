@@ -1,5 +1,6 @@
 import { Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { useXarrow } from 'react-xarrows';
 import { RootState } from '../../../../store';
 import { NavBarViewDialog } from '../../../../types/types';
 import { CircleProgress } from '../../../components/CircleProgress/CircleProgress';
@@ -14,6 +15,8 @@ type EventGraphProsp = {
 
 export const EventGraph: React.FC<EventGraphProsp> = props => {
   const { isEventsListDownloaded, eventsList } = useSelector((state: RootState) => state.events);
+  const { isLight } = useSelector((state: RootState) => state.theme);
+  const updateXarrow = useXarrow();
 
   const renderRow = (nodes: SessionEventWithPos[]) => (
     <Stack
@@ -46,17 +49,43 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
     );
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleScroll = (_event: React.UIEvent<HTMLElement>) => {
+    updateXarrow();
+  };
+
   return isEventsListDownloaded ? (
-    <Stack
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      spacing={8}
-      sx={{ marginTop: '50px' }}
+    <div
+      onScroll={handleScroll}
+      className={isLight ? '' : 'dark-div'}
+      style={{
+        backgroundColor: 'transparent',
+        width: '100%',
+        maxWidth: '100%',
+        height: 'calc(100vh - 50px)',
+        maxHeight: 'calc(100vh - 50px)',
+        overflow: 'auto',
+      }}
     >
-      <RootNode />
-      {renderRows()}
-    </Stack>
+      <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        spacing={8}
+        sx={{
+          padding: '20px',
+          paddingTop: '50px',
+          width: 'max-content',
+          minWidth: 'calc(100% - 40px)',
+          maxWidth: 'max-content',
+          height: 'max-content',
+          maxHeight: 'max-content',
+        }}
+      >
+        <RootNode />
+        {renderRows()}
+      </Stack>
+    </div>
   ) : (
     <CircleProgress />
   );

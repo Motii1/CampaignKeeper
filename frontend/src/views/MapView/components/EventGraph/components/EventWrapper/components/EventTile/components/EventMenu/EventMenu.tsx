@@ -30,7 +30,7 @@ export const EventMenu: React.FC<EventMenuProps> = props => {
       justifyContent="center"
       alignItems="center"
       spacing={1}
-      sx={{ width: '100%', minHeight: 20, paddingBottom: 0.7 }}
+      sx={{ width: '100%', minHeight: 21 }}
     >
       <Typography
         sx={{
