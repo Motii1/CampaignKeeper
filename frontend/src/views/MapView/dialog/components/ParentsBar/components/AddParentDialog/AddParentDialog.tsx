@@ -37,8 +37,6 @@ export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
   const renderValue = (value: string) => {
     const newValue =
       value !== '' ? eventsList.find(event => event.id === value)?.title : 'Choose parent';
-    // eslint-disable-next-line no-console
-    console.log(`->${value}<-`);
     return newValue;
   };
 

@@ -36,8 +36,6 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
     return props.event.childrenIds.map(childId => {
       const offset = arrowsEndOffsets[currentArrow];
       currentArrow++;
-      // eslint-disable-next-line no-console
-      console.log(`${props.event.title}-${childId}`);
       return (
         <EventArrow
           key={`${props.event.id}-${childId}`}
