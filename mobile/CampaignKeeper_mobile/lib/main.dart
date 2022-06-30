@@ -72,9 +72,8 @@ class MainApp extends StatelessWidget {
             navigatorObservers: [routeObserver],
             builder: (context, child) {
               return ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(
-                  physics: BouncingScrollPhysics(),
-                  overscroll: false,
+                behavior: MaterialScrollBehavior(
+                  androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
                 ),
                 child: child!,
               );

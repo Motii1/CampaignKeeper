@@ -113,22 +113,6 @@ class SessionManager extends BaseManager<SessionEntity> {
     return true;
   }
 
-  void _checkIntegrity() {
-    if (_map.isNotEmpty) {
-      var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
-
-      if (campaigns.isNotEmpty) {
-        var keys = List.from(_map.keys);
-
-        keys.forEach((key) {
-          if (!campaigns.contains(key)) {
-            _map.remove(key);
-          }
-        });
-      }
-    }
-  }
-
   void _cacheAll() {
     var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
     var data = [];
