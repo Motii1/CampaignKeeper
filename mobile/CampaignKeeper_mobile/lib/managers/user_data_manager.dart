@@ -3,6 +3,7 @@ import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
 
 class UserDataManager extends BaseManager<UserDataEntity> {
@@ -49,7 +50,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   }
 
   @override
-  Future<bool> refresh({int groupId = -1, bool online = true}) async {
+  Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_entity == null) {
       String? cache = await CacheUtil().getSecure(_key);
 

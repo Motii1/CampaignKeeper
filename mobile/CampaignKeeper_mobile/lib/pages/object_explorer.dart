@@ -28,8 +28,8 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
 
   Future<void> onRefresh() async {
     DataCarrier().refresh<UserDataEntity>();
-    await DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    await DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
+    await DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
+    await DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id);
   }
 
   Future<void> onObjectRefresh() async {
@@ -96,13 +96,13 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
 
   @override
   void onReturn() async {
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    DataCarrier().refresh<ObjectEntity>(groupId: object?.schemaId ?? -1);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
+    DataCarrier().refresh<ObjectEntity>(parameterValue: object?.schemaId);
   }
 
   @override
   void onResume() async {
-    DataCarrier().refresh<ObjectEntity>(groupId: object?.schemaId ?? -1);
+    DataCarrier().refresh<ObjectEntity>(parameterValue: object?.schemaId);
   }
 
   @override
@@ -112,8 +112,8 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
     scrollController.addListener(scrollListener);
     DataCarrier().addListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    DataCarrier().refresh<ObjectEntity>(groupId: object?.schemaId ?? -1);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
+    DataCarrier().refresh<ObjectEntity>(parameterValue: object?.schemaId);
   }
 
   @override

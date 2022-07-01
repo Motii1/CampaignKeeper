@@ -37,8 +37,8 @@ class _CampaignState extends KeeperState<Campaign> {
   Future<void> onRefresh() async {
     DataCarrier().refresh<UserDataEntity>();
     await DataCarrier().refresh<CampaignEntity>();
-    await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
-    await DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
+    await DataCarrier().refresh<SessionEntity>(parameterValue: widget.campaignId);
+    await DataCarrier().refresh<SchemaEntity>(parameterValue: widget.campaignId);
   }
 
   Future<void> onCampaignRefresh() async {
@@ -111,14 +111,14 @@ class _CampaignState extends KeeperState<Campaign> {
   @override
   void onReturn() async {
     DataCarrier().refresh<CampaignEntity>();
-    DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
-    DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
+    DataCarrier().refresh<SessionEntity>(parameterValue: widget.campaignId);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: widget.campaignId);
   }
 
   @override
   void onEveryResume() async {
-    await DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
-    await DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
+    await DataCarrier().refresh<SessionEntity>(parameterValue: widget.campaignId);
+    await DataCarrier().refresh<SchemaEntity>(parameterValue: widget.campaignId);
   }
 
   @override
@@ -128,8 +128,8 @@ class _CampaignState extends KeeperState<Campaign> {
     DataCarrier().addListener<SessionEntity>(onSessionRefresh);
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);
     DataCarrier().refresh<CampaignEntity>();
-    DataCarrier().refresh<SessionEntity>(groupId: widget.campaignId);
-    DataCarrier().refresh<SchemaEntity>(groupId: widget.campaignId);
+    DataCarrier().refresh<SessionEntity>(parameterValue: widget.campaignId);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: widget.campaignId);
   }
 
   @override

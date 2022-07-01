@@ -1,3 +1,4 @@
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
 // A hollow class used as a base for proper managers
@@ -28,7 +29,7 @@ class BaseManager<T> extends ChangeNotifier {
 
   // Used to refresh entities from local cache
   // or from a server.
-  Future<bool> refresh({int groupId = -1, bool online = true}) {
+  Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) {
     throw new UnimplementedError();
   }
 

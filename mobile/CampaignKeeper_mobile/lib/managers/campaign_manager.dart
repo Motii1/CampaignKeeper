@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
@@ -29,7 +30,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   }
 
   @override
-  Future<bool> refresh({int groupId = -1, bool online = true}) async {
+  Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_entities.isEmpty) {
       String? cache = await CacheUtil().get(_key);
       if (cache != null && cache.isNotEmpty) {

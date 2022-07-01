@@ -63,3 +63,19 @@ enum KeeperSliverReplacerType {
   Animate,
   Instant,
 }
+
+enum EntityParameter {
+  campaign,
+  schema,
+}
+
+extension EntityParameterExtension on EntityParameter {
+  String get name {
+    switch (this) {
+      case EntityParameter.campaign:
+        return 'campaignId';
+      case EntityParameter.schema:
+        return 'schemaId';
+    }
+  }
+}

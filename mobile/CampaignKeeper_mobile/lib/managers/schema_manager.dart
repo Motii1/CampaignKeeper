@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
@@ -39,7 +40,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
   }
 
   @override
-  Future<bool> refresh({int groupId = -1, bool online = true}) async {
+  Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
       String? cache = await CacheUtil().get(_key);
       if (cache != null) {
@@ -52,27 +53,28 @@ class SchemaManager extends BaseManager<SchemaEntity> {
       }
     }
 
-    if (online && groupId > -1) {
-      Response userResponse = await RequestHelper().get(
-          endpoint: SchemaEntity.endpoint, params: [RequestParameter(name: "campaignId", value: groupId)]);
+    parameterName = parameterName ?? EntityParameter.campaign;
+    if (online && parameterName == EntityParameter.campaign && parameterValue != null) {
+      var parameter = RequestParameter(name: parameterName.name, value: parameterValue);
+      Response userResponse = await RequestHelper().get(endpoint: SchemaEntity.endpoint, params: [parameter]);
 
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<SchemaEntity> newEntities =
             (responseData['schemas'] as List).map((e) => _decodeEntity(e)).toList();
 
-        if (_isEqual(groupId, newEntities)) {
+        if (_isEqual(parameterValue, newEntities)) {
           return false;
         }
 
-        _map[groupId] = newEntities;
+        _map[parameterValue] = newEntities;
 
         notifyListeners();
         _cacheAll();
 
         return true;
       } else if (userResponse.status == ResponseStatus.IncorrectData) {
-        _map[groupId]?.clear();
+        _map[parameterValue]?.clear();
 
         notifyListeners();
         _cacheAll();

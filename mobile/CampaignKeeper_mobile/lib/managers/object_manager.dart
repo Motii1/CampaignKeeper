@@ -40,7 +40,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
   }
 
   @override
-  Future<bool> refresh({int groupId = -1, bool online = true}) async {
+  Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
       String? cache = await CacheUtil().get(_key);
       if (cache != null) {
@@ -53,27 +53,56 @@ class ObjectManager extends BaseManager<ObjectEntity> {
       }
     }
 
-    if (online && groupId > -1) {
-      Response userResponse = await RequestHelper()
-          .get(endpoint: ObjectEntity.endpoint, params: [RequestParameter(name: "schemaId", value: groupId)]);
+    parameterName = parameterName ?? EntityParameter.schema;
+    if (online && parameterValue != null) {
+      var parameter = RequestParameter(name: parameterName.name, value: parameterValue);
+      Response userResponse = await RequestHelper().get(endpoint: ObjectEntity.endpoint, params: [parameter]);
 
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<ObjectEntity> newEntities =
             (responseData['objects'] as List).map((e) => _decodeEntity(e)).toList();
 
-        if (_isEqual(groupId, newEntities)) {
-          return false;
-        }
+        if (parameterName == EntityParameter.schema) {
+          if (_isEqual(parameterValue, newEntities)) {
+            return false;
+          }
 
-        _map[groupId] = newEntities;
+          _map[parameterValue] = newEntities;
+        } else {
+          var oldKeys = _map.keys.toList();
+          var newKeys = newEntities.map((e) => e.schemaId).toSet();
+          bool isEqual = newKeys.toList().equals(oldKeys);
+          int iter = 0;
+
+          while (isEqual && iter < oldKeys.length) {
+            var key = oldKeys[iter];
+            isEqual &= _isEqual(key, newEntities.where((e) => e.schemaId == key).toList());
+
+            iter++;
+          }
+
+          if (isEqual) {
+            return false;
+          }
+
+          _map.clear();
+
+          newKeys.forEach((key) {
+            _map[key] = newEntities.where((e) => e.schemaId == key).toList();
+          });
+        }
 
         notifyListeners();
         _cacheAll();
 
         return true;
       } else if (userResponse.status == ResponseStatus.IncorrectData) {
-        _map[groupId]?.clear();
+        if (parameterName == EntityParameter.schema) {
+          _map[parameterValue]?.clear();
+        } else {
+          _map.clear();
+        }
 
         notifyListeners();
         _cacheAll();

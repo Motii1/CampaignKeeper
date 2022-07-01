@@ -27,7 +27,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
 
   Future<void> onRefresh() async {
     await DataCarrier().refresh<UserDataEntity>();
-    await DataCarrier().refresh<SessionEntity>(groupId: session?.campaignId ?? -1);
+    await DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
   }
 
   Future<void> onSessionRefresh() async {
@@ -43,14 +43,14 @@ class _SessionMapState extends KeeperState<SessionMap> {
 
   @override
   void onEveryResume() {
-    DataCarrier().refresh<SessionEntity>(groupId: session?.campaignId ?? -1);
+    DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
   }
 
   @override
   void initState() {
     super.initState();
     DataCarrier().addListener<SessionEntity>(onSessionRefresh);
-    DataCarrier().refresh<SessionEntity>(groupId: session?.campaignId ?? -1);
+    DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
   }
 
   @override

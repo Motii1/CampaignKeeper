@@ -10,6 +10,7 @@ import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
 import 'package:campaign_keeper_mobile/managers/schema_manager.dart';
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
 // Service used throught the whole app to unify
@@ -73,9 +74,10 @@ class DataCarrier {
     return [];
   }
 
-  Future<bool> refresh<T>({int groupId = -1, bool online = true}) async {
+  Future<bool> refresh<T>({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_managers.containsKey(T)) {
-      return await _managers[T]!.refresh(groupId: groupId, online: online);
+      return await _managers[T]!
+          .refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
     }
 
     return false;

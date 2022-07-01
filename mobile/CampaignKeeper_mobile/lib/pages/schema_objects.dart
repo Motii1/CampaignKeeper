@@ -32,8 +32,8 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   Future<void> onRefresh() async {
     DataCarrier().refresh<UserDataEntity>();
     DataCarrier().refresh<CampaignEntity>();
-    await DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    await DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
+    await DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
+    await DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id);
   }
 
   Future<void> onSchemaRefresh() async {
@@ -95,13 +95,13 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
 
   @override
   void onReturn() async {
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
+    DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id);
   }
 
   @override
   void onEveryResume() async {
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
   }
 
   @override
@@ -109,8 +109,8 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
     super.initState();
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);
     DataCarrier().addListener<ObjectEntity>(onObjectsRefresh);
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
+    DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id);
   }
 
   @override
