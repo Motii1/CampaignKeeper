@@ -1,16 +1,21 @@
 import 'dart:collection';
 import 'dart:math';
+import 'package:campaign_keeper_mobile/components/graph/event_node.dart';
+import 'package:campaign_keeper_mobile/components/graph/start_node.dart';
 import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 import 'package:graphview/GraphView.dart';
 
 class EventFacade {
+  final startKey = GlobalKey();
+  Map<int, EventEntity> _eventMap = {};
+
   SugiyamaConfiguration getBuilder() {
     return SugiyamaConfiguration()
-      ..levelSeparation = 75
-      ..nodeSeparation = 15
-      ..iterations = 10;
+      ..levelSeparation = 90
+      ..nodeSeparation = 25
+      ..iterations = 20;
   }
 
   Graph getGraph(int sessionId) {
@@ -19,7 +24,7 @@ class EventFacade {
     final startNode = Node.Id(0);
 
     var events = DataCarrier().getList<EventEntity>(groupId: sessionId);
-    var eventMap = Map.fromIterable(events, key: (e) => e.id, value: (e) => e);
+    _eventMap = Map.fromIterable(events, key: (e) => e.id, value: (e) => e);
     var nodeMap = Map.fromIterable(events, key: (e) => e.id, value: (e) => Node.Id(e.id));
 
     var q = Queue.from(events.where((e) => e.parentIds.length == 0).map((e) => e.id));
@@ -27,7 +32,7 @@ class EventFacade {
       while (q.isNotEmpty) {
         var id = q.removeFirst();
         var node = nodeMap[id] as Node;
-        var event = eventMap[id] as EventEntity;
+        var event = _eventMap[id] as EventEntity;
 
         if (event.parentIds.isEmpty) {
           graph.addEdge(startNode, node);
@@ -49,26 +54,13 @@ class EventFacade {
   }
 
   Widget getNodeWidget(BuildContext context, int id) {
-    return SizedBox(
-      width: 90,
-      height: id % 2 == 0 ? 70 : null,
-      child: Material(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(10),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () {
-            print("Move me to the event screen");
-          },
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text("Node ${id}"),
-            ),
-          ),
-        ),
-      ),
-    );
+    if (id == 0) {
+      return KeeperStartNode(
+        key: startKey,
+      );
+    }
+
+    return KeeperEventNode(entity: _eventMap[id]);
   }
 }
 

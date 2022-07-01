@@ -103,6 +103,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
                 ),
               )
             : KeeperInteractiveViewer(
+                centerKey: eventFacade.startKey,
                 child: GraphView(
                   graph: eventFacade.getGraph(widget.sessionId),
                   algorithm: KeeperSugiyamaAlgorithm(eventFacade.getBuilder()),
@@ -120,7 +121,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print("Move to the first event");
+          print("move me to the first event");
         },
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(Icons.article_outlined),
