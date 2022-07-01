@@ -144,6 +144,8 @@ class EventManager extends BaseManager<EventEntity> {
     List<FieldValue> descriptionValues = (data['descriptionMetadataArray'] as List<dynamic>)
         .map((e) => FieldValue.decode(e, defaultFieldName: 'descriptions'))
         .toList();
+    List<int> parentIds = (data['parentIds'] as List<dynamic>).map((e) => e as int).toList();
+    List<int> childrenIds = (data['childrenIds'] as List<dynamic>).map((e) => e as int).toList();
 
     return EventEntity(
       id: id,
@@ -155,6 +157,8 @@ class EventManager extends BaseManager<EventEntity> {
       characterValues: characterValues,
       placeValues: placeValues,
       descriptionValues: descriptionValues,
+      parentIds: parentIds,
+      childrenIds: childrenIds,
     );
   }
 
@@ -169,6 +173,8 @@ class EventManager extends BaseManager<EventEntity> {
       'charactersMetadataArray': entity.characterValues.map((e) => FieldValue.encode(e)).toList(),
       'placeMetadataArray': entity.placeValues.map((e) => FieldValue.encode(e)).toList(),
       'descriptionMetadataArray': entity.descriptionValues.map((e) => FieldValue.encode(e)).toList(),
+      'parentIds': entity.parentIds,
+      'childrenIds': entity.childrenIds,
     };
 
     return data;

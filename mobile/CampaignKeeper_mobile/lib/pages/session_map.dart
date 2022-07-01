@@ -7,7 +7,7 @@ import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
-import 'package:campaign_keeper_mobile/facades/fake_event_facade.dart';
+import 'package:campaign_keeper_mobile/facades/event_facade.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class SessionMap extends StatefulWidget {
 }
 
 class _SessionMapState extends KeeperState<SessionMap> {
-  final eventFacade = FakeEventFacade();
+  final eventFacade = EventFacade();
   bool isLoaded = false;
   Graph? graph;
   late SessionEntity? session = DataCarrier().get(entId: widget.sessionId);
@@ -52,7 +52,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
   void updateGraph() {
     if (isLoaded) {
       setState(() {
-        graph = eventFacade.getGraph();
+        graph = eventFacade.getGraph(widget.sessionId);
       });
     }
   }
@@ -104,7 +104,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
               )
             : KeeperInteractiveViewer(
                 child: GraphView(
-                  graph: eventFacade.getGraph(),
+                  graph: eventFacade.getGraph(widget.sessionId),
                   algorithm: KeeperSugiyamaAlgorithm(eventFacade.getBuilder()),
                   paint: Paint()
                     ..color = Theme.of(context).colorScheme.onBackground

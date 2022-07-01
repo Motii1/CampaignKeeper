@@ -12,6 +12,8 @@ class EventEntity {
   List<FieldValue> characterValues;
   List<FieldValue> placeValues;
   List<FieldValue> descriptionValues;
+  List<int> parentIds;
+  List<int> childrenIds;
 
   EventEntity({
     required this.id,
@@ -23,21 +25,21 @@ class EventEntity {
     required this.characterValues,
     required this.placeValues,
     required this.descriptionValues,
+    required this.parentIds,
+    required this.childrenIds,
   });
 
   bool equals(EventEntity other) {
-    bool characterEquals = characterValues.equals(other.characterValues);
-    bool placesEquals = placeValues.equals(other.placeValues);
-    bool descriptionEquals = descriptionValues.equals(other.descriptionValues);
-
-    return characterEquals &&
-        placesEquals &&
-        descriptionEquals &&
-        id == other.id &&
+    return id == other.id &&
         sessionId == other.sessionId &&
         title == other.title &&
         type == other.type &&
         status == other.status &&
-        displayStatus == other.displayStatus;
+        displayStatus == other.displayStatus &&
+        parentIds.equals(other.parentIds) &&
+        childrenIds.equals(other.childrenIds) &&
+        characterValues.equals(other.characterValues) &&
+        placeValues.equals(other.placeValues) &&
+        descriptionValues.equals(other.descriptionValues);
   }
 }

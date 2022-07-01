@@ -80,7 +80,7 @@ extension EntityParameterExtension on EntityParameter {
   }
 }
 
-extension ListExtension on List<FieldValue> {
+extension ListFieldValueExtension on List<FieldValue> {
   bool equals(List<FieldValue> other) {
     if (this.length != other.length) {
       return false;
@@ -88,6 +88,22 @@ extension ListExtension on List<FieldValue> {
 
     for (int i = 0; i < this.length; i++) {
       if (!this[i].equals(other[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+}
+
+extension ListIntExtension on List<int> {
+  bool equals(List<int> other) {
+    if (this.length != other.length) {
+      return false;
+    }
+
+    for (int i = 0; i < this.length; i++) {
+      if (this[i] != other[i]) {
         return false;
       }
     }
