@@ -13,9 +13,10 @@ class EventFacade {
 
   SugiyamaConfiguration getBuilder() {
     return SugiyamaConfiguration()
-      ..levelSeparation = 90
+      ..levelSeparation = 100
       ..nodeSeparation = 25
-      ..iterations = 20;
+      ..iterations = 20
+      ..orientation = SugiyamaConfiguration.ORIENTATION_TOP_BOTTOM;
   }
 
   Graph getGraph(int sessionId) {
@@ -61,54 +62,5 @@ class EventFacade {
     }
 
     return KeeperEventNode(entity: _eventMap[id]);
-  }
-}
-
-// Here it's a fixed SugiyamaAlgorithm from the graphview package that makes sure nodes don't overlap on each other.
-class KeeperSugiyamaAlgorithm extends SugiyamaAlgorithm {
-  KeeperSugiyamaAlgorithm(configuration) : super(configuration);
-
-  @override
-  void placeBlock(Node? v, Map<Node?, Node?> sink, Map<Node?, double> shift, Map<Node?, double?> x,
-      Map<Node?, Node?> align, Map<Node?, double> blockWidth, Map<Node?, Node?> root, bool leftToRight) {
-    if (x[v] == double.negativeInfinity) {
-      var nodeSeparation = configuration.nodeSeparation;
-      x[v] = 0;
-      var currentNode = v;
-
-      try {
-        do {
-          if (leftToRight && positionOfNode(currentNode) > 0 ||
-              !leftToRight && positionOfNode(currentNode) < layers[getLayerIndex(currentNode)].length - 1) {
-            final pred = predecessor(currentNode, leftToRight);
-            final u = root[pred];
-            placeBlock(u, sink, shift, x, align, blockWidth, root, leftToRight);
-            if (sink[v] == v) {
-              sink[v] = sink[u];
-            }
-            if (sink[v] != sink[u]) {
-              if (leftToRight) {
-                shift[sink[u]] = min(shift[sink[u]]!,
-                    x[v]! - x[u]! - nodeSeparation - 0.5 * (blockWidth[u]! + blockWidth[v]!));
-              } else {
-                shift[sink[u]] = max(shift[sink[u]]!,
-                    x[v]! - x[u]! + nodeSeparation + 0.5 * (blockWidth[u]! + blockWidth[v]!));
-              }
-            } else {
-              if (leftToRight) {
-                x[v] =
-                    max(x[v]! + v!.width, x[u]! + nodeSeparation + 0.5 * (blockWidth[u]! + blockWidth[v]!));
-              } else {
-                x[v] =
-                    min(x[v]! - v!.width, x[u]! - nodeSeparation - 0.5 * (blockWidth[u]! + blockWidth[v]!));
-              }
-            }
-          }
-          currentNode = align[currentNode];
-        } while (currentNode != v);
-      } catch (e) {
-        print(e);
-      }
-    }
   }
 }

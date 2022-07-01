@@ -27,30 +27,42 @@ class SessionMap extends StatefulWidget {
 
 class _SessionMapState extends KeeperState<SessionMap> {
   final eventFacade = EventFacade();
-  bool isLoaded = false;
+  int loadBit = 0;
   Graph? graph;
   late SessionEntity? session = DataCarrier().get(entId: widget.sessionId);
 
-  Future<void> onRefresh() async {
+  Future<void> refresh() async {
     DataCarrier().refresh<UserDataEntity>();
     DataCarrier().refresh<CampaignEntity>();
-    await DataCarrier()
-        .refresh<ObjectEntity>(parameterName: EntityParameter.campaign, parameterValue: session?.campaignId);
-    await DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
-    await DataCarrier().refresh<EventEntity>(parameterValue: widget.sessionId);
+    DataCarrier()
+        .refresh<ObjectEntity>(parameterName: EntityParameter.campaign, parameterValue: session?.campaignId)
+        .whenComplete(onObjectRefresh);
+    DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId).whenComplete(onSessionRefresh);
+    DataCarrier().refresh<EventEntity>(parameterValue: widget.sessionId).whenComplete(onEventRefresh);
   }
 
-  Future<void> onSessionRefresh() async {
+  void onSessionRefresh() async {
     SessionEntity? entity = DataCarrier().get(entId: widget.sessionId);
     if (entity == null) {
       returnTo('/start');
     } else {
+      loadBit |= 1;
       updateGraph();
     }
   }
 
+  void onObjectRefresh() {
+    loadBit |= 2;
+    updateGraph();
+  }
+
+  void onEventRefresh() {
+    loadBit |= 4;
+    updateGraph();
+  }
+
   void updateGraph() {
-    if (isLoaded) {
+    if (loadBit == 7) {
       setState(() {
         graph = eventFacade.getGraph(widget.sessionId);
       });
@@ -59,6 +71,10 @@ class _SessionMapState extends KeeperState<SessionMap> {
 
   @override
   void onEveryResume() {
+    setState(() {
+      loadBit = 0;
+    });
+
     DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
     DataCarrier()
         .refresh<ObjectEntity>(parameterName: EntityParameter.campaign, parameterValue: session?.campaignId);
@@ -68,24 +84,17 @@ class _SessionMapState extends KeeperState<SessionMap> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-
-    if (!isLoaded) {
-      await onRefresh();
-
-      DataCarrier().addListener<SessionEntity>(onSessionRefresh);
-      DataCarrier().addListener<ObjectEntity>(updateGraph);
-      DataCarrier().addListener<EventEntity>(updateGraph);
-
-      isLoaded = true;
-      updateGraph();
-    }
+    DataCarrier().addListener<SessionEntity>(onSessionRefresh);
+    DataCarrier().addListener<ObjectEntity>(onObjectRefresh);
+    DataCarrier().addListener<EventEntity>(onEventRefresh);
+    refresh();
   }
 
   @override
   void dispose() {
     DataCarrier().removeListener<SessionEntity>(onSessionRefresh);
-    DataCarrier().removeListener<ObjectEntity>(updateGraph);
-    DataCarrier().removeListener<EventEntity>(updateGraph);
+    DataCarrier().removeListener<ObjectEntity>(onObjectRefresh);
+    DataCarrier().removeListener<EventEntity>(onEventRefresh);
     super.dispose();
   }
 
@@ -94,7 +103,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
     return Scaffold(
       body: KeeperFloatingSearch(
         popup: KeeperPopup.settings(context),
-        child: !isLoaded || graph == null
+        child: loadBit != 7 || graph == null
             ? Center(
                 child: SpinKitRing(
                   color: Theme.of(context).colorScheme.onBackground,
@@ -106,7 +115,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
                 centerKey: eventFacade.startKey,
                 child: GraphView(
                   graph: eventFacade.getGraph(widget.sessionId),
-                  algorithm: KeeperSugiyamaAlgorithm(eventFacade.getBuilder()),
+                  algorithm: SugiyamaAlgorithm(eventFacade.getBuilder()),
                   paint: Paint()
                     ..color = Theme.of(context).colorScheme.onBackground
                     ..strokeWidth = 2.5
