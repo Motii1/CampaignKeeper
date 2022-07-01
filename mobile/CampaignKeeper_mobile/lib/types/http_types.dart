@@ -20,18 +20,23 @@ class Response {
 
 // Wrapper for a http request parameter
 class RequestParameter {
-  String name;
+  String? name;
   Object value;
 
-  RequestParameter({required this.name, required this.value});
+  RequestParameter({this.name, required this.value});
 
   String get parameter {
     var buffer = new StringBuffer();
 
-    buffer.write("?");
-    buffer.write(name);
-    buffer.write("=");
-    buffer.write(value);
+    if (name != null) {
+      buffer.write("?");
+      buffer.write(name);
+      buffer.write("=");
+      buffer.write(value);
+    } else {
+      buffer.write("/");
+      buffer.write(value);
+    }
 
     return buffer.toString();
   }

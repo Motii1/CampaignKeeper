@@ -2,10 +2,14 @@ import 'package:campaign_keeper_mobile/components/app_bar/keeper_floating_search
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/keeper_interactive_viewer.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
+import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/entities/event_ent.dart';
+import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/facades/fake_event_facade.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphview/GraphView.dart';
@@ -22,12 +26,18 @@ class SessionMap extends StatefulWidget {
 }
 
 class _SessionMapState extends KeeperState<SessionMap> {
+  final eventFacade = FakeEventFacade();
+  bool isLoaded = false;
+  Graph? graph;
   late SessionEntity? session = DataCarrier().get(entId: widget.sessionId);
-  var eventFacade = FakeEventFacade();
 
   Future<void> onRefresh() async {
-    await DataCarrier().refresh<UserDataEntity>();
+    DataCarrier().refresh<UserDataEntity>();
+    DataCarrier().refresh<CampaignEntity>();
+    await DataCarrier()
+        .refresh<ObjectEntity>(parameterName: EntityParameter.campaign, parameterValue: session?.campaignId);
     await DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
+    await DataCarrier().refresh<EventEntity>(parameterValue: widget.sessionId);
   }
 
   Future<void> onSessionRefresh() async {
@@ -35,8 +45,14 @@ class _SessionMapState extends KeeperState<SessionMap> {
     if (entity == null) {
       returnTo('/start');
     } else {
+      updateGraph();
+    }
+  }
+
+  void updateGraph() {
+    if (isLoaded) {
       setState(() {
-        session = entity;
+        graph = eventFacade.getGraph();
       });
     }
   }
@@ -44,18 +60,32 @@ class _SessionMapState extends KeeperState<SessionMap> {
   @override
   void onEveryResume() {
     DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
+    DataCarrier()
+        .refresh<ObjectEntity>(parameterName: EntityParameter.campaign, parameterValue: session?.campaignId);
+    DataCarrier().refresh<EventEntity>(parameterValue: widget.sessionId);
   }
 
   @override
-  void initState() {
-    super.initState();
-    DataCarrier().addListener<SessionEntity>(onSessionRefresh);
-    DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if (!isLoaded) {
+      await onRefresh();
+
+      DataCarrier().addListener<SessionEntity>(onSessionRefresh);
+      DataCarrier().addListener<ObjectEntity>(updateGraph);
+      DataCarrier().addListener<EventEntity>(updateGraph);
+
+      isLoaded = true;
+      updateGraph();
+    }
   }
 
   @override
   void dispose() {
     DataCarrier().removeListener<SessionEntity>(onSessionRefresh);
+    DataCarrier().removeListener<ObjectEntity>(updateGraph);
+    DataCarrier().removeListener<EventEntity>(updateGraph);
     super.dispose();
   }
 
@@ -64,7 +94,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
     return Scaffold(
       body: KeeperFloatingSearch(
         popup: KeeperPopup.settings(context),
-        child: session == null
+        child: !isLoaded || graph == null
             ? Center(
                 child: SpinKitRing(
                   color: Theme.of(context).colorScheme.onBackground,

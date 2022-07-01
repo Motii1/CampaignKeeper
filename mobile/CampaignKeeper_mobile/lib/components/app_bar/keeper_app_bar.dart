@@ -32,10 +32,6 @@ class KeeperAppBar extends StatelessWidget {
     return navigator != null && navigator.canPop() && autoLeading;
   }
 
-  Future<void> _refresh() {
-    return Future.delayed(Duration(seconds: 0));
-  }
-
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(

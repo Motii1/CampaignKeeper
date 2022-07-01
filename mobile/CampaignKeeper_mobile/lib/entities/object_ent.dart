@@ -48,20 +48,6 @@ class ObjectEntity {
         schemaId == other.schemaId &&
         title == other.title &&
         imageData == other.imageData &&
-        _valuesEquals(other.values);
-  }
-
-  bool _valuesEquals(List<FieldValue> other) {
-    if (values.length == other.length) {
-      for (int i = 0; i < values.length; i++) {
-        if (!values[i].equals(other[i])) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    return false;
+        values.equals(other.values);
   }
 }

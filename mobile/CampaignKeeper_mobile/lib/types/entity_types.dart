@@ -35,11 +35,8 @@ class FieldValue {
     return data;
   }
 
-  static FieldValue decode(Map data) {
-    if (!data.containsKey('type') ||
-        !data.containsKey('sequenceNumber') ||
-        !data.containsKey('value') ||
-        !data.containsKey('fieldName')) {
+  static FieldValue decode(Map data, {defaultFieldName = ""}) {
+    if (!data.containsKey('type') || !data.containsKey('sequenceNumber') || !data.containsKey('value')) {
       throw Exception("Wrong FieldValue data map.");
     }
 
@@ -47,7 +44,7 @@ class FieldValue {
     int sequence = data['sequenceNumber'];
     String text = type == FieldValueType.Text ? data['value'] : "";
     int id = type == FieldValueType.Id ? int.parse(data['value'].toString()) : 0;
-    String fieldName = data['fieldName'];
+    String fieldName = data['fieldName'] ?? defaultFieldName;
 
     if (type == FieldValueType.Text) {
       return FieldValue(type: type, sequence: sequence, fieldName: fieldName, text: text);
@@ -67,6 +64,7 @@ enum KeeperSliverReplacerType {
 enum EntityParameter {
   campaign,
   schema,
+  session,
 }
 
 extension EntityParameterExtension on EntityParameter {
@@ -76,6 +74,24 @@ extension EntityParameterExtension on EntityParameter {
         return 'campaignId';
       case EntityParameter.schema:
         return 'schemaId';
+      case EntityParameter.session:
+        return 'sessionId';
     }
+  }
+}
+
+extension ListExtension on List<FieldValue> {
+  bool equals(List<FieldValue> other) {
+    if (this.length != other.length) {
+      return false;
+    }
+
+    for (int i = 0; i < this.length; i++) {
+      if (!this[i].equals(other[i])) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
