@@ -6,7 +6,7 @@ class KeeperStartNode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 260,
+      width: 280,
       child: Center(
         child: Card(
           color: Theme.of(context).colorScheme.primary,

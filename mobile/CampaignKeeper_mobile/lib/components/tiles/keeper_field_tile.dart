@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 
 // Lisr element presenting FieldValues with a header.
 class KeeperFieldTile extends StatelessWidget {
-  const KeeperFieldTile({Key? key, required this.fieldName, required this.values}) : super(key: key);
+  const KeeperFieldTile({Key? key, required this.fieldName, required this.values, this.padding})
+      : super(key: key);
   final String fieldName;
   final List<FieldValue> values;
+  final EdgeInsets? padding;
 
   // isBackground determines if chips should be drawn with a rectangle backrgound
   // or just rounded outline, as Flutter can't do both at the same time.
@@ -44,7 +46,7 @@ class KeeperFieldTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 9, vertical: 4.5),
+      padding: padding ?? EdgeInsets.symmetric(horizontal: 9, vertical: 4.5),
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(14),

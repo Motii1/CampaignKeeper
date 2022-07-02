@@ -67,7 +67,9 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
   Widget objectItemBuilder(BuildContext context, int index) {
     if (index == 0) {
       return KeeperImageTile(image: object?.image);
-    } else if (index == 1) {
+    }
+
+    if (index == 1) {
       return VisibilityDetector(
         key: Key('object-title'),
         child: KeeperTitleTile(title: object?.title ?? ""),
@@ -81,17 +83,19 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
           }
         },
       );
-    } else if (schema != null && schema!.fields.length >= index - 2) {
+    }
+
+    if (schema != null && schema!.fields.length >= index - 2) {
       var fieldName = schema!.fields[index - 2];
       var values = object!.values.where((e) => e.fieldName == fieldName).toList()
         ..sort(((a, b) => a.sequence.compareTo(b.sequence)));
 
       return KeeperFieldTile(fieldName: fieldName, values: values);
-    } else {
-      return Center(
-        child: Text("Error"),
-      );
     }
+
+    return Center(
+      child: Text("Error"),
+    );
   }
 
   @override
