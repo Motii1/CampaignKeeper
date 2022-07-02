@@ -42,9 +42,11 @@ class KeeperGraphView extends StatelessWidget {
           });
         }
 
-        event.childrenIds.forEach((e) {
-          q.add(e);
-        });
+        if (event.displayStatus.toLowerCase() == 'shown') {
+          event.childrenIds.forEach((e) {
+            q.add(e);
+          });
+        }
       }
     } else {
       graph.addNode(startNode);

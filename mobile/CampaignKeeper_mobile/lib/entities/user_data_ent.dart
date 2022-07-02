@@ -28,7 +28,7 @@ class UserDataEntity {
   String? get imageData => _imageData;
 
   // A setter that also updates an cached image.
-  void set imageData(String? value) {
+  set imageData(String? value) {
     _imageData = value;
 
     if (value != null) {

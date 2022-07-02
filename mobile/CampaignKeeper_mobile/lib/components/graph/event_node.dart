@@ -35,7 +35,9 @@ class KeeperEventNode extends StatelessWidget {
         minWidth: 280,
       ),
       child: Material(
-        color: Theme.of(context).colorScheme.primary,
+        color: entity?.type.toLowerCase() == 'fight'
+            ? Theme.of(context).colorScheme.error
+            : Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
@@ -60,20 +62,32 @@ class KeeperEventNode extends StatelessWidget {
                     ),
                   ),
                 ),
-                KeeperChipTile(
-                  fieldName: "Places",
-                  values: placeValues,
-                  padding: EdgeInsets.zero,
-                ),
-                KeeperChipTile(
-                  fieldName: "Characters",
-                  values: characterValues,
-                  padding: EdgeInsets.zero,
-                ),
-                KeeperFieldTile(
-                  fieldName: "Description",
-                  values: descriptionValues,
-                  padding: EdgeInsets.zero,
+                Visibility(
+                  visible: entity?.displayStatus.toLowerCase() == 'shown',
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      KeeperChipTile(
+                        fieldName: "Places",
+                        values: placeValues,
+                        padding: EdgeInsets.zero,
+                        isProminent: entity?.type.toLowerCase() == 'fight',
+                      ),
+                      KeeperChipTile(
+                        fieldName: "Characters",
+                        values: characterValues,
+                        padding: EdgeInsets.zero,
+                        isProminent: entity?.type.toLowerCase() == 'fight',
+                      ),
+                      KeeperFieldTile(
+                        fieldName: "Description",
+                        values: descriptionValues,
+                        padding: EdgeInsets.zero,
+                        isProminent: entity?.type.toLowerCase() == 'fight',
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

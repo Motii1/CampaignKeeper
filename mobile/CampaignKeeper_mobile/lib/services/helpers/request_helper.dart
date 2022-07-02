@@ -185,13 +185,13 @@ class RequestHelper extends ChangeNotifier {
 
     switch (response.statusCode) {
       case 200:
-        return Response(ResponseStatus.Success, await response.body, await response.bodyBytes);
+        return Response(ResponseStatus.Success, response.body, response.bodyBytes);
       case 400:
       case 401:
       case 402:
       case 403:
       case 404:
-        print("Error response: " + await response.body.toString());
+        print("Error response: " + response.body.toString());
         return Response(ResponseStatus.IncorrectData, null, null);
       default:
         return Response(ResponseStatus.Error, null, null);

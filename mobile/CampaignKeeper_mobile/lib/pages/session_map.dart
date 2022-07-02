@@ -86,10 +86,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
       loadBit = 0;
     });
 
-    DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
-    DataCarrier()
-        .refresh<ObjectEntity>(parameterName: EntityParameter.campaign, parameterValue: session?.campaignId);
-    DataCarrier().refresh<EventEntity>(parameterValue: widget.sessionId);
+    refresh();
   }
 
   @override

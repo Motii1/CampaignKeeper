@@ -26,7 +26,7 @@ class ObjectEntity {
   String? get imageData => _imageData;
 
   // A setter that also updates an cached image.
-  void set imageData(String? value) {
+  set imageData(String? value) {
     _imageData = value == "" ? null : value;
 
     if (_imageData != null) {
