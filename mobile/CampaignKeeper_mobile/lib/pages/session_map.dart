@@ -71,16 +71,16 @@ class _SessionMapState extends KeeperState<SessionMap> {
   }
 
   void fabOnPressed() {
-    controller.openDrawer(
-      "Test",
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-          .map((e) => KeeperDrawerTile(
-                child: ListTile(
-                  title: Text(e.toString()),
-                ),
-              ))
-          .toList(),
-    );
+    var nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+    var fun = (BuildContext context, int id) {
+      return KeeperDrawerTile(
+        child: ListTile(
+          title: Text(nums[id].toString()),
+        ),
+      );
+    };
+
+    controller.openDrawer("Test", nums.length, fun);
   }
 
   @override

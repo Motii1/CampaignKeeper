@@ -6,16 +6,19 @@ import 'dart:math';
 class KeeperDrawerDialogController extends ChangeNotifier {
   bool _isDrawerOpen = false;
   String _title = "";
-  List<KeeperDrawerTile> _items = [];
+  KeeperDrawerTile Function(BuildContext, int)? _builder;
+  int _itemCount = 0;
 
   bool get isDrawerOpen => _isDrawerOpen;
   String get title => _title;
-  List<KeeperDrawerTile> get items => _items;
+  KeeperDrawerTile Function(BuildContext, int)? get builder => _builder;
+  int get itemCount => _itemCount;
 
-  void openDrawer(String title, List<KeeperDrawerTile> items) {
+  void openDrawer(String title, int itemCount, KeeperDrawerTile Function(BuildContext, int) builder) {
     _isDrawerOpen = true;
     _title = title;
-    _items = items;
+    _itemCount = itemCount;
+    _builder = builder;
     notifyListeners();
   }
 
@@ -34,11 +37,13 @@ class KeeperDrawerTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (() {
-        context.findAncestorWidgetOfExactType<KeeperDrawerDialog>()?.controller.closeDrawer();
+        Future.delayed(Duration(milliseconds: 100), () {
+          context.findAncestorWidgetOfExactType<KeeperDrawerDialog>()?.controller.closeDrawer();
 
-        if (onTap != null) {
-          onTap!();
-        }
+          if (onTap != null) {
+            onTap!();
+          }
+        });
       }),
       child: child,
     );
@@ -55,39 +60,39 @@ class KeeperDrawerDialog extends StatefulWidget {
 }
 
 class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTickerProviderStateMixin {
-  static const shadowDuration = Duration(milliseconds: 200);
-  final scrollController = ScrollController();
+  static const shadowDuration = Duration(milliseconds: 190);
   final drawerKey = GlobalKey();
   final stackKey = GlobalKey();
-  double scrollOffset = 0;
-  bool isScrolling = false;
   late bool isDrawerOpen = widget.controller.isDrawerOpen;
   late String title = widget.controller.title;
-  late List<KeeperDrawerTile> items = widget.controller.items;
-
-  late final controller = AnimationController(
+  late int itemCount = widget.controller.itemCount;
+  late KeeperDrawerTile Function(BuildContext, int) builder =
+      widget.controller.builder ?? (_context, _id) => KeeperDrawerTile(child: Text("Error"));
+  late final drawerController = AnimationController(
     vsync: this,
-    duration: Duration(milliseconds: 250),
+    duration: Duration(milliseconds: 260),
+    reverseDuration: Duration(milliseconds: 300),
   );
   late final offsetAnimation = Tween<Offset>(
     begin: Offset(0.0, 1.0),
     end: Offset.zero,
-  ).animate(controller);
+  ).animate(drawerController);
 
   void drawerListener() {
+    if (widget.controller.isDrawerOpen) {
+      title = widget.controller.title;
+      itemCount = widget.controller.itemCount;
+      builder = widget.controller.builder ?? builder;
+    }
+
     setState(() {
       isDrawerOpen = widget.controller.isDrawerOpen;
-
-      if (isDrawerOpen) {
-        title = widget.controller.title;
-        items = widget.controller.items;
-      }
     });
 
     if (isDrawerOpen) {
-      controller.forward();
+      drawerController.forward();
     } else {
-      controller.reverse();
+      drawerController.reverse();
     }
   }
 
@@ -96,16 +101,16 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
 
     if (details.globalPosition.dy > maxHeight - drawerHeight + 15) {
-      controller.value = controller.value - (details.primaryDelta ?? 0) / maxHeight;
+      drawerController.value -= (details.primaryDelta ?? 0) / maxHeight;
     }
   }
 
   void onDragEnd(DragEndDetails details) {
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 250;
 
-    if ((details.primaryVelocity ?? 0) < 200 && controller.value > 0.89) {
-      int value = (drawerHeight * (1.0 - controller.value)).toInt() * 4;
-      controller.animateTo(1.0, duration: Duration(milliseconds: value));
+    if ((details.primaryVelocity ?? 0) < 200 && drawerController.value > 0.89) {
+      int value = (drawerHeight * (1.0 - drawerController.value)).toInt() * 4;
+      drawerController.animateTo(1.0, duration: Duration(milliseconds: value));
     } else {
       widget.controller.closeDrawer();
     }
@@ -113,8 +118,8 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
 
   void onDragCancel() {
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
-    int value = (drawerHeight * (1.0 - controller.value)).toInt() * 4;
-    controller.animateTo(1.0, duration: Duration(milliseconds: value));
+    int value = (drawerHeight * (1.0 - drawerController.value)).toInt() * 4;
+    drawerController.animateTo(1.0, duration: Duration(milliseconds: value));
   }
 
   @override
@@ -126,9 +131,8 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   @override
   void dispose() {
     widget.controller.removeListener(drawerListener);
-    controller.stop();
-    controller.dispose();
-    scrollController.dispose();
+    drawerController.stop();
+    drawerController.dispose();
     super.dispose();
   }
 
@@ -188,44 +192,12 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
                             _DrawerHandler(),
                             KeeperTitleTile(title: title),
                             Flexible(
-                              child: GestureDetector(
-                                onVerticalDragStart: ((details) {
-                                  scrollOffset = scrollController.offset;
-                                  isScrolling = false;
-                                }),
-                                onVerticalDragUpdate: (details) {
-                                  double delta = details.primaryDelta ?? 0;
-
-                                  if (!isScrolling &&
-                                      ((scrollController.offset == 0 && delta >= 0) ||
-                                          (controller.value != 1.0 && delta <= 0))) {
-                                    onDragUpdate(details);
-                                  } else {
-                                    isScrolling = true;
-                                    scrollOffset = max(0,
-                                        min(scrollOffset - delta, scrollController.position.maxScrollExtent));
-                                    scrollController.jumpTo(scrollOffset);
-                                  }
-                                },
-                                onVerticalDragEnd: (details) {
-                                  if (controller.value != 1.0 && !isScrolling) {
-                                    onDragEnd(details);
-                                  } else {
-                                    double delta = (details.primaryVelocity ?? 0) / 7;
-                                    scrollOffset = max(0,
-                                        min(scrollOffset - delta, scrollController.position.maxScrollExtent));
-                                    scrollController.animateTo(scrollOffset,
-                                        duration: Duration(milliseconds: 160), curve: Curves.decelerate);
-                                  }
-                                },
-                                child: ListView.builder(
-                                  controller: scrollController,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.zero,
-                                  itemCount: items.length,
-                                  itemBuilder: (context, id) => items[id],
-                                ),
+                              child: _DrawerList(
+                                drawerController: drawerController,
+                                onDragUpdate: onDragUpdate,
+                                onDragEnd: onDragEnd,
+                                itemCount: itemCount,
+                                builder: builder,
                               ),
                             ),
                           ],
@@ -243,6 +215,85 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   }
 }
 
+class _DrawerList extends StatefulWidget {
+  final AnimationController drawerController;
+  final void Function(DragUpdateDetails) onDragUpdate;
+  final void Function(DragEndDetails) onDragEnd;
+  final int itemCount;
+  final KeeperDrawerTile Function(BuildContext, int) builder;
+
+  const _DrawerList({
+    Key? key,
+    required this.drawerController,
+    required this.onDragUpdate,
+    required this.onDragEnd,
+    required this.itemCount,
+    required this.builder,
+  }) : super(key: key);
+
+  @override
+  State<_DrawerList> createState() => __DrawerListState();
+}
+
+class __DrawerListState extends State<_DrawerList> {
+  final scrollController = ScrollController();
+  double scrollOffset = 0;
+  bool isScrolling = false;
+
+  void onDragStart(DragStartDetails details) {
+    scrollOffset = scrollController.offset;
+    isScrolling = false;
+  }
+
+  void onDragUpdate(DragUpdateDetails details) {
+    double delta = details.primaryDelta ?? 0;
+
+    if (!isScrolling &&
+        ((scrollController.offset == 0 && delta >= 0) ||
+            (widget.drawerController.value != 1.0 && delta <= 0))) {
+      widget.onDragUpdate(details);
+    } else {
+      isScrolling = true;
+      scrollOffset = max(0, min(scrollOffset - delta, scrollController.position.maxScrollExtent));
+      scrollController.jumpTo(scrollOffset);
+    }
+  }
+
+  void onDragEnd(DragEndDetails details) {
+    if (widget.drawerController.value != 1.0 && !isScrolling) {
+      widget.onDragEnd(details);
+    } else {
+      double delta = ((details.primaryVelocity ?? 0) - 180) / 8;
+      scrollOffset = max(0, min(scrollOffset - delta, scrollController.position.maxScrollExtent));
+      scrollController.animateTo(scrollOffset,
+          duration: Duration(milliseconds: 160), curve: Curves.decelerate);
+    }
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onVerticalDragStart: onDragStart,
+      onVerticalDragUpdate: onDragUpdate,
+      onVerticalDragEnd: onDragEnd,
+      child: ListView.builder(
+        controller: scrollController,
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        itemCount: widget.itemCount,
+        itemBuilder: widget.builder,
+      ),
+    );
+  }
+}
+
 class _DrawerHandler extends StatelessWidget {
   const _DrawerHandler({Key? key}) : super(key: key);
 
@@ -252,7 +303,7 @@ class _DrawerHandler extends StatelessWidget {
       padding: EdgeInsets.only(top: 13, bottom: 9),
       child: Center(
         child: Material(
-          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.25),
+          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.2),
           borderRadius: BorderRadius.circular(20),
           child: SizedBox(
             height: 5.5,
