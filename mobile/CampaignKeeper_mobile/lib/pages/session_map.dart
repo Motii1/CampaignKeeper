@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_floating_search.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
+import 'package:campaign_keeper_mobile/components/keeper_drawer_dialog.dart';
 import 'package:campaign_keeper_mobile/components/keeper_graph_view.dart';
 import 'package:campaign_keeper_mobile/components/keeper_interactive_viewer.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
@@ -25,6 +26,7 @@ class SessionMap extends StatefulWidget {
 }
 
 class _SessionMapState extends KeeperState<SessionMap> {
+  final controller = KeeperDrawerDialogController();
   final startKey = GlobalKey();
   int loadBit = 0;
   List<EventEntity> events = [];
@@ -69,7 +71,16 @@ class _SessionMapState extends KeeperState<SessionMap> {
   }
 
   void fabOnPressed() {
-    print("move me to the first event");
+    controller.openDrawer(
+      "Test",
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+          .map((e) => KeeperDrawerTile(
+                child: ListTile(
+                  title: Text(e.toString()),
+                ),
+              ))
+          .toList(),
+    );
   }
 
   @override
@@ -108,32 +119,35 @@ class _SessionMapState extends KeeperState<SessionMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: KeeperFloatingSearch(
-        popup: KeeperPopup.settings(context),
-        child: loadBit != 7
-            ? Center(
-                child: SpinKitRing(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  size: 40.0,
-                  lineWidth: 5.0,
+    return KeeperDrawerDialog(
+      controller: controller,
+      child: Scaffold(
+        body: KeeperFloatingSearch(
+          popup: KeeperPopup.settings(context),
+          child: loadBit != 7
+              ? Center(
+                  child: SpinKitRing(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    size: 40.0,
+                    lineWidth: 5.0,
+                  ),
+                )
+              : KeeperInteractiveViewer(
+                  centerKey: startKey,
+                  child: KeeperGraphView(
+                    events: events,
+                    startKey: startKey,
+                  ),
                 ),
-              )
-            : KeeperInteractiveViewer(
-                centerKey: startKey,
-                child: KeeperGraphView(
-                  events: events,
-                  startKey: startKey,
-                ),
-              ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: events.isEmpty ? null : fabOnPressed,
-        backgroundColor: events.isEmpty
-            ? Color.alphaBlend(Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
-                Theme.of(context).colorScheme.primary)
-            : Theme.of(context).colorScheme.primary,
-        child: Icon(Icons.article_outlined),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: events.isEmpty ? null : fabOnPressed,
+          backgroundColor: events.isEmpty
+              ? Color.alphaBlend(Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
+                  Theme.of(context).colorScheme.primary)
+              : Theme.of(context).colorScheme.primary,
+          child: Icon(Icons.article_outlined),
+        ),
       ),
     );
   }

@@ -92,19 +92,25 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
 
     if (details.globalPosition.dy > maxHeight - drawerHeight + 15) {
-      controller.value -= (details.primaryDelta ?? 0) / maxHeight;
+      controller.value = controller.value - (details.primaryDelta ?? 0) / maxHeight;
     }
   }
 
   void onDragEnd(DragEndDetails details) {
-    double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
+    double drawerHeight = drawerKey.currentContext?.size?.height ?? 250;
 
-    if (controller.value > 1.0 - 60 / drawerHeight) {
+    if ((details.primaryVelocity ?? 0) < 160 && controller.value > 0.89) {
       int value = (drawerHeight * (1.0 - controller.value)).toInt() * 4;
       controller.animateTo(1.0, duration: Duration(milliseconds: value));
     } else {
       widget.controller.closeDrawer();
     }
+  }
+
+  void onDragCancel() {
+    double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
+    int value = (drawerHeight * (1.0 - controller.value)).toInt() * 4;
+    controller.animateTo(1.0, duration: Duration(milliseconds: value));
   }
 
   @override
@@ -116,6 +122,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   @override
   void dispose() {
     widget.controller.removeListener(drawerListener);
+    controller.stop();
     controller.dispose();
     super.dispose();
   }
@@ -151,7 +158,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).padding.top + 30,
+                height: MediaQuery.of(context).padding.top + 50,
               ),
               Flexible(
                 child: Align(
@@ -159,25 +166,31 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
                   child: GestureDetector(
                     onVerticalDragUpdate: onDragUpdate,
                     onVerticalDragEnd: onDragEnd,
+                    onVerticalDragCancel: onDragCancel,
                     child: Material(
                       key: drawerKey,
                       color: Theme.of(context).colorScheme.background,
                       borderRadius:
                           BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _DrawerHandler(),
-                          KeeperTitleTile(title: title),
-                          Flexible(
-                            child: ListView(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.zero,
-                              children: items,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: 250,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _DrawerHandler(),
+                            KeeperTitleTile(title: title),
+                            Flexible(
+                              child: ListView(
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                children: items,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -197,10 +210,10 @@ class _DrawerHandler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 14, bottom: 10),
+      padding: EdgeInsets.only(top: 13, bottom: 9),
       child: Center(
         child: Material(
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.25),
           borderRadius: BorderRadius.circular(20),
           child: SizedBox(
             height: 5.5,

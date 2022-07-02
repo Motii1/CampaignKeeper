@@ -13,7 +13,6 @@ class KeeperFieldTile extends StatelessWidget {
   final List<FieldValue> values;
   final EdgeInsets? padding;
   final bool isProminent;
-  // TODO: Add optional background color
 
   // isBackground determines if chips should be drawn with a rectangle backrgound
   // or just rounded outline, as Flutter can't do both at the same time.
