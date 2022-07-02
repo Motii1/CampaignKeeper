@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_floating_search.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
+import 'package:campaign_keeper_mobile/components/keeper_graph_view.dart';
 import 'package:campaign_keeper_mobile/components/keeper_interactive_viewer.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
@@ -7,12 +8,10 @@ import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
-import 'package:campaign_keeper_mobile/facades/event_facade.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:graphview/GraphView.dart';
 
 // Page displaying map of events in the current session.
 // Allows to show details of a particular event or
@@ -26,9 +25,9 @@ class SessionMap extends StatefulWidget {
 }
 
 class _SessionMapState extends KeeperState<SessionMap> {
-  final eventFacade = EventFacade();
+  final startKey = GlobalKey();
   int loadBit = 0;
-  Graph? graph;
+  List<EventEntity> events = [];
   late SessionEntity? session = DataCarrier().get(entId: widget.sessionId);
 
   Future<void> refresh() async {
@@ -62,11 +61,23 @@ class _SessionMapState extends KeeperState<SessionMap> {
   }
 
   void updateGraph() {
-    if (loadBit == 7) {
+    if (loadBit == 7 && this.mounted) {
       setState(() {
-        graph = eventFacade.getGraph(widget.sessionId);
+        events = DataCarrier().getList<EventEntity>(groupId: widget.sessionId);
       });
     }
+  }
+
+  void fabOnPressed() {
+    print("move me to the first event");
+  }
+
+  @override
+  void onReturn() {
+    DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
+    DataCarrier()
+        .refresh<ObjectEntity>(parameterName: EntityParameter.campaign, parameterValue: session?.campaignId);
+    DataCarrier().refresh<EventEntity>(parameterValue: widget.sessionId);
   }
 
   @override
@@ -82,8 +93,8 @@ class _SessionMapState extends KeeperState<SessionMap> {
   }
 
   @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     DataCarrier().addListener<SessionEntity>(onSessionRefresh);
     DataCarrier().addListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().addListener<EventEntity>(onEventRefresh);
@@ -103,7 +114,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
     return Scaffold(
       body: KeeperFloatingSearch(
         popup: KeeperPopup.settings(context),
-        child: loadBit != 7 || graph == null
+        child: loadBit != 7
             ? Center(
                 child: SpinKitRing(
                   color: Theme.of(context).colorScheme.onBackground,
@@ -112,27 +123,19 @@ class _SessionMapState extends KeeperState<SessionMap> {
                 ),
               )
             : KeeperInteractiveViewer(
-                centerKey: eventFacade.startKey,
-                child: GraphView(
-                  graph: eventFacade.getGraph(widget.sessionId),
-                  algorithm: SugiyamaAlgorithm(eventFacade.getBuilder()),
-                  paint: Paint()
-                    ..color = Theme.of(context).colorScheme.onBackground
-                    ..strokeWidth = 2.5
-                    ..style = PaintingStyle.stroke,
-                  builder: (Node node) {
-                    // I can decide what widget should be shown here based on the id
-                    var id = node.key?.value as int;
-                    return eventFacade.getNodeWidget(context, id);
-                  },
+                centerKey: startKey,
+                child: KeeperGraphView(
+                  events: events,
+                  startKey: startKey,
                 ),
               ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print("move me to the first event");
-        },
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        onPressed: events.isEmpty ? null : fabOnPressed,
+        backgroundColor: events.isEmpty
+            ? Color.alphaBlend(Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
+                Theme.of(context).colorScheme.primary)
+            : Theme.of(context).colorScheme.primary,
         child: Icon(Icons.article_outlined),
       ),
     );

@@ -123,6 +123,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
   @override
   void dispose() {
     scrollController.removeListener(scrollListener);
+    scrollController.dispose();
     DataCarrier().removeListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().removeListener<SchemaEntity>(onSchemaRefresh);
     super.dispose();

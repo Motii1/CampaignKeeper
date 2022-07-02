@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:campaign_keeper_mobile/types/widget_types.dart';
 import 'package:flutter/material.dart';
 
