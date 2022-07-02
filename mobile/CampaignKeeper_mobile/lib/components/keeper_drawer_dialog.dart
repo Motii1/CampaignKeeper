@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/components/tiles/keeper_title_tile.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 // IN PROGRESS
 class KeeperDrawerDialogController extends ChangeNotifier {
@@ -55,8 +56,11 @@ class KeeperDrawerDialog extends StatefulWidget {
 
 class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTickerProviderStateMixin {
   static const shadowDuration = Duration(milliseconds: 200);
+  final scrollController = ScrollController();
   final drawerKey = GlobalKey();
   final stackKey = GlobalKey();
+  double scrollOffset = 0;
+  bool isScrolling = false;
   late bool isDrawerOpen = widget.controller.isDrawerOpen;
   late String title = widget.controller.title;
   late List<KeeperDrawerTile> items = widget.controller.items;
@@ -99,7 +103,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   void onDragEnd(DragEndDetails details) {
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 250;
 
-    if ((details.primaryVelocity ?? 0) < 160 && controller.value > 0.89) {
+    if ((details.primaryVelocity ?? 0) < 200 && controller.value > 0.89) {
       int value = (drawerHeight * (1.0 - controller.value)).toInt() * 4;
       controller.animateTo(1.0, duration: Duration(milliseconds: value));
     } else {
@@ -124,6 +128,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
     widget.controller.removeListener(drawerListener);
     controller.stop();
     controller.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -158,7 +163,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).padding.top + 50,
+                height: MediaQuery.of(context).padding.top + 35,
               ),
               Flexible(
                 child: Align(
@@ -183,10 +188,44 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
                             _DrawerHandler(),
                             KeeperTitleTile(title: title),
                             Flexible(
-                              child: ListView(
-                                shrinkWrap: true,
-                                padding: EdgeInsets.zero,
-                                children: items,
+                              child: GestureDetector(
+                                onVerticalDragStart: ((details) {
+                                  scrollOffset = scrollController.offset;
+                                  isScrolling = false;
+                                }),
+                                onVerticalDragUpdate: (details) {
+                                  double delta = details.primaryDelta ?? 0;
+
+                                  if (!isScrolling &&
+                                      ((scrollController.offset == 0 && delta >= 0) ||
+                                          (controller.value != 1.0 && delta <= 0))) {
+                                    onDragUpdate(details);
+                                  } else {
+                                    isScrolling = true;
+                                    scrollOffset = max(0,
+                                        min(scrollOffset - delta, scrollController.position.maxScrollExtent));
+                                    scrollController.jumpTo(scrollOffset);
+                                  }
+                                },
+                                onVerticalDragEnd: (details) {
+                                  if (controller.value != 1.0 && !isScrolling) {
+                                    onDragEnd(details);
+                                  } else {
+                                    double delta = (details.primaryVelocity ?? 0) / 7;
+                                    scrollOffset = max(0,
+                                        min(scrollOffset - delta, scrollController.position.maxScrollExtent));
+                                    scrollController.animateTo(scrollOffset,
+                                        duration: Duration(milliseconds: 160), curve: Curves.decelerate);
+                                  }
+                                },
+                                child: ListView.builder(
+                                  controller: scrollController,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.zero,
+                                  itemCount: items.length,
+                                  itemBuilder: (context, id) => items[id],
+                                ),
                               ),
                             ),
                           ],
