@@ -30,6 +30,7 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
         <EventWrapper
           key={`event-node-key-${node.id}`}
           event={node}
+          eventsList={eventsList}
           setIsOpen={props.setIsOpen}
           setDialogType={props.setDialogType}
         />
@@ -38,14 +39,29 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
   );
 
   // TO-DO: show "Add an event, Grand Designer" when there are no events
-  const renderRows = () => {
+  const renderGraph = () => {
     if (eventsList.length === 0) return null;
+    const queue: SessionEventWithPos[] = eventsList.filter(event => event.parentIds.length === 0);
+    const eventToShowSet: Set<SessionEventWithPos> = new Set(queue);
 
-    const maxRow = Math.max(...eventsList.map((event: SessionEventWithPos) => event.y));
+    while (queue.length > 0) {
+      const currentEvent = queue.shift();
+      if (currentEvent) {
+        eventToShowSet.add(currentEvent);
+        if (currentEvent && currentEvent?.displayStatus === 'shown') {
+          queue.push(...eventsList.filter(event => currentEvent.childrenIds.includes(event.id)));
+        }
+      }
+    }
+
+    const eventsToShow = Array.from(eventToShowSet);
+    // eslint-disable-next-line no-console
+    console.log(eventsToShow);
+    const maxRow = Math.max(...eventsToShow.map((event: SessionEventWithPos) => event.y));
     const rowIndexes = Array.from(Array(maxRow + 1).keys());
 
     return rowIndexes.map(index =>
-      renderRow(eventsList.filter((node: SessionEventWithPos) => node.y === index))
+      renderRow(eventsToShow.filter((node: SessionEventWithPos) => node.y === index))
     );
   };
 
@@ -83,7 +99,7 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
         }}
       >
         <RootNode />
-        {renderRows()}
+        {renderGraph()}
       </Stack>
     </div>
   ) : (

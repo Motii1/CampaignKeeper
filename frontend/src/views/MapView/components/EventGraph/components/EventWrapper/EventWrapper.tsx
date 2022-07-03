@@ -6,6 +6,7 @@ import { EventTile } from './components/EventTile/EventTile';
 
 type EventWrapperProps = {
   event: SessionEventWithPos;
+  eventsList: SessionEventWithPos[];
   setIsOpen: (newIsOpen: boolean) => void;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
@@ -50,7 +51,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
     });
   };
 
-  return props.event.displayStatus === 'shown' || props.event.displayStatus === 'collapsed' ? (
+  return (
     <Box>
       {props.event.parentIds.length === 0 ? renderRootArrow() : null}
       <EventTile
@@ -61,5 +62,5 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
       />
       {props.event.displayStatus === 'shown' ? renderChildArrows() : null}
     </Box>
-  ) : null;
+  );
 };

@@ -6,9 +6,9 @@ import requestMethods from '../../../../../../../../../../../../axios/requestMet
 import { useQuery } from '../../../../../../../../../../../../axios/useQuery';
 import { EditEventData } from '../../../../../../../../../../dialog/MapDialog';
 import {
-  collapseEvent,
+  hideEvent,
   SessionEventWithPos,
-  uncollapseEvent,
+  showEvent,
 } from '../../../../../../../../../../eventsSlice';
 
 type DisplayStatusIconProps = {
@@ -30,16 +30,16 @@ export const DisplayStatusIcon: React.FC<DisplayStatusIconProps> = props => {
   const handleRunQueryStatus = useCallback(() => {
     if (!isLoadingStatus && statusStatus) {
       if (statusStatus === 200)
-        if (displayStatus === 'collapsed')
+        if (displayStatus === 'hidden')
           dispatch(
-            collapseEvent({
-              eventToCollapse: props.event,
+            hideEvent({
+              id: props.event.id,
             })
           );
         else
           dispatch(
-            uncollapseEvent({
-              eventToUncollapse: props.event,
+            showEvent({
+              id: props.event.id,
             })
           );
       resetQueryStatus();
@@ -51,7 +51,7 @@ export const DisplayStatusIcon: React.FC<DisplayStatusIconProps> = props => {
   }, [handleRunQueryStatus]);
 
   const handleClick = () => {
-    const newDisplayStatus = displayStatus === 'shown' ? 'collapsed' : 'shown';
+    const newDisplayStatus = displayStatus === 'shown' ? 'hidden' : 'shown';
     runQueryStatus({
       displayStatus: newDisplayStatus,
     });
