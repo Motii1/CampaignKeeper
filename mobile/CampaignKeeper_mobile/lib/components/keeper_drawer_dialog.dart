@@ -274,13 +274,15 @@ class __DrawerListState extends State<_DrawerList> {
     if (widget.drawerController.value != 1.0 && !isScrolling) {
       widget.onDragEnd(details);
     } else {
-      double delta = ((details.primaryVelocity ?? 0) - 180) / 8;
+      double velocity = details.primaryVelocity ?? 0;
+      double direction = velocity > 0 ? 1 : -1;
+      double delta = max(0, velocity.abs() - 180) * direction / 15;
 
       if (scrollOffset != 0 || delta > 0) {
         scrollOffset = max(widget.scrollController.position.minScrollExtent,
             min(scrollOffset - delta, widget.scrollController.position.maxScrollExtent));
         widget.scrollController
-            .animateTo(scrollOffset, duration: Duration(milliseconds: 160), curve: Curves.decelerate);
+            .animateTo(scrollOffset, duration: Duration(milliseconds: 120), curve: Curves.decelerate);
       }
     }
   }

@@ -26,6 +26,7 @@ class KeeperGraphView extends StatelessWidget {
 
     var eventMap = Map.fromIterable(events, key: (e) => e.id, value: (e) => e);
     var nodeMap = Map.fromIterable(events, key: (e) => e.id, value: (e) => Node.Id(e.id));
+    Set<int> visibleNodes = {};
 
     var q = Queue.from(events.where((e) => e.parentIds.length == 0).map((e) => e.id));
     if (q.isNotEmpty) {
@@ -38,11 +39,14 @@ class KeeperGraphView extends StatelessWidget {
           graph.addEdge(startNode, node);
         } else {
           event.parentIds.forEach((e) {
-            graph.addEdge(nodeMap[e]!, node);
+            if (visibleNodes.contains(e)) {
+              graph.addEdge(nodeMap[e]!, node);
+            }
           });
         }
 
         if (event.displayStatus.toLowerCase() == 'shown') {
+          visibleNodes.add(id);
           event.childrenIds.forEach((e) {
             q.add(e);
           });
