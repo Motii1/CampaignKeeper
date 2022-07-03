@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { useXarrow } from 'react-xarrows';
 import { RootState } from '../../../../store';
 import { NavBarViewDialog } from '../../../../types/types';
+import { compareEventsByX } from '../../../../utils/utils';
 import { CircleProgress } from '../../../components/CircleProgress/CircleProgress';
 import { SessionEventWithPos } from '../../eventsSlice';
 import { EventWrapper } from './components/EventWrapper/EventWrapper';
@@ -21,25 +22,30 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
   const updateXarrow = useXarrow();
 
   const renderRow = useCallback(
-    (nodes: SessionEventWithPos[]) => (
-      <Stack
-        key={nodes[0].y}
-        direction="row"
-        justifyContent="center"
-        alignItems="flex-start"
-        spacing={4}
-      >
-        {nodes.map(node => (
-          <EventWrapper
-            key={`event-node-key-${node.id}`}
-            event={node}
-            eventsList={eventsList}
-            setIsOpen={props.setIsOpen}
-            setDialogType={props.setDialogType}
-          />
-        ))}
-      </Stack>
-    ),
+    (nodes: SessionEventWithPos[]) => {
+      // eslint-disable-next-line no-console
+      const nodesCopy = nodes;
+      nodesCopy.sort(compareEventsByX);
+      return (
+        <Stack
+          key={nodes[0].y}
+          direction="row"
+          justifyContent="center"
+          alignItems="flex-start"
+          spacing={4}
+        >
+          {nodesCopy.map(node => (
+            <EventWrapper
+              key={`event-node-key-${node.id}`}
+              event={node}
+              eventsList={eventsList}
+              setIsOpen={props.setIsOpen}
+              setDialogType={props.setDialogType}
+            />
+          ))}
+        </Stack>
+      );
+    },
     [eventsList, props.setDialogType, props.setIsOpen]
   );
 

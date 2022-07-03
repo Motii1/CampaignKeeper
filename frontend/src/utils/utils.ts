@@ -219,3 +219,9 @@ export const compareEventsByTitle = (e1: SessionEventWithPos, e2: SessionEventWi
   if (e1.title > e2.title) return 1;
   return 0;
 };
+
+export const compareEventsByX = (e1: SessionEventWithPos, e2: SessionEventWithPos): number => {
+  if (e1.x < e2.x) return -1;
+  if (e1.x > e2.x) return 1;
+  return 0;
+};

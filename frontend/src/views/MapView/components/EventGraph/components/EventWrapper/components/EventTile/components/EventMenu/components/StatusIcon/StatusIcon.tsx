@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import requestMethods from '../../../../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../../../../axios/useQuery';
 import { EditEventData } from '../../../../../../../../../../dialog/MapDialog';
-import { editEvent, SessionEventWithPos } from '../../../../../../../../../../eventsSlice';
+import { changeEventStatus, SessionEventWithPos } from '../../../../../../../../../../eventsSlice';
 
 type StatusIconProps = {
   event: SessionEventWithPos;
@@ -34,8 +34,9 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
     if (!isLoadingStatus && statusStatus) {
       if (statusStatus === 200)
         dispatch(
-          editEvent({
-            editedEvent: { ...props.event, status: eventStatus },
+          changeEventStatus({
+            changedEventId: props.event.id,
+            newStatus: eventStatus,
           })
         );
       resetQueryStatus();
@@ -47,17 +48,19 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
   }, [handleRunQueryStatus]);
 
   const handleClick = () => {
+    if (eventStatus === 'none')
+      runQueryStatus({
+        status: 'done',
+      });
+    else if (eventStatus === 'done')
+      runQueryStatus({
+        status: 'omitted',
+      });
+    else
+      runQueryStatus({
+        status: 'none',
+      });
     setNewStatus();
-    runQueryStatus({
-      title: props.event.title,
-      type: props.event.type,
-      status: eventStatus,
-      displayStatus: props.event.displayStatus,
-      placeMetadataArray: props.event.placeMetadataArray,
-      descriptionMetadataArray: props.event.descriptionMetadataArray,
-      charactersMetadataArray: props.event.charactersMetadataArray,
-      parentIds: props.event.parentIds,
-    });
   };
 
   if (eventStatus === 'none')

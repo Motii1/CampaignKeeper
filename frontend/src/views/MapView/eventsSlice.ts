@@ -191,6 +191,17 @@ const eventsSlice = createSlice({
       });
       state.eventsList = setPositions(newEventsList);
     },
+    changeEventStatus: (state, action) => {
+      const newEventsList = state.eventsList.map(event => {
+        if (event.id === action.payload.changedEventId)
+          return {
+            ...event,
+            status: action.payload.newStatus,
+          };
+        return event;
+      });
+      state.eventsList = newEventsList;
+    },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resetState: (state, _action) => {
       state.isEventsListDownloaded = false;
@@ -213,7 +224,14 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { addEvent, editEvent, deleteEvent, hideEvent, showEvent, resetState } =
-  eventsSlice.actions;
+export const {
+  addEvent,
+  editEvent,
+  deleteEvent,
+  hideEvent,
+  showEvent,
+  changeEventStatus,
+  resetState,
+} = eventsSlice.actions;
 
 export default eventsSlice.reducer;

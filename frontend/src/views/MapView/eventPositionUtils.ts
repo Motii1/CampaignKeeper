@@ -112,15 +112,9 @@ export const setXPos = (nodes: NodePositionInfo[]): NodePositionInfo[] => {
 };
 
 export const setPositions = (events: SessionEventWithPos[]): SessionEventWithPos[] => {
-  // eslint-disable-next-line no-console
-  console.log('setting positions');
-
   const eventsAsNodes: NodePositionInfo[] = convertEventsToNodes(events);
   const nodesWithYPos = setYPos(eventsAsNodes);
   const nodesWithBothPos = setXPos(nodesWithYPos);
-
-  // eslint-disable-next-line no-console
-  console.log(nodesWithBothPos);
 
   return events.map(event => {
     const eventAsNode = nodesWithBothPos.find(node => node.id === event.id);
