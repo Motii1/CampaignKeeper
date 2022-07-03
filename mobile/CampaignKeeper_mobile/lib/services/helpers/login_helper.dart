@@ -56,7 +56,7 @@ class LoginHelper {
     DataCarrier().clear();
 
     if (RequestHelper().isCookieValid()) {
-      var response = await RequestHelper().post(endpoint: _logoutEnd, isLogin: true);
+      var response = await RequestHelper().post(endpoint: _logoutEnd, isLogin: false);
 
       RequestHelper().clearCookie();
       return response.status;
