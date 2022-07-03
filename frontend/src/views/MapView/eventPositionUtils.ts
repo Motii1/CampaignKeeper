@@ -9,9 +9,11 @@ type NodePositionInfo = {
   y: number;
 };
 
-const compareNodesByX = (e1: NodePositionInfo, e2: NodePositionInfo): number => {
+const compareNodesInRow = (e1: NodePositionInfo, e2: NodePositionInfo): number => {
   if (e1.x < e2.x) return -1;
   if (e1.x > e2.x) return 1;
+  if (e1.id < e2.id) return -1;
+  if (e1.id > e2.id) return 1;
   return 0;
 };
 
@@ -96,7 +98,7 @@ export const setXPos = (nodes: NodePositionInfo[]): NodePositionInfo[] => {
       const nodeParentsX = getParents(node, nodes).map(node => node.x);
       node.x = nodeParentsX.reduce((a, b) => a + b, 0) / nodeParentsX.length;
     });
-    rows[index].sort(compareNodesByX);
+    rows[index].sort(compareNodesInRow);
 
     // normalizing avg for each node in row
     let newX = 0;
