@@ -169,8 +169,6 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
   };
 
   const handleCancel = () => {
-    // eslint-disable-next-line no-console
-    console.log(`Start dialog: ${props.isOpen}`);
     props.setIsOpen(false);
     resetDialog();
   };

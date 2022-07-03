@@ -1,4 +1,5 @@
 import { Stack } from '@mui/material';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useXarrow } from 'react-xarrows';
 import { RootState } from '../../../../store';
@@ -16,30 +17,34 @@ type EventGraphProsp = {
 export const EventGraph: React.FC<EventGraphProsp> = props => {
   const { isEventsListDownloaded, eventsList } = useSelector((state: RootState) => state.events);
   const { isLight } = useSelector((state: RootState) => state.theme);
+
   const updateXarrow = useXarrow();
 
-  const renderRow = (nodes: SessionEventWithPos[]) => (
-    <Stack
-      key={nodes[0].y}
-      direction="row"
-      justifyContent="center"
-      alignItems="flex-start"
-      spacing={4}
-    >
-      {nodes.map(node => (
-        <EventWrapper
-          key={`event-node-key-${node.id}`}
-          event={node}
-          eventsList={eventsList}
-          setIsOpen={props.setIsOpen}
-          setDialogType={props.setDialogType}
-        />
-      ))}
-    </Stack>
+  const renderRow = useCallback(
+    (nodes: SessionEventWithPos[]) => (
+      <Stack
+        key={nodes[0].y}
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-start"
+        spacing={4}
+      >
+        {nodes.map(node => (
+          <EventWrapper
+            key={`event-node-key-${node.id}`}
+            event={node}
+            eventsList={eventsList}
+            setIsOpen={props.setIsOpen}
+            setDialogType={props.setDialogType}
+          />
+        ))}
+      </Stack>
+    ),
+    [eventsList, props.setDialogType, props.setIsOpen]
   );
 
   // TO-DO: show "Add an event, Grand Designer" when there are no events
-  const renderGraph = () => {
+  const renderGraph = useCallback(() => {
     if (eventsList.length === 0) return null;
     const queue: SessionEventWithPos[] = eventsList.filter(event => event.parentIds.length === 0);
     const eventToShowSet: Set<SessionEventWithPos> = new Set(queue);
@@ -55,15 +60,13 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
     }
 
     const eventsToShow = Array.from(eventToShowSet);
-    // eslint-disable-next-line no-console
-    console.log(eventsToShow);
     const maxRow = Math.max(...eventsToShow.map((event: SessionEventWithPos) => event.y));
     const rowIndexes = Array.from(Array(maxRow + 1).keys());
 
     return rowIndexes.map(index =>
       renderRow(eventsToShow.filter((node: SessionEventWithPos) => node.y === index))
     );
-  };
+  }, [eventsList, renderRow]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleScroll = (_event: React.UIEvent<HTMLElement>) => {
