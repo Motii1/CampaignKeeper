@@ -35,7 +35,7 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
       if (statusStatus === 200)
         dispatch(
           editEvent({
-            updatedEvent: { ...props.event, status: eventStatus },
+            editedEvent: { ...props.event, status: eventStatus },
           })
         );
       resetQueryStatus();

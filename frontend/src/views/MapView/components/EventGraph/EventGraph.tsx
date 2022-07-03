@@ -48,7 +48,8 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
     if (eventsList.length === 0) return null;
     const queue: SessionEventWithPos[] = eventsList.filter(event => event.parentIds.length === 0);
     const eventToShowSet: Set<SessionEventWithPos> = new Set(queue);
-
+    // eslint-disable-next-line no-console
+    console.log(eventsList);
     while (queue.length > 0) {
       const currentEvent = queue.shift();
       if (currentEvent) {

@@ -64,6 +64,42 @@ const addEventToStore = (newEvent: SessionEvent, eventsList: SessionEventWithPos
       y: -1,
     });
 
+const editEventInStore = (editedEvent: SessionEventWithPos, eventsList: SessionEventWithPos[]) =>
+  eventsList
+    .map(event => {
+      // edited event was a child (and maybe still is)
+      if (event.childrenIds.includes(editedEvent.id))
+        return editedEvent.parentIds.includes(event.id)
+          ? event
+          : {
+              ...event,
+              childrenIds: event.childrenIds.filter(id => id !== editedEvent.id),
+            };
+      // edited event was a parent (and maybe still is)
+      if (event.parentIds.includes(editedEvent.id))
+        return editedEvent.childrenIds.includes(event.id)
+          ? event
+          : {
+              ...event,
+              parentIds: event.parentIds.filter(id => id !== editedEvent.id),
+            };
+      // edited event is a new child
+      if (editedEvent.parentIds.includes(event.id))
+        return {
+          ...event,
+          childrenIds: event.childrenIds.concat(editedEvent.id),
+        };
+      // edited event is a new parent
+      if (editedEvent.childrenIds.includes(event.id))
+        return {
+          ...event,
+          parentIds: event.parentIds.concat(editedEvent.id),
+        };
+      // edited event is not associated
+      return event;
+    })
+    .concat(editedEvent);
+
 const removeEventFromStore = (
   deletedEvent: SessionEventWithPos,
   newParentId: string,
@@ -112,9 +148,9 @@ const eventsSlice = createSlice({
     },
     editEvent: (state, action) => {
       const currentEventsList = state.eventsList.filter(
-        event => event.id !== action.payload.updatedEvent.id
+        event => event.id !== action.payload.editedEvent.id
       );
-      const newEventList = addEventToStore(action.payload.updatedEvent, currentEventsList);
+      const newEventList = editEventInStore(action.payload.editedEvent, currentEventsList);
       newEventList.forEach((event: SessionEventWithPos) => {
         event.x = -1;
         event.y = -1;
