@@ -59,11 +59,11 @@ class KeeperDrawerDialog extends StatefulWidget {
 }
 
 class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTickerProviderStateMixin {
-  static const shadowDuration = Duration(milliseconds: 190);
   final drawerKey = GlobalKey();
-  final stackKey = GlobalKey();
   final scrollController = ScrollController();
   bool isHeaderElevated = false;
+  double fillerSize = 0;
+  late double topPadding = MediaQuery.of(context).padding.top + 35;
   late bool isDrawerOpen = widget.controller.isDrawerOpen;
   late String title = widget.controller.title;
   late int itemCount = widget.controller.itemCount;
@@ -110,18 +110,42 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   }
 
   void onDragUpdate(DragUpdateDetails details) {
-    double maxHeight = stackKey.currentContext?.size?.height ?? MediaQuery.of(context).size.height;
+    double maxHeight = MediaQuery.of(context).size.height;
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
+    double delta = details.primaryDelta ?? 0;
+
+    if (!isDrawerOpen) return;
 
     if (details.globalPosition.dy > maxHeight - drawerHeight + 15) {
-      drawerController.value -= (details.primaryDelta ?? 0) / maxHeight;
+      drawerController.value -= delta / maxHeight;
+
+      if (fillerSize != 0) {
+        setState(() {
+          fillerSize = 0;
+        });
+      }
+    } else {
+      double newFillerSize = fillerSize - delta;
+      newFillerSize = max(0, newFillerSize);
+      newFillerSize = min(maxHeight - topPadding - drawerHeight, newFillerSize);
+
+      setState(() {
+        fillerSize = newFillerSize;
+      });
     }
   }
 
   void onDragEnd(DragEndDetails details) {
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 250;
+    double velocity = details.primaryVelocity ?? 0;
 
-    if ((details.primaryVelocity ?? 0) < 250 && drawerController.value > 0.89) {
+    if (!isDrawerOpen) return;
+
+    if (fillerSize > 0) {
+      setState(() {
+        fillerSize = 0;
+      });
+    } else if (velocity < 250 && drawerController.value > 0.89) {
       int value = (drawerHeight * (1.0 - drawerController.value)).toInt() * 4;
       drawerController.animateTo(1.0, duration: Duration(milliseconds: value));
     } else {
@@ -155,7 +179,6 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   @override
   Widget build(BuildContext context) {
     return Stack(
-      key: stackKey,
       alignment: AlignmentDirectional.bottomCenter,
       fit: StackFit.expand,
       children: [
@@ -163,7 +186,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
           color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
         ),
         AnimatedOpacity(
-          duration: shadowDuration,
+          duration: const Duration(milliseconds: 190),
           opacity: isDrawerOpen ? 0.8 : 1.0,
           child: widget.child,
         ),
@@ -188,29 +211,41 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: 250,
-                  maxHeight: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - 35,
+                  maxHeight: MediaQuery.of(context).size.height - topPadding,
                 ),
                 child: Material(
-                  key: drawerKey,
                   color: Theme.of(context).colorScheme.background,
                   borderRadius:
-                      BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                      const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _DrawerHeader(
-                        title: title,
-                        isElevated: isHeaderElevated,
+                      Column(
+                        key: drawerKey,
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _DrawerHeader(
+                            title: title,
+                            isElevated: isHeaderElevated,
+                          ),
+                          Flexible(
+                            child: _DrawerList(
+                              drawerController: drawerController,
+                              scrollController: scrollController,
+                              onDragUpdate: onDragUpdate,
+                              onDragEnd: onDragEnd,
+                              itemCount: itemCount,
+                              builder: builder,
+                            ),
+                          ),
+                        ],
                       ),
-                      Flexible(
-                        child: _DrawerList(
-                          drawerController: drawerController,
-                          scrollController: scrollController,
-                          onDragUpdate: onDragUpdate,
-                          onDragEnd: onDragEnd,
-                          itemCount: itemCount,
-                          builder: builder,
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 150),
+                        child: SizedBox(
+                          height: fillerSize,
                         ),
                       ),
                     ],
@@ -316,7 +351,7 @@ class _DrawerHeader extends StatelessWidget {
     return Material(
       animationDuration: Duration(milliseconds: 450),
       color: Theme.of(context).colorScheme.background,
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       elevation: isElevated ? 5 : 0,
       shadowColor: Theme.of(context).colorScheme.brightness == Brightness.light
           ? Colors.black.withOpacity(0.2)
@@ -339,7 +374,7 @@ class _DrawerHandler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 13, bottom: 9),
+      padding: const EdgeInsets.only(top: 13, bottom: 9),
       child: Center(
         child: Material(
           color: Theme.of(context).colorScheme.onBackground.withOpacity(0.2),
