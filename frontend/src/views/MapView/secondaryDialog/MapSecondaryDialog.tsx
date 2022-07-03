@@ -24,7 +24,7 @@ type MapSecondaryDialogProps = {
 
 export const MapSecondaryDialog: React.FC<MapSecondaryDialogProps> = props => {
   const dispatch = useDispatch();
-  const eventId = useSelector((state: RootState) => state.mapView.currentEvent?.id);
+  const currentEvent = useSelector((state: RootState) => state.mapView.currentEvent);
   const { eventsList } = useSelector((state: RootState) => state.events);
 
   const [newParent, setNewParent] = useState<string | null>(null);
@@ -34,12 +34,12 @@ export const MapSecondaryDialog: React.FC<MapSecondaryDialogProps> = props => {
     status: statusDelete,
     runQuery: runQueryDelete,
     resetQuery: resetQueryDelete,
-  } = useQuery<deleteEventData>(`/api/event/${eventId}`, requestMethods.DELETE);
+  } = useQuery<deleteEventData>(`/api/event/${currentEvent?.id}`, requestMethods.DELETE);
 
   const handleRunQueryDelete = useCallback(() => {
     if (!isLoadingDelete && statusDelete) {
       if (statusDelete === 200) {
-        dispatch(deleteEvent({ id: eventId }));
+        dispatch(deleteEvent({ deletedEvent: currentEvent, newParent: newParent }));
         dispatch(setCurrentEvent({ currentEvent: null }));
         props.setSnackbarSuccess('Event deleted');
         props.setIsOpen(false);
@@ -50,7 +50,7 @@ export const MapSecondaryDialog: React.FC<MapSecondaryDialogProps> = props => {
       }
       resetQueryDelete();
     }
-  }, [dispatch, eventId, isLoadingDelete, props, resetQueryDelete, statusDelete]);
+  }, [currentEvent, dispatch, isLoadingDelete, newParent, props, resetQueryDelete, statusDelete]);
 
   useEffect(() => {
     handleRunQueryDelete();
@@ -67,7 +67,9 @@ export const MapSecondaryDialog: React.FC<MapSecondaryDialogProps> = props => {
 
   const renderItems = () => {
     const possibleNewParents = eventsList
-      .filter(event => event.id !== eventId)
+      .filter(
+        event => event.id !== currentEvent?.id && !currentEvent?.childrenIds.includes(event.id)
+      )
       .sort(compareEventsByTitle)
       .map(event => (
         <MenuItem value={event.id} key={event.id}>
@@ -80,6 +82,7 @@ export const MapSecondaryDialog: React.FC<MapSecondaryDialogProps> = props => {
 
   const handleOk = () => {
     if (newParent) runQueryDelete({ parentId: newParent });
+    else if (currentEvent?.childrenIds.length === 0) runQueryDelete();
   };
 
   const handleCancel = () => {
@@ -96,7 +99,7 @@ export const MapSecondaryDialog: React.FC<MapSecondaryDialogProps> = props => {
         onCancel={handleCancel}
       >
         <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
-          {eventsList.find(event => event.id === eventId)?.childrenIds !== [] ? (
+          {currentEvent?.childrenIds.length !== 0 ? (
             <>
               <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface' }}>
                 Select new parent for children events:

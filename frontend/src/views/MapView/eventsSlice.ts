@@ -42,7 +42,7 @@ export const fetchEvents = createAsyncThunk('session/fetchEvents', async (sessio
   return response;
 });
 
-const addEventToEventsList = (newEvent: SessionEvent, eventsList: SessionEventWithPos[]) =>
+const addEventToStore = (newEvent: SessionEvent, eventsList: SessionEventWithPos[]) =>
   eventsList
     .map(event => {
       const newEventId = newEvent.id;
@@ -64,14 +64,35 @@ const addEventToEventsList = (newEvent: SessionEvent, eventsList: SessionEventWi
       y: -1,
     });
 
-const removeEventFromEventList = (idToRemove: string, eventsList: SessionEventWithPos[]) =>
-  eventsList
-    .filter(event => event.id !== idToRemove)
-    .map(event => ({
-      ...event,
-      parentsIds: event.parentIds.filter(id => id !== idToRemove),
-      childrenIds: event.childrenIds.filter(id => id !== idToRemove),
-    }));
+const removeEventFromStore = (
+  deletedEvent: SessionEventWithPos,
+  newParentId: string,
+  eventsList: SessionEventWithPos[]
+) =>
+  eventsList.map(event => {
+    // add info to new parent for orpahned events
+    if (event.id === newParentId)
+      return {
+        ...event,
+        childrenIds: event.childrenIds
+          .filter(id => id !== deletedEvent.id)
+          .concat(deletedEvent.childrenIds),
+      };
+    // deleted event was child
+    if (event.childrenIds.includes(deletedEvent.id))
+      return {
+        ...event,
+        childrenIds: event.childrenIds.filter(id => id !== deletedEvent.id),
+      };
+    // deleted event was parent
+    if (event.parentIds.includes(deletedEvent.id))
+      return {
+        ...event,
+        parentIds: event.parentIds.filter(id => id !== deletedEvent.id).concat(newParentId),
+      };
+    // deleted event is not associated
+    return event;
+  });
 
 const eventsSlice = createSlice({
   name: 'session',
@@ -79,19 +100,21 @@ const eventsSlice = createSlice({
   reducers: {
     addEvent: (state, action) => {
       const currentEventsList = state.eventsList;
-      const newEventList = addEventToEventsList(action.payload.newEvent, currentEventsList);
-      newEventList.forEach((event: SessionEventWithPos) => {
+      const newEventsList = addEventToStore(action.payload.newEvent, currentEventsList);
+      // eslint-disable-next-line no-console
+      console.log(newEventsList);
+      newEventsList.forEach((event: SessionEventWithPos) => {
         event.x = -1;
         event.y = -1;
       });
-      setYPos(newEventList);
-      state.eventsList = newEventList;
+      setYPos(newEventsList);
+      state.eventsList = newEventsList;
     },
     editEvent: (state, action) => {
       const currentEventsList = state.eventsList.filter(
         event => event.id !== action.payload.updatedEvent.id
       );
-      const newEventList = addEventToEventsList(action.payload.updatedEvent, currentEventsList);
+      const newEventList = addEventToStore(action.payload.updatedEvent, currentEventsList);
       newEventList.forEach((event: SessionEventWithPos) => {
         event.x = -1;
         event.y = -1;
@@ -100,8 +123,16 @@ const eventsSlice = createSlice({
       state.eventsList = newEventList;
     },
     deleteEvent: (state, action) => {
-      const currentEventsList = state.eventsList.filter(event => event.id !== action.payload.id);
-      const newEventsList = removeEventFromEventList(action.payload.id, currentEventsList);
+      const currentEventsList = state.eventsList.filter(
+        event => event.id !== action.payload.deletedEvent.id
+      );
+      const newEventsList = removeEventFromStore(
+        action.payload.deletedEvent,
+        action.payload.newParent,
+        currentEventsList
+      );
+      // eslint-disable-next-line no-console
+      console.log(newEventsList);
       newEventsList.forEach((event: SessionEventWithPos) => {
         event.x = -1;
         event.y = -1;
