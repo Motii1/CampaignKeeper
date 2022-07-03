@@ -3,6 +3,8 @@ import { SessionEventWithPos } from './eventsSlice';
 type NodePositionInfo = {
   id: string;
   parentIds: string[];
+  childrenIds: string[];
+  isShown: boolean;
   x: number;
   y: number;
 };
@@ -27,13 +29,31 @@ const checkAllParents = (node: NodePositionInfo, nodes: NodePositionInfo[]) =>
 
 const getHighestY = (nodes: NodePositionInfo[]) => Math.max(...nodes.map(node => node.y));
 
-const convertEventsToNodes = (events: SessionEventWithPos[]): NodePositionInfo[] =>
-  events.map((eventNode: SessionEventWithPos) => ({
-    id: eventNode.id,
-    parentIds: eventNode.parentIds,
-    x: eventNode.x,
-    y: eventNode.y,
+// removing unimportant information and events which aren't shown
+const convertEventsToNodes = (events: SessionEventWithPos[]): NodePositionInfo[] => {
+  const eventsAsNodes = events.map((event: SessionEventWithPos) => ({
+    id: event.id,
+    parentIds: event.parentIds,
+    childrenIds: event.childrenIds,
+    isShown: event.displayStatus === 'shown',
+    x: event.x,
+    y: event.y,
   }));
+
+  const queue: NodePositionInfo[] = eventsAsNodes.filter(event => event.parentIds.length === 0);
+  const nodesInGraph: Set<NodePositionInfo> = new Set(queue);
+  while (queue.length > 0) {
+    const currentNode = queue.shift();
+    if (currentNode) {
+      nodesInGraph.add(currentNode);
+      if (currentNode && currentNode?.isShown) {
+        queue.push(...eventsAsNodes.filter(node => currentNode.childrenIds.includes(node.id)));
+      }
+    }
+  }
+
+  return Array.from(nodesInGraph);
+};
 
 const setYPos = (nodes: NodePositionInfo[]): NodePositionInfo[] => {
   const oldNodes: NodePositionInfo[] = JSON.parse(JSON.stringify(nodes));
