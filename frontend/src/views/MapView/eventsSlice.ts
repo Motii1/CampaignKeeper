@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
-import { setYPos } from './graphExperiments';
+import { setPositions } from './eventPositionUtils';
 
 export type EventFieldMetadata = {
   value: string;
@@ -137,14 +137,11 @@ const eventsSlice = createSlice({
     addEvent: (state, action) => {
       const currentEventsList = state.eventsList;
       const newEventsList = addEventToStore(action.payload.newEvent, currentEventsList);
-      // eslint-disable-next-line no-console
-      console.log(newEventsList);
       newEventsList.forEach((event: SessionEventWithPos) => {
         event.x = -1;
         event.y = -1;
       });
-      setYPos(newEventsList);
-      state.eventsList = newEventsList;
+      state.eventsList = setPositions(newEventsList);
     },
     editEvent: (state, action) => {
       const currentEventsList = state.eventsList.filter(
@@ -155,8 +152,7 @@ const eventsSlice = createSlice({
         event.x = -1;
         event.y = -1;
       });
-      setYPos(newEventList);
-      state.eventsList = newEventList;
+      state.eventsList = setPositions(newEventList);
     },
     deleteEvent: (state, action) => {
       const currentEventsList = state.eventsList.filter(
@@ -167,14 +163,11 @@ const eventsSlice = createSlice({
         action.payload.newParent,
         currentEventsList
       );
-      // eslint-disable-next-line no-console
-      console.log(newEventsList);
       newEventsList.forEach((event: SessionEventWithPos) => {
         event.x = -1;
         event.y = -1;
       });
-      setYPos(newEventsList);
-      state.eventsList = newEventsList;
+      state.eventsList = setPositions(newEventsList);
     },
     hideEvent: (state, action) => {
       const newEventsList = state.eventsList.map(event => {
@@ -185,7 +178,7 @@ const eventsSlice = createSlice({
           };
         return event;
       });
-      state.eventsList = newEventsList;
+      state.eventsList = setPositions(newEventsList);
     },
     showEvent: (state, action) => {
       const newEventsList = state.eventsList.map(event => {
@@ -196,7 +189,7 @@ const eventsSlice = createSlice({
           };
         return event;
       });
-      state.eventsList = newEventsList;
+      state.eventsList = setPositions(newEventsList);
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resetState: (state, _action) => {
@@ -212,8 +205,8 @@ const eventsSlice = createSlice({
           event.x = -1;
           event.y = -1;
         });
-        setYPos(eventsFromAPI);
-        state.eventsList = eventsFromAPI;
+        const eventsWithPositions = setPositions(eventsFromAPI);
+        state.eventsList = eventsWithPositions;
         state.isEventsListDownloaded = true;
       }
     });
