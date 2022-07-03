@@ -2,7 +2,6 @@ import 'package:campaign_keeper_mobile/components/tiles/keeper_title_tile.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-// IN PROGRESS
 class KeeperDrawerDialogController extends ChangeNotifier {
   bool _isDrawerOpen = false;
   String _title = "";
@@ -63,6 +62,8 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   static const shadowDuration = Duration(milliseconds: 190);
   final drawerKey = GlobalKey();
   final stackKey = GlobalKey();
+  final scrollController = ScrollController();
+  bool isHeaderElevated = false;
   late bool isDrawerOpen = widget.controller.isDrawerOpen;
   late String title = widget.controller.title;
   late int itemCount = widget.controller.itemCount;
@@ -96,6 +97,18 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
     }
   }
 
+  void scrollListener() {
+    if (scrollController.position.atEdge && scrollController.position.pixels == 0 && isHeaderElevated) {
+      setState(() {
+        isHeaderElevated = false;
+      });
+    } else if (!scrollController.position.atEdge && !isHeaderElevated) {
+      setState(() {
+        isHeaderElevated = true;
+      });
+    }
+  }
+
   void onDragUpdate(DragUpdateDetails details) {
     double maxHeight = stackKey.currentContext?.size?.height ?? MediaQuery.of(context).size.height;
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
@@ -108,7 +121,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   void onDragEnd(DragEndDetails details) {
     double drawerHeight = drawerKey.currentContext?.size?.height ?? 250;
 
-    if ((details.primaryVelocity ?? 0) < 200 && drawerController.value > 0.89) {
+    if ((details.primaryVelocity ?? 0) < 250 && drawerController.value > 0.89) {
       int value = (drawerHeight * (1.0 - drawerController.value)).toInt() * 4;
       drawerController.animateTo(1.0, duration: Duration(milliseconds: value));
     } else {
@@ -126,13 +139,16 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   void initState() {
     super.initState();
     widget.controller.addListener(drawerListener);
+    scrollController.addListener(scrollListener);
   }
 
   @override
   void dispose() {
     widget.controller.removeListener(drawerListener);
+    scrollController.removeListener(scrollListener);
     drawerController.stop();
     drawerController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -144,7 +160,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
       fit: StackFit.expand,
       children: [
         Container(
-          color: Colors.black,
+          color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
         ),
         AnimatedOpacity(
           duration: shadowDuration,
@@ -163,51 +179,45 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
             )),
         SlideTransition(
           position: offsetAnimation,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).padding.top + 35,
-              ),
-              Flexible(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: GestureDetector(
-                    onVerticalDragUpdate: onDragUpdate,
-                    onVerticalDragEnd: onDragEnd,
-                    onVerticalDragCancel: onDragCancel,
-                    child: Material(
-                      key: drawerKey,
-                      color: Theme.of(context).colorScheme.background,
-                      borderRadius:
-                          BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: 250,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _DrawerHandler(),
-                            KeeperTitleTile(title: title),
-                            Flexible(
-                              child: _DrawerList(
-                                drawerController: drawerController,
-                                onDragUpdate: onDragUpdate,
-                                onDragEnd: onDragEnd,
-                                itemCount: itemCount,
-                                builder: builder,
-                              ),
-                            ),
-                          ],
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: GestureDetector(
+              onVerticalDragUpdate: onDragUpdate,
+              onVerticalDragEnd: onDragEnd,
+              onVerticalDragCancel: onDragCancel,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: 250,
+                  maxHeight: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - 35,
+                ),
+                child: Material(
+                  key: drawerKey,
+                  color: Theme.of(context).colorScheme.background,
+                  borderRadius:
+                      BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _DrawerHeader(
+                        title: title,
+                        isElevated: isHeaderElevated,
+                      ),
+                      Flexible(
+                        child: _DrawerList(
+                          drawerController: drawerController,
+                          scrollController: scrollController,
+                          onDragUpdate: onDragUpdate,
+                          onDragEnd: onDragEnd,
+                          itemCount: itemCount,
+                          builder: builder,
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ],
@@ -217,6 +227,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
 
 class _DrawerList extends StatefulWidget {
   final AnimationController drawerController;
+  final ScrollController scrollController;
   final void Function(DragUpdateDetails) onDragUpdate;
   final void Function(DragEndDetails) onDragEnd;
   final int itemCount;
@@ -225,6 +236,7 @@ class _DrawerList extends StatefulWidget {
   const _DrawerList({
     Key? key,
     required this.drawerController,
+    required this.scrollController,
     required this.onDragUpdate,
     required this.onDragEnd,
     required this.itemCount,
@@ -236,12 +248,11 @@ class _DrawerList extends StatefulWidget {
 }
 
 class __DrawerListState extends State<_DrawerList> {
-  final scrollController = ScrollController();
   double scrollOffset = 0;
   bool isScrolling = false;
 
   void onDragStart(DragStartDetails details) {
-    scrollOffset = scrollController.offset;
+    scrollOffset = widget.scrollController.offset;
     isScrolling = false;
   }
 
@@ -249,13 +260,13 @@ class __DrawerListState extends State<_DrawerList> {
     double delta = details.primaryDelta ?? 0;
 
     if (!isScrolling &&
-        ((scrollController.offset == 0 && delta >= 0) ||
+        ((widget.scrollController.offset == 0 && delta >= 0) ||
             (widget.drawerController.value != 1.0 && delta <= 0))) {
       widget.onDragUpdate(details);
     } else {
       isScrolling = true;
-      scrollOffset = max(0, min(scrollOffset - delta, scrollController.position.maxScrollExtent));
-      scrollController.jumpTo(scrollOffset);
+      scrollOffset = max(0, min(scrollOffset - delta, widget.scrollController.position.maxScrollExtent));
+      widget.scrollController.jumpTo(scrollOffset);
     }
   }
 
@@ -264,16 +275,14 @@ class __DrawerListState extends State<_DrawerList> {
       widget.onDragEnd(details);
     } else {
       double delta = ((details.primaryVelocity ?? 0) - 180) / 8;
-      scrollOffset = max(0, min(scrollOffset - delta, scrollController.position.maxScrollExtent));
-      scrollController.animateTo(scrollOffset,
-          duration: Duration(milliseconds: 160), curve: Curves.decelerate);
-    }
-  }
 
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
+      if (scrollOffset != 0 || delta > 0) {
+        scrollOffset = max(widget.scrollController.position.minScrollExtent,
+            min(scrollOffset - delta, widget.scrollController.position.maxScrollExtent));
+        widget.scrollController
+            .animateTo(scrollOffset, duration: Duration(milliseconds: 160), curve: Curves.decelerate);
+      }
+    }
   }
 
   @override
@@ -283,12 +292,40 @@ class __DrawerListState extends State<_DrawerList> {
       onVerticalDragUpdate: onDragUpdate,
       onVerticalDragEnd: onDragEnd,
       child: ListView.builder(
-        controller: scrollController,
+        controller: widget.scrollController,
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         padding: EdgeInsets.zero,
         itemCount: widget.itemCount,
         itemBuilder: widget.builder,
+      ),
+    );
+  }
+}
+
+class _DrawerHeader extends StatelessWidget {
+  final String title;
+  final bool isElevated;
+
+  const _DrawerHeader({Key? key, required this.title, required this.isElevated}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      animationDuration: Duration(milliseconds: 450),
+      color: Theme.of(context).colorScheme.background,
+      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      elevation: isElevated ? 5 : 0,
+      shadowColor: Theme.of(context).colorScheme.brightness == Brightness.light
+          ? Colors.black.withOpacity(0.2)
+          : Colors.white.withOpacity(0.1),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _DrawerHandler(),
+          KeeperTitleTile(title: title),
+        ],
       ),
     );
   }
