@@ -159,6 +159,8 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   }
 
   void onDragCancel() {
+    if (!isDrawerOpen) return;
+
     int value = (drawerHeight * (1.0 - drawerController.value)).toInt() * 4;
     drawerController.animateTo(1.0, duration: Duration(milliseconds: value));
   }
