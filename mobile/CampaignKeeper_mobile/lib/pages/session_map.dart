@@ -83,6 +83,16 @@ class _SessionMapState extends KeeperState<SessionMap> {
     controller.openDrawer("Test", nums.length, fun);
   }
 
+  void onPopupSelected(dynamic value) {
+    if (value == 'Refresh') {
+      setState(() {
+        loadBit = 0;
+      });
+
+      refresh();
+    }
+  }
+
   @override
   void onReturn() {
     DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
@@ -123,7 +133,16 @@ class _SessionMapState extends KeeperState<SessionMap> {
       controller: controller,
       child: Scaffold(
         body: KeeperFloatingSearch(
-          popup: KeeperPopup.settings(context),
+          popup: KeeperPopup.settings(
+            context,
+            itemBuilder: (context) => [
+              PopupMenuItem<String>(
+                value: 'Refresh',
+                child: Text("Refresh"),
+              )
+            ],
+            onSelected: onPopupSelected,
+          ),
           child: loadBit != 7
               ? Center(
                   child: SpinKitRing(
