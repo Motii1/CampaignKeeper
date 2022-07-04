@@ -163,6 +163,15 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
     drawerController.animateTo(1.0, duration: Duration(milliseconds: value));
   }
 
+  Future<bool> onWillPop() async {
+    if (isDrawerOpen) {
+      widget.controller.closeDrawer();
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -182,79 +191,82 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: AlignmentDirectional.bottomCenter,
-      fit: StackFit.expand,
-      children: [
-        Container(
-          color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
-        ),
-        AnimatedOpacity(
-          duration: const Duration(milliseconds: 190),
-          opacity: isDrawerOpen ? 0.8 : 1.0,
-          child: widget.child,
-        ),
-        Visibility(
-            visible: isDrawerOpen,
-            child: GestureDetector(
-              onTap: (() {
-                widget.controller.closeDrawer();
-              }),
-              child: Container(
-                color: Colors.transparent,
-              ),
-            )),
-        SlideTransition(
-          position: offsetAnimation,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: GestureDetector(
-              onVerticalDragUpdate: onDragUpdate,
-              onVerticalDragEnd: onDragEnd,
-              onVerticalDragCancel: onDragCancel,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: 250,
-                  maxHeight: MediaQuery.of(context).size.height - topPadding,
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        fit: StackFit.expand,
+        children: [
+          Container(
+            color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+          ),
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 190),
+            opacity: isDrawerOpen ? 0.8 : 1.0,
+            child: widget.child,
+          ),
+          Visibility(
+              visible: isDrawerOpen,
+              child: GestureDetector(
+                onTap: (() {
+                  widget.controller.closeDrawer();
+                }),
+                child: Container(
+                  color: Colors.transparent,
                 ),
-                child: Material(
-                  color: Theme.of(context).colorScheme.background,
-                  borderRadius:
-                      const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _DrawerHeader(
-                        key: headerKey,
-                        title: title,
-                        isElevated: isHeaderElevated,
-                      ),
-                      Flexible(
-                        key: listKey,
-                        child: _DrawerList(
-                          drawerController: drawerController,
-                          scrollController: scrollController,
-                          onDragUpdate: onDragUpdate,
-                          onDragEnd: onDragEnd,
-                          itemCount: itemCount,
-                          builder: builder,
+              )),
+          SlideTransition(
+            position: offsetAnimation,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: GestureDetector(
+                onVerticalDragUpdate: onDragUpdate,
+                onVerticalDragEnd: onDragEnd,
+                onVerticalDragCancel: onDragCancel,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: 250,
+                    maxHeight: MediaQuery.of(context).size.height - topPadding,
+                  ),
+                  child: Material(
+                    color: Theme.of(context).colorScheme.background,
+                    borderRadius:
+                        const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _DrawerHeader(
+                          key: headerKey,
+                          title: title,
+                          isElevated: isHeaderElevated,
                         ),
-                      ),
-                      AnimatedSize(
-                        duration: const Duration(milliseconds: 250),
-                        child: SizedBox(
-                          height: fillerSize,
+                        Flexible(
+                          key: listKey,
+                          child: _DrawerList(
+                            drawerController: drawerController,
+                            scrollController: scrollController,
+                            onDragUpdate: onDragUpdate,
+                            onDragEnd: onDragEnd,
+                            itemCount: itemCount,
+                            builder: builder,
+                          ),
                         ),
-                      ),
-                    ],
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 250),
+                          child: SizedBox(
+                            height: fillerSize,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
