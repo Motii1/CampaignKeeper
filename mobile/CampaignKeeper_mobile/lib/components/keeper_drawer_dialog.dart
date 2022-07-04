@@ -59,7 +59,8 @@ class KeeperDrawerDialog extends StatefulWidget {
 }
 
 class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTickerProviderStateMixin {
-  final drawerKey = GlobalKey();
+  final headerKey = GlobalKey();
+  final listKey = GlobalKey();
   final scrollController = ScrollController();
   bool isHeaderElevated = false;
   double fillerSize = 0;
@@ -78,6 +79,10 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
     begin: Offset(0.0, 1.0),
     end: Offset.zero,
   ).animate(drawerController);
+
+  double get drawerHeight {
+    return (headerKey.currentContext?.size?.height ?? 0) + (listKey.currentContext?.size?.height ?? 0);
+  }
 
   void drawerListener() {
     if (widget.controller.isDrawerOpen) {
@@ -111,12 +116,11 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
 
   void onDragUpdate(DragUpdateDetails details) {
     double maxHeight = MediaQuery.of(context).size.height;
-    double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
     double delta = details.primaryDelta ?? 0;
 
     if (!isDrawerOpen) return;
 
-    if (details.globalPosition.dy > maxHeight - drawerHeight + 15) {
+    if (delta > 0 && fillerSize == 0 || delta < 0 && drawerController.value < 1) {
       drawerController.value -= delta / maxHeight;
 
       if (fillerSize != 0) {
@@ -136,15 +140,16 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   }
 
   void onDragEnd(DragEndDetails details) {
-    double drawerHeight = drawerKey.currentContext?.size?.height ?? 250;
     double velocity = details.primaryVelocity ?? 0;
 
     if (!isDrawerOpen) return;
 
     if (fillerSize > 0) {
-      setState(() {
-        fillerSize = 0;
-      });
+      Future.delayed(Duration(milliseconds: 40), (() {
+        setState(() {
+          fillerSize = 0;
+        });
+      }));
     } else if (velocity < 250 && drawerController.value > 0.89) {
       int value = (drawerHeight * (1.0 - drawerController.value)).toInt() * 4;
       drawerController.animateTo(1.0, duration: Duration(milliseconds: value));
@@ -154,7 +159,6 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
   }
 
   void onDragCancel() {
-    double drawerHeight = drawerKey.currentContext?.size?.height ?? 400;
     int value = (drawerHeight * (1.0 - drawerController.value)).toInt() * 4;
     drawerController.animateTo(1.0, duration: Duration(milliseconds: value));
   }
@@ -221,29 +225,24 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Column(
-                        key: drawerKey,
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _DrawerHeader(
-                            title: title,
-                            isElevated: isHeaderElevated,
-                          ),
-                          Flexible(
-                            child: _DrawerList(
-                              drawerController: drawerController,
-                              scrollController: scrollController,
-                              onDragUpdate: onDragUpdate,
-                              onDragEnd: onDragEnd,
-                              itemCount: itemCount,
-                              builder: builder,
-                            ),
-                          ),
-                        ],
+                      _DrawerHeader(
+                        key: headerKey,
+                        title: title,
+                        isElevated: isHeaderElevated,
+                      ),
+                      Flexible(
+                        key: listKey,
+                        child: _DrawerList(
+                          drawerController: drawerController,
+                          scrollController: scrollController,
+                          onDragUpdate: onDragUpdate,
+                          onDragEnd: onDragEnd,
+                          itemCount: itemCount,
+                          builder: builder,
+                        ),
                       ),
                       AnimatedSize(
-                        duration: const Duration(milliseconds: 150),
+                        duration: const Duration(milliseconds: 250),
                         child: SizedBox(
                           height: fillerSize,
                         ),
@@ -296,7 +295,9 @@ class __DrawerListState extends State<_DrawerList> {
 
     if (!isScrolling &&
         ((widget.scrollController.offset == 0 && delta >= 0) ||
-            (widget.drawerController.value != 1.0 && delta <= 0))) {
+            ((widget.drawerController.value != 1.0 ||
+                    widget.scrollController.offset == widget.scrollController.position.maxScrollExtent) &&
+                delta <= 0))) {
       widget.onDragUpdate(details);
     } else {
       isScrolling = true;
@@ -306,7 +307,7 @@ class __DrawerListState extends State<_DrawerList> {
   }
 
   void onDragEnd(DragEndDetails details) {
-    if (widget.drawerController.value != 1.0 && !isScrolling) {
+    if ((widget.drawerController.value != 1.0 || widget.scrollController.position.atEdge) && !isScrolling) {
       widget.onDragEnd(details);
     } else {
       double velocity = details.primaryVelocity ?? 0;
