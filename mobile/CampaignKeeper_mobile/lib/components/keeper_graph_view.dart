@@ -69,12 +69,22 @@ class KeeperGraphView extends StatelessWidget {
       );
     }
 
+    var entity = events.firstWhereOrNull((e) => e.id == id);
+
     return ConstrainedBox(
       constraints: BoxConstraints(
         minWidth: 280,
         maxWidth: 280,
       ),
-      child: KeeperEventNode(entity: events.firstWhereOrNull((e) => e.id == id)),
+      child: KeeperEventNode(
+        entity: entity,
+        onTap: () {
+          if (entity != null) {
+            Navigator.of(context)
+                .pushNamed('/start/campaign/session_map/event_explorer', arguments: entity.id);
+          }
+        },
+      ),
     );
   }
 

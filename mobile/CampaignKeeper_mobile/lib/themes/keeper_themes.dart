@@ -155,6 +155,52 @@ class _DefaultTheme {
         },
       ),
     ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+          var color = Color.alphaBlend(onSurface.withOpacity(0.5), primary);
+
+          if (states.contains(MaterialState.disabled)) {
+            color = color.withOpacity(0.7);
+          }
+
+          return color;
+        }),
+        backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) => background),
+        side: MaterialStateProperty.resolveWith<BorderSide?>((states) {
+          var color = onSurface.withOpacity(0.25);
+
+          if (states.contains(MaterialState.disabled)) {
+            color = color.withOpacity(0.65);
+          }
+
+          return BorderSide(
+            width: 2,
+            color: color,
+          );
+        }),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+          var color = primary;
+
+          if (states.contains(MaterialState.disabled)) {
+            color = color.withOpacity(0.65);
+          }
+
+          return color;
+        }),
+        elevation: MaterialStateProperty.resolveWith<double?>((states) {
+          if (states.contains(MaterialState.pressed)) {
+            return 3;
+          }
+
+          return 1;
+        }),
+      ),
+    ),
   );
 
   _DefaultTheme({

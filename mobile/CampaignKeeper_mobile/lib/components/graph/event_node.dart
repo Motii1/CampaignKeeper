@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 
 class KeeperEventNode extends StatelessWidget {
   final EventEntity? entity;
+  final bool forceShow;
+  final void Function()? onTap;
   final List<FieldValue> characterValues = [];
   final List<FieldValue> placeValues = [];
   final List<FieldValue> descriptionValues = [];
 
-  KeeperEventNode({Key? key, required this.entity}) : super(key: key) {
+  KeeperEventNode({Key? key, required this.entity, this.forceShow = false, this.onTap}) : super(key: key) {
     if (entity != null) {
       var charValues = entity!.characterValues.where((e) => e.fieldName == 'characters').toList()
         ..sort(((a, b) => a.sequence.compareTo(b.sequence)));
@@ -35,9 +37,7 @@ class KeeperEventNode extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () {
-          print("Move me to the event screen");
-        },
+        onTap: onTap,
         child: Padding(
           padding: EdgeInsets.all(3.5),
           child: Column(
@@ -57,7 +57,7 @@ class KeeperEventNode extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: entity?.displayStatus.toLowerCase() == 'shown',
+                visible: entity?.displayStatus.toLowerCase() == 'shown' || forceShow,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,

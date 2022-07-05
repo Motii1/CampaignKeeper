@@ -27,6 +27,11 @@ class EventSearchController extends BaseSearchController<EventEntity> {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: KeeperEventNode(
         entity: objectEnt,
+        forceShow: true,
+        onTap: () {
+          Navigator.of(context)
+              .pushReplacementNamed('/start/campaign/session_map/event_explorer', arguments: objectEnt.id);
+        },
       ),
     );
   }

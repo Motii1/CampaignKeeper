@@ -74,7 +74,8 @@ class _SessionMapState extends KeeperState<SessionMap> {
     var rootEvents = events.where((e) => e.parentIds.isEmpty).toList();
 
     if (rootEvents.length == 1) {
-      //TODO: open explorer
+      var entity = rootEvents[0];
+      Navigator.of(context).pushNamed('/start/campaign/session_map/event_explorer', arguments: entity.id);
     } else if (rootEvents.length > 1) {
       controller.openDrawer(
         "Choose event",
@@ -84,7 +85,9 @@ class _SessionMapState extends KeeperState<SessionMap> {
             title: Text(rootEvents[id].title),
           ),
           onTap: () {
-            //TODO: open explorer
+            var entity = rootEvents[id];
+            Navigator.of(context)
+                .pushNamed('/start/campaign/session_map/event_explorer', arguments: entity.id);
           },
         ),
       );
