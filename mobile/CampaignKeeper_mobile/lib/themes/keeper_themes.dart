@@ -189,7 +189,7 @@ class KeeperThemes {
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  static const Color _light = Color(0xffdce9f5);
+  static const Color _light = Color(0xffe3eef7);
   static const Color _lighterLight = Color(0xfff0f8fc);
 
   static const Color _primaryDark = Color(0xffffe082);

@@ -7,7 +7,7 @@ class KeeperStartNode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.surface,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Text(
@@ -16,7 +16,7 @@ class KeeperStartNode extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ),

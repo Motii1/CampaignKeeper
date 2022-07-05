@@ -19,7 +19,7 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
 
   // It shows a snackbar with a connection status info
   // when connection status changes.
-  void showStatus() {
+  void statusListener() {
     bool isOnline = RequestHelper().isOnline;
     ScaffoldMessengerState scaffold = ScaffoldMessenger.of(context);
     if (ModalRoute.of(context)!.isCurrent && this.mounted && scaffold.mounted) {
@@ -71,13 +71,13 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    RequestHelper().addListener(showStatus);
+    RequestHelper().addListener(statusListener);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
-    RequestHelper().removeListener(showStatus);
+    RequestHelper().removeListener(statusListener);
     routeObserver.unsubscribe(this);
     super.dispose();
   }
