@@ -30,10 +30,12 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   late List<ObjectEntity> objects = DataCarrier().getList(groupId: schema?.id ?? -1);
 
   Future<void> onRefresh() async {
-    DataCarrier().refresh<UserDataEntity>();
-    DataCarrier().refresh<CampaignEntity>();
-    await DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
-    await DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id);
+    await Future.wait([
+      DataCarrier().refresh<UserDataEntity>(),
+      DataCarrier().refresh<CampaignEntity>(),
+      DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId),
+      DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id),
+    ]);
   }
 
   Future<void> onSchemaRefresh() async {

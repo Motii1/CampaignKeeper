@@ -29,21 +29,20 @@ class SessionMap extends StatefulWidget {
 class _SessionMapState extends KeeperState<SessionMap> {
   final controller = KeeperDrawerDialogController();
   final startKey = GlobalKey();
-  int loadBit = 0;
-  List<EventEntity> events = [];
+  bool isLoaded = false;
+  late List<EventEntity> events = DataCarrier().getList<EventEntity>(groupId: widget.sessionId);
   late var searchController = EventSearchController(sessionId: widget.sessionId);
   late SessionEntity? session = DataCarrier().get(entId: widget.sessionId);
 
-  bool get isMapLoaded => loadBit == 7;
-
   Future<void> refresh() async {
-    DataCarrier().refresh<UserDataEntity>();
-    DataCarrier().refresh<CampaignEntity>();
-    DataCarrier()
-        .refresh<ObjectEntity>(parameterName: EntityParameter.campaign, parameterValue: session?.campaignId)
-        .whenComplete(onObjectRefresh);
-    DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId).whenComplete(onSessionRefresh);
-    DataCarrier().refresh<EventEntity>(parameterValue: widget.sessionId).whenComplete(onEventRefresh);
+    await Future.wait([
+      DataCarrier().refresh<UserDataEntity>(),
+      DataCarrier().refresh<CampaignEntity>(),
+      DataCarrier().refresh<ObjectEntity>(
+          parameterName: EntityParameter.campaign, parameterValue: session?.campaignId),
+      DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId),
+      DataCarrier().refresh<EventEntity>(parameterValue: widget.sessionId),
+    ]);
   }
 
   void onSessionRefresh() async {
@@ -51,23 +50,20 @@ class _SessionMapState extends KeeperState<SessionMap> {
     if (entity == null) {
       returnTo('/start');
     } else {
-      loadBit |= 1;
       updateGraph();
     }
   }
 
   void onObjectRefresh() {
-    loadBit |= 2;
     updateGraph();
   }
 
   void onEventRefresh() {
-    loadBit |= 4;
     updateGraph();
   }
 
   void updateGraph() {
-    if (isMapLoaded && this.mounted) {
+    if (this.mounted) {
       setState(() {
         events = DataCarrier().getList<EventEntity>(groupId: widget.sessionId);
       });
@@ -95,13 +91,21 @@ class _SessionMapState extends KeeperState<SessionMap> {
     }
   }
 
+  void refreshGraph() async {
+    setState(() {
+      isLoaded = false;
+    });
+
+    await refresh();
+
+    setState(() {
+      isLoaded = true;
+    });
+  }
+
   void onPopupSelected(dynamic value) {
     if (value == 'Refresh') {
-      setState(() {
-        loadBit = 0;
-      });
-
-      refresh();
+      refreshGraph();
     }
   }
 
@@ -115,11 +119,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
 
   @override
   void onEveryResume() {
-    setState(() {
-      loadBit = 0;
-    });
-
-    refresh();
+    refreshGraph();
   }
 
   @override
@@ -128,7 +128,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
     DataCarrier().addListener<SessionEntity>(onSessionRefresh);
     DataCarrier().addListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().addListener<EventEntity>(onEventRefresh);
-    refresh();
+    refreshGraph();
   }
 
   @override
@@ -145,7 +145,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
       controller: controller,
       child: Scaffold(
         body: KeeperFloatingSearch(
-          searchController: isMapLoaded ? searchController : null,
+          searchController: isLoaded ? searchController : null,
           popup: KeeperPopup.settings(
             context,
             itemBuilder: (context) => [
@@ -156,7 +156,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
             ],
             onSelected: onPopupSelected,
           ),
-          child: !isMapLoaded
+          child: !isLoaded
               ? Center(
                   child: SpinKitRing(
                     color: Theme.of(context).colorScheme.onBackground,
@@ -173,8 +173,8 @@ class _SessionMapState extends KeeperState<SessionMap> {
                 ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: isMapLoaded ? fabOnPressed : null,
-          backgroundColor: isMapLoaded
+          onPressed: isLoaded ? fabOnPressed : null,
+          backgroundColor: isLoaded
               ? Theme.of(context).colorScheme.primary
               : Color.alphaBlend(Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
                   Theme.of(context).colorScheme.primary),

@@ -26,8 +26,10 @@ class _StartState extends KeeperState<Start> {
   bool isPopExit = false;
 
   Future<void> onRefresh() async {
-    await DataCarrier().refresh<UserDataEntity>();
-    await DataCarrier().refresh<CampaignEntity>();
+    await Future.wait([
+      DataCarrier().refresh<UserDataEntity>(),
+      DataCarrier().refresh<CampaignEntity>(),
+    ]);
   }
 
   void forceLogOut() {

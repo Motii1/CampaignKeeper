@@ -27,9 +27,11 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
   bool isScrolledToTop = true;
 
   Future<void> onRefresh() async {
-    DataCarrier().refresh<UserDataEntity>();
-    await DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
-    await DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id);
+    await Future.wait([
+      DataCarrier().refresh<UserDataEntity>(),
+      DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId),
+      DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id),
+    ]);
   }
 
   Future<void> onObjectRefresh() async {

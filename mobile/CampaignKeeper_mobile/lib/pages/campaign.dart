@@ -35,10 +35,12 @@ class _CampaignState extends KeeperState<Campaign> {
   int currentPage = 0;
 
   Future<void> onRefresh() async {
-    DataCarrier().refresh<UserDataEntity>();
-    await DataCarrier().refresh<CampaignEntity>();
-    await DataCarrier().refresh<SessionEntity>(parameterValue: widget.campaignId);
-    await DataCarrier().refresh<SchemaEntity>(parameterValue: widget.campaignId);
+    await Future.wait([
+      DataCarrier().refresh<UserDataEntity>(),
+      DataCarrier().refresh<CampaignEntity>(),
+      DataCarrier().refresh<SessionEntity>(parameterValue: widget.campaignId),
+      DataCarrier().refresh<SchemaEntity>(parameterValue: widget.campaignId),
+    ]);
   }
 
   Future<void> onCampaignRefresh() async {
@@ -117,8 +119,10 @@ class _CampaignState extends KeeperState<Campaign> {
 
   @override
   void onEveryResume() async {
-    await DataCarrier().refresh<SessionEntity>(parameterValue: widget.campaignId);
-    await DataCarrier().refresh<SchemaEntity>(parameterValue: widget.campaignId);
+    Future.wait([
+      DataCarrier().refresh<SessionEntity>(parameterValue: widget.campaignId),
+      DataCarrier().refresh<SchemaEntity>(parameterValue: widget.campaignId),
+    ]);
   }
 
   @override
