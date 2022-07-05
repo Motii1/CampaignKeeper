@@ -5,7 +5,7 @@ import 'package:campaign_keeper_mobile/search_controllers/base_search_controller
 import 'package:flutter/material.dart';
 
 class CampaignSearchController extends BaseSearchController<CampaignEntity> {
-  CampaignSearchController({String heroTag = 'search'}) : super(heroTag: heroTag);
+  const CampaignSearchController({String heroTag = 'search'}) : super(heroTag: heroTag);
 
   @override
   List filterEntities(String input) {

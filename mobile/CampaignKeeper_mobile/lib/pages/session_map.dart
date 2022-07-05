@@ -9,6 +9,7 @@ import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
+import 'package:campaign_keeper_mobile/search_controllers/event_search_controller.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
   final startKey = GlobalKey();
   int loadBit = 0;
   List<EventEntity> events = [];
+  late var searchController = EventSearchController(sessionId: widget.sessionId);
   late SessionEntity? session = DataCarrier().get(entId: widget.sessionId);
 
   bool get isMapLoaded => loadBit == 7;
@@ -143,6 +145,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
       controller: controller,
       child: Scaffold(
         body: KeeperFloatingSearch(
+          searchController: isMapLoaded ? searchController : null,
           popup: KeeperPopup.settings(
             context,
             itemBuilder: (context) => [
