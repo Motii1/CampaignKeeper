@@ -183,20 +183,20 @@ class KeeperThemes {
   static const Color _primaryLight = Color.fromARGB(255, 167, 205, 247);
   static const Color _onPrimaryLight = Color(0xff242424);
 
-  static final Color _secondaryLight = Color.fromARGB(255, 254, 156, 226);
+  static final Color _secondaryLight = Color(0xffdceff0);
   static const Color _onSecondaryLight = Color(0xff242424);
 
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
   static const Color _light = Color(0xffdce9f5);
-  static const Color _lighterLight = Color(0xffeef6fa);
+  static const Color _lighterLight = Color(0xfff0f8fc);
 
   static const Color _primaryDark = Color(0xffffe082);
   static const Color _onPrimaryDark = Color(0xff242424);
 
-  static const Color _secondaryDark = Color.fromARGB(255, 36, 223, 248);
-  static const Color _onSecondaryDark = Color(0xff242424);
+  static const Color _secondaryDark = Color.fromARGB(255, 66, 94, 112);
+  static const Color _onSecondaryDark = Color.fromARGB(255, 250, 253, 255);
 
   static const Color _errorDark = Colors.redAccent;
   static const Color _onErrorDark = Color(0xff242424);

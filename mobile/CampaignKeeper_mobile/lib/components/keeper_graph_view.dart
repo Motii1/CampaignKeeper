@@ -61,12 +61,21 @@ class KeeperGraphView extends StatelessWidget {
 
   Widget getNodeWidget(BuildContext context, int id) {
     if (id == 0) {
-      return KeeperStartNode(
-        key: startKey,
+      return SizedBox(
+        width: 280,
+        child: KeeperStartNode(
+          key: startKey,
+        ),
       );
     }
 
-    return KeeperEventNode(entity: events.firstWhereOrNull((e) => e.id == id));
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 280,
+        maxWidth: 280,
+      ),
+      child: KeeperEventNode(entity: events.firstWhereOrNull((e) => e.id == id)),
+    );
   }
 
   @override
