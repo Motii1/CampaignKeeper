@@ -6,6 +6,7 @@ type AddReferenceSelectProps = {
   name: string;
   id: string;
   label: string;
+  value: ReferenceSelectItem | null;
   setValue: (newValue: ReferenceSelectItem | null) => void;
   items: ReferenceSelectItem[] | null;
 };
@@ -56,7 +57,12 @@ export const AddReferenceSelect: React.FC<AddReferenceSelectProps> = props => {
       >
         {props.name}
       </Typography>
-      <CustomSelect labelId={props.id} handleChange={handleChange} renderValue={renderValue}>
+      <CustomSelect
+        labelId={props.id}
+        handleChange={handleChange}
+        value={props.value?.id}
+        renderValue={renderValue}
+      >
         {renderItems()}
       </CustomSelect>
     </Stack>

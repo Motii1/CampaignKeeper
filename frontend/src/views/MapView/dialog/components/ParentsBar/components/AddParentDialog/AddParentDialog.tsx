@@ -2,6 +2,7 @@ import { MenuItem, SelectChangeEvent } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store';
+import { compareEventsByTitle } from '../../../../../../../utils/utils';
 import { CustomDialog } from '../../../../../../components/CustomDialog/CustomDialog';
 import { CustomSelect } from '../../../../../../components/CustomSelect/CustomSelect';
 
@@ -35,16 +36,21 @@ export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
   };
 
   const renderValue = (value: string) => {
-    const newValue =
-      value !== '' ? eventsList.find(event => event.id === value)?.title : 'Choose parent';
-    // eslint-disable-next-line no-console
-    console.log(`->${value}<-`);
-    return newValue;
+    if (props.parents.includes(selectedParent as string)) return 'Choose parent';
+    if (value !== '') return eventsList.find(event => event.id === value)?.title;
+    return 'Choose parent';
   };
+
+  // const renderValue = (value: string) => {
+  //   const newValue =
+  //     value !== '' ? eventsList.find(event => event.id === value)?.title : 'Choose parent';
+  //   return newValue;
+  // };
 
   const renderItems = () => {
     const possibleParents = eventsList
       .filter(event => !props.parents.includes(event.id))
+      .sort(compareEventsByTitle)
       .map(event => (
         <MenuItem value={event.id} key={event.id}>
           {event.title}
@@ -65,7 +71,7 @@ export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
       <CustomSelect
         labelId={'event-parent-select'}
         handleChange={handleChange}
-        value={selectedParent}
+        value={props.parents.includes(selectedParent as string) ? '' : selectedParent}
         renderValue={renderValue}
       >
         {renderItems()}

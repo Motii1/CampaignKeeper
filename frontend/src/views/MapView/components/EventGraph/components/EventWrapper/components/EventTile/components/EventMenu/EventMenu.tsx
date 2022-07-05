@@ -37,7 +37,7 @@ export const EventMenu: React.FC<EventMenuProps> = props => {
           textAlign: 'center',
           width: '230px',
           marginLeft: '70px',
-          color: 'customPalette.onAccent',
+          color: props.event.type === 'normal' ? 'customPalette.onAccent' : 'customPalette.onRed',
           fontWeight: 'bold',
           height: '100%',
           display: 'inline-block',

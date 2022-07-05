@@ -66,6 +66,7 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
           name="Scheme"
           id="schema-select"
           label="Choose schema"
+          value={chosenSchema}
           setValue={setChosenSchema}
           items={codexItemsToSelectItems(schemas)}
         />
@@ -74,6 +75,7 @@ export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
             name="Entry"
             id="entry-select"
             label="Choose entry"
+            value={chosenEntry}
             setValue={setChosenEntry}
             items={chosenSchema ? codexItemsToSelectItems(entries[chosenSchema.id]) : null}
           />

@@ -5,6 +5,7 @@ import { RootState } from '../../../../../../../../store';
 type EventArrowProps = {
   start: string;
   end: string;
+  startAnchor: anchorType;
   endAnchor: anchorType;
 };
 
@@ -20,9 +21,9 @@ export const EventArrow: React.FC<EventArrowProps> = props => {
       headSize={4}
       path="smooth"
       curveness={1}
-      startAnchor="bottom"
+      startAnchor={props.startAnchor}
       endAnchor={props.endAnchor}
-      zIndex={-1}
+      zIndex={5000}
     />
   );
 };

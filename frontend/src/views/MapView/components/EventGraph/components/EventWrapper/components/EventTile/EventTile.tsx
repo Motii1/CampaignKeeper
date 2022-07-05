@@ -15,7 +15,7 @@ export const EventTile: React.FC<EventTileProps> = props => (
   <Paper
     elevation={0}
     sx={{
-      backgroundColor: 'customPalette.accent',
+      backgroundColor: props.event.type === 'normal' ? 'customPalette.accent' : 'customPalette.red',
       borderRadius: 2,
       width: '400px',
       //minHeight: props.event.displayStatus === 'shown' ? '200px' : '30px',

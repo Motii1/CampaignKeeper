@@ -129,7 +129,7 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
       if (statusEdit === 200) {
         dispatch(
           editEvent({
-            updatedEvent: {
+            editedEvent: {
               id: currentEvent?.id,
               title: eventTitle,
               sessionId: currentEvent?.sessionId,

@@ -6,6 +6,7 @@ import { EventTile } from './components/EventTile/EventTile';
 
 type EventWrapperProps = {
   event: SessionEventWithPos;
+  eventsList: SessionEventWithPos[];
   setIsOpen: (newIsOpen: boolean) => void;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
@@ -17,6 +18,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
       key={`${props.event.id}-root-node`}
       start={'root-node'}
       end={`event-${props.event.id}`}
+      startAnchor="bottom"
       endAnchor={{
         position: 'top',
         offset: { x: 0 },
@@ -25,7 +27,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
   );
 
   const renderChildArrows = () => {
-    const numberOfArrows = props.event.parentIds.length;
+    const numberOfArrows = props.event.childrenIds.length;
     const a1 =
       numberOfArrows % 2 === 0 ? 0.5 * numberOfArrows * -10 : 0.5 * numberOfArrows * -20 + 10;
     const arrowsEndOffsets = [a1];
@@ -41,16 +43,20 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
           key={`${props.event.id}-${childId}`}
           start={`event-${props.event.id}`}
           end={`event-${childId}`}
+          startAnchor={{
+            position: 'bottom',
+            offset: { x: offset },
+          }}
           endAnchor={{
             position: 'top',
-            offset: { x: offset },
+            offset: {},
           }}
         />
       );
     });
   };
 
-  return props.event.displayStatus === 'shown' || props.event.displayStatus === 'collapsed' ? (
+  return (
     <Box>
       {props.event.parentIds.length === 0 ? renderRootArrow() : null}
       <EventTile
@@ -61,5 +67,5 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
       />
       {props.event.displayStatus === 'shown' ? renderChildArrows() : null}
     </Box>
-  ) : null;
+  );
 };

@@ -1,8 +1,10 @@
 import { Stack } from '@mui/material';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useXarrow } from 'react-xarrows';
 import { RootState } from '../../../../store';
 import { NavBarViewDialog } from '../../../../types/types';
+import { compareEventsByX } from '../../../../utils/utils';
 import { CircleProgress } from '../../../components/CircleProgress/CircleProgress';
 import { SessionEventWithPos } from '../../eventsSlice';
 import { EventWrapper } from './components/EventWrapper/EventWrapper';
@@ -16,38 +18,60 @@ type EventGraphProsp = {
 export const EventGraph: React.FC<EventGraphProsp> = props => {
   const { isEventsListDownloaded, eventsList } = useSelector((state: RootState) => state.events);
   const { isLight } = useSelector((state: RootState) => state.theme);
+
   const updateXarrow = useXarrow();
 
-  const renderRow = (nodes: SessionEventWithPos[]) => (
-    <Stack
-      key={nodes[0].y}
-      direction="row"
-      justifyContent="center"
-      alignItems="flex-start"
-      spacing={4}
-    >
-      {nodes.map(node => (
-        <EventWrapper
-          key={`event-node-key-${node.id}`}
-          event={node}
-          setIsOpen={props.setIsOpen}
-          setDialogType={props.setDialogType}
-        />
-      ))}
-    </Stack>
+  const renderRow = useCallback(
+    (nodes: SessionEventWithPos[]) => {
+      // eslint-disable-next-line no-console
+      const nodesCopy = nodes;
+      nodesCopy.sort(compareEventsByX);
+      return (
+        <Stack
+          key={nodes[0].y}
+          direction="row"
+          justifyContent="center"
+          alignItems="flex-start"
+          spacing={4}
+        >
+          {nodesCopy.map(node => (
+            <EventWrapper
+              key={`event-node-key-${node.id}`}
+              event={node}
+              eventsList={eventsList}
+              setIsOpen={props.setIsOpen}
+              setDialogType={props.setDialogType}
+            />
+          ))}
+        </Stack>
+      );
+    },
+    [eventsList, props.setDialogType, props.setIsOpen]
   );
 
   // TO-DO: show "Add an event, Grand Designer" when there are no events
-  const renderRows = () => {
+  const renderGraph = useCallback(() => {
     if (eventsList.length === 0) return null;
+    const queue: SessionEventWithPos[] = eventsList.filter(event => event.parentIds.length === 0);
+    const eventToShowSet: Set<SessionEventWithPos> = new Set(queue);
+    while (queue.length > 0) {
+      const currentEvent = queue.shift();
+      if (currentEvent) {
+        eventToShowSet.add(currentEvent);
+        if (currentEvent && currentEvent?.displayStatus === 'shown') {
+          queue.push(...eventsList.filter(event => currentEvent.childrenIds.includes(event.id)));
+        }
+      }
+    }
 
-    const maxRow = Math.max(...eventsList.map((event: SessionEventWithPos) => event.y));
+    const eventsToShow = Array.from(eventToShowSet);
+    const maxRow = Math.max(...eventsToShow.map((event: SessionEventWithPos) => event.y));
     const rowIndexes = Array.from(Array(maxRow + 1).keys());
 
     return rowIndexes.map(index =>
-      renderRow(eventsList.filter((node: SessionEventWithPos) => node.y === index))
+      renderRow(eventsToShow.filter((node: SessionEventWithPos) => node.y === index))
     );
-  };
+  }, [eventsList, renderRow]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleScroll = (_event: React.UIEvent<HTMLElement>) => {
@@ -83,7 +107,7 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
         }}
       >
         <RootNode />
-        {renderRows()}
+        {renderGraph()}
       </Stack>
     </div>
   ) : (

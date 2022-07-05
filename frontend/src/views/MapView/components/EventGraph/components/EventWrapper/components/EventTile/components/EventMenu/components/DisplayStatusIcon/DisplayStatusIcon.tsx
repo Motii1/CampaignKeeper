@@ -5,7 +5,11 @@ import { useDispatch } from 'react-redux';
 import requestMethods from '../../../../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../../../../axios/useQuery';
 import { EditEventData } from '../../../../../../../../../../dialog/MapDialog';
-import { editEvent, SessionEventWithPos } from '../../../../../../../../../../eventsSlice';
+import {
+  hideEvent,
+  SessionEventWithPos,
+  showEvent,
+} from '../../../../../../../../../../eventsSlice';
 
 type DisplayStatusIconProps = {
   event: SessionEventWithPos;
@@ -15,11 +19,6 @@ export const DisplayStatusIcon: React.FC<DisplayStatusIconProps> = props => {
   const dispatch = useDispatch();
 
   const [displayStatus, setDisplayStatus] = useState(props.event.displayStatus);
-
-  const setNewStatus = () => {
-    if (displayStatus === 'shown') setDisplayStatus('collapsed');
-    else setDisplayStatus('shown');
-  };
 
   const {
     isLoading: isLoadingStatus,
@@ -31,11 +30,18 @@ export const DisplayStatusIcon: React.FC<DisplayStatusIconProps> = props => {
   const handleRunQueryStatus = useCallback(() => {
     if (!isLoadingStatus && statusStatus) {
       if (statusStatus === 200)
-        dispatch(
-          editEvent({
-            updatedEvent: { ...props.event, displayStatus: displayStatus },
-          })
-        );
+        if (displayStatus === 'hidden')
+          dispatch(
+            hideEvent({
+              id: props.event.id,
+            })
+          );
+        else
+          dispatch(
+            showEvent({
+              id: props.event.id,
+            })
+          );
       resetQueryStatus();
     }
   }, [dispatch, displayStatus, isLoadingStatus, props.event, resetQueryStatus, statusStatus]);
@@ -45,17 +51,11 @@ export const DisplayStatusIcon: React.FC<DisplayStatusIconProps> = props => {
   }, [handleRunQueryStatus]);
 
   const handleClick = () => {
-    setNewStatus();
+    const newDisplayStatus = displayStatus === 'shown' ? 'hidden' : 'shown';
     runQueryStatus({
-      title: props.event.title,
-      type: props.event.type,
-      status: props.event.status,
-      displayStatus: displayStatus,
-      placeMetadataArray: props.event.placeMetadataArray,
-      descriptionMetadataArray: props.event.descriptionMetadataArray,
-      charactersMetadataArray: props.event.charactersMetadataArray,
-      parentIds: props.event.parentIds,
+      displayStatus: newDisplayStatus,
     });
+    setDisplayStatus(newDisplayStatus);
   };
 
   if (displayStatus === 'shown')
