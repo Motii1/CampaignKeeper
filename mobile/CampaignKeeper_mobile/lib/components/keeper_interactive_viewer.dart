@@ -29,7 +29,9 @@ class _KeeperInteractiveViewerState extends State<KeeperInteractiveViewer> with 
         double padding = (screenWidth - widgetWidth) / 2 - 3;
         double deltaY = posY - padding;
 
-        controller.value = Matrix4.translationValues(-deltaY, 80, 0);
+        double paddingTop = MediaQuery.of(context).padding.top;
+
+        controller.value = Matrix4.translationValues(-deltaY, paddingTop + 55, 0);
 
         setState(() {
           opacity = 1.0;

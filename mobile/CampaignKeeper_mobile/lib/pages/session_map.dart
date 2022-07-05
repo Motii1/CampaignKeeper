@@ -16,7 +16,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // Page displaying map of events in the current session.
 // Allows to show details of a particular event or
-// use a FAB to show the first, root one.
+// use a FAB to view a root node.
 class SessionMap extends StatefulWidget {
   const SessionMap({Key? key, required this.sessionId}) : super(key: key);
   final int sessionId;
@@ -31,6 +31,8 @@ class _SessionMapState extends KeeperState<SessionMap> {
   int loadBit = 0;
   List<EventEntity> events = [];
   late SessionEntity? session = DataCarrier().get(entId: widget.sessionId);
+
+  bool get isMapLoaded => loadBit == 7;
 
   Future<void> refresh() async {
     DataCarrier().refresh<UserDataEntity>();
@@ -63,7 +65,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
   }
 
   void updateGraph() {
-    if (loadBit == 7 && this.mounted) {
+    if (isMapLoaded && this.mounted) {
       setState(() {
         events = DataCarrier().getList<EventEntity>(groupId: widget.sessionId);
       });
@@ -71,16 +73,24 @@ class _SessionMapState extends KeeperState<SessionMap> {
   }
 
   void fabOnPressed() {
-    var nums = [1, 2, 3];
-    var fun = (BuildContext context, int id) {
-      return KeeperDrawerTile(
-        child: ListTile(
-          title: Text(nums[id].toString()),
+    var rootEvents = events.where((e) => e.parentIds.isEmpty).toList();
+
+    if (rootEvents.length == 1) {
+      //TODO: open explorer
+    } else if (rootEvents.length > 1) {
+      controller.openDrawer(
+        "Choose event",
+        rootEvents.length,
+        (context, id) => KeeperDrawerTile(
+          child: ListTile(
+            title: Text(rootEvents[id].title),
+          ),
+          onTap: () {
+            //TODO: open explorer
+          },
         ),
       );
-    };
-
-    controller.openDrawer("Test", nums.length, fun);
+    }
   }
 
   void onPopupSelected(dynamic value) {
@@ -143,7 +153,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
             ],
             onSelected: onPopupSelected,
           ),
-          child: loadBit != 7
+          child: !isMapLoaded
               ? Center(
                   child: SpinKitRing(
                     color: Theme.of(context).colorScheme.onBackground,
@@ -160,11 +170,11 @@ class _SessionMapState extends KeeperState<SessionMap> {
                 ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: events.isEmpty ? null : fabOnPressed,
-          backgroundColor: events.isEmpty
-              ? Color.alphaBlend(Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
-                  Theme.of(context).colorScheme.primary)
-              : Theme.of(context).colorScheme.primary,
+          onPressed: isMapLoaded ? fabOnPressed : null,
+          backgroundColor: isMapLoaded
+              ? Theme.of(context).colorScheme.primary
+              : Color.alphaBlend(Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
+                  Theme.of(context).colorScheme.primary),
           child: Icon(Icons.article_outlined),
         ),
       ),
