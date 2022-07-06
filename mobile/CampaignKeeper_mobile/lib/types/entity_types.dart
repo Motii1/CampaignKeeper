@@ -111,3 +111,22 @@ extension ListIntExtension on List<int> {
     return true;
   }
 }
+
+extension StringExtension on String {
+  String toCapitalize() {
+    var words = this.split(" ");
+    var builder = StringBuffer();
+
+    words.forEach((word) {
+      var tmp = word[0].toUpperCase();
+
+      if (word.length > 1) {
+        tmp += word.substring(1);
+      }
+
+      builder.write(tmp);
+    });
+
+    return builder.toString();
+  }
+}

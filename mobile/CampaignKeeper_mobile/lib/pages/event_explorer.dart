@@ -1,7 +1,9 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
+import 'package:campaign_keeper_mobile/components/keeper_drawer_dialog.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_chip_tile.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_field_tile.dart';
+import 'package:campaign_keeper_mobile/components/tiles/keeper_text_tile.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_title_tile.dart';
 import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
@@ -23,6 +25,7 @@ class EventExplorer extends StatefulWidget {
 
 class _EventExplorerState extends KeeperState<EventExplorer> {
   final scrollController = ScrollController();
+  final drawerController = KeeperDrawerDialogController();
   final List<FieldValue> characterValues = [];
   final List<FieldValue> placeValues = [];
   final List<FieldValue> descriptionValues = [];
@@ -100,6 +103,33 @@ class _EventExplorerState extends KeeperState<EventExplorer> {
     }
   }
 
+  void onButtonPressed(bool isParent) {
+    var listIds = (isParent ? event?.parentIds : event?.childrenIds) ?? [];
+
+    if (listIds.length == 1) {
+      Navigator.of(context)
+          .pushReplacementNamed('/start/campaign/session_map/event_explorer', arguments: listIds[0]);
+    } else if (listIds.length > 1) {
+      drawerController.openDrawer(
+        "Choose event",
+        listIds.length,
+        (context, id) => KeeperDrawerTile(
+          child: ListTile(
+            title: Text(DataCarrier().get<EventEntity>(entId: listIds[id])?.title ?? "Error"),
+          ),
+          onTap: () {
+            Navigator.of(context)
+                .pushReplacementNamed('/start/campaign/session_map/event_explorer', arguments: listIds[id]);
+          },
+        ),
+      );
+    }
+  }
+
+  void onPrevPressed() => onButtonPressed(true);
+
+  void onNextPressed() => onButtonPressed(false);
+
   Widget objectItemBuilder(BuildContext context, int index) {
     if (index == 0) {
       return VisibilityDetector(
@@ -118,6 +148,14 @@ class _EventExplorerState extends KeeperState<EventExplorer> {
     }
 
     if (index == 1) {
+      return KeeperTextTile(
+        fieldName: "Status",
+        value: event?.status ?? "",
+        isProminent: isFight,
+      );
+    }
+
+    if (index == 2) {
       return KeeperChipTile(
         fieldName: "Places",
         values: placeValues,
@@ -125,7 +163,7 @@ class _EventExplorerState extends KeeperState<EventExplorer> {
       );
     }
 
-    if (index == 2) {
+    if (index == 3) {
       return KeeperChipTile(
         fieldName: "Characters",
         values: characterValues,
@@ -133,7 +171,7 @@ class _EventExplorerState extends KeeperState<EventExplorer> {
       );
     }
 
-    if (index == 3) {
+    if (index == 4) {
       return KeeperFieldTile(
         fieldName: "Description",
         values: descriptionValues,
@@ -183,37 +221,43 @@ class _EventExplorerState extends KeeperState<EventExplorer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: AnimatedOpacity(
-          duration: Duration(milliseconds: 120),
-          opacity: isTitleVisible ? 1.0 : 0.0,
-          child: Text(event?.title ?? ""),
+    return KeeperDrawerDialog(
+      controller: drawerController,
+      child: Scaffold(
+        appBar: AppBar(
+          title: AnimatedOpacity(
+            duration: Duration(milliseconds: 120),
+            opacity: isTitleVisible ? 1.0 : 0.0,
+            child: Text(event?.title ?? ""),
+          ),
+          actions: [KeeperPopup.settings(context)],
+          elevation: isScrolledToTop ? 0 : 5,
         ),
-        actions: [KeeperPopup.settings(context)],
-        elevation: isScrolledToTop ? 0 : 5,
-      ),
-      body: RefreshIndicator(
-        color: Theme.of(context).colorScheme.onBackground,
-        strokeWidth: 2.5,
-        onRefresh: onRefresh,
-        child: ListView.builder(
-          physics: AlwaysScrollableScrollPhysics(),
-          controller: scrollController,
-          itemBuilder: objectItemBuilder,
-          itemCount: event != null ? 4 : 1,
+        body: RefreshIndicator(
+          color: Theme.of(context).colorScheme.onBackground,
+          strokeWidth: 2.5,
+          onRefresh: onRefresh,
+          child: ListView.builder(
+            physics: AlwaysScrollableScrollPhysics(),
+            controller: scrollController,
+            itemBuilder: objectItemBuilder,
+            itemCount: event != null ? 5 : 1,
+          ),
+        ),
+        bottomNavigationBar: _EventBottomNavigation(
+          onPrevPressed: event?.parentIds.isNotEmpty == true ? onPrevPressed : null,
+          onNextPressed: event?.childrenIds.isNotEmpty == true ? onNextPressed : null,
         ),
       ),
-      bottomNavigationBar: _EventBottomNavigation(),
     );
   }
 }
 
 class _EventBottomNavigation extends StatelessWidget {
-  final void Function()? onTapPrev;
-  final void Function()? onTapNext;
+  final void Function()? onPrevPressed;
+  final void Function()? onNextPressed;
 
-  const _EventBottomNavigation({Key? key, this.onTapPrev, this.onTapNext}) : super(key: key);
+  const _EventBottomNavigation({Key? key, this.onPrevPressed, this.onNextPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +294,7 @@ class _EventBottomNavigation extends StatelessWidget {
                       }),
                       overlayColor: MaterialStateProperty.resolveWith<Color?>(
                           (states) => Theme.of(context).colorScheme.onBackground.withOpacity(0.1))),
-                  onPressed: onTapPrev,
+                  onPressed: onPrevPressed,
                   child: Text("Previous"),
                 ),
               ),
@@ -259,7 +303,7 @@ class _EventBottomNavigation extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(left: 6, right: 10),
                 child: ElevatedButton(
-                  onPressed: onTapNext,
+                  onPressed: onNextPressed,
                   child: Text("Next"),
                 ),
               ),
