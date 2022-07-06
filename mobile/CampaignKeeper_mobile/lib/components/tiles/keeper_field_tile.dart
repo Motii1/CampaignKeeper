@@ -22,7 +22,7 @@ class KeeperFieldTile extends StatelessWidget {
         text: DataCarrier().get<ObjectEntity>(entId: value.id)?.title ?? "Error",
         style: TextStyle(
             color: isBackground ? Colors.transparent : Theme.of(context).colorScheme.onPrimary,
-            fontSize: (17.5 * MediaQuery.textScaleFactorOf(context)) - 2,
+            fontSize: 16.5 - 1.5 / MediaQuery.textScaleFactorOf(context),
             fontWeight: FontWeight.w500,
             background: Paint()
               ..color = Theme.of(context).colorScheme.primary
@@ -75,7 +75,7 @@ class KeeperFieldTile extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       style: TextStyle(
-                        fontSize: 17.5,
+                        fontSize: 16.5,
                         fontWeight: FontWeight.w400,
                         color: Colors.transparent,
                       ),
@@ -85,7 +85,7 @@ class KeeperFieldTile extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       style: TextStyle(
-                        fontSize: 17.5,
+                        fontSize: 16.5,
                         fontWeight: FontWeight.w400,
                         color: Theme.of(context).colorScheme.onBackground,
                       ),

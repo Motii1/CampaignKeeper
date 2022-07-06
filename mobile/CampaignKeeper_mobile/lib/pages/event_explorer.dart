@@ -103,7 +103,7 @@ class _EventExplorerState extends KeeperState<EventExplorer> {
     }
   }
 
-  void onButtonPressed(bool isParent) {
+  void onButtonPressed(bool isParent) async {
     var listIds = (isParent ? event?.parentIds : event?.childrenIds) ?? [];
 
     if (listIds.length == 1) {
@@ -283,15 +283,8 @@ class _EventBottomNavigation extends StatelessWidget {
 
                         return color;
                       }),
-                      backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
-                        var color = Theme.of(context).colorScheme.background;
-
-                        if (states.contains(MaterialState.disabled)) {
-                          color = color.withOpacity(0.95);
-                        }
-
-                        return color;
-                      }),
+                      backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                          (_) => Theme.of(context).colorScheme.background),
                       overlayColor: MaterialStateProperty.resolveWith<Color?>(
                           (states) => Theme.of(context).colorScheme.onBackground.withOpacity(0.1))),
                   onPressed: onPrevPressed,

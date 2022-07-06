@@ -21,7 +21,7 @@ class KeeperTextTile extends StatelessWidget {
                 Theme.of(context).colorScheme.error.withOpacity(0.3), Theme.of(context).colorScheme.surface)
             : null,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(14, 14, 14, 7),
+          padding: EdgeInsets.fromLTRB(14, 14, 14, 11),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -38,6 +38,11 @@ class KeeperTextTile extends StatelessWidget {
               ),
               Text(
                 value.toCapitalize(),
+                style: TextStyle(
+                  fontSize: 16.5,
+                  fontWeight: FontWeight.w400,
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
               ),
             ],
           ),

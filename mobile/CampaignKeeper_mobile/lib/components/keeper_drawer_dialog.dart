@@ -227,7 +227,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
                 onVerticalDragCancel: onDragCancel,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    minHeight: 250,
+                    minHeight: 200,
                     maxHeight: MediaQuery.of(context).size.height - topPadding,
                   ),
                   child: Material(
