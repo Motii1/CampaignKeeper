@@ -30,60 +30,70 @@ class KeeperEventNode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isOmitted = entity?.status.toLowerCase() == 'omitted';
+
     return Material(
-      color: entity?.type.toLowerCase() == 'fight'
-          ? Theme.of(context).colorScheme.error
-          : Theme.of(context).colorScheme.primary,
+      color: Theme.of(context).colorScheme.background,
       borderRadius: BorderRadius.circular(16),
       clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.all(3.5),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 3, bottom: 3.5),
-                child: Text(
-                  entity?.title ?? "No Data",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
+      child: Opacity(
+        opacity: isOmitted ? 0.8 : 1,
+        child: Material(
+          color: entity?.type.toLowerCase() == 'fight'
+              ? Theme.of(context).colorScheme.error
+              : Theme.of(context).colorScheme.primary,
+          borderRadius: BorderRadius.circular(16),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: EdgeInsets.all(3.5),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 3, bottom: 3.5),
+                    child: Text(
+                      entity?.title ?? "No Data",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                    ),
                   ),
-                ),
+                  Visibility(
+                    visible: entity?.displayStatus.toLowerCase() == 'shown' || forceShow,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        KeeperChipTile(
+                          fieldName: "Places",
+                          values: placeValues,
+                          padding: EdgeInsets.zero,
+                          isProminent: entity?.type.toLowerCase() == 'fight',
+                        ),
+                        KeeperChipTile(
+                          fieldName: "Characters",
+                          values: characterValues,
+                          padding: EdgeInsets.zero,
+                          isProminent: entity?.type.toLowerCase() == 'fight',
+                        ),
+                        KeeperFieldTile(
+                          fieldName: "Description",
+                          values: descriptionValues,
+                          padding: EdgeInsets.zero,
+                          isProminent: entity?.type.toLowerCase() == 'fight',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Visibility(
-                visible: entity?.displayStatus.toLowerCase() == 'shown' || forceShow,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    KeeperChipTile(
-                      fieldName: "Places",
-                      values: placeValues,
-                      padding: EdgeInsets.zero,
-                      isProminent: entity?.type.toLowerCase() == 'fight',
-                    ),
-                    KeeperChipTile(
-                      fieldName: "Characters",
-                      values: characterValues,
-                      padding: EdgeInsets.zero,
-                      isProminent: entity?.type.toLowerCase() == 'fight',
-                    ),
-                    KeeperFieldTile(
-                      fieldName: "Description",
-                      values: descriptionValues,
-                      padding: EdgeInsets.zero,
-                      isProminent: entity?.type.toLowerCase() == 'fight',
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
