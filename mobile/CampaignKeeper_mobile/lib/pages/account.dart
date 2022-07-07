@@ -1,6 +1,6 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
+import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
-import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/list/keeper_list_header.dart';
 import 'package:campaign_keeper_mobile/components/list/keeper_list_tile.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
@@ -19,7 +19,7 @@ class Account extends StatefulWidget {
   State<Account> createState() => _AccountState();
 }
 
-class _AccountState extends KeeperState<Account> {
+class _AccountState extends State<Account> {
   UserDataEntity? ent = DataCarrier().get<UserDataEntity>();
   final ImagePicker picker = ImagePicker();
   final int maxImageSize = 500000;
@@ -76,7 +76,7 @@ class _AccountState extends KeeperState<Account> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return KeeperScaffold(
       body: KeeperAppBar(
         title: "Account",
         sliver: SliverList(

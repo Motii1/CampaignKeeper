@@ -1,6 +1,7 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_search_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_anim_sliver_replacer.dart';
+import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_schema_tile.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_session_tile.dart';
@@ -146,7 +147,7 @@ class _CampaignState extends KeeperState<Campaign> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return KeeperScaffold(
       body: KeeperSearchBar(
           title: campaign?.name ?? '',
           popup: KeeperPopup.settings(context),

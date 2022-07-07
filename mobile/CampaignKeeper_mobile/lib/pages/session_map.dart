@@ -3,6 +3,7 @@ import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/keeper_drawer_dialog.dart';
 import 'package:campaign_keeper_mobile/components/keeper_graph_view.dart';
 import 'package:campaign_keeper_mobile/components/keeper_interactive_viewer.dart';
+import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/event_ent.dart';
@@ -146,7 +147,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
   Widget build(BuildContext context) {
     return KeeperDrawerDialog(
       controller: controller,
-      child: Scaffold(
+      child: KeeperScaffold(
         body: KeeperFloatingSearch(
           searchController: isLoaded ? searchController : null,
           popup: KeeperPopup.settings(

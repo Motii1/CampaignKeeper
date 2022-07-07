@@ -1,6 +1,6 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_debug_menu.dart';
-import 'package:campaign_keeper_mobile/components/keeper_state.dart';
+import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/list/keeper_list_header.dart';
 import 'package:campaign_keeper_mobile/components/list/keeper_list_tile.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
@@ -17,7 +17,7 @@ class Settings extends StatefulWidget {
   _SettingsState createState() => _SettingsState();
 }
 
-class _SettingsState extends KeeperState<Settings> {
+class _SettingsState extends State<Settings> {
   bool isSystemThemeAvailable = false;
   bool isDebugMode = false;
 
@@ -72,7 +72,7 @@ class _SettingsState extends KeeperState<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return KeeperScaffold(
       body: KeeperAppBar(
         title: "Settings",
         sliver: SliverList(

@@ -25,6 +25,7 @@ class _DefaultTheme {
   final TextStyle textColorTitle;
 
   late ThemeData theme = ThemeData(
+    useMaterial3: true,
     appBarTheme: AppBarTheme(
       elevation: 0.0,
       backgroundColor: background,
@@ -199,6 +200,14 @@ class _DefaultTheme {
 
           return 1;
         }),
+      ),
+    ),
+    chipTheme: ChipThemeData(
+      pressElevation: 1.5,
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(17),
       ),
     ),
   );

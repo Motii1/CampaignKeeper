@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/keeper_drawer_dialog.dart';
+import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_chip_tile.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_field_tile.dart';
@@ -185,19 +186,6 @@ class _EventExplorerState extends KeeperState<EventExplorer> {
   }
 
   @override
-  void onReturn() async {
-    DataCarrier().refresh<SessionEntity>(parameterValue: session?.campaignId);
-    DataCarrier()
-        .refresh<ObjectEntity>(parameterValue: session?.campaignId, parameterName: EntityParameter.campaign);
-    DataCarrier().refresh<EventEntity>(parameterValue: session?.id);
-  }
-
-  @override
-  void onResume() async {
-    onReturn();
-  }
-
-  @override
   void initState() {
     super.initState();
     VisibilityDetectorController.instance.updateInterval = Duration(milliseconds: 250);
@@ -206,7 +194,7 @@ class _EventExplorerState extends KeeperState<EventExplorer> {
     DataCarrier().addListener<ObjectEntity>(onEventRefresh);
     DataCarrier().addListener<SessionEntity>(onSessionRefresh);
     event = DataCarrier().get(entId: widget.eventId);
-    onReturn();
+    onRefresh();
   }
 
   @override
@@ -223,7 +211,7 @@ class _EventExplorerState extends KeeperState<EventExplorer> {
   Widget build(BuildContext context) {
     return KeeperDrawerDialog(
       controller: drawerController,
-      child: Scaffold(
+      child: KeeperScaffold(
         appBar: AppBar(
           title: AnimatedOpacity(
             duration: Duration(milliseconds: 120),

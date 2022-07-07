@@ -1,5 +1,5 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_app_bar.dart';
-import 'package:campaign_keeper_mobile/components/keeper_state.dart';
+import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/keeper_logo_card.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +12,10 @@ class About extends StatefulWidget {
   _AboutState createState() => _AboutState();
 }
 
-class _AboutState extends KeeperState<About> {
+class _AboutState extends State<About> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return KeeperScaffold(
       body: KeeperAppBar(
         title: "About",
         sliver: SliverFillRemaining(

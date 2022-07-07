@@ -1,4 +1,5 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
+import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_field_tile.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_image_tile.dart';
@@ -133,7 +134,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return KeeperScaffold(
       appBar: AppBar(
         title: AnimatedOpacity(
           duration: Duration(milliseconds: 120),
