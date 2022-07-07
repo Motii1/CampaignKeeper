@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Simple interactive viewer that lets move
 // drag and scale it's content.
+// Allows to center the content.
 class KeeperInteractiveViewer extends StatefulWidget {
   const KeeperInteractiveViewer({Key? key, required this.child, required this.centerKey}) : super(key: key);
   final Widget child;
@@ -15,6 +16,10 @@ class KeeperInteractiveViewer extends StatefulWidget {
 class _KeeperInteractiveViewerState extends State<KeeperInteractiveViewer> with WidgetsBindingObserver {
   final controller = TransformationController();
   var opacity = 0.0;
+
+  Size get screenSize {
+    return MediaQuery.of(context).size;
+  }
 
   @override
   void initState() {
@@ -53,7 +58,7 @@ class _KeeperInteractiveViewerState extends State<KeeperInteractiveViewer> with 
       duration: Duration(milliseconds: 250),
       child: InteractiveViewer(
         constrained: false,
-        boundaryMargin: EdgeInsets.all(double.infinity),
+        boundaryMargin: EdgeInsets.symmetric(vertical: screenSize.height, horizontal: screenSize.width),
         minScale: 0.5,
         maxScale: 2.0,
         child: widget.child,
