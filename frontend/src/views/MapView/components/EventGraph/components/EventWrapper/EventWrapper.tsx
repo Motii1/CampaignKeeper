@@ -16,7 +16,7 @@ const arrowColors = ['#6E85B7', '#B2C8DF', '#C4D7E0', '#F8F9D7'];
 
 const getOffsets = (numberOfArrows: number) => {
   const firstOffset =
-    numberOfArrows % 2 === 0 ? 0.5 * numberOfArrows * -10 : 0.5 * numberOfArrows * -20 + 10;
+    numberOfArrows % 2 === 0 ? 0.5 * numberOfArrows * -10 + 5 : 0.5 * numberOfArrows * -20 + 10;
   const arrowsEndOffsets = [firstOffset];
   for (let i = 1; i < numberOfArrows; i++) arrowsEndOffsets.push(firstOffset + i * 20);
   return arrowsEndOffsets;

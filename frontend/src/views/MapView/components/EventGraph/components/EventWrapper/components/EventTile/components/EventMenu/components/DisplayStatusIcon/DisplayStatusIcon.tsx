@@ -1,5 +1,6 @@
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import { Tooltip } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import requestMethods from '../../../../../../../../../../../../axios/requestMethods';
@@ -60,18 +61,22 @@ export const DisplayStatusIcon: React.FC<DisplayStatusIconProps> = props => {
 
   if (displayStatus === 'shown')
     return (
-      <VisibilityOutlinedIcon
+      <Tooltip title="Collapse event">
+        <VisibilityOutlinedIcon
+          fontSize="small"
+          onClick={handleClick}
+          sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
+        />
+      </Tooltip>
+    );
+
+  return (
+    <Tooltip title="Expand event">
+      <VisibilityOffOutlinedIcon
         fontSize="small"
         onClick={handleClick}
         sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
       />
-    );
-
-  return (
-    <VisibilityOffOutlinedIcon
-      fontSize="small"
-      onClick={handleClick}
-      sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-    />
+    </Tooltip>
   );
 };

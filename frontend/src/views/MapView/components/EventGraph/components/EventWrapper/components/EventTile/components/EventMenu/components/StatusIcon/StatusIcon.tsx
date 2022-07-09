@@ -1,6 +1,7 @@
 import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
+import { Tooltip } from '@mui/material';
 import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import requestMethods from '../../../../../../../../../../../../axios/requestMethods';
@@ -64,26 +65,32 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
 
   if (props.event.status === 'none')
     return (
-      <CheckBoxOutlineBlankOutlinedIcon
-        fontSize="small"
-        onClick={handleClick}
-        sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-      />
+      <Tooltip title="Change event status to done">
+        <CheckBoxOutlineBlankOutlinedIcon
+          fontSize="small"
+          onClick={handleClick}
+          sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
+        />
+      </Tooltip>
     );
   if (props.event.status === 'done')
     return (
-      <CheckBoxOutlinedIcon
-        fontSize="small"
-        onClick={handleClick}
-        sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-      />
+      <Tooltip title="Change event status to omitted">
+        <CheckBoxOutlinedIcon
+          fontSize="small"
+          onClick={handleClick}
+          sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
+        />
+      </Tooltip>
     );
   else
     return (
-      <IndeterminateCheckBoxOutlinedIcon
-        fontSize="small"
-        onClick={handleClick}
-        sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-      />
+      <Tooltip title="Change event status to none">
+        <IndeterminateCheckBoxOutlinedIcon
+          fontSize="small"
+          onClick={handleClick}
+          sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
+        />
+      </Tooltip>
     );
 };

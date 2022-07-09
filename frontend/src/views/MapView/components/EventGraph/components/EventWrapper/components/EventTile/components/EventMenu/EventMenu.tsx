@@ -1,5 +1,5 @@
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { Stack, Typography } from '@mui/material';
+import { Stack, Tooltip, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { NavBarViewDialog } from '../../../../../../../../../../types/types';
 import { SessionEventWithPos } from '../../../../../../../../eventsSlice';
@@ -47,11 +47,13 @@ export const EventMenu: React.FC<EventMenuProps> = props => {
       >
         {props.title}
       </Typography>
-      <EditOutlinedIcon
-        onClick={handleEditIcon}
-        fontSize="small"
-        sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-      />
+      <Tooltip title="Edit event">
+        <EditOutlinedIcon
+          onClick={handleEditIcon}
+          fontSize="small"
+          sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
+        />
+      </Tooltip>
       <DisplayStatusIcon event={props.event} />
       <StatusIcon event={props.event} />
     </Stack>
