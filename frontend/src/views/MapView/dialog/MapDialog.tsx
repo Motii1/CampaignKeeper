@@ -192,35 +192,46 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
   const handleOk = () => {
     if (eventTitleHelperText === '')
       if (props.dialogType === NavBarViewDialog.NewEvent)
-        runQueryNew({
-          title: eventTitle,
-          sessionId: currentSessionId,
-          type: eventType,
-          status: eventStatus,
-          placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
-          descriptionMetadataArray: convertReferenceFieldToEventMetadata(
-            referenceFields['Description']
-          ),
-          charactersMetadataArray: convertReferenceFieldToEventMetadata(
-            referenceFields['Characters']
-          ),
-          parentIds: parentIds,
-        });
-      else
-        runQueryEdit({
-          title: eventTitle,
-          type: eventType,
-          status: eventStatus,
-          displayStatus: currentEvent?.displayStatus,
-          placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
-          descriptionMetadataArray: convertReferenceFieldToEventMetadata(
-            referenceFields['Description']
-          ),
-          charactersMetadataArray: convertReferenceFieldToEventMetadata(
-            referenceFields['Characters']
-          ),
-          parentIds: parentIds,
-        });
+        if (parentIds.length === 0 && eventsList.find(event => event.parentIds.length === 0))
+          props.setSnackbarError('Session can have only one starting event');
+        else
+          runQueryNew({
+            title: eventTitle,
+            sessionId: currentSessionId,
+            type: eventType,
+            status: eventStatus,
+            placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
+            descriptionMetadataArray: convertReferenceFieldToEventMetadata(
+              referenceFields['Description']
+            ),
+            charactersMetadataArray: convertReferenceFieldToEventMetadata(
+              referenceFields['Characters']
+            ),
+            parentIds: parentIds,
+          });
+      else {
+        if (
+          parentIds.length === 0 &&
+          eventsList.find(event => event.parentIds.length === 0) &&
+          !eventsList.find(event => event.id === currentEvent?.id)
+        )
+          props.setSnackbarError('Session can have only one starting event');
+        else
+          runQueryEdit({
+            title: eventTitle,
+            type: eventType,
+            status: eventStatus,
+            displayStatus: currentEvent?.displayStatus,
+            placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
+            descriptionMetadataArray: convertReferenceFieldToEventMetadata(
+              referenceFields['Description']
+            ),
+            charactersMetadataArray: convertReferenceFieldToEventMetadata(
+              referenceFields['Characters']
+            ),
+            parentIds: parentIds,
+          });
+      }
   };
 
   const handleCancel = () => {
@@ -248,7 +259,7 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
         variant="subtitle2"
         sx={{ color: 'customPalette.onSurface', fontStyle: 'italic', paddingLeft: '5px' }}
       >
-        Events without parents will be children of start
+        {"Event without parents will be session's starting event"}
       </Typography>
     );
 

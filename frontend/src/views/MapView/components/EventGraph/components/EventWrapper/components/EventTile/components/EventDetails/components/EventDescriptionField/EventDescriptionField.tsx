@@ -35,9 +35,10 @@ export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props
       const entry = convertEntriesHashMapToList(entries).find(
         element => element.id.toString() === metadata.value
       );
-      const schema = schemas.find(element => element.id === entry?.id);
+      const schema = schemas.find(element => element.id === entry?.schemaId);
       if (schema && entry)
         return <ReferenceChip entry={entry} schema={schema} key={metadata.sequenceNumber} />;
+
       return null;
     });
   };

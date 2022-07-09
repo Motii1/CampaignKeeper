@@ -37,7 +37,7 @@ export const EventDetailsField: React.FC<EventDetailsFieldProps> = props => {
       <Typography sx={{ color: 'customPalette.onBackgroundVariant', fontWeight: 'medium' }}>
         {props.title}
       </Typography>
-      <Box sx={{ display: 'inline' }}>{renderEntries()}</Box>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: '5px' }}>{renderEntries()}</Box>
     </Stack>
   );
 };
