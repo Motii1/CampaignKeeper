@@ -9,7 +9,8 @@ import {
 import { AddReferenceDialog } from '../../../../components/AddReferenceDialog/AddReferenceDialog';
 import { FieldTextArea } from '../../../../components/FieldTextArea/FieldTextArea';
 import { AddChipReferenceDialog } from './components/AddChipReferenceDialog/AddChipReferenceDialog';
-import { FieldChipArea } from './components/FieldChipArea/FieldChipArea';
+import { FieldChip } from './components/FieldChip/FieldChip';
+import { FieldChipBar } from './components/FieldChipBar/FieldChipBar';
 
 type MapFieldListProps = {
   fieldNames: string[];
@@ -21,6 +22,17 @@ export const MapFieldList: React.FC<MapFieldListProps> = props => {
   const [currentChipField, setCurrentChipField] = useState('');
   const [isChipDialogOpen, setIsChipDialogOpen] = useState(false);
   const [isDescriptionDialogOpen, setIsDescriptionDialogOpen] = useState(false);
+
+  const renderFieldChips = (fieldName: string) =>
+    props.fields[fieldName].map(field => (
+      <FieldChip
+        key={field.value}
+        currentField={fieldName}
+        fieldContent={field}
+        fields={props.fields}
+        setFields={props.setFields}
+      />
+    ));
 
   const handleFieldInput = (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
     const newValue = event.target.value;
@@ -38,22 +50,22 @@ export const MapFieldList: React.FC<MapFieldListProps> = props => {
         spacing={1}
         sx={{ width: '100%' }}
       >
-        <FieldChipArea
+        <FieldChipBar
           key={'Place'}
           name={'Place'}
           value={convertReferenceFieldToString(props.fields['Place'])}
-          onChange={event => handleFieldInput(event, 'Place')}
           setCurrentField={setCurrentChipField}
           setIsAddDialogOpen={setIsChipDialogOpen}
         />
-        <FieldChipArea
+        {renderFieldChips('Place')}
+        <FieldChipBar
           key={'Characters'}
           name={'Characters'}
           value={convertReferenceFieldToString(props.fields['Characters'])}
-          onChange={event => handleFieldInput(event, 'Characters')}
           setCurrentField={setCurrentChipField}
           setIsAddDialogOpen={setIsChipDialogOpen}
         />
+        {renderFieldChips('Characters')}
         <FieldTextArea
           key={'Description'}
           name={'Description'}

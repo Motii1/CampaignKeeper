@@ -32,6 +32,7 @@ export const AddChipReferenceDialog: React.FC<AddChipReferenceDialogProps> = pro
   const [chosenEntry, setChosenEntry] = useState<ReferenceSelectItem | null>(null);
 
   const clearDialog = () => {
+    setText(null);
     setChosenSchema(null);
     setChosenEntry(null);
     props.setIsOpen(false);
@@ -44,10 +45,7 @@ export const AddChipReferenceDialog: React.FC<AddChipReferenceDialogProps> = pro
       id: id,
     });
     props.setFields({ ...newFields });
-    props.setIsOpen(false);
     clearDialog();
-    // eslint-disable-next-line no-console
-    console.log(props.fields);
   };
 
   const handleTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,7 +1,7 @@
 import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import requestMethods from '../../../../../../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../../../../../../axios/useQuery';
@@ -15,13 +15,13 @@ type StatusIconProps = {
 export const StatusIcon: React.FC<StatusIconProps> = props => {
   const dispatch = useDispatch();
 
-  const [eventStatus, setEventStatus] = useState(props.event.status);
+  // const [eventStatus, setEventStatus] = useState(props.event.status);
 
-  const setNewStatus = () => {
-    if (eventStatus === 'none') setEventStatus('done');
-    else if (eventStatus === 'done') setEventStatus('omitted');
-    else setEventStatus('none');
-  };
+  const getNewStatus = useCallback(() => {
+    if (props.event.status === 'none') return 'done';
+    else if (props.event.status === 'done') return 'omitted';
+    return 'none';
+  }, [props.event.status]);
 
   const {
     isLoading: isLoadingStatus,
@@ -36,23 +36,23 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
         dispatch(
           changeEventStatus({
             changedEventId: props.event.id,
-            newStatus: eventStatus,
+            newStatus: getNewStatus(),
           })
         );
       resetQueryStatus();
     }
-  }, [dispatch, eventStatus, isLoadingStatus, props.event, resetQueryStatus, statusStatus]);
+  }, [dispatch, getNewStatus, isLoadingStatus, props.event.id, resetQueryStatus, statusStatus]);
 
   useEffect(() => {
     handleRunQueryStatus();
   }, [handleRunQueryStatus]);
 
   const handleClick = () => {
-    if (eventStatus === 'none')
+    if (props.event.status === 'none')
       runQueryStatus({
         status: 'done',
       });
-    else if (eventStatus === 'done')
+    else if (props.event.status === 'done')
       runQueryStatus({
         status: 'omitted',
       });
@@ -60,10 +60,9 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
       runQueryStatus({
         status: 'none',
       });
-    setNewStatus();
   };
 
-  if (eventStatus === 'none')
+  if (props.event.status === 'none')
     return (
       <CheckBoxOutlineBlankOutlinedIcon
         fontSize="small"
@@ -71,7 +70,7 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
         sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
       />
     );
-  if (eventStatus === 'done')
+  if (props.event.status === 'done')
     return (
       <CheckBoxOutlinedIcon
         fontSize="small"
