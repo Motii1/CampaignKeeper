@@ -51,6 +51,8 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
 
   // TO-DO: show "Add an event, Grand Designer" when there are no events
   const renderGraph = useCallback(() => {
+    // eslint-disable-next-line no-console
+    console.log(eventsList);
     if (eventsList.length === 0) return null;
     const queue: SessionEventWithPos[] = eventsList.filter(event => event.parentIds.length === 0);
     const eventToShowSet: Set<SessionEventWithPos> = new Set(queue);

@@ -225,3 +225,14 @@ export const compareEventsByX = (e1: SessionEventWithPos, e2: SessionEventWithPo
   if (e1.x > e2.x) return 1;
   return 0;
 };
+
+export const compareEventsByXThenId = (
+  e1: SessionEventWithPos,
+  e2: SessionEventWithPos
+): number => {
+  if (e1.x < e2.x) return -1;
+  if (e1.x > e2.x) return 1;
+  if (e1.id < e2.id) return -1;
+  if (e1.id > e2.id) return 1;
+  return 0;
+};

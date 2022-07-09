@@ -192,7 +192,7 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
   const handleOk = () => {
     if (eventTitleHelperText === '')
       if (props.dialogType === NavBarViewDialog.NewEvent)
-        if (parentIds.length === 0 && eventsList.find(event => event.parentIds.length === 0))
+        if (parentIds.length === 0 && eventsList.length > 0)
           props.setSnackbarError('Session can have only one starting event');
         else
           runQueryNew({
@@ -212,8 +212,8 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
       else {
         if (
           parentIds.length === 0 &&
-          eventsList.find(event => event.parentIds.length === 0) &&
-          !eventsList.find(event => event.id === currentEvent?.id)
+          eventsList.length > 0 &&
+          !(eventsList.find(event => event.id === currentEvent?.id)?.parentIds.length === 0)
         )
           props.setSnackbarError('Session can have only one starting event');
         else
