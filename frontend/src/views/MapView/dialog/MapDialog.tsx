@@ -46,7 +46,6 @@ export const MapDialog: React.FC<MapDialogProps> = props => {
   const { eventsList } = useSelector((state: RootState) => state.events);
   const { entries } = useSelector((state: RootState) => state.codex);
 
-  // TO-DO: move to another file?
   const possibleType = useMemo(() => ['normal', 'fight'], []);
   const possibleStatus = useMemo(() => ['none', 'done', 'omitted'], []);
   const referenceFieldNames = useMemo(() => ['Place', 'Characters', 'Description'], []);

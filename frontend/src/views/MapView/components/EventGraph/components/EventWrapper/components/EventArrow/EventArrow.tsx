@@ -23,7 +23,7 @@ export const EventArrow: React.FC<EventArrowProps> = props => {
       curveness={1}
       startAnchor={props.startAnchor}
       endAnchor={props.endAnchor}
-      zIndex={5000}
+      zIndex={-10}
     />
   );
 };

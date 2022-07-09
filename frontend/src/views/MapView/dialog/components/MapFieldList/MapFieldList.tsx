@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Stack } from '@mui/material';
 import { useState } from 'react';
 import { ReferenceFieldsState } from '../../../../../types/types';
@@ -7,6 +8,8 @@ import {
 } from '../../../../../utils/utils';
 import { AddReferenceDialog } from '../../../../components/AddReferenceDialog/AddReferenceDialog';
 import { FieldTextArea } from '../../../../components/FieldTextArea/FieldTextArea';
+import { AddChipReferenceDialog } from './components/AddChipReferenceDialog/AddChipReferenceDialog';
+import { FieldChipArea } from './components/FieldChipArea/FieldChipArea';
 
 type MapFieldListProps = {
   fieldNames: string[];
@@ -15,8 +18,9 @@ type MapFieldListProps = {
 };
 
 export const MapFieldList: React.FC<MapFieldListProps> = props => {
-  const [currentField, setCurrentField] = useState('');
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [currentChipField, setCurrentChipField] = useState('');
+  const [isChipDialogOpen, setIsChipDialogOpen] = useState(false);
+  const [isDescriptionDialogOpen, setIsDescriptionDialogOpen] = useState(false);
 
   const handleFieldInput = (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
     const newValue = event.target.value;
@@ -24,18 +28,6 @@ export const MapFieldList: React.FC<MapFieldListProps> = props => {
     newFields[fieldName] = getUpdatedReferenceField(newFields[fieldName], newValue);
     props.setFields({ ...newFields });
   };
-
-  const renderFields = () =>
-    props.fieldNames.map(fieldName => (
-      <FieldTextArea
-        key={fieldName}
-        name={fieldName}
-        value={convertReferenceFieldToString(props.fields[fieldName])}
-        onChange={event => handleFieldInput(event, fieldName)}
-        setCurrentField={setCurrentField}
-        setIsAddDialogOpen={setIsAddDialogOpen}
-      />
-    ));
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -46,12 +38,42 @@ export const MapFieldList: React.FC<MapFieldListProps> = props => {
         spacing={1}
         sx={{ width: '100%' }}
       >
-        {renderFields()}
+        <FieldChipArea
+          key={'Place'}
+          name={'Place'}
+          value={convertReferenceFieldToString(props.fields['Place'])}
+          onChange={event => handleFieldInput(event, 'Place')}
+          setCurrentField={setCurrentChipField}
+          setIsAddDialogOpen={setIsChipDialogOpen}
+        />
+        <FieldChipArea
+          key={'Characters'}
+          name={'Characters'}
+          value={convertReferenceFieldToString(props.fields['Characters'])}
+          onChange={event => handleFieldInput(event, 'Characters')}
+          setCurrentField={setCurrentChipField}
+          setIsAddDialogOpen={setIsChipDialogOpen}
+        />
+        <FieldTextArea
+          key={'Description'}
+          name={'Description'}
+          value={convertReferenceFieldToString(props.fields['Description'])}
+          onChange={event => handleFieldInput(event, 'Description')}
+          setCurrentField={setCurrentChipField}
+          setIsAddDialogOpen={setIsDescriptionDialogOpen}
+        />
       </Stack>
+      <AddChipReferenceDialog
+        currentField={currentChipField}
+        isOpen={isChipDialogOpen}
+        setIsOpen={setIsChipDialogOpen}
+        fields={props.fields}
+        setFields={props.setFields}
+      />
       <AddReferenceDialog
-        currentField={currentField}
-        isOpen={isAddDialogOpen}
-        setIsOpen={setIsAddDialogOpen}
+        currentField={'Description'}
+        isOpen={isDescriptionDialogOpen}
+        setIsOpen={setIsDescriptionDialogOpen}
         fields={props.fields}
         setFields={props.setFields}
       />
