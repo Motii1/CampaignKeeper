@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../types/types';
 import { updateSelectedCampaignData } from '../../CampaignView/campaignViewSlice';
+import { resetState as resetEventsState } from '../../MapView/eventsSlice';
+import { resetState as resetMapViewState } from '../../MapView/mapViewSlice';
 import { updateState as updateStateStart } from '../../StartView/startViewSlice';
 import viewsRoutes from '../../viewsRoutes';
 import { EditMenu } from '../EditMenu/EditMenu';
@@ -32,6 +34,8 @@ export const CampaignTile: React.FC<CampaignTileProps> = props => {
           campaignImageBase64: props.campaignImageBase64,
         })
       );
+      dispatch(resetEventsState({}));
+      dispatch(resetMapViewState({}));
       history.push(viewsRoutes.CAMPAIGN);
     }
   };
