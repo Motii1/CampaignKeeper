@@ -57,7 +57,7 @@ export const lightTheme = createTheme({
     customPalette: {
       background: '#f4f9fb',
       surface: '#e1ebf5',
-      primary: '#e8f0f7',
+      primary: '#ecf3fa',
       secondary: '#f5ebf7',
       tertiary: '#dceff0',
       onBackground: '#303d50',
