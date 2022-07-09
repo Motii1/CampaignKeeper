@@ -25,6 +25,7 @@ export const EventTile: React.FC<EventTileProps> = props => (
         },
       },
       position: 'relative',
+      opacity: props.event.status === 'none' ? '1' : '0.8',
     }}
     id={props.id}
   >
