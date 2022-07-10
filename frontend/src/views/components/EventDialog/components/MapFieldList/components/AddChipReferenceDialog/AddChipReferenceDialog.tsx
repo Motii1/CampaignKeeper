@@ -27,12 +27,12 @@ const codexItemsToSelectItems = (items: Schema[] | Entry[]): ReferenceSelectItem
 export const AddChipReferenceDialog: React.FC<AddChipReferenceDialogProps> = props => {
   const { schemas, entries } = useSelector((state: RootState) => state.codex);
 
-  const [text, setText] = useState<null | string>(null);
+  const [text, setText] = useState<string>('');
   const [chosenSchema, setChosenSchema] = useState<ReferenceSelectItem | null>(null);
   const [chosenEntry, setChosenEntry] = useState<ReferenceSelectItem | null>(null);
 
   const clearDialog = () => {
-    setText(null);
+    setText('');
     setChosenSchema(null);
     setChosenEntry(null);
     props.setIsOpen(false);
@@ -53,7 +53,7 @@ export const AddChipReferenceDialog: React.FC<AddChipReferenceDialogProps> = pro
   };
 
   const handleOk = () => {
-    if (text && text !== '') {
+    if (text !== '') {
       addNewField(text);
     } else if (chosenSchema && chosenEntry) {
       addNewField(`${chosenEntry.name}`, chosenEntry.id);
@@ -103,7 +103,6 @@ export const AddChipReferenceDialog: React.FC<AddChipReferenceDialogProps> = pro
           }}
           variant="outlined"
           fullWidth
-          multiline
           onChange={handleTextInput}
           sx={{
             backgroundColor: 'customPalette.background',
