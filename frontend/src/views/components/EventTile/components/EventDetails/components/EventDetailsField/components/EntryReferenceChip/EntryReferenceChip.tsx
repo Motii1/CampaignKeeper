@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { EventTileType } from '../../../../../../../../../types/types';
 import { Entry, Schema } from '../../../../../../../../CodexView/codexSlice';
 import { setCurrentSchemaAndEntry } from '../../../../../../../../CodexView/codexViewSlice';
 import viewsRoutes from '../../../../../../../../viewsRoutes';
@@ -8,7 +9,7 @@ import viewsRoutes from '../../../../../../../../viewsRoutes';
 type EntryReferenceChipProps = {
   entry: Entry;
   schema: Schema;
-  isShownInExplorer: undefined | boolean;
+  type: EventTileType;
 };
 
 export const EntryReferenceChip: React.FC<EntryReferenceChipProps> = props => {
@@ -27,7 +28,7 @@ export const EntryReferenceChip: React.FC<EntryReferenceChipProps> = props => {
   return (
     <Typography
       noWrap={true}
-      variant={props.isShownInExplorer ? 'subtitle2' : 'subtitle1'}
+      variant={props.type === EventTileType.Explorer ? 'subtitle2' : 'subtitle1'}
       sx={{
         fontWeight: 'bold',
         color: 'customPalette.onAccent',

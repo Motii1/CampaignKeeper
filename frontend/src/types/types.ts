@@ -35,6 +35,12 @@ export enum CustomSnackbarType {
   Error,
 }
 
+export enum EventTileType {
+  Map,
+  Explorer,
+  ExplorerParent,
+}
+
 export type ReferenceFieldMetadata = {
   value: string;
   id: null | string;

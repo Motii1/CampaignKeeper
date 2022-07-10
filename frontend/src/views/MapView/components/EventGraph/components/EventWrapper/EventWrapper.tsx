@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { NavBarViewDialog } from '../../../../../../types/types';
+import { EventTileType, NavBarViewDialog } from '../../../../../../types/types';
 import { compareEventsByXThenId } from '../../../../../../utils/utils';
 import { EventTile } from '../../../../../components/EventTile/EventTile';
 import { SessionEventWithPos } from '../../../../eventsSlice';
@@ -74,6 +74,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
         event={props.event}
         setIsOpen={props.setIsOpen}
         setDialogType={props.setDialogType}
+        type={EventTileType.Map}
       />
       {props.event.displayStatus === 'shown' ? renderChildArrows() : null}
     </Box>

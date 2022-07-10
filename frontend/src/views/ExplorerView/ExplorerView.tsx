@@ -2,7 +2,7 @@ import { Box, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { NavBarViewDialog } from '../../types/types';
+import { EventTileType, NavBarViewDialog } from '../../types/types';
 import { EmptyPlaceholder } from '../components/EmptyPlaceholder/EmptyPlaceholder';
 import { EventTile } from '../components/EventTile/EventTile';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
@@ -46,7 +46,7 @@ export const ExplorerView: React.FC = () => {
       {currentEvent ? (
         <Box>
           <Stack direction="column" justifyContent="center" alignItems="center" spacing={4}>
-            <EventTile event={currentEvent} isShownInExplorer />
+            <EventTile event={currentEvent} type={EventTileType.Explorer} />
           </Stack>
           {currentEvent.parentIds.length > 0 ? (
             <>

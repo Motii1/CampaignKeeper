@@ -2,7 +2,7 @@ import { Stack, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { NavBarViewDialog } from '../../../../../types/types';
+import { EventTileType, NavBarViewDialog } from '../../../../../types/types';
 import { setCurrentEvent as setCurrentEventExplorerView } from '../../../../ExplorerView/explorerViewSlice';
 import { SessionEventWithPos } from '../../../../MapView/eventsSlice';
 import { setCurrentEvent as setCurrentEventMapView } from '../../../../MapView/mapViewSlice';
@@ -15,7 +15,7 @@ type EventBarProps = {
   event: SessionEventWithPos;
   setIsOpen?: (newIsOpen: boolean) => void;
   setDialogType?: (newDialogType: NavBarViewDialog) => void;
-  isShownInExplorer?: boolean;
+  type: EventTileType;
 };
 
 export const EventBar: React.FC<EventBarProps> = props => {
@@ -43,29 +43,29 @@ export const EventBar: React.FC<EventBarProps> = props => {
       spacing={1}
       sx={{ width: '100%', minHeight: 21 }}
     >
-      <Tooltip title={props.isShownInExplorer ? '' : 'Click to view event in Explorer'}>
+      <Tooltip title={props.type === EventTileType.Map ? '' : 'Click to view event in Explorer'}>
         <Typography
           sx={{
             textAlign: 'center',
-            width: props.isShownInExplorer ? '460px' : '230px',
-            marginLeft: props.isShownInExplorer ? '0px' : '70px',
+            width: props.type ? '460px' : '230px',
+            marginLeft: props.type ? '0px' : '70px',
             color: props.event.type === 'normal' ? 'customPalette.onAccent' : 'customPalette.onRed',
             fontWeight: 'bold',
             height: '100%',
             display: 'inline-block',
             verticalAlign: 'middle',
             lineHeight: 'normal',
-            cursor: props.isShownInExplorer ? 'default' : 'pointer',
+            cursor: props.type === EventTileType.Map ? 'pointer' : 'default',
           }}
-          onClick={props.isShownInExplorer ? undefined : handleTitleClick}
-          variant={props.isShownInExplorer ? 'h6' : 'subtitle1'}
+          onClick={props.type === EventTileType.Map ? handleTitleClick : undefined}
+          variant={props.type === EventTileType.Explorer ? 'h6' : 'subtitle1'}
         >
           {props.event.title}
         </Typography>
       </Tooltip>
-      {props.isShownInExplorer ? null : <EditIcon handleClick={handleEditIcon} />}
-      {props.isShownInExplorer ? null : <DisplayStatusIcon event={props.event} />}
-      {props.isShownInExplorer ? null : <StatusIcon event={props.event} />}
+      {props.type === EventTileType.Map ? <EditIcon handleClick={handleEditIcon} /> : null}
+      {props.type === EventTileType.Map ? <DisplayStatusIcon event={props.event} /> : null}
+      {props.type === EventTileType.Map ? <StatusIcon event={props.event} /> : null}
     </Stack>
   );
 };

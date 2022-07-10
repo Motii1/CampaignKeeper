@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store';
+import { EventTileType } from '../../../../../../../types/types';
 import { convertEntriesHashMapToList } from '../../../../../../../utils/utils';
 import { EventFieldMetadata } from '../../../../../../MapView/eventsSlice';
 import { ReferenceChip } from './ReferenceChip/ReferenceChip';
@@ -8,7 +9,7 @@ import { ReferenceChip } from './ReferenceChip/ReferenceChip';
 type EventDescriptionFieldProps = {
   title: string;
   data: EventFieldMetadata[];
-  isShownInExplorer?: boolean;
+  type: EventTileType;
 };
 
 export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props => {
@@ -27,7 +28,7 @@ export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props
               width: 'fit-content',
               color: 'customPalette.onSurface',
             }}
-            variant={props.isShownInExplorer ? 'subtitle2' : 'subtitle1'}
+            variant={props.type === EventTileType.Explorer ? 'subtitle2' : 'subtitle1'}
             key={metadata.sequenceNumber}
           >
             {metadata.value}

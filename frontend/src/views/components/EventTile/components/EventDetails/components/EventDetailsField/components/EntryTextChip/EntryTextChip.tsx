@@ -1,14 +1,15 @@
 import { Typography } from '@mui/material';
+import { EventTileType } from '../../../../../../../../../types/types';
 
 type EntryTextChipProps = {
   title: string;
-  isShownInExplorer: undefined | boolean;
+  type: EventTileType;
 };
 
 export const EntryTextChip: React.FC<EntryTextChipProps> = props => (
   <Typography
     noWrap={true}
-    variant={props.isShownInExplorer ? 'subtitle2' : 'subtitle1'}
+    variant={props.type === EventTileType.Explorer ? 'subtitle2' : 'subtitle1'}
     sx={{
       fontWeight: 'bold',
       color: 'customPalette.background',
