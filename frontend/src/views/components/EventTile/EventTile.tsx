@@ -1,8 +1,8 @@
 import { Box, Paper, Stack } from '@mui/material';
 import { NavBarViewDialog } from '../../../types/types';
 import { SessionEventWithPos } from '../../MapView/eventsSlice';
+import { EventBar } from './components/EventBar/EventBar';
 import { EventDetails } from './components/EventDetails/EventDetails';
-import { EventMenu } from './components/EventMenu/EventMenu';
 
 type EventTileProps = {
   id?: string;
@@ -39,7 +39,7 @@ export const EventTile: React.FC<EventTileProps> = props => (
         padding: 0.7,
       }}
     >
-      <EventMenu
+      <EventBar
         event={props.event}
         setIsOpen={props.setIsOpen}
         setDialogType={props.setDialogType}

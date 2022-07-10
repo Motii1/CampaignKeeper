@@ -1,29 +1,29 @@
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { Stack, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../../../types/types';
-import { setCurrentEventId as setCurrentEventExplorerView } from '../../../../ExplorerView/explorerViewSlice';
+import { setCurrentEvent as setCurrentEventExplorerView } from '../../../../ExplorerView/explorerViewSlice';
 import { SessionEventWithPos } from '../../../../MapView/eventsSlice';
 import { setCurrentEvent as setCurrentEventMapView } from '../../../../MapView/mapViewSlice';
 import viewsRoutes from '../../../../viewsRoutes';
 import { DisplayStatusIcon } from './components/DisplayStatusIcon/DisplayStatusIcon';
+import { EditIcon } from './components/EditIcon/EditIcon';
 import { StatusIcon } from './components/StatusIcon/StatusIcon';
 
-type EventMenuProps = {
+type EventBarProps = {
   event: SessionEventWithPos;
   setIsOpen?: (newIsOpen: boolean) => void;
   setDialogType?: (newDialogType: NavBarViewDialog) => void;
   isShownInExplorer?: boolean;
 };
 
-export const EventMenu: React.FC<EventMenuProps> = props => {
+export const EventBar: React.FC<EventBarProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();
 
   const handleTitleClick = () => {
-    dispatch(setCurrentEventExplorerView({ currentEventId: props.event.id }));
+    dispatch(setCurrentEventExplorerView({ currentEvent: props.event }));
     history.push(viewsRoutes.EXPLORER);
   };
 
@@ -63,17 +63,9 @@ export const EventMenu: React.FC<EventMenuProps> = props => {
           {props.event.title}
         </Typography>
       </Tooltip>
-      {props.isShownInExplorer ? null : (
-        <Tooltip title="Edit event">
-          <EditOutlinedIcon
-            onClick={handleEditIcon}
-            fontSize="small"
-            sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-          />
-        </Tooltip>
-      )}
+      {props.isShownInExplorer ? null : <EditIcon handleClick={handleEditIcon} />}
       {props.isShownInExplorer ? null : <DisplayStatusIcon event={props.event} />}
-      <StatusIcon event={props.event} />
+      {props.isShownInExplorer ? null : <StatusIcon event={props.event} />}
     </Stack>
   );
 };

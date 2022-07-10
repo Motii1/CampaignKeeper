@@ -4,28 +4,28 @@ import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
 import { EventDialog } from '../../components/EventDialog/EventDialog';
 
-type MapDialogProps = {
+type ExplorerDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
-  dialogType: NavBarViewDialog;
   setIsSecondaryOpen: (newIsOpen: boolean) => void;
   setSnackbarSuccess: (message: string) => void;
   setSnackbarError: (message: string) => void;
 };
 
-export const MapDialog: React.FC<MapDialogProps> = props => {
-  const { currentSessionId, currentEvent } = useSelector((state: RootState) => state.mapView);
+export const ExplorerDialog: React.FC<ExplorerDialogProps> = props => {
+  const { currentSessionId, currentEvent } = useSelector((state: RootState) => state.explorerView);
 
   return (
     <EventDialog
       currentSessionId={currentSessionId}
-      currentEvent={currentEvent}
+      currentEvent={currentEvent ? currentEvent : null}
       isOpen={props.isOpen}
       setIsOpen={props.setIsOpen}
-      dialogType={props.dialogType}
+      dialogType={NavBarViewDialog.EditEvent}
       setIsSecondaryOpen={props.setIsSecondaryOpen}
       setSnackbarSuccess={props.setSnackbarSuccess}
       setSnackbarError={props.setSnackbarError}
+      isShownInExplorer
     />
   );
 };

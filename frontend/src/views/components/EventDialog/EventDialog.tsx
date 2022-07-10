@@ -12,6 +12,7 @@ import {
 } from '../../../utils/utils';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
+import { setCurrentEvent as setCurrentEventExplorerView } from '../../ExplorerView/explorerViewSlice';
 import {
   addEvent,
   editEvent,
@@ -44,11 +45,11 @@ type EventDialogProps = {
   setIsSecondaryOpen: (newIsOpen: boolean) => void;
   setSnackbarSuccess: (message: string) => void;
   setSnackbarError: (message: string) => void;
+  isShownInExplorer?: boolean;
 };
 
 export const EventDialog: React.FC<EventDialogProps> = props => {
   const dispatch = useDispatch();
-  const { currentSessionId, currentEvent } = useSelector((state: RootState) => state.mapView);
   const { eventsList } = useSelector((state: RootState) => state.events);
   const { entries } = useSelector((state: RootState) => state.codex);
 
@@ -59,13 +60,23 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
   const [dialogTitle, setDialogTitle] = useState(
     props.dialogType === NavBarViewDialog.NewEvent ? 'Create new event' : 'Edit event'
   );
-  const [eventTitle, setEventTitle] = useState<string>('');
+  const [eventTitle, setEventTitle] = useState<string>(
+    props.isShownInExplorer && props.currentEvent ? props.currentEvent.title : ''
+  );
   const [eventTitleHelperText, setEventTitleHelperText] = useState<string>('');
-  const [parentIds, setParentIds] = useState<string[]>([]);
-  const [eventType, setEventType] = useState<string>(possibleType[0]);
-  const [eventStatus, setEventStatus] = useState<string>(possibleStatus[0]);
+  const [parentIds, setParentIds] = useState<string[]>(
+    props.isShownInExplorer && props.currentEvent ? props.currentEvent.parentIds : []
+  );
+  const [eventType, setEventType] = useState<string>(
+    props.isShownInExplorer && props.currentEvent ? props.currentEvent.type : possibleType[0]
+  );
+  const [eventStatus, setEventStatus] = useState<string>(
+    props.isShownInExplorer && props.currentEvent ? props.currentEvent.status : possibleStatus[0]
+  );
   const [referenceFields, setReferenceFields] = useState(
-    createEmptyEventFields(referenceFieldNames)
+    props.isShownInExplorer && props.currentEvent
+      ? createFilledEventFields(referenceFieldNames, props.currentEvent, entries)
+      : createEmptyEventFields(referenceFieldNames)
   );
 
   useEffect(() => {
@@ -77,16 +88,16 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
       setEventType(possibleType[0]);
       setEventStatus(possibleStatus[0]);
       setReferenceFields(createEmptyEventFields(referenceFieldNames));
-    } else if (currentEvent) {
+    } else if (props.currentEvent) {
       setDialogTitle('Edit event');
-      setEventTitle(currentEvent.title);
+      setEventTitle(props.currentEvent.title);
       setEventTitleHelperText('');
-      setParentIds(currentEvent.parentIds);
-      setEventType(currentEvent.type);
-      setEventStatus(currentEvent.status);
-      setReferenceFields(createFilledEventFields(referenceFieldNames, currentEvent, entries));
+      setParentIds(props.currentEvent.parentIds);
+      setEventType(props.currentEvent.type);
+      setEventStatus(props.currentEvent.status);
+      setReferenceFields(createFilledEventFields(referenceFieldNames, props.currentEvent, entries));
     }
-  }, [currentEvent, entries, possibleStatus, possibleType, props, referenceFieldNames]);
+  }, [entries, possibleStatus, possibleType, props, referenceFieldNames]);
 
   const {
     isLoading: isLoadingNew,
@@ -127,32 +138,37 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
     status: statusEdit,
     runQuery: runQueryEdit,
     resetQuery: resetQueryEdit,
-  } = useQuery<EditEventData>(`/api/event/${currentEvent?.id}`, requestMethods.PATCH);
+  } = useQuery<EditEventData>(`/api/event/${props.currentEvent?.id}`, requestMethods.PATCH);
 
   const handleRunQueryEdit = useCallback(() => {
     if (!isLoadingEdit && statusEdit) {
       if (statusEdit === 200) {
+        const editedEvent = {
+          id: props.currentEvent?.id,
+          title: eventTitle,
+          sessionId: props.currentEvent?.sessionId,
+          type: eventType,
+          status: eventStatus,
+          displayStatus: props.currentEvent?.displayStatus,
+          placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
+          descriptionMetadataArray: convertReferenceFieldToEventMetadata(
+            referenceFields['Description']
+          ),
+          charactersMetadataArray: convertReferenceFieldToEventMetadata(
+            referenceFields['Characters']
+          ),
+          parentIds: parentIds,
+          childrenIds: props.currentEvent?.childrenIds,
+        };
         dispatch(
           editEvent({
-            editedEvent: {
-              id: currentEvent?.id,
-              title: eventTitle,
-              sessionId: currentEvent?.sessionId,
-              type: eventType,
-              status: eventStatus,
-              displayStatus: currentEvent?.displayStatus,
-              placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
-              descriptionMetadataArray: convertReferenceFieldToEventMetadata(
-                referenceFields['Description']
-              ),
-              charactersMetadataArray: convertReferenceFieldToEventMetadata(
-                referenceFields['Characters']
-              ),
-              parentIds: parentIds,
-              childrenIds: currentEvent?.childrenIds,
-            },
+            editedEvent: editedEvent,
           })
         );
+        if (props.isShownInExplorer) {
+          dispatch(setCurrentEventExplorerView({ currentEvent: editedEvent }));
+        }
+
         props.setSnackbarSuccess('Event edited');
         props.setIsOpen(false);
         resetDialog();
@@ -161,7 +177,6 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
       resetQueryEdit();
     }
   }, [
-    currentEvent,
     dispatch,
     eventStatus,
     eventTitle,
@@ -203,7 +218,7 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
         else
           runQueryNew({
             title: eventTitle,
-            sessionId: currentSessionId,
+            sessionId: props.currentSessionId,
             type: eventType,
             status: eventStatus,
             placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
@@ -219,7 +234,7 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
         if (
           parentIds.length === 0 &&
           eventsList.length > 0 &&
-          !(eventsList.find(event => event.id === currentEvent?.id)?.parentIds.length === 0)
+          !(eventsList.find(event => event.id === props.currentEvent?.id)?.parentIds.length === 0)
         )
           props.setSnackbarError('Session can have only one starting event');
         else
@@ -227,7 +242,7 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
             title: eventTitle,
             type: eventType,
             status: eventStatus,
-            displayStatus: currentEvent?.displayStatus,
+            displayStatus: props.currentEvent?.displayStatus,
             placeMetadataArray: convertReferenceFieldToEventMetadata(referenceFields['Place']),
             descriptionMetadataArray: convertReferenceFieldToEventMetadata(
               referenceFields['Description']
@@ -309,7 +324,9 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
           />
           <ParentsBar
             currentEventId={
-              currentEvent && props.dialogType === NavBarViewDialog.EditEvent ? currentEvent.id : ''
+              props.currentEvent && props.dialogType === NavBarViewDialog.EditEvent
+                ? props.currentEvent.id
+                : ''
             }
             parents={parentIds}
             setParents={setParentIds}
