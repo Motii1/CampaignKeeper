@@ -39,7 +39,6 @@ export const EventTile: React.FC<EventTileProps> = props => (
       }}
     >
       <EventMenu
-        title={props.event.title}
         event={props.event}
         setIsOpen={props.setIsOpen}
         setDialogType={props.setDialogType}

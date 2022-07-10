@@ -22,7 +22,7 @@ export const Routing: React.FC = () => (
     <ProtectedRouteWrapper path={viewsRoutes.MAP}>
       <MapView />
     </ProtectedRouteWrapper>
-    <ProtectedRouteWrapper path={viewsRoutes.SESSIONS}>
+    <ProtectedRouteWrapper path={viewsRoutes.EXPLORER}>
       <ExplorerView />
     </ProtectedRouteWrapper>
     <ProtectedRouteWrapper path={viewsRoutes.CODEX}>

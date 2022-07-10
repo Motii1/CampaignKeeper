@@ -83,14 +83,13 @@ export const StatusIcon: React.FC<StatusIconProps> = props => {
         />
       </Tooltip>
     );
-  else
-    return (
-      <Tooltip title="Change event status to none">
-        <IndeterminateCheckBoxOutlinedIcon
-          fontSize="small"
-          onClick={handleClick}
-          sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
-        />
-      </Tooltip>
-    );
+  return (
+    <Tooltip title="Change event status to none">
+      <IndeterminateCheckBoxOutlinedIcon
+        fontSize="small"
+        onClick={handleClick}
+        sx={{ color: 'customPalette.onAccent', opacity: '0.8', cursor: 'pointer' }}
+      />
+    </Tooltip>
+  );
 };
