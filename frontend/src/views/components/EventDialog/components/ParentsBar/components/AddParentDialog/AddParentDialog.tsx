@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store';
 import { compareEventsByTitle } from '../../../../../../../utils/utils';
-import { CustomDialog } from '../../../../../../components/CustomDialog/CustomDialog';
-import { CustomSelect } from '../../../../../../components/CustomSelect/CustomSelect';
+import { CustomDialog } from '../../../../../CustomDialog/CustomDialog';
+import { CustomSelect } from '../../../../../CustomSelect/CustomSelect';
 
 type AddParentDialogProps = {
+  currentEventId: string;
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
   parents: string[];
@@ -41,15 +42,9 @@ export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
     return 'Choose parent';
   };
 
-  // const renderValue = (value: string) => {
-  //   const newValue =
-  //     value !== '' ? eventsList.find(event => event.id === value)?.title : 'Choose parent';
-  //   return newValue;
-  // };
-
   const renderItems = () => {
     const possibleParents = eventsList
-      .filter(event => !props.parents.includes(event.id))
+      .filter(event => !props.parents.includes(event.id) && event.id !== props.currentEventId)
       .sort(compareEventsByTitle)
       .map(event => (
         <MenuItem value={event.id} key={event.id}>

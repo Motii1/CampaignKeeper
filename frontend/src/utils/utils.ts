@@ -232,7 +232,7 @@ export const compareEventsByXThenId = (
 ): number => {
   if (e1.x < e2.x) return -1;
   if (e1.x > e2.x) return 1;
-  if (e1.id < e2.id) return -1;
   if (e1.id > e2.id) return 1;
+  if (e1.id < e2.id) return -1;
   return 0;
 };

@@ -6,8 +6,8 @@ import {
   convertReferenceFieldToString,
   getUpdatedReferenceField,
 } from '../../../../../utils/utils';
-import { AddReferenceDialog } from '../../../../components/AddReferenceDialog/AddReferenceDialog';
-import { FieldTextArea } from '../../../../components/FieldTextArea/FieldTextArea';
+import { AddReferenceDialog } from '../../../AddReferenceDialog/AddReferenceDialog';
+import { FieldTextArea } from '../../../FieldTextArea/FieldTextArea';
 import { AddChipReferenceDialog } from './components/AddChipReferenceDialog/AddChipReferenceDialog';
 import { FieldChip } from './components/FieldChip/FieldChip';
 import { FieldChipBar } from './components/FieldChipBar/FieldChipBar';

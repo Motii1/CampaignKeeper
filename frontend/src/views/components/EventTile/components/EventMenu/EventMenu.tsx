@@ -58,6 +58,7 @@ export const EventMenu: React.FC<EventMenuProps> = props => {
             cursor: props.isShownInExplorer ? 'default' : 'pointer',
           }}
           onClick={props.isShownInExplorer ? undefined : handleTitleClick}
+          variant={props.isShownInExplorer ? 'h6' : 'subtitle1'}
         >
           {props.event.title}
         </Typography>

@@ -5,8 +5,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import requestMethods from '../../../../../../../axios/requestMethods';
 import { useQuery } from '../../../../../../../axios/useQuery';
-import { EditEventData } from '../../../../../../MapView/dialog/MapDialog';
 import { hideEvent, SessionEventWithPos, showEvent } from '../../../../../../MapView/eventsSlice';
+import { EditEventData } from '../../../../../EventDialog/EventDialog';
 
 type DisplayStatusIconProps = {
   event: SessionEventWithPos;

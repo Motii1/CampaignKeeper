@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { AddParentDialog } from './components/AddParentDialog/AddParentDialog';
 
 type ParentsBarProps = {
+  currentEventId: string;
   parents: string[];
   setParents: (newParents: string[]) => void;
 };
@@ -27,6 +28,7 @@ export const ParentsBar: React.FC<ParentsBarProps> = props => {
         />
       </Stack>
       <AddParentDialog
+        currentEventId={props.currentEventId}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         parents={props.parents}

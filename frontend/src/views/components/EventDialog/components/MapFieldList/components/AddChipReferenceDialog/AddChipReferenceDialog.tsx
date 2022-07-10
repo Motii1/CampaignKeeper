@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store';
 import { ReferenceFieldsState } from '../../../../../../../types/types';
 import { Entry, Schema } from '../../../../../../CodexView/codexSlice';
-import { AddReferenceSelect } from '../../../../../../components/AddReferenceDialog/components/AddReferenceSelect/AddReferenceSelect';
-import { CustomDialog } from '../../../../../../components/CustomDialog/CustomDialog';
+import { AddReferenceSelect } from '../../../../../AddReferenceDialog/components/AddReferenceSelect/AddReferenceSelect';
+import { CustomDialog } from '../../../../../CustomDialog/CustomDialog';
 
 export type ReferenceSelectItem = {
   name: string;

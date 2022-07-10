@@ -1,5 +1,5 @@
 import { MenuItem, SelectChangeEvent, Stack, Typography } from '@mui/material';
-import { CustomSelect } from '../../../../components/CustomSelect/CustomSelect';
+import { CustomSelect } from '../../../CustomSelect/CustomSelect';
 
 type EventSelectProps = {
   id: string;
