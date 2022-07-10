@@ -1,5 +1,5 @@
 import { Paper, Stack } from '@mui/material';
-import { EventFieldMetadata } from '../../../../../../../../eventsSlice';
+import { EventFieldMetadata } from '../../../../MapView/eventsSlice';
 import { EventDescriptionField } from './components/EventDescriptionField/EventDescriptionField';
 import { EventDetailsField } from './components/EventDetailsField/EventDetailsField';
 
@@ -7,6 +7,7 @@ type EventDetailsProps = {
   place: EventFieldMetadata[];
   characters: EventFieldMetadata[];
   description: EventFieldMetadata[];
+  isShownInExplorer?: boolean;
 };
 
 export const EventDetails: React.FC<EventDetailsProps> = props => (
@@ -20,8 +21,16 @@ export const EventDetails: React.FC<EventDetailsProps> = props => (
     }}
   >
     <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
-      <EventDetailsField title={'Place'} data={props.place} />
-      <EventDetailsField title={'Characters'} data={props.characters} />
+      <EventDetailsField
+        title={'Place'}
+        data={props.place}
+        isShownInExplorer={props.isShownInExplorer}
+      />
+      <EventDetailsField
+        title={'Characters'}
+        data={props.characters}
+        isShownInExplorer={props.isShownInExplorer}
+      />
       <EventDescriptionField title={'Description'} data={props.description} />
     </Stack>
   </Paper>

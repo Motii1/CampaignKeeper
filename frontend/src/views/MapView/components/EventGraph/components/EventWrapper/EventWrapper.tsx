@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
 import { NavBarViewDialog } from '../../../../../../types/types';
 import { compareEventsByXThenId } from '../../../../../../utils/utils';
+import { EventTile } from '../../../../../components/EventTile/EventTile';
 import { SessionEventWithPos } from '../../../../eventsSlice';
 import { EventArrow } from './components/EventArrow/EventArrow';
-import { EventTile } from './components/EventTile/EventTile';
 
 type EventWrapperProps = {
   event: SessionEventWithPos;

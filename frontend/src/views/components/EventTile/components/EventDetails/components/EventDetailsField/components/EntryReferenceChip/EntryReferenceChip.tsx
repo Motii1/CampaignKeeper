@@ -1,9 +1,9 @@
 import { Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Entry, Schema } from '../../../../../../../../../../../../../CodexView/codexSlice';
-import { setCurrentSchemaAndEntry } from '../../../../../../../../../../../../../CodexView/codexViewSlice';
-import viewsRoutes from '../../../../../../../../../../../../../viewsRoutes';
+import { Entry, Schema } from '../../../../../../../../CodexView/codexSlice';
+import { setCurrentSchemaAndEntry } from '../../../../../../../../CodexView/codexViewSlice';
+import viewsRoutes from '../../../../../../../../viewsRoutes';
 
 type EntryReferenceChipProps = {
   entry: Entry;

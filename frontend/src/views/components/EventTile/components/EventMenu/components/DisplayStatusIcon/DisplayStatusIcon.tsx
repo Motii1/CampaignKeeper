@@ -3,14 +3,10 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { Tooltip } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import requestMethods from '../../../../../../../../../../../../axios/requestMethods';
-import { useQuery } from '../../../../../../../../../../../../axios/useQuery';
-import { EditEventData } from '../../../../../../../../../../dialog/MapDialog';
-import {
-  hideEvent,
-  SessionEventWithPos,
-  showEvent,
-} from '../../../../../../../../../../eventsSlice';
+import requestMethods from '../../../../../../../axios/requestMethods';
+import { useQuery } from '../../../../../../../axios/useQuery';
+import { EditEventData } from '../../../../../../MapView/dialog/MapDialog';
+import { hideEvent, SessionEventWithPos, showEvent } from '../../../../../../MapView/eventsSlice';
 
 type DisplayStatusIconProps = {
   event: SessionEventWithPos;

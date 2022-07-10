@@ -1,14 +1,15 @@
 import { Box, Paper, Stack } from '@mui/material';
-import { NavBarViewDialog } from '../../../../../../../../types/types';
-import { SessionEventWithPos } from '../../../../../../eventsSlice';
+import { NavBarViewDialog } from '../../../types/types';
+import { SessionEventWithPos } from '../../MapView/eventsSlice';
 import { EventDetails } from './components/EventDetails/EventDetails';
 import { EventMenu } from './components/EventMenu/EventMenu';
 
 type EventTileProps = {
-  id: string;
+  id?: string;
   event: SessionEventWithPos;
-  setIsOpen: (newIsOpen: boolean) => void;
-  setDialogType: (newDialogType: NavBarViewDialog) => void;
+  setIsOpen?: (newIsOpen: boolean) => void;
+  setDialogType?: (newDialogType: NavBarViewDialog) => void;
+  isShownInExplorer?: boolean;
 };
 
 export const EventTile: React.FC<EventTileProps> = props => (
@@ -17,7 +18,7 @@ export const EventTile: React.FC<EventTileProps> = props => (
     sx={{
       backgroundColor: props.event.type === 'normal' ? 'customPalette.accent' : 'customPalette.red',
       borderRadius: 2,
-      width: '400px',
+      width: props.isShownInExplorer ? '800px' : '400px',
       //minHeight: props.event.displayStatus === 'shown' ? '200px' : '30px',
       '& .MuiBox-root': {
         '& .css-0': {
@@ -25,9 +26,9 @@ export const EventTile: React.FC<EventTileProps> = props => (
         },
       },
       position: 'relative',
-      opacity: props.event.status === 'none' ? '1' : '0.8',
+      opacity: props.event.status === 'none' || props.isShownInExplorer ? '1' : '0.8',
     }}
-    id={props.id}
+    id={props.id ? props.id : 'event-tile-explorer-view'}
   >
     <Stack
       direction="column"
@@ -42,6 +43,7 @@ export const EventTile: React.FC<EventTileProps> = props => (
         event={props.event}
         setIsOpen={props.setIsOpen}
         setDialogType={props.setDialogType}
+        isShownInExplorer={props.isShownInExplorer}
       />
       {props.event.displayStatus === 'shown' ? (
         <Box

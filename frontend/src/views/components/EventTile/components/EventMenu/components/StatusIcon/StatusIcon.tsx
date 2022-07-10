@@ -4,10 +4,10 @@ import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/Indeterminate
 import { Tooltip } from '@mui/material';
 import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import requestMethods from '../../../../../../../../../../../../axios/requestMethods';
-import { useQuery } from '../../../../../../../../../../../../axios/useQuery';
-import { EditEventData } from '../../../../../../../../../../dialog/MapDialog';
-import { changeEventStatus, SessionEventWithPos } from '../../../../../../../../../../eventsSlice';
+import requestMethods from '../../../../../../../axios/requestMethods';
+import { useQuery } from '../../../../../../../axios/useQuery';
+import { EditEventData } from '../../../../../../MapView/dialog/MapDialog';
+import { changeEventStatus, SessionEventWithPos } from '../../../../../../MapView/eventsSlice';
 
 type StatusIconProps = {
   event: SessionEventWithPos;
@@ -15,8 +15,6 @@ type StatusIconProps = {
 
 export const StatusIcon: React.FC<StatusIconProps> = props => {
   const dispatch = useDispatch();
-
-  // const [eventStatus, setEventStatus] = useState(props.event.status);
 
   const getNewStatus = useCallback(() => {
     if (props.event.status === 'none') return 'done';

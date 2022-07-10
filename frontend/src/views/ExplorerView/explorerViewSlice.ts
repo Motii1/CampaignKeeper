@@ -1,14 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SessionEventWithPos } from '../MapView/eventsSlice';
 
 type ExplorerViewSlice = {
   currentSessionId: string;
-  currentEvent: null | SessionEventWithPos;
+  currentEventId: string;
 };
 
 const initialState: ExplorerViewSlice = {
   currentSessionId: '',
-  currentEvent: null,
+  currentEventId: '',
 };
 
 const explorerViewSlice = createSlice({
@@ -17,19 +16,19 @@ const explorerViewSlice = createSlice({
   reducers: {
     setSessionId: (state, action) => {
       state.currentSessionId = action.payload.currentSessionId;
-      state.currentEvent = null;
+      state.currentEventId = '';
     },
-    setCurrentEvent: (state, action) => {
-      state.currentEvent = action.payload.currentEvent;
+    setCurrentEventId: (state, action) => {
+      state.currentEventId = action.payload.currentEventId;
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resetState: (state, _action) => {
       state.currentSessionId = '';
-      state.currentEvent = null;
+      state.currentEventId = '';
     },
   },
 });
 
-export const { setSessionId, setCurrentEvent, resetState } = explorerViewSlice.actions;
+export const { setSessionId, setCurrentEventId, resetState } = explorerViewSlice.actions;
 
 export default explorerViewSlice.reducer;

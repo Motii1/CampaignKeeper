@@ -1,15 +1,16 @@
 /* eslint-disable no-console */
 import { Box, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../../../../../../../../store';
-import { convertEntriesHashMapToList } from '../../../../../../../../../../../../utils/utils';
-import { EventFieldMetadata } from '../../../../../../../../../../eventsSlice';
+import { RootState } from '../../../../../../../store';
+import { convertEntriesHashMapToList } from '../../../../../../../utils/utils';
+import { EventFieldMetadata } from '../../../../../../MapView/eventsSlice';
 import { EntryReferenceChip } from './components/EntryReferenceChip/EntryReferenceChip';
 import { EntryTextChip } from './components/EntryTextChip/EntryTextChip';
 
 type EventDetailsFieldProps = {
   title: string;
   data: EventFieldMetadata[];
+  isShownInExplorer: undefined | boolean;
 };
 
 export const EventDetailsField: React.FC<EventDetailsFieldProps> = props => {
@@ -34,7 +35,10 @@ export const EventDetailsField: React.FC<EventDetailsFieldProps> = props => {
 
   return (
     <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0.5}>
-      <Typography sx={{ color: 'customPalette.onBackgroundVariant', fontWeight: 'medium' }}>
+      <Typography
+        variant={props.isShownInExplorer ? 'body2' : 'body1'}
+        sx={{ color: 'customPalette.onBackgroundVariant', fontWeight: 'medium' }}
+      >
         {props.title}
       </Typography>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: '5px' }}>{renderEntries()}</Box>
