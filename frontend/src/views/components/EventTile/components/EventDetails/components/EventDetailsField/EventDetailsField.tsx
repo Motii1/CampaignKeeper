@@ -21,14 +21,27 @@ export const EventDetailsField: React.FC<EventDetailsFieldProps> = props => {
     sortedData.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
     return sortedData.map(metadata => {
       if (metadata.type === 'string')
-        return <EntryTextChip key={metadata.sequenceNumber} title={metadata.value} />;
+        return (
+          <EntryTextChip
+            key={metadata.sequenceNumber}
+            title={metadata.value}
+            isShownInExplorer={props.isShownInExplorer}
+          />
+        );
 
       const entry = convertEntriesHashMapToList(entries).find(
         element => element.id.toString() === metadata.value
       );
       const schema = schemas.find(element => element.id === entry?.schemaId);
       if (schema && entry)
-        return <EntryReferenceChip key={entry.id} entry={entry} schema={schema} />;
+        return (
+          <EntryReferenceChip
+            key={entry.id}
+            entry={entry}
+            schema={schema}
+            isShownInExplorer={props.isShownInExplorer}
+          />
+        );
       return null;
     });
   };
@@ -36,7 +49,7 @@ export const EventDetailsField: React.FC<EventDetailsFieldProps> = props => {
   return (
     <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0.5}>
       <Typography
-        variant={props.isShownInExplorer ? 'body2' : 'body1'}
+        variant={props.isShownInExplorer ? 'subtitle2' : 'subtitle1'}
         sx={{ color: 'customPalette.onBackgroundVariant', fontWeight: 'medium' }}
       >
         {props.title}

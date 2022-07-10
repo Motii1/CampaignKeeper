@@ -8,6 +8,7 @@ import viewsRoutes from '../../../../../../../../viewsRoutes';
 type EntryReferenceChipProps = {
   entry: Entry;
   schema: Schema;
+  isShownInExplorer: undefined | boolean;
 };
 
 export const EntryReferenceChip: React.FC<EntryReferenceChipProps> = props => {
@@ -26,7 +27,7 @@ export const EntryReferenceChip: React.FC<EntryReferenceChipProps> = props => {
   return (
     <Typography
       noWrap={true}
-      variant="subtitle2"
+      variant={props.isShownInExplorer ? 'subtitle2' : 'subtitle1'}
       sx={{
         fontWeight: 'bold',
         color: 'customPalette.onAccent',

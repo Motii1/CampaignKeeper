@@ -2,12 +2,13 @@ import { Typography } from '@mui/material';
 
 type EntryTextChipProps = {
   title: string;
+  isShownInExplorer: undefined | boolean;
 };
 
 export const EntryTextChip: React.FC<EntryTextChipProps> = props => (
   <Typography
     noWrap={true}
-    variant="subtitle2"
+    variant={props.isShownInExplorer ? 'subtitle2' : 'subtitle1'}
     sx={{
       fontWeight: 'bold',
       color: 'customPalette.background',

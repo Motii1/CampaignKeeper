@@ -31,7 +31,11 @@ export const EventDetails: React.FC<EventDetailsProps> = props => (
         data={props.characters}
         isShownInExplorer={props.isShownInExplorer}
       />
-      <EventDescriptionField title={'Description'} data={props.description} />
+      <EventDescriptionField
+        title={'Description'}
+        data={props.description}
+        isShownInExplorer={props.isShownInExplorer}
+      />
     </Stack>
   </Paper>
 );

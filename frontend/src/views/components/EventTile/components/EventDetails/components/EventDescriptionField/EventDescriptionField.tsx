@@ -8,6 +8,7 @@ import { ReferenceChip } from './ReferenceChip/ReferenceChip';
 type EventDescriptionFieldProps = {
   title: string;
   data: EventFieldMetadata[];
+  isShownInExplorer?: boolean;
 };
 
 export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props => {
@@ -26,6 +27,7 @@ export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props
               width: 'fit-content',
               color: 'customPalette.onSurface',
             }}
+            variant={props.isShownInExplorer ? 'subtitle2' : 'subtitle1'}
             key={metadata.sequenceNumber}
           >
             {metadata.value}
