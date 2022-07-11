@@ -4,17 +4,21 @@ import { compareEventsByTitle } from '../../../../utils/utils';
 import { CustomSnackbar } from '../../../components/CustomSnackbar/CustomSnackbar';
 import { useSnackbar } from '../../../components/CustomSnackbar/useSnackbar';
 import { SessionEventWithPos } from '../../../MapView/eventsSlice';
+import { OtherEventsDialog } from '../OtherEventsDialog/OtherEventsDialog';
 import { AddChildDialog } from './components/AddChildDialog/AddChildDialog';
 import { ChildChip } from './components/ChildChip/ChildChip';
 import { NewChildChip } from './components/NewChildChip/NewChildChip';
+import { OtherEventsButton } from './components/OtherEventsButton/OtherEventsButton';
 
-type ChildrenSelectProps = {
+type OtherEventsPanelProps = {
   currentSessionId: string;
   currentEvent: SessionEventWithPos;
   eventsList: SessionEventWithPos[];
 };
 
-export const ChildrenSelect: React.FC<ChildrenSelectProps> = props => {
+export const OtherEventsPanel: React.FC<OtherEventsPanelProps> = props => {
+  const [isPrevEventOpen, setIsPrevEventOpen] = useState(false);
+  const [isNextEventOpen, setIsNextEventOpen] = useState(false);
   const [isAddChildOpen, setIsAddChildOpen] = useState(false);
   const { snackbarProperties, setSnackbarSuccess, setSnackbarError } = useSnackbar();
 
@@ -48,6 +52,10 @@ export const ChildrenSelect: React.FC<ChildrenSelectProps> = props => {
         backgroundColor: 'customPalette.surface',
       }}
     >
+      <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+        <OtherEventsButton content={'Prev event'} setIsOpen={setIsPrevEventOpen} />
+        <OtherEventsButton content={'Next event'} setIsOpen={setIsNextEventOpen} />
+      </Stack>
       <Stack direction="column" justifyContent="flex-end" alignItems="center" spacing={4}>
         <Paper
           sx={{
@@ -61,6 +69,22 @@ export const ChildrenSelect: React.FC<ChildrenSelectProps> = props => {
           {renderChildren()}
         </Paper>
       </Stack>
+      <OtherEventsDialog
+        title={'Choose previous event'}
+        isOpen={isPrevEventOpen}
+        setIsOpen={setIsPrevEventOpen}
+        otherEvents={props.eventsList.filter(event =>
+          props.currentEvent.parentIds.includes(event.id)
+        )}
+      />
+      <OtherEventsDialog
+        title={'Choose next event'}
+        isOpen={isNextEventOpen}
+        setIsOpen={setIsNextEventOpen}
+        otherEvents={props.eventsList.filter(event =>
+          props.currentEvent.childrenIds.includes(event.id)
+        )}
+      />
       <AddChildDialog
         currentSessionId={props.currentSessionId}
         currentEvent={props.currentEvent}

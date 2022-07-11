@@ -38,6 +38,7 @@ export const EventTile: React.FC<EventTileProps> = props => {
             zIndex: '5',
           },
         },
+        cursor: props.type === EventTileType.ExplorerParent ? 'pointer' : 'default',
         position: 'relative',
         opacity: props.event.status === 'none' || props.type !== EventTileType.Map ? '1' : '0.8',
       }}

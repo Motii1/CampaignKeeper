@@ -90,7 +90,7 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
       setDialogTitle('Create new event');
       setEventTitle('');
       setEventTitleHelperText('');
-      setParentIds([]);
+      setParentIds(props.parentId ? [props.parentId] : []);
       setEventType(possibleType[0]);
       setEventStatus(possibleStatus[0]);
       setReferenceFields(createEmptyEventFields(referenceFieldNames));

@@ -7,11 +7,8 @@ import { EventTileType, NavBarViewDialog } from '../../types/types';
 import { EmptyPlaceholder } from '../components/EmptyPlaceholder/EmptyPlaceholder';
 import { EventTile } from '../components/EventTile/EventTile';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
-import { SessionEventWithPos } from '../MapView/eventsSlice';
 import viewsRoutes from '../viewsRoutes';
-import { BackButton } from './components/BackButton/BackButton';
-import { ChildrenSelect } from './components/Children/ChildrenSelect';
-import { ParentDialog } from './components/ParentsDialog/ParentsDialog';
+import { OtherEventsPanel } from './components/OtherEventsPanel/OtherEventsPanel';
 import { setCurrentEvent } from './explorerViewSlice';
 
 export const ExplorerView: React.FC = () => {
@@ -24,9 +21,6 @@ export const ExplorerView: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
 
-  const [isParentDialogOpen, setIsParentDialogOpen] = useState(false);
-  const [parentEvents, setParentEvents] = useState<SessionEventWithPos[]>([]);
-
   if (currentSessionId === '') history.push(viewsRoutes.CAMPAIGN);
   else if (!currentEvent) {
     const rootEvent = eventsList.find(event => event.parentIds.length === 0);
@@ -35,19 +29,6 @@ export const ExplorerView: React.FC = () => {
 
   const handleFab = () => {
     if (currentEvent) setIsOpen(true);
-  };
-
-  const handleParentButton = () => {
-    if (currentEvent) {
-      if (currentEvent.parentIds.length > 1) {
-        const parentEvents = eventsList.filter(event => currentEvent.parentIds.includes(event.id));
-        setParentEvents(parentEvents);
-        setIsParentDialogOpen(true);
-      } else {
-        const parentEvent = eventsList.find(event => event.id === currentEvent.parentIds[0]);
-        dispatch(setCurrentEvent({ currentEvent: parentEvent }));
-      }
-    }
   };
 
   return (
@@ -71,17 +52,7 @@ export const ExplorerView: React.FC = () => {
           }}
         >
           <EventTile event={currentEvent} type={EventTileType.Explorer} />
-          {currentEvent.parentIds.length > 0 ? (
-            <>
-              <BackButton handleClick={handleParentButton} />
-              <ParentDialog
-                parentEvents={parentEvents}
-                isOpen={isParentDialogOpen}
-                setIsOpen={setIsParentDialogOpen}
-              />
-            </>
-          ) : null}
-          <ChildrenSelect
+          <OtherEventsPanel
             currentSessionId={currentSessionId}
             currentEvent={currentEvent}
             eventsList={eventsList}
