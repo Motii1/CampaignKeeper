@@ -8,6 +8,7 @@ export enum CustomButtonType {
   Accent,
   Primary,
   Delete,
+  Inverted,
 }
 
 export enum FabIcon {

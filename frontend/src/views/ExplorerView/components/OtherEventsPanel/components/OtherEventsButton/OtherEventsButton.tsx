@@ -11,6 +11,6 @@ export const OtherEventsButton: React.FC<OtherEventsButton> = props => (
     content={props.content}
     onClick={() => props.setIsOpen(true)}
     behavior={CustomButtonBehavior.Func}
-    type={CustomButtonType.Accent}
+    type={CustomButtonType.Inverted}
   />
 );
