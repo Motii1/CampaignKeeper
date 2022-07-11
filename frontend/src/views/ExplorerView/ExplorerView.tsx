@@ -37,7 +37,7 @@ export const ExplorerView: React.FC = () => {
       setIsPrimaryOpen={setIsOpen}
       primaryDialogType={dialogType}
       setPrimaryDialogType={setDialogType}
-      handleFab={handleFab}
+      handleFab={currentEvent ? handleFab : undefined}
     >
       {currentEvent ? (
         <Stack

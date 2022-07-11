@@ -68,12 +68,7 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
           {props.children}
         </Box>
       </Stack>
-      <CustomFab
-        currentView={currentView}
-        handleClick={
-          props.handleFab ? props.handleFab : () => props.setIsPrimaryOpen(!props.isPrimaryOpen)
-        }
-      />
+      <CustomFab currentView={currentView} handleClick={props.handleFab} />
       <PrimaryCustomDialogWrapper
         currentView={currentView}
         isOpen={props.isPrimaryOpen}
