@@ -1,5 +1,6 @@
 import { Paper, Stack } from '@mui/material';
 import { useState } from 'react';
+import { compareEventsByTitle } from '../../../../utils/utils';
 import { CustomSnackbar } from '../../../components/CustomSnackbar/CustomSnackbar';
 import { useSnackbar } from '../../../components/CustomSnackbar/useSnackbar';
 import { SessionEventWithPos } from '../../../MapView/eventsSlice';
@@ -29,6 +30,7 @@ export const ChildrenSelect: React.FC<ChildrenSelectProps> = props => {
     >
       {props.eventsList
         .filter(event => props.currentEvent.childrenIds.includes(event.id))
+        .sort(compareEventsByTitle)
         .map(event => (
           <ChildChip event={event} key={event.id} />
         ))}
@@ -61,6 +63,7 @@ export const ChildrenSelect: React.FC<ChildrenSelectProps> = props => {
       </Stack>
       <AddChildDialog
         currentSessionId={props.currentSessionId}
+        currentEvent={props.currentEvent}
         parentId={props.currentEvent.id}
         isOpen={isAddChildOpen}
         setIsOpen={setIsAddChildOpen}

@@ -66,10 +66,10 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
   );
   const [eventTitleHelperText, setEventTitleHelperText] = useState<string>('');
   const [parentIds, setParentIds] = useState<string[]>(
-    props.isShownInExplorer && props.currentEvent
-      ? props.currentEvent.parentIds
-      : props.parentId
+    props.isShownInExplorer && props.parentId
       ? [props.parentId]
+      : props.currentEvent
+      ? props.currentEvent.parentIds
       : []
   );
 
@@ -129,6 +129,16 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
         props.setSnackbarSuccess('Event created');
         props.setIsOpen(false);
         resetDialog();
+        if (props.isShownInExplorer && dataNew) {
+          dispatch(
+            setCurrentEventExplorerView({
+              currentEvent: {
+                ...props.currentEvent,
+                childrenIds: props.currentEvent?.childrenIds.concat(dataNew.id),
+              },
+            })
+          );
+        }
       } else if (statusNew === 400) props.setSnackbarError('Error during event creation');
 
       resetQueryNew();
