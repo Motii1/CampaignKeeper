@@ -81,7 +81,11 @@ export const ExplorerView: React.FC = () => {
               />
             </>
           ) : null}
-          <ChildrenSelect currentEvent={currentEvent} eventsList={eventsList} />
+          <ChildrenSelect
+            currentSessionId={currentSessionId}
+            currentEvent={currentEvent}
+            eventsList={eventsList}
+          />
         </Stack>
       ) : (
         <EmptyPlaceholder message={'Create an event to explore it, voyager'} />

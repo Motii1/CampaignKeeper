@@ -42,10 +42,11 @@ type EventDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
   dialogType: NavBarViewDialog;
-  setIsSecondaryOpen: (newIsOpen: boolean) => void;
+  setIsSecondaryOpen?: (newIsOpen: boolean) => void;
   setSnackbarSuccess: (message: string) => void;
   setSnackbarError: (message: string) => void;
   isShownInExplorer?: boolean;
+  parentId?: string;
 };
 
 export const EventDialog: React.FC<EventDialogProps> = props => {
@@ -65,8 +66,13 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
   );
   const [eventTitleHelperText, setEventTitleHelperText] = useState<string>('');
   const [parentIds, setParentIds] = useState<string[]>(
-    props.isShownInExplorer && props.currentEvent ? props.currentEvent.parentIds : []
+    props.isShownInExplorer && props.currentEvent
+      ? props.currentEvent.parentIds
+      : props.parentId
+      ? [props.parentId]
+      : []
   );
+
   const [eventType, setEventType] = useState<string>(
     props.isShownInExplorer && props.currentEvent ? props.currentEvent.type : possibleType[0]
   );
@@ -261,7 +267,7 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
   };
 
   const handleDelete = () => {
-    props.setIsSecondaryOpen(true);
+    if (props.setIsSecondaryOpen) props.setIsSecondaryOpen(true);
   };
 
   const renderParents = () =>

@@ -1,13 +1,22 @@
 import { Paper, Stack } from '@mui/material';
+import { useState } from 'react';
+import { CustomSnackbar } from '../../../components/CustomSnackbar/CustomSnackbar';
+import { useSnackbar } from '../../../components/CustomSnackbar/useSnackbar';
 import { SessionEventWithPos } from '../../../MapView/eventsSlice';
+import { AddChildDialog } from './components/AddChildDialog/AddChildDialog';
 import { ChildChip } from './components/ChildChip/ChildChip';
+import { NewChildChip } from './components/NewChildChip/NewChildChip';
 
 type ChildrenSelectProps = {
+  currentSessionId: string;
   currentEvent: SessionEventWithPos;
   eventsList: SessionEventWithPos[];
 };
 
 export const ChildrenSelect: React.FC<ChildrenSelectProps> = props => {
+  const [isAddChildOpen, setIsAddChildOpen] = useState(false);
+  const { snackbarProperties, setSnackbarSuccess, setSnackbarError } = useSnackbar();
+
   const renderChildren = () => (
     <Stack
       direction="row"
@@ -23,6 +32,7 @@ export const ChildrenSelect: React.FC<ChildrenSelectProps> = props => {
         .map(event => (
           <ChildChip event={event} key={event.id} />
         ))}
+      <NewChildChip setIsOpen={setIsAddChildOpen} />
     </Stack>
   );
 
@@ -49,6 +59,20 @@ export const ChildrenSelect: React.FC<ChildrenSelectProps> = props => {
           {renderChildren()}
         </Paper>
       </Stack>
+      <AddChildDialog
+        currentSessionId={props.currentSessionId}
+        parentId={props.currentEvent.id}
+        isOpen={isAddChildOpen}
+        setIsOpen={setIsAddChildOpen}
+        setSnackbarSuccess={setSnackbarSuccess}
+        setSnackbarError={setSnackbarError}
+      />
+      <CustomSnackbar
+        message={snackbarProperties.message}
+        type={snackbarProperties.type}
+        isOpen={snackbarProperties.isOpen}
+        setIsOpen={snackbarProperties.setIsOpen}
+      />
     </Paper>
   );
 };
