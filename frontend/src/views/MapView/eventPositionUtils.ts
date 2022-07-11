@@ -114,6 +114,8 @@ export const setXPos = (nodes: NodePositionInfo[]): NodePositionInfo[] => {
 };
 
 export const setPositions = (events: SessionEventWithPos[]): SessionEventWithPos[] => {
+  if (events.length === 0) return [];
+
   const eventsAsNodes: NodePositionInfo[] = convertEventsToNodes(events);
   const nodesWithYPos = setYPos(eventsAsNodes);
   const nodesWithBothPos = setXPos(nodesWithYPos);

@@ -19,7 +19,7 @@ export const NavBar: React.FC<NavBarProps> = props => {
   const secondaryButtonDisplayableViews = [
     viewsRoutes.CAMPAIGN,
     viewsRoutes.MAP,
-    viewsRoutes.SESSIONS,
+    viewsRoutes.EXPLORER,
     viewsRoutes.CODEX,
   ];
   const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(props.currentView);
@@ -58,10 +58,10 @@ export const NavBar: React.FC<NavBarProps> = props => {
         />
         <SecondaryNavBarButton
           text="EXPLORER"
-          isChosen={props.currentView === viewsRoutes.SESSIONS}
+          isChosen={props.currentView === viewsRoutes.EXPLORER}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => {
-            history.push(viewsRoutes.SESSIONS);
+            history.push(viewsRoutes.EXPLORER);
           }}
         />
         <SecondaryNavBarButton

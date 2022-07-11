@@ -14,6 +14,7 @@ export enum FabIcon {
   Add,
   Save,
   Delete,
+  Edit,
 }
 
 export enum NavBarViewDialog {
@@ -32,6 +33,12 @@ export enum CustomSnackbarType {
   Info,
   Success,
   Error,
+}
+
+export enum EventTileType {
+  Map,
+  Explorer,
+  ExplorerParent,
 }
 
 export type ReferenceFieldMetadata = {

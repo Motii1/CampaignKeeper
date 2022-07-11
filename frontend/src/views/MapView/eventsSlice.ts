@@ -147,12 +147,12 @@ const eventsSlice = createSlice({
       const currentEventsList = state.eventsList.filter(
         event => event.id !== action.payload.editedEvent.id
       );
-      const newEventList = editEventInStore(action.payload.editedEvent, currentEventsList);
-      newEventList.forEach((event: SessionEventWithPos) => {
+      const newEventsList = editEventInStore(action.payload.editedEvent, currentEventsList);
+      newEventsList.forEach((event: SessionEventWithPos) => {
         event.x = -1;
         event.y = -1;
       });
-      state.eventsList = setPositions(newEventList);
+      state.eventsList = setPositions(newEventsList);
     },
     deleteEvent: (state, action) => {
       const currentEventsList = state.eventsList.filter(

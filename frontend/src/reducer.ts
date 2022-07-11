@@ -6,6 +6,7 @@ import sessionsReducer from './views/CampaignView/sessionsSlice';
 import codexReducer from './views/CodexView/codexSlice';
 import codexViewReducer from './views/CodexView/codexViewSlice';
 import errorReducer from './views/ErrorView/errorSlice';
+import explorerViewReducer from './views/ExplorerView/explorerViewSlice';
 import userDetailsReducer from './views/LandingView/userDetailsSlice';
 import eventsSlice from './views/MapView/eventsSlice';
 import mapViewReducer from './views/MapView/mapViewSlice';
@@ -24,6 +25,7 @@ export const appReducer = combineReducers({
   codex: codexReducer,
   events: eventsSlice,
   mapView: mapViewReducer,
+  explorerView: explorerViewReducer,
 });
 
 const rootReducer = (state: RootState | undefined, action: AnyAction): RootState => {

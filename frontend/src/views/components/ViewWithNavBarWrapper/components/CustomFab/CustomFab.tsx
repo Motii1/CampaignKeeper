@@ -2,6 +2,7 @@ import { Fab } from '@mui/material';
 import React from 'react';
 import { CampaignFabContet } from '../../../../CampaignView/fab/CampaignFabContent';
 import { CodexFabContent } from '../../../../CodexView/fab/CodexFabContent';
+import { ExplorerFabContent } from '../../../../ExplorerView/fab/ExplorerFabContent';
 import { MapFabContent } from '../../../../MapView/fab/MapFabContent';
 import { StartFabContent } from '../../../../StartView/fab/StartFabContent';
 import viewsRoutes from '../../../../viewsRoutes';
@@ -23,6 +24,8 @@ export const CustomFab: React.FC<CustomFabProps> = props => {
         return <CodexFabContent />;
       case viewsRoutes.MAP:
         return <MapFabContent />;
+      case viewsRoutes.EXPLORER:
+        return <ExplorerFabContent />;
       default:
         return <StartFabContent />;
     }

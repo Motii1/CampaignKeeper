@@ -14,4 +14,4 @@ const NOTES = '/notes';
 
 const ERROR = '/error';
 
-export default { LANDING, START, CAMPAIGN, MAP, SESSIONS: EXPLORER, CODEX, NOTES, ERROR };
+export default { LANDING, START, CAMPAIGN, MAP, EXPLORER, CODEX, NOTES, ERROR };

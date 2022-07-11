@@ -11,7 +11,6 @@ type AddReferenceSelectProps = {
   items: ReferenceSelectItem[] | null;
 };
 
-// IMPORTANT: MenuItems need css uplift
 export const AddReferenceSelect: React.FC<AddReferenceSelectProps> = props => {
   const handleChange = (event: SelectChangeEvent) => {
     if (props.items) {

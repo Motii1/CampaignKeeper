@@ -6,6 +6,7 @@ import { RootState } from '../../../../store';
 import { NavBarViewDialog } from '../../../../types/types';
 import { compareEventsByX } from '../../../../utils/utils';
 import { CircleProgress } from '../../../components/CircleProgress/CircleProgress';
+import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
 import { SessionEventWithPos } from '../../eventsSlice';
 import { EventWrapper } from './components/EventWrapper/EventWrapper';
 import { RootNode } from './components/RootNode/RootNode';
@@ -23,7 +24,6 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
 
   const renderRow = useCallback(
     (nodes: SessionEventWithPos[]) => {
-      // eslint-disable-next-line no-console
       const nodesCopy = nodes;
       nodesCopy.sort(compareEventsByX);
       return (
@@ -51,7 +51,13 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
 
   // TO-DO: show "Add an event, Grand Designer" when there are no events
   const renderGraph = useCallback(() => {
-    if (eventsList.length === 0) return null;
+    if (eventsList.length === 0)
+      return (
+        <EmptyPlaceholder
+          message={'Begin this adventure by adding its starting point, explorer!'}
+        />
+      );
+
     const queue: SessionEventWithPos[] = eventsList.filter(event => event.parentIds.length === 0);
     const eventToShowSet: Set<SessionEventWithPos> = new Set(queue);
     while (queue.length > 0) {
@@ -68,8 +74,27 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
     const maxRow = Math.max(...eventsToShow.map((event: SessionEventWithPos) => event.y));
     const rowIndexes = Array.from(Array(maxRow + 1).keys());
 
-    return rowIndexes.map(index =>
-      renderRow(eventsToShow.filter((node: SessionEventWithPos) => node.y === index))
+    return (
+      <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        spacing={8}
+        sx={{
+          padding: '20px',
+          paddingTop: '50px',
+          width: 'max-content',
+          minWidth: 'calc(100% - 40px)',
+          maxWidth: 'max-content',
+          height: 'max-content',
+          maxHeight: 'max-content',
+        }}
+      >
+        <RootNode />
+        {rowIndexes.map(index =>
+          renderRow(eventsToShow.filter((node: SessionEventWithPos) => node.y === index))
+        )}
+      </Stack>
     );
   }, [eventsList, renderRow]);
 
@@ -91,24 +116,7 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
         overflow: 'auto',
       }}
     >
-      <Stack
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        spacing={8}
-        sx={{
-          padding: '20px',
-          paddingTop: '50px',
-          width: 'max-content',
-          minWidth: 'calc(100% - 40px)',
-          maxWidth: 'max-content',
-          height: 'max-content',
-          maxHeight: 'max-content',
-        }}
-      >
-        <RootNode />
-        {renderGraph()}
-      </Stack>
+      {renderGraph()}
     </div>
   ) : (
     <CircleProgress />

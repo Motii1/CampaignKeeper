@@ -1,4 +1,4 @@
-import { Add, Delete, QuestionMark, Save } from '@mui/icons-material';
+import { Add, Delete, ModeEdit, QuestionMark, Save } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { FabIcon } from '../../../types/types';
 
@@ -16,6 +16,8 @@ export const FabContentWrapper: React.FC<FabContentWrapperProps> = props => {
         return <Save />;
       case FabIcon.Delete:
         return <Delete />;
+      case FabIcon.Edit:
+        return <ModeEdit />;
       default:
         return <QuestionMark />;
     }

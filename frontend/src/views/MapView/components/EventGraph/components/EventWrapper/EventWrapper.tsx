@@ -1,8 +1,9 @@
 import { Box } from '@mui/material';
-import { NavBarViewDialog } from '../../../../../../types/types';
+import { EventTileType, NavBarViewDialog } from '../../../../../../types/types';
+import { compareEventsByXThenId } from '../../../../../../utils/utils';
+import { EventTile } from '../../../../../components/EventTile/EventTile';
 import { SessionEventWithPos } from '../../../../eventsSlice';
 import { EventArrow } from './components/EventArrow/EventArrow';
-import { EventTile } from './components/EventTile/EventTile';
 
 type EventWrapperProps = {
   event: SessionEventWithPos;
@@ -11,7 +12,16 @@ type EventWrapperProps = {
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
-// TO-DO: EventTiles should be shown ABOVE EventArrows
+const arrowColors = ['#6E85B7', '#B2C8DF', '#C4D7E0', '#F8F9D7'];
+
+const getOffsets = (numberOfArrows: number) => {
+  const firstOffset =
+    numberOfArrows % 2 === 0 ? 0.5 * numberOfArrows * -10 + 5 : 0.5 * numberOfArrows * -20 + 10;
+  const arrowsEndOffsets = [firstOffset];
+  for (let i = 1; i < numberOfArrows; i++) arrowsEndOffsets.push(firstOffset + i * 20);
+  return arrowsEndOffsets;
+};
+
 export const EventWrapper: React.FC<EventWrapperProps> = props => {
   const renderRootArrow = () => (
     <EventArrow
@@ -19,24 +29,23 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
       start={'root-node'}
       end={`event-${props.event.id}`}
       startAnchor="bottom"
-      endAnchor={{
-        position: 'top',
-        offset: { x: 0 },
-      }}
+      endAnchor="top"
     />
   );
 
   const renderChildArrows = () => {
-    const numberOfArrows = props.event.childrenIds.length;
-    const a1 =
-      numberOfArrows % 2 === 0 ? 0.5 * numberOfArrows * -10 : 0.5 * numberOfArrows * -20 + 10;
-    const arrowsEndOffsets = [a1];
-    for (let i = 1; i < numberOfArrows; i++) arrowsEndOffsets.push(a1 + i * 20);
+    const startAnchorOffsets = getOffsets(props.event.childrenIds.length);
 
     let currentArrow = 0;
-
     return props.event.childrenIds.map(childId => {
-      const offset = arrowsEndOffsets[currentArrow];
+      const startOffset = startAnchorOffsets[currentArrow];
+
+      const childParents = props.eventsList.filter(event => event.childrenIds.includes(childId));
+      childParents.sort(compareEventsByXThenId);
+      const endAnchorOffsets = getOffsets(childParents.length);
+      const currentEventIndexOnParentList = childParents.indexOf(props.event);
+      const endOffset = endAnchorOffsets[currentEventIndexOnParentList];
+
       currentArrow++;
       return (
         <EventArrow
@@ -45,12 +54,13 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
           end={`event-${childId}`}
           startAnchor={{
             position: 'bottom',
-            offset: { x: offset },
+            offset: { x: startOffset },
           }}
           endAnchor={{
             position: 'top',
-            offset: {},
+            offset: { x: endOffset },
           }}
+          color={arrowColors[currentEventIndexOnParentList % 4]}
         />
       );
     });
@@ -64,6 +74,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
         event={props.event}
         setIsOpen={props.setIsOpen}
         setDialogType={props.setDialogType}
+        type={EventTileType.Map}
       />
       {props.event.displayStatus === 'shown' ? renderChildArrows() : null}
     </Box>

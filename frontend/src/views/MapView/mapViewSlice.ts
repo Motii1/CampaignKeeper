@@ -22,9 +22,14 @@ const mapViewSlice = createSlice({
     setCurrentEvent: (state, action) => {
       state.currentEvent = action.payload.currentEvent;
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    resetState: (state, _action) => {
+      state.currentSessionId = '';
+      state.currentEvent = null;
+    },
   },
 });
 
-export const { setSessionId, setCurrentEvent } = mapViewSlice.actions;
+export const { setSessionId, setCurrentEvent, resetState } = mapViewSlice.actions;
 
 export default mapViewSlice.reducer;
