@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewW
 import { SessionEventWithPos } from '../MapView/eventsSlice';
 import viewsRoutes from '../viewsRoutes';
 import { BackButton } from './components/BackButton/BackButton';
+import { ChildrenSelect } from './components/Children/ChildrenSelect';
 import { ParentDialog } from './components/ParentsDialog/ParentsDialog';
 import { setCurrentEvent } from './explorerViewSlice';
 
@@ -32,6 +33,10 @@ export const ExplorerView: React.FC = () => {
     if (rootEvent) dispatch(setCurrentEvent({ currentEvent: rootEvent }));
   }
 
+  const handleFab = () => {
+    if (currentEvent) setIsOpen(true);
+  };
+
   const handleParentButton = () => {
     if (currentEvent) {
       if (currentEvent.parentIds.length > 1) {
@@ -51,12 +56,21 @@ export const ExplorerView: React.FC = () => {
       setIsPrimaryOpen={setIsOpen}
       primaryDialogType={dialogType}
       setPrimaryDialogType={setDialogType}
+      handleFab={handleFab}
     >
       {currentEvent ? (
-        <Box>
-          <Stack direction="column" justifyContent="center" alignItems="center" spacing={4}>
-            <EventTile event={currentEvent} type={EventTileType.Explorer} />
-          </Stack>
+        <Stack
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="center"
+          spacing={4}
+          sx={{
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            marginTop: '150px',
+          }}
+        >
+          <EventTile event={currentEvent} type={EventTileType.Explorer} />
           {currentEvent.parentIds.length > 0 ? (
             <>
               <BackButton handleClick={handleParentButton} />
@@ -67,9 +81,10 @@ export const ExplorerView: React.FC = () => {
               />
             </>
           ) : null}
-        </Box>
+          <ChildrenSelect currentEvent={currentEvent} eventsList={eventsList} />
+        </Stack>
       ) : (
-        <EmptyPlaceholder message={'Choose an event to explore it, voyager'} />
+        <EmptyPlaceholder message={'Create an event to explore it, voyager'} />
       )}
     </ViewWithNavBarWrapper>
   );
