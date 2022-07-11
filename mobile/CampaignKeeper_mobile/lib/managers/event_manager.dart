@@ -14,9 +14,14 @@ class EventManager extends BaseManager<EventEntity> {
   Map<int, List<EventEntity>> _map = {};
 
   @override
-  void attach(EventEntity entity) {
-    _attach(entity);
-    _cacheAll();
+  void attach(EventEntity entity) async {
+    lockedOperation<void>(
+      () async {
+        _attach(entity);
+        _cacheAll();
+      },
+      defaultResult: null,
+    );
   }
 
   @override
@@ -41,6 +46,24 @@ class EventManager extends BaseManager<EventEntity> {
 
   @override
   Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
+    var refreshValue = RefreshParameter(parameter: parameterName, value: parameterValue);
+
+    return await lockedOperation<bool>(
+      () async {
+        return await _refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
+      },
+      parameter: refreshValue,
+      defaultResult: true,
+    );
+  }
+
+  @override
+  void clear() {
+    _map.clear();
+    _cacheAll();
+  }
+
+  Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
       String? cache = await CacheUtil().get(_key);
       if (cache != null) {
@@ -54,6 +77,7 @@ class EventManager extends BaseManager<EventEntity> {
     }
 
     parameterName = parameterName ?? EntityParameter.session;
+
     if (online && parameterName == EntityParameter.session && parameterValue != null) {
       var parameter = RequestParameter(value: parameterValue);
       Response userResponse = await RequestHelper().get(endpoint: EventEntity.endpoint, params: [parameter]);
@@ -63,16 +87,14 @@ class EventManager extends BaseManager<EventEntity> {
         List<EventEntity> newEntities =
             (responseData['events'] as List).map((e) => _decodeEntity(e)).toList();
 
-        if (_isEqual(parameterValue, newEntities)) {
-          return false;
+        if (!_isEqual(parameterValue, newEntities)) {
+          _map[parameterValue] = newEntities;
+
+          notifyListeners();
+          _cacheAll();
+
+          return true;
         }
-
-        _map[parameterValue] = newEntities;
-
-        notifyListeners();
-        _cacheAll();
-
-        return true;
       } else if (userResponse.status == ResponseStatus.IncorrectData) {
         _map[parameterValue]?.clear();
 
@@ -82,12 +104,6 @@ class EventManager extends BaseManager<EventEntity> {
     }
 
     return false;
-  }
-
-  @override
-  void clear() {
-    _map.clear();
-    _cacheAll();
   }
 
   void _attach(EventEntity entity) {

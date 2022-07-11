@@ -14,9 +14,14 @@ class ObjectManager extends BaseManager<ObjectEntity> {
   Map<int, List<ObjectEntity>> _map = {};
 
   @override
-  void attach(ObjectEntity entity) {
-    _attach(entity);
-    _cacheAll();
+  void attach(ObjectEntity entity) async {
+    lockedOperation(
+      () async {
+        _attach(entity);
+        _cacheAll();
+      },
+      defaultResult: null,
+    );
   }
 
   @override
@@ -41,6 +46,24 @@ class ObjectManager extends BaseManager<ObjectEntity> {
 
   @override
   Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
+    var refreshValue = RefreshParameter(parameter: parameterName, value: parameterValue);
+
+    return await lockedOperation<bool>(
+      () async {
+        return await _refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
+      },
+      parameter: refreshValue,
+      defaultResult: true,
+    );
+  }
+
+  @override
+  void clear() {
+    _map.clear();
+    _cacheAll();
+  }
+
+  Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
       String? cache = await CacheUtil().get(_key);
       if (cache != null) {
@@ -54,6 +77,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
     }
 
     parameterName = parameterName ?? EntityParameter.schema;
+
     if (online && parameterValue != null) {
       var parameter = RequestParameter(name: parameterName.name, value: parameterValue);
       Response userResponse = await RequestHelper().get(endpoint: ObjectEntity.endpoint, params: [parameter]);
@@ -63,7 +87,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
         List<ObjectEntity> newEntities =
             (responseData['objects'] as List).map((e) => _decodeEntity(e)).toList();
 
-        if (parameterName == EntityParameter.schema) {
+        if (parameterName == EntityParameter.schema && !_isEqual(parameterValue, newEntities)) {
           if (_isEqual(parameterValue, newEntities)) {
             return false;
           }
@@ -110,12 +134,6 @@ class ObjectManager extends BaseManager<ObjectEntity> {
     }
 
     return false;
-  }
-
-  @override
-  void clear() {
-    _map.clear();
-    _cacheAll();
   }
 
   void _attach(ObjectEntity entity) {

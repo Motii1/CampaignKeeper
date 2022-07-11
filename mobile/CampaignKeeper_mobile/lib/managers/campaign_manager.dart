@@ -14,9 +14,14 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   CampaignManager();
 
   @override
-  void attach(CampaignEntity entity) {
-    _entities.add(entity);
-    _cacheAll();
+  void attach(CampaignEntity entity) async {
+    lockedOperation(
+      () async {
+        _entities.add(entity);
+        _cacheAll();
+      },
+      defaultResult: null,
+    );
   }
 
   @override
@@ -31,6 +36,23 @@ class CampaignManager extends BaseManager<CampaignEntity> {
 
   @override
   Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
+    var refreshValue = RefreshParameter(parameter: parameterName, value: parameterValue);
+
+    return await lockedOperation(
+      () async {
+        return await _refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
+      },
+      parameter: refreshValue,
+      defaultResult: true,
+    );
+  }
+
+  @override
+  void clear() {
+    _entities.clear();
+  }
+
+  Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_entities.isEmpty) {
       String? cache = await CacheUtil().get(_key);
       if (cache != null && cache.isNotEmpty) {
@@ -49,23 +71,18 @@ class CampaignManager extends BaseManager<CampaignEntity> {
         List<CampaignEntity> newEntities =
             (responseData['campaigns'] as List).map((e) => _decodeEntity(e)).toList();
 
-        if (_isEqual(newEntities)) {
-          return false;
-        }
+        if (!_isEqual(newEntities)) {
+          _entities = newEntities;
 
-        _entities = newEntities;
-        notifyListeners();
-        _cacheAll();
-        return true;
+          notifyListeners();
+          _cacheAll();
+
+          return true;
+        }
       }
     }
 
     return false;
-  }
-
-  @override
-  void clear() {
-    _entities.clear();
   }
 
   bool _isEqual(List<CampaignEntity> newEntities) {

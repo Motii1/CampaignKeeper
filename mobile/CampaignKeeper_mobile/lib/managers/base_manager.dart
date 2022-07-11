@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
 // A hollow class used as a base for proper managers
 // due to a lack of interfaces in dart.
 class BaseManager<T> extends ChangeNotifier {
+  Future? lock;
   // Attaches given entity to the local base and caches it.
   // Might also update server.
   void attach(T entity) {
@@ -36,5 +39,41 @@ class BaseManager<T> extends ChangeNotifier {
   // Used to clear data.
   void clear() {
     throw new UnimplementedError();
+  }
+
+  Future<bool> lockOperation(Completer completer, {RefreshParameter? parameter}) async {
+    if (lock != null) {
+      dynamic res = await lock;
+      if (parameter != null && res != null && res is RefreshParameter) {
+        if (res.equals(parameter)) {
+          return true;
+        }
+      }
+    }
+
+    lock = completer.future;
+
+    return false;
+  }
+
+  void releaseOperation(Completer completer, {RefreshParameter? parameter}) {
+    completer.complete(parameter);
+    lock = null;
+  }
+
+  Future<T> lockedOperation<T>(Future<T> fun(),
+      {required T defaultResult, RefreshParameter? parameter}) async {
+    var completer = Completer();
+    bool lockRes = await lockOperation(completer, parameter: parameter);
+
+    if (lockRes) {
+      return defaultResult;
+    }
+
+    T res = await fun();
+
+    releaseOperation(completer, parameter: parameter);
+
+    return res;
   }
 }

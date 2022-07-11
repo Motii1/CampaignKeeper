@@ -14,9 +14,14 @@ class SchemaManager extends BaseManager<SchemaEntity> {
   Map<int, List<SchemaEntity>> _map = {};
 
   @override
-  void attach(SchemaEntity entity) {
-    _attach(entity);
-    _cacheAll();
+  void attach(SchemaEntity entity) async {
+    lockedOperation(
+      () async {
+        _attach(entity);
+        _cacheAll();
+      },
+      defaultResult: null,
+    );
   }
 
   @override
@@ -41,6 +46,24 @@ class SchemaManager extends BaseManager<SchemaEntity> {
 
   @override
   Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
+    var refreshValue = RefreshParameter(parameter: parameterName, value: parameterValue);
+
+    return await lockedOperation<bool>(
+      () async {
+        return await _refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
+      },
+      parameter: refreshValue,
+      defaultResult: true,
+    );
+  }
+
+  @override
+  void clear() {
+    _map.clear();
+    _cacheAll();
+  }
+
+  Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
       String? cache = await CacheUtil().get(_key);
       if (cache != null) {
@@ -54,6 +77,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     }
 
     parameterName = parameterName ?? EntityParameter.campaign;
+
     if (online && parameterName == EntityParameter.campaign && parameterValue != null) {
       var parameter = RequestParameter(name: parameterName.name, value: parameterValue);
       Response userResponse = await RequestHelper().get(endpoint: SchemaEntity.endpoint, params: [parameter]);
@@ -63,16 +87,14 @@ class SchemaManager extends BaseManager<SchemaEntity> {
         List<SchemaEntity> newEntities =
             (responseData['schemas'] as List).map((e) => _decodeEntity(e)).toList();
 
-        if (_isEqual(parameterValue, newEntities)) {
-          return false;
+        if (!_isEqual(parameterValue, newEntities)) {
+          _map[parameterValue] = newEntities;
+
+          notifyListeners();
+          _cacheAll();
+
+          return true;
         }
-
-        _map[parameterValue] = newEntities;
-
-        notifyListeners();
-        _cacheAll();
-
-        return true;
       } else if (userResponse.status == ResponseStatus.IncorrectData) {
         _map[parameterValue]?.clear();
 
@@ -82,12 +104,6 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     }
 
     return false;
-  }
-
-  @override
-  void clear() {
-    _map.clear();
-    _cacheAll();
   }
 
   void _attach(SchemaEntity entity) {

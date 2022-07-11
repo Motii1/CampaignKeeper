@@ -16,9 +16,14 @@ class SessionManager extends BaseManager<SessionEntity> {
   SessionManager();
 
   @override
-  void attach(SessionEntity entity) {
-    _attach(entity);
-    _cacheAll();
+  void attach(SessionEntity entity) async {
+    lockedOperation(
+      () async {
+        _attach(entity);
+        _cacheAll();
+      },
+      defaultResult: null,
+    );
   }
 
   @override
@@ -43,6 +48,24 @@ class SessionManager extends BaseManager<SessionEntity> {
 
   @override
   Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
+    var refreshValue = RefreshParameter(parameter: parameterName, value: parameterValue);
+
+    return await lockedOperation<bool>(
+      () async {
+        return await _refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
+      },
+      parameter: refreshValue,
+      defaultResult: true,
+    );
+  }
+
+  @override
+  void clear() {
+    _map.clear();
+    _cacheAll();
+  }
+
+  Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
       String? cache = await CacheUtil().get(_key);
       if (cache != null) {
@@ -56,6 +79,7 @@ class SessionManager extends BaseManager<SessionEntity> {
     }
 
     parameterName = parameterName ?? EntityParameter.campaign;
+
     if (online && parameterName == EntityParameter.campaign && parameterValue != null) {
       var parameter = RequestParameter(name: parameterName.name, value: parameterValue);
       Response userResponse =
@@ -66,16 +90,14 @@ class SessionManager extends BaseManager<SessionEntity> {
         List<SessionEntity> newEntities =
             (responseData['sessions'] as List).map((e) => _decodeEntity(e)).toList();
 
-        if (_isEqual(parameterValue, newEntities)) {
-          return false;
+        if (!_isEqual(parameterValue, newEntities)) {
+          _map[parameterValue] = newEntities;
+
+          notifyListeners();
+          _cacheAll();
+
+          return true;
         }
-
-        _map[parameterValue] = newEntities;
-
-        notifyListeners();
-        _cacheAll();
-
-        return true;
       } else if (userResponse.status == ResponseStatus.IncorrectData) {
         _map[parameterValue]?.clear();
 
@@ -85,12 +107,6 @@ class SessionManager extends BaseManager<SessionEntity> {
     }
 
     return false;
-  }
-
-  @override
-  void clear() {
-    _map.clear();
-    _cacheAll();
   }
 
   void _attach(SessionEntity entity) {

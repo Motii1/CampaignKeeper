@@ -13,30 +13,41 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   UserDataManager();
 
   @override
-  void attach(UserDataEntity entity) {
-    _entity = entity;
-    Map data = _encodeEntity(_entity!);
+  void attach(UserDataEntity entity) async {
+    lockedOperation<void>(
+      () async {
+        _entity = entity;
+        Map data = _encodeEntity(_entity!);
 
-    CacheUtil().addSecure(_key, json.encode(data));
+        CacheUtil().addSecure(_key, json.encode(data));
+      },
+      defaultResult: null,
+    );
   }
 
   @override
   Future<bool> patch({required UserDataEntity newEntity}) async {
-    if (newEntity.imageData != null) {
-      var bytes = base64Decode(newEntity.imageData!);
-      var file = KeeperFile(name: 'image-file', type: KeeperMediaType.image, bytes: bytes);
+    return await lockedOperation<bool>(
+      () async {
+        if (newEntity.imageData != null) {
+          var bytes = base64Decode(newEntity.imageData!);
+          var file = KeeperFile(name: 'image-file', type: KeeperMediaType.image, bytes: bytes);
 
-      var response = await RequestHelper().putFile(endpoint: UserDataEntity.imageEndpoint, file: file);
+          var response = await RequestHelper().putFile(endpoint: UserDataEntity.imageEndpoint, file: file);
 
-      if (response.status == ResponseStatus.Success) {
-        _entity!.imageData = newEntity.imageData;
+          if (response.status == ResponseStatus.Success) {
+            _entity!.imageData = newEntity.imageData;
 
-        notifyListeners();
-        return true;
-      }
-    }
+            notifyListeners();
 
-    return false;
+            return true;
+          }
+        }
+
+        return false;
+      },
+      defaultResult: false,
+    );
   }
 
   @override
@@ -51,6 +62,24 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
   @override
   Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
+    var refreshValue = RefreshParameter(parameter: parameterName, value: parameterValue);
+
+    return await lockedOperation<bool>(
+      () async {
+        return await _refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
+      },
+      parameter: refreshValue,
+      defaultResult: true,
+    );
+  }
+
+  @override
+  void clear() {
+    _entity = null;
+    CacheUtil().deleteSecure();
+  }
+
+  Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_entity == null) {
       String? cache = await CacheUtil().getSecure(_key);
 
@@ -92,18 +121,10 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
         CacheUtil().deleteSecure();
         notifyListeners();
-
-        return false;
       }
     }
 
     return false;
-  }
-
-  @override
-  void clear() {
-    _entity = null;
-    CacheUtil().deleteSecure();
   }
 
   UserDataEntity? _decodeEntity(Map data) {

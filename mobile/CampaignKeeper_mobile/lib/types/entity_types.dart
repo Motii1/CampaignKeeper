@@ -96,6 +96,19 @@ extension ListFieldValueExtension on List<FieldValue> {
   }
 }
 
+class RefreshParameter {
+  final EntityParameter? parameter;
+  final int? value;
+
+  RefreshParameter({this.parameter, this.value});
+
+  bool equals(RefreshParameter? other) {
+    if (other == null) return false;
+
+    return parameter == other.parameter && value == other.value;
+  }
+}
+
 extension ListIntExtension on List<int> {
   bool equals(List<int> other) {
     if (this.length != other.length) {
