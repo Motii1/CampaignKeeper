@@ -6,6 +6,7 @@ import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:flutter/material.dart';
 import 'package:graphview/GraphView.dart';
 
+// Produces functional graph for the given events.
 class KeeperGraphView extends StatelessWidget {
   const KeeperGraphView({Key? key, required this.events, required this.startKey}) : super(key: key);
   final List<EventEntity> events;
@@ -19,6 +20,8 @@ class KeeperGraphView extends StatelessWidget {
       ..orientation = SugiyamaConfiguration.ORIENTATION_TOP_BOTTOM;
   }
 
+  // Uses a queue to determine which event's should be
+  // part of the graph.
   Graph getGraph() {
     final Graph graph = Graph();
 

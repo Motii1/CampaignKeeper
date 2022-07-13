@@ -4,7 +4,7 @@ import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-// Lisr element presenting FieldValues with a header.
+// List element presenting FieldValues with a header.
 class KeeperFieldTile extends StatelessWidget {
   const KeeperFieldTile(
       {Key? key, required this.fieldName, required this.values, this.padding, this.isProminent = false})

@@ -2,6 +2,7 @@ import 'package:campaign_keeper_mobile/components/tiles/keeper_title_tile.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+// Controller used to interact with a drawer dialog.
 class KeeperDrawerDialogController extends ChangeNotifier {
   bool _isDrawerOpen = false;
   String _title = "";
@@ -13,6 +14,7 @@ class KeeperDrawerDialogController extends ChangeNotifier {
   KeeperDrawerTile Function(BuildContext, int)? get builder => _builder;
   int get itemCount => _itemCount;
 
+  // Opens the drawer with given parameters.
   void openDrawer(String title, int itemCount, KeeperDrawerTile Function(BuildContext, int) builder) {
     _isDrawerOpen = true;
     _title = title;
@@ -21,12 +23,15 @@ class KeeperDrawerDialogController extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Closes the drawer.
   void closeDrawer() {
     _isDrawerOpen = false;
     notifyListeners();
   }
 }
 
+// A special list tile used inside a drawer dialog.
+// Makes sure drawer will be closed after an item is pressed.
 class KeeperDrawerTile extends StatelessWidget {
   const KeeperDrawerTile({Key? key, this.onTap, required this.child}) : super(key: key);
   final Widget child;
@@ -49,6 +54,8 @@ class KeeperDrawerTile extends StatelessWidget {
   }
 }
 
+// Widget used as a drawer dialog.
+// It's higly interactive and easy in use by the end user.
 class KeeperDrawerDialog extends StatefulWidget {
   const KeeperDrawerDialog({Key? key, required this.controller, required this.child}) : super(key: key);
   final KeeperDrawerDialogController controller;
@@ -84,6 +91,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
     return (headerKey.currentContext?.size?.height ?? 0) + (listKey.currentContext?.size?.height ?? 0);
   }
 
+  // Listens to the controller changes.
   void drawerListener() {
     if (widget.controller.isDrawerOpen) {
       title = widget.controller.title;
@@ -102,6 +110,7 @@ class _KeeperDrawerDialogState extends State<KeeperDrawerDialog> with SingleTick
     }
   }
 
+  // Used to determine if header should be elevated when content is scrolled.
   void scrollListener() {
     if (scrollController.position.atEdge && scrollController.position.pixels == 0 && isHeaderElevated) {
       setState(() {

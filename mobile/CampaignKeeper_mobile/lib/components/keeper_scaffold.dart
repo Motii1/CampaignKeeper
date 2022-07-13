@@ -2,6 +2,8 @@ import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:flutter/material.dart';
 
+// Scaffold wraper with added functionality of
+// displaying status connectivity changes.
 class KeeperScaffold extends StatefulWidget {
   final PreferredSizeWidget? appBar;
   final Widget? body;
@@ -17,7 +19,7 @@ class KeeperScaffold extends StatefulWidget {
 }
 
 class _KeeperScaffoldState extends State<KeeperScaffold> {
-  // It shows a snackbar with a connection status info
+  // Shows a snackbar with a connection status info
   // when connection status changes.
   void statusListener() async {
     bool isOnline = RequestHelper().isOnline;

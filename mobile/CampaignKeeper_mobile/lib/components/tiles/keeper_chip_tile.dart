@@ -3,7 +3,7 @@ import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
-// Lisr element presenting FieldValues with a header.
+// List element presenting FieldValues as chips.
 class KeeperChipTile extends StatelessWidget {
   const KeeperChipTile(
       {Key? key, required this.fieldName, required this.values, this.padding, this.isProminent = false})
@@ -13,8 +13,8 @@ class KeeperChipTile extends StatelessWidget {
   final EdgeInsets? padding;
   final bool isProminent;
 
-  // isBackground determines if chips should be drawn with a rectangle backrgound
-  // or just rounded outline, as Flutter can't do both at the same time.
+  // Produces a chip with proper color scheme and functionality
+  // based on a value.
   Widget formatValue(BuildContext context, FieldValue value) {
     return InputChip(
       label: Text(

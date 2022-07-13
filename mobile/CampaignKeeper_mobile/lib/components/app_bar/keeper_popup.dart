@@ -14,6 +14,7 @@ class KeeperPopup extends StatefulWidget {
   _KeeperPopupState createState() => _KeeperPopupState();
 
   // A function returning a popup with most common options.
+  // Has an ability to easily add more choices.
   static KeeperPopup settings(BuildContext context,
       {List<PopupMenuEntry<dynamic>> Function(BuildContext)? itemBuilder,
       void Function(dynamic)? onSelected}) {

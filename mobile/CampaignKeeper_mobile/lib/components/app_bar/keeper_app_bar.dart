@@ -2,7 +2,7 @@ import 'package:campaign_keeper_mobile/components/app_bar/keeper_back_button.dar
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:flutter/material.dart';
 
-// This widget provides comfort, modern and scallable action bar
+// This widget provides comfortable, modern and scallable action bar
 // that makes navigation easy with a taller smartphone.
 // As required parameters it takes a title, a sliver body.
 // Optionally it takes popup menu, function that runs on pull down refresh

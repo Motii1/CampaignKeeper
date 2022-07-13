@@ -2,7 +2,7 @@ import 'package:campaign_keeper_mobile/types/widget_types.dart';
 import 'package:flutter/material.dart';
 
 // Simple interactive viewer that lets move
-// drag and scale it's content.
+// drag and scale it's child.
 // Allows to center the content.
 class KeeperInteractiveViewer extends StatefulWidget {
   const KeeperInteractiveViewer({Key? key, required this.child, required this.centerKey}) : super(key: key);

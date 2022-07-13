@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Widget representing root node of the event graph.
 class KeeperStartNode extends StatelessWidget {
   const KeeperStartNode({Key? key}) : super(key: key);
 

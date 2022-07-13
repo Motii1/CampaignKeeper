@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 
+// Entity representing an event.
 class EventEntity {
   static const String endpoint = '/api/event/graph';
 

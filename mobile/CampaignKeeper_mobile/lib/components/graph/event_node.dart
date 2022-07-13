@@ -4,6 +4,7 @@ import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
+// Widget representing a node of the event graph.
 class KeeperEventNode extends StatelessWidget {
   final EventEntity? entity;
   final bool forceShow;
