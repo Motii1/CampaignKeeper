@@ -15,7 +15,7 @@ import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-// Page displaying a single object.
+// Page displaying a single event.
 class EventExplorer extends StatefulWidget {
   const EventExplorer({Key? key, required this.eventId}) : super(key: key);
   final int eventId;

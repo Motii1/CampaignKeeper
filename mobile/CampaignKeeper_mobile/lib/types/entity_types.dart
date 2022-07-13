@@ -61,12 +61,15 @@ enum KeeperSliverReplacerType {
   Instant,
 }
 
+// Used for proper endpoints selection.
 enum EntityParameter {
   campaign,
   schema,
   session,
 }
 
+// Extends EntityParameter with a method
+// to get string value out of enum.
 extension EntityParameterExtension on EntityParameter {
   String get name {
     switch (this) {
@@ -80,6 +83,8 @@ extension EntityParameterExtension on EntityParameter {
   }
 }
 
+// Extends lists of FieldValue with an easy option
+// of equality check.
 extension ListFieldValueExtension on List<FieldValue> {
   bool equals(List<FieldValue> other) {
     if (this.length != other.length) {
@@ -96,6 +101,7 @@ extension ListFieldValueExtension on List<FieldValue> {
   }
 }
 
+// Represents manager refresh options.
 class RefreshParameter {
   final EntityParameter? parameter;
   final int? value;
@@ -109,6 +115,8 @@ class RefreshParameter {
   }
 }
 
+// Extends lists of ints with an easy option
+// of equality check.
 extension ListIntExtension on List<int> {
   bool equals(List<int> other) {
     if (this.length != other.length) {
@@ -125,6 +133,8 @@ extension ListIntExtension on List<int> {
   }
 }
 
+// Extends strings with the ability to
+//capitalize every word (separated by space) in it.
 extension StringExtension on String {
   String toCapitalize() {
     var words = this.split(" ");

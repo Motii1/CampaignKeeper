@@ -109,6 +109,7 @@ class RequestHelper extends ChangeNotifier {
     }
   }
 
+  // Posts given body and returns a response.
   Future<Response> post(
       {required String endpoint, Object? body, bool isLogin = false, bool isAutoLogin = true}) async {
     Map<String, String> headers = {"cookie": isCookieValid() ? _cookie.toString() : ""};
@@ -158,6 +159,7 @@ class RequestHelper extends ChangeNotifier {
     }
   }
 
+  // Puts file and returns a respond.
   Future<Response> putFile({required String endpoint, required KeeperFile file}) async {
     Map<String, String> headers = {
       "cookie": isCookieValid() ? _cookie.toString() : "",
@@ -198,6 +200,7 @@ class RequestHelper extends ChangeNotifier {
     }
   }
 
+  // Returns a value if cookie is still valid.
   bool isCookieValid() {
     if (_cookie != null) {
       DateTime? expire = _cookie!.expires;

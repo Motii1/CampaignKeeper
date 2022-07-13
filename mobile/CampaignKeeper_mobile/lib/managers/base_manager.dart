@@ -41,6 +41,8 @@ class BaseManager<T> extends ChangeNotifier {
     throw new UnimplementedError();
   }
 
+  // Will put a lock on the manager.
+  // Optionally if parameter is same as lock release value manager lock will be missed.
   Future<bool> lockOperation(Completer completer, {RefreshParameter? parameter}) async {
     if (lock != null) {
       dynamic res = await lock;
@@ -56,11 +58,16 @@ class BaseManager<T> extends ChangeNotifier {
     return false;
   }
 
+  // Releases the lock.
+  // Optionally the lock can return refresh parameters on release.
   void releaseOperation(Completer completer, {RefreshParameter? parameter}) {
     completer.complete(parameter);
     lock = null;
   }
 
+  // Locks given async method so it won't run in a race
+  // with other functions.
+  // If parameter is provided fun won't be run if it's the same as lock release value.
   Future<T> lockedOperation<T>(Future<T> fun(),
       {required T defaultResult, RefreshParameter? parameter}) async {
     var completer = Completer();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Extension for GlobalKey to get the Rect of associated widget.
 extension GlobalKeyExtension on GlobalKey {
   Rect? get globalPaintBounds {
     final renderObject = currentContext?.findRenderObject();
