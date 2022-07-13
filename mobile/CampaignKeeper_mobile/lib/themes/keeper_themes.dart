@@ -209,6 +209,8 @@ class _DefaultTheme {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(17),
       ),
+      backgroundColor: primary,
+      foregroundColor: onPrimary,
     ),
   );
 
