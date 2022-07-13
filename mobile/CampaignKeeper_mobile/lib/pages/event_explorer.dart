@@ -247,49 +247,68 @@ class _EventBottomNavigation extends StatelessWidget {
 
   const _EventBottomNavigation({Key? key, this.onPrevPressed, this.onNextPressed}) : super(key: key);
 
+  Widget getButton(BuildContext context, bool isNext) {
+    return ElevatedButton(
+      style: ButtonStyle(
+          foregroundColor: isNext
+              ? null
+              : MaterialStateProperty.resolveWith<Color?>((states) {
+                  var color = Color.alphaBlend(Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
+                      Theme.of(context).colorScheme.primary);
+
+                  if (states.contains(MaterialState.disabled)) {
+                    color = color.withOpacity(0.7);
+                  }
+
+                  return color;
+                }),
+          backgroundColor: isNext
+              ? null
+              : MaterialStateProperty.resolveWith<Color?>((_) => Theme.of(context).colorScheme.background),
+          overlayColor: isNext
+              ? null
+              : MaterialStateProperty.resolveWith<Color?>(
+                  (states) => Theme.of(context).colorScheme.onBackground.withOpacity(0.1))),
+      onPressed: isNext ? onNextPressed : onPrevPressed,
+      child: Text(isNext ? "Next" : "Previous"),
+    );
+  }
+
+  List<Widget> getButtons(BuildContext context) {
+    List<Widget> list = [];
+
+    if (onPrevPressed != null) {
+      list.add(Expanded(
+        child: getButton(context, false),
+      ));
+    }
+
+    if (onPrevPressed != null && onNextPressed != null) {
+      list.add(SizedBox(
+        width: 12,
+      ));
+    }
+
+    if (onNextPressed != null) {
+      list.add(Expanded(
+        child: getButton(context, true),
+      ));
+    }
+
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 70,
       child: Material(
         color: Theme.of(context).colorScheme.surface,
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: 10, right: 6),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
-                        var color = Color.alphaBlend(
-                            Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
-                            Theme.of(context).colorScheme.primary);
-
-                        if (states.contains(MaterialState.disabled)) {
-                          color = color.withOpacity(0.7);
-                        }
-
-                        return color;
-                      }),
-                      backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                          (_) => Theme.of(context).colorScheme.background),
-                      overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                          (states) => Theme.of(context).colorScheme.onBackground.withOpacity(0.1))),
-                  onPressed: onPrevPressed,
-                  child: Text("Previous"),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: 6, right: 10),
-                child: ElevatedButton(
-                  onPressed: onNextPressed,
-                  child: Text("Next"),
-                ),
-              ),
-            ),
-          ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            children: getButtons(context),
+          ),
         ),
       ),
     );
