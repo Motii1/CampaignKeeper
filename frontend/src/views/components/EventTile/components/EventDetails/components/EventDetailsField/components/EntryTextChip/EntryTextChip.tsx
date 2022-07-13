@@ -9,7 +9,7 @@ type EntryTextChipProps = {
 export const EntryTextChip: React.FC<EntryTextChipProps> = props => (
   <Typography
     noWrap={true}
-    variant={props.type === EventTileType.Explorer ? 'subtitle2' : 'subtitle1'}
+    variant={props.type === EventTileType.Explorer ? 'subtitle1' : 'subtitle2'}
     sx={{
       fontWeight: 'bold',
       color: 'customPalette.background',

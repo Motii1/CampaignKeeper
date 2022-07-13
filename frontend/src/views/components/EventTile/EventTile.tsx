@@ -60,10 +60,10 @@ export const EventTile: React.FC<EventTileProps> = props => {
           setDialogType={props.setDialogType}
           type={props.type}
         />
-        {props.event.displayStatus === 'shown' ? (
+        {props.event.displayStatus === 'shown' || props.type !== EventTileType.Map ? (
           <Box
             sx={{
-              maxHeight: props.event.displayStatus === 'shown' ? 'min-content' : '0px',
+              maxHeight: 'min-content',
               width: '100%',
               paddingTop: 0.7,
             }}

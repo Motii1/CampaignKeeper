@@ -29,7 +29,8 @@ export const OtherEventsPanel: React.FC<OtherEventsPanelProps> = props => {
       alignItems="center"
       spacing={2}
       sx={{
-        width: '1000px',
+        width: '1050px',
+        margin: '50px',
       }}
     >
       {props.eventsList
@@ -47,12 +48,19 @@ export const OtherEventsPanel: React.FC<OtherEventsPanelProps> = props => {
       sx={{
         position: 'fixed',
         bottom: '0px',
-        width: ' 1200px',
-        height: '200px',
+        width: '1200px',
+        height: '220px',
+        borderRadius: '20px 20px 0px 0px',
         backgroundColor: 'customPalette.surface',
       }}
     >
-      <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+        sx={{ marginTop: '20px' }}
+      >
         <OtherEventsButton content={'Prev event'} setIsOpen={setIsPrevEventOpen} />
         <OtherEventsButton content={'Next event'} setIsOpen={setIsNextEventOpen} />
       </Stack>
@@ -61,8 +69,9 @@ export const OtherEventsPanel: React.FC<OtherEventsPanelProps> = props => {
           sx={{
             position: 'fixed',
             bottom: '0px',
-            width: ' 1150px',
-            height: '140px',
+            width: '1150px',
+            height: '150px',
+            borderRadius: '20px 20px 0px 0px',
             backgroundColor: 'customPalette.background',
           }}
         >
