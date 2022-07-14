@@ -13,6 +13,8 @@ class DependenciesHelper {
   FlutterSecureStorage _secureStorage = new FlutterSecureStorage();
   SharedPreferences? _storage;
   http.Client _client = http.Client();
+  http.MultipartRequest Function(String, Uri) _multipartRequest =
+      (type, uri) => http.MultipartRequest(type, uri);
 
   DependenciesHelper._internal();
 
@@ -44,5 +46,9 @@ class DependenciesHelper {
 
   http.Client get client {
     return _client;
+  }
+
+  http.MultipartRequest Function(String, Uri) get multipartRequest {
+    return _multipartRequest;
   }
 }

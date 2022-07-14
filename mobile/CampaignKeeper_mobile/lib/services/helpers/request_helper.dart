@@ -165,7 +165,7 @@ class RequestHelper extends ChangeNotifier {
       "cookie": isCookieValid() ? _cookie.toString() : "",
       "Content-type": "multipart/form-data",
     };
-    var request = new http.MultipartRequest("PUT", Uri.parse("${AppPrefs().url}$endpoint"));
+    var request = DependenciesHelper().multipartRequest("PUT", Uri.parse("${AppPrefs().url}$endpoint"));
     http.StreamedResponse streamResponse;
     http.Response response;
 
