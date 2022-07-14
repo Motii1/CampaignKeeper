@@ -16,7 +16,7 @@ class SessionManager extends BaseManager<SessionEntity> {
   SessionManager();
 
   @override
-  void attach(SessionEntity entity) async {
+  Future<void> attach(SessionEntity entity) async {
     lockedOperation(
       () async {
         _attach(entity);

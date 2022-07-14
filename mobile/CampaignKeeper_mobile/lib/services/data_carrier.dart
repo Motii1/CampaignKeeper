@@ -49,9 +49,9 @@ class DataCarrier {
     }
   }
 
-  void attach<T>(T entity) {
+  Future<void> attach<T>(T entity) async {
     if (_managers.containsKey(T)) {
-      _managers[T]!.attach(entity);
+      await _managers[T]!.attach(entity);
     }
   }
 

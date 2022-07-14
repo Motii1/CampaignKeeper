@@ -9,7 +9,7 @@ class BaseManager<T> extends ChangeNotifier {
   Future? lock;
   // Attaches given entity to the local base and caches it.
   // Might also update server.
-  void attach(T entity) {
+  Future<void> attach(T entity) async {
     throw new UnimplementedError();
   }
 

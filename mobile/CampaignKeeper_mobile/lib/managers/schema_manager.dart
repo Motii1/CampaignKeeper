@@ -14,7 +14,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
   Map<int, List<SchemaEntity>> _map = {};
 
   @override
-  void attach(SchemaEntity entity) async {
+  Future<void> attach(SchemaEntity entity) async {
     lockedOperation(
       () async {
         _attach(entity);

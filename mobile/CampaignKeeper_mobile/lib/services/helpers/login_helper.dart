@@ -21,10 +21,6 @@ class LoginHelper {
   Future<ResponseStatus> autoLogin() async {
     ResponseStatus? status;
 
-    if (RequestHelper().isCookieValid()) {
-      status = await RequestHelper().testConnection();
-    }
-
     UserDataEntity? userEntity = DataCarrier().get();
     if (userEntity != null && userEntity.password != null) {
       status = await login(userEntity.username, userEntity.password!);
@@ -46,14 +42,14 @@ class LoginHelper {
           password: password,
           imageData: responseData["image"]);
 
-      DataCarrier().attach(entity);
+      await DataCarrier().attach(entity);
     }
 
     return response.status;
   }
 
   Future<ResponseStatus> logout() async {
-    DataCarrier().clear();
+    await DataCarrier().clear();
 
     if (RequestHelper().isCookieValid()) {
       var response = await RequestHelper().post(endpoint: _logoutEnd, isLogin: false);

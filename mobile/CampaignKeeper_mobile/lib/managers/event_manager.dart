@@ -14,7 +14,7 @@ class EventManager extends BaseManager<EventEntity> {
   Map<int, List<EventEntity>> _map = {};
 
   @override
-  void attach(EventEntity entity) async {
+  Future<void> attach(EventEntity entity) async {
     lockedOperation<void>(
       () async {
         _attach(entity);

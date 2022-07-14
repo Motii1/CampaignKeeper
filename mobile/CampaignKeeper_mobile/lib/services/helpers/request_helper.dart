@@ -138,7 +138,9 @@ class RequestHelper extends ChangeNotifier {
     _changeStatus(true);
     switch (response.statusCode) {
       case 200:
-        _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
+        if (response.headers["set-cookie"] != null) {
+          _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
+        }
 
         return Response(ResponseStatus.Success, response.body, response.bodyBytes);
       case 400:

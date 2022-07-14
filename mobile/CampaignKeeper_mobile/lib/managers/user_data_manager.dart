@@ -13,8 +13,8 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   UserDataManager();
 
   @override
-  void attach(UserDataEntity entity) async {
-    lockedOperation<void>(
+  Future<void> attach(UserDataEntity entity) async {
+    await lockedOperation<void>(
       () async {
         _entity = entity;
         Map data = _encodeEntity(_entity!);

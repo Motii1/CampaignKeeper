@@ -14,7 +14,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   CampaignManager();
 
   @override
-  void attach(CampaignEntity entity) async {
+  Future<void> attach(CampaignEntity entity) async {
     lockedOperation(
       () async {
         _entities.add(entity);

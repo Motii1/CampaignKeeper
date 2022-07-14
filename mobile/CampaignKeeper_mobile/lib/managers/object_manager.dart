@@ -14,7 +14,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
   Map<int, List<ObjectEntity>> _map = {};
 
   @override
-  void attach(ObjectEntity entity) async {
+  Future<void> attach(ObjectEntity entity) async {
     lockedOperation(
       () async {
         _attach(entity);
