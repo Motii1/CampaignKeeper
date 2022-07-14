@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Box, Paper, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -40,24 +40,36 @@ export const ExplorerView: React.FC = () => {
       handleFab={currentEvent ? handleFab : undefined}
     >
       {currentEvent ? (
-        <Stack
-          direction="column"
-          justifyContent="flex-start"
-          alignItems="center"
-          spacing={4}
+        <Paper
+          elevation={0}
           sx={{
+            height: 'calc(100vh - 50px)',
+            maxHeight: 'calc(100vh - 50px)',
             overflowY: 'auto',
-            overflowX: 'hidden',
-            marginTop: '150px',
+            backgroundColor: 'transparent',
           }}
         >
-          <EventTile event={currentEvent} type={EventTileType.Explorer} />
-          <OtherEventsPanel
-            currentSessionId={currentSessionId}
-            currentEvent={currentEvent}
-            eventsList={eventsList}
-          />
-        </Stack>
+          <Stack
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="center"
+            spacing={4}
+            sx={{
+              height: 'max-content',
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              paddingBottom: '250px',
+            }}
+          >
+            <Box sx={{ height: 'calc(100vh * 0.09)' }} />
+            <EventTile event={currentEvent} type={EventTileType.Explorer} />
+            <OtherEventsPanel
+              currentSessionId={currentSessionId}
+              currentEvent={currentEvent}
+              eventsList={eventsList}
+            />
+          </Stack>
+        </Paper>
       ) : (
         <EmptyPlaceholder message={'Create an event to explore it, voyager'} />
       )}

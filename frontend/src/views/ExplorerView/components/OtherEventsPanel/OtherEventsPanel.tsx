@@ -29,8 +29,8 @@ export const OtherEventsPanel: React.FC<OtherEventsPanelProps> = props => {
       alignItems="center"
       spacing={2}
       sx={{
-        width: '1050px',
-        margin: '50px',
+        width: 'max-content',
+        margin: '30px',
       }}
     >
       {props.eventsList
@@ -45,11 +45,11 @@ export const OtherEventsPanel: React.FC<OtherEventsPanelProps> = props => {
 
   return (
     <Paper
+      elevation={3}
       sx={{
         position: 'fixed',
         bottom: '0px',
-        width: '1200px',
-        height: '220px',
+        height: 'min-content',
         borderRadius: '20px 20px 0px 0px',
         backgroundColor: 'customPalette.surface',
       }}
@@ -59,7 +59,7 @@ export const OtherEventsPanel: React.FC<OtherEventsPanelProps> = props => {
         justifyContent="center"
         alignItems="center"
         spacing={2}
-        sx={{ marginTop: '20px' }}
+        sx={{ marginTop: '15px', marginBottom: '15px' }}
       >
         <OtherEventsButton content={'Prev event'} setIsOpen={setIsPrevEventOpen} />
         <OtherEventsButton content={'Next event'} setIsOpen={setIsNextEventOpen} />
@@ -67,10 +67,12 @@ export const OtherEventsPanel: React.FC<OtherEventsPanelProps> = props => {
       <Stack direction="column" justifyContent="flex-end" alignItems="center" spacing={4}>
         <Paper
           sx={{
-            position: 'fixed',
-            bottom: '0px',
             width: '1150px',
-            height: '150px',
+            maxWidth: 'calc(100vw - 70px)',
+            height: 'min-content',
+            marginLeft: '15px',
+            marginRight: '15px',
+            overflowX: 'auto',
             borderRadius: '20px 20px 0px 0px',
             backgroundColor: 'customPalette.background',
           }}

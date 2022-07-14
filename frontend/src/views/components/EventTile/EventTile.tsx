@@ -32,7 +32,6 @@ export const EventTile: React.FC<EventTileProps> = props => {
           props.event.type === 'normal' ? 'customPalette.accent' : 'customPalette.red',
         borderRadius: 2,
         width: props.type === EventTileType.Explorer ? '800px' : '400px',
-        //minHeight: props.event.displayStatus === 'shown' ? '200px' : '30px',
         '& .MuiBox-root': {
           '& .css-0': {
             zIndex: '5',
