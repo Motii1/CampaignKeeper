@@ -1,19 +1,13 @@
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-
-import 'user_login_manager_test.mocks.dart';
+import '../../mocks/secure_storage_mock.dart';
 
 // run flutter pub run build_runner build --delete-conflicting-outputs to generate mocks
-@GenerateMocks([FlutterSecureStorage])
 void main() {
-  group("Testing User Data Manager", () {
-    final secureStorage = MockFlutterSecureStorage();
-    when(secureStorage.write(key: anyNamed('key'), value: anyNamed('value')));
+  group("User Data Manager", () {
+    final secureStorage = SecureStorageMock();
 
     test("Adding new user", () {
       DependenciesHelper().useMocks(secureStorage: secureStorage);
