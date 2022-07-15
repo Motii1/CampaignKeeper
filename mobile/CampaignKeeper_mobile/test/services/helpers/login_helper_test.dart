@@ -19,7 +19,7 @@ void main() {
     DependenciesHelper().useMocks(secureStorage: secureStorage, client: client);
 
     test("Auto login succeed", () async {
-      var ent = UserDataEntity(
+      UserDataEntity? ent = UserDataEntity(
         username: "Test",
         email: "Test",
         password: "Test",
@@ -32,13 +32,12 @@ void main() {
       };
       client.postResponse = http.Response(json.encode(userMap), 200);
 
-      ResponseStatus status = await LoginHelper().autoLogin();
+      var tuple = await LoginHelper().autoLogin();
+      ResponseStatus status = tuple.first;
+      ent = tuple.second;
 
       expect(status, ResponseStatus.Success);
-
-      ent = dc.get();
-
-      expect(ent.username, "Test2");
+      expect(ent?.username, "Test2");
     });
 
     test("Auto login incorrect data without proper entity", () async {
@@ -50,7 +49,7 @@ void main() {
       await dc.attach<UserDataEntity>(ent);
       client.postResponse = http.Response("", 200);
 
-      ResponseStatus status = await LoginHelper().autoLogin();
+      ResponseStatus status = (await LoginHelper().autoLogin()).first;
 
       expect(status, ResponseStatus.IncorrectData);
     });
@@ -65,7 +64,7 @@ void main() {
       await dc.attach<UserDataEntity>(ent);
       client.postResponse = http.Response("", 500);
 
-      ResponseStatus status = await LoginHelper().autoLogin();
+      ResponseStatus status = (await LoginHelper().autoLogin()).first;
 
       expect(status, ResponseStatus.Error);
     });
@@ -79,11 +78,11 @@ void main() {
       };
       client.postResponse = http.Response(json.encode(userMap), 200);
 
-      var status = await LoginHelper().login("Test", "Test");
+      var tuple = await LoginHelper().login("Test", "Test");
+      var status = tuple.first;
+      UserDataEntity? ent = tuple.second;
 
       expect(status, ResponseStatus.Success);
-
-      UserDataEntity? ent = dc.get();
 
       expect(ent != null, true);
       expect(ent?.username, "Test2");

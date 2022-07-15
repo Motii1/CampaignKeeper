@@ -42,6 +42,7 @@ void main() {
         'email': "Test",
       };
 
+      client.postBody = null;
       client.postResponse = http.Response(json.encode(userMap), 200);
       client.getResponse = http.Response("", 400);
 
@@ -49,9 +50,10 @@ void main() {
 
       expect(response.status, ResponseStatus.IncorrectData);
 
-      var newUser = dc.get<UserDataEntity>();
+      var postBody = client.postBody as Map;
 
-      expect(newUser?.username, "Test2");
+      expect(postBody['username'], "Test");
+      expect(postBody['password'], "Test");
     });
 
     test("Post success", () async {

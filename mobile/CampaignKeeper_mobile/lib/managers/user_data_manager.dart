@@ -14,10 +14,15 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
   @override
   Future<void> attach(UserDataEntity entity) async {
-    _entity = entity;
-    Map data = _encodeEntity(_entity!);
+    await lockedOperation(
+      () async {
+        _entity = entity;
+        Map data = _encodeEntity(_entity!);
 
-    CacheUtil().addSecure(_key, json.encode(data));
+        CacheUtil().addSecure(_key, json.encode(data));
+      },
+      defaultResult: null,
+    );
   }
 
   @override
@@ -28,7 +33,8 @@ class UserDataManager extends BaseManager<UserDataEntity> {
           var bytes = base64Decode(newEntity.imageData!);
           var file = KeeperFile(name: 'image-file', type: KeeperMediaType.image, bytes: bytes);
 
-          var response = await RequestHelper().putFile(endpoint: UserDataEntity.imageEndpoint, file: file);
+          var response = await RequestHelper()
+              .putFile(endpoint: UserDataEntity.imageEndpoint, file: file, isAutoLogin: false);
 
           if (response.status == ResponseStatus.Success) {
             _entity!.imageData = newEntity.imageData;

@@ -115,6 +115,13 @@ class RefreshParameter {
   }
 }
 
+class Tuple<T1, T2> {
+  T1 first;
+  T2 second;
+
+  Tuple({required this.first, required this.second});
+}
+
 // Extends lists of ints with an easy option
 // of equality check.
 extension ListIntExtension on List<int> {

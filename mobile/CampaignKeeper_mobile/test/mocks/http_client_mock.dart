@@ -12,6 +12,8 @@ class HttpClientMock implements Client {
   Response postResponse = Response("", 200);
   Response putResponse = Response("", 200);
 
+  Object? postBody;
+
   @override
   void close() {}
 
@@ -37,6 +39,7 @@ class HttpClientMock implements Client {
 
   @override
   Future<Response> post(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+    postBody = body;
     return postResponse;
   }
 

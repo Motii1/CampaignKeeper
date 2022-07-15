@@ -25,10 +25,14 @@ class _LoadingState extends State<Loading> {
   void autoLogin() async {
     await AppPrefs().refresh(context);
     await DataCarrier().refresh<UserDataEntity>(online: false);
-    ResponseStatus status = await LoginHelper().autoLogin();
+
+    var tuple = await LoginHelper().autoLogin();
+    ResponseStatus status = tuple.first;
+    UserDataEntity? userEnt = tuple.second;
 
     switch (status) {
       case ResponseStatus.Success:
+        await DataCarrier().attach(userEnt!);
         await DataCarrier().refresh<CampaignEntity>();
 
         Navigator.pushReplacementNamed(context, "/start");
@@ -39,11 +43,10 @@ class _LoadingState extends State<Loading> {
         Navigator.pushReplacementNamed(context, "/login");
         break;
       default:
-        UserDataEntity? userEnt = DataCarrier().get();
-
         if (userEnt == null) {
           Navigator.pushReplacementNamed(context, "/login");
         } else {
+          await DataCarrier().attach(userEnt);
           await DataCarrier().refresh<CampaignEntity>(online: false);
           Navigator.pushReplacementNamed(context, "/start");
         }

@@ -93,7 +93,7 @@ class RequestHelper extends ChangeNotifier {
       return Response(ResponseStatus.Success, response.body, response.bodyBytes);
     } else if (response.statusCode >= 400 && response.statusCode < 500) {
       if (isAutoLogin && !isCookieValid()) {
-        ResponseStatus loginResponse = await LoginHelper().autoLogin();
+        ResponseStatus loginResponse = (await LoginHelper().autoLogin()).first;
         if (loginResponse == ResponseStatus.Success) {
           return await get(endpoint: endpoint, params: params, isAutoLogin: false);
         }
@@ -160,7 +160,7 @@ class RequestHelper extends ChangeNotifier {
       return Response(ResponseStatus.Success, response.body, response.bodyBytes);
     } else if (response.statusCode >= 400 && response.statusCode < 500) {
       if (isAutoLogin && !isLogin && !isCookieValid()) {
-        ResponseStatus loginResponse = await LoginHelper().autoLogin();
+        ResponseStatus loginResponse = (await LoginHelper().autoLogin()).first;
         if (loginResponse == ResponseStatus.Success) {
           return await post(
               endpoint: endpoint, body: body, isLogin: isLogin, isAutoLogin: false, isSilent: isSilent);
@@ -212,7 +212,7 @@ class RequestHelper extends ChangeNotifier {
       return Response(ResponseStatus.Success, response.body, response.bodyBytes);
     } else if (response.statusCode >= 400 && response.statusCode < 500) {
       if (isAutoLogin && !isCookieValid()) {
-        ResponseStatus loginResponse = await LoginHelper().autoLogin();
+        ResponseStatus loginResponse = (await LoginHelper().autoLogin()).first;
         if (loginResponse == ResponseStatus.Success) {
           return await putFile(endpoint: endpoint, fields: fields, file: file, isAutoLogin: false);
         }
