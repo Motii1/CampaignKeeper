@@ -145,17 +145,17 @@ class _DefaultTheme {
         borderRadius: BorderRadius.circular(20),
       ),
     ),
-    radioTheme: RadioThemeData(
-      fillColor: MaterialStateColor.resolveWith(
-        (states) {
-          if (states.contains(MaterialState.selected)) {
-            return Color.alphaBlend(onBackground.withAlpha(90), primary);
-          }
+    // radioTheme: RadioThemeData(
+    //   fillColor: MaterialStateColor.resolveWith(
+    //     (states) {
+    //       if (states.contains(MaterialState.selected)) {
+    //         return Color.alphaBlend(onBackground.withAlpha(90), primary);
+    //       }
 
-          return onBackground;
-        },
-      ),
-    ),
+    //       return onBackground;
+    //     },
+    //   ),
+    // ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
@@ -211,6 +211,10 @@ class _DefaultTheme {
       ),
       backgroundColor: primary,
       foregroundColor: onPrimary,
+      elevation: 2,
+      focusElevation: 2,
+      hoverElevation: 2,
+      highlightElevation: 2,
     ),
   );
 
@@ -237,7 +241,7 @@ class _DefaultTheme {
 
 // Apps theme provider.
 class KeeperThemes {
-  static const Color _primaryLight = Color.fromARGB(255, 167, 205, 247);
+  static const Color _primaryLight = Color(0xffa4c1f2);
   static const Color _onPrimaryLight = Color(0xff242424);
 
   static final Color _secondaryLight = Color(0xffdaeced);

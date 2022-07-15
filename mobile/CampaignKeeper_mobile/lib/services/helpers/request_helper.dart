@@ -31,11 +31,12 @@ class RequestHelper extends ChangeNotifier {
   }
 
   // Returns pair of a respond status and a string json
-  Future<Response> get(
-      {required String endpoint,
-      List<RequestParameter>? params,
-      bool isAutoLogin = true,
-      bool isSilent = false}) async {
+  Future<Response> get({
+    required String endpoint,
+    List<RequestParameter>? params,
+    bool isAutoLogin = true,
+    bool isSilent = false,
+  }) async {
     var buffer = StringBuffer();
 
     buffer.write(endpoint);
@@ -88,30 +89,30 @@ class RequestHelper extends ChangeNotifier {
       _changeStatus(true);
     }
 
-    switch (response.statusCode) {
-      case 200:
-        return Response(ResponseStatus.Success, response.body, response.bodyBytes);
-      case 400:
-      case 401:
-      case 402:
-      case 403:
-      case 404:
-        if (isAutoLogin && !isCookieValid()) {
-          ResponseStatus loginResponse = await LoginHelper().autoLogin();
-          if (loginResponse == ResponseStatus.Success) {
-            return await get(endpoint: endpoint, params: params, isAutoLogin: false);
-          }
+    if (response.statusCode == 200) {
+      return Response(ResponseStatus.Success, response.body, response.bodyBytes);
+    } else if (response.statusCode >= 400 && response.statusCode < 500) {
+      if (isAutoLogin && !isCookieValid()) {
+        ResponseStatus loginResponse = await LoginHelper().autoLogin();
+        if (loginResponse == ResponseStatus.Success) {
+          return await get(endpoint: endpoint, params: params, isAutoLogin: false);
         }
+      }
 
-        return Response(ResponseStatus.IncorrectData, null, null);
-      default:
-        return Response(ResponseStatus.Error, null, null);
+      return Response(ResponseStatus.IncorrectData, null, null);
+    } else {
+      return Response(ResponseStatus.Error, null, null);
     }
   }
 
   // Posts given body and returns a response.
-  Future<Response> post(
-      {required String endpoint, Object? body, bool isLogin = false, bool isAutoLogin = true}) async {
+  Future<Response> post({
+    required String endpoint,
+    Object? body,
+    bool isLogin = false,
+    bool isAutoLogin = true,
+    bool isSilent = false,
+  }) async {
     Map<String, String> headers = {"cookie": isCookieValid() ? _cookie.toString() : ""};
     var response;
     try {
@@ -120,60 +121,80 @@ class RequestHelper extends ChangeNotifier {
           .post(Uri.parse("${AppPrefs().url}$endpoint"), body: body, headers: isLogin ? null : headers)
           .timeout(Duration(seconds: isLogin ? AppPrefs().loginTimeout : AppPrefs().timeout));
     } on TimeoutException catch (_) {
-      _changeStatus(false);
+      if (!isSilent) {
+        _changeStatus(true);
+      }
+
       return Response(ResponseStatus.TimeOut, null, null);
     } on SocketException catch (_) {
-      _changeStatus(false);
+      if (!isSilent) {
+        _changeStatus(true);
+      }
+
       return Response(ResponseStatus.Error, null, null);
     } on Exception catch (_) {
-      _changeStatus(false);
+      if (!isSilent) {
+        _changeStatus(true);
+      }
+
       return Response(ResponseStatus.Error, null, null);
     } catch (_) {
-      _changeStatus(false);
+      if (!isSilent) {
+        _changeStatus(true);
+      }
+
       return Response(ResponseStatus.Error, null, null);
     }
 
     print("Post status: ${response.statusCode}");
 
-    _changeStatus(true);
-    switch (response.statusCode) {
-      case 200:
-        if (response.headers["set-cookie"] != null) {
-          _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
-        }
+    if (!isSilent) {
+      _changeStatus(true);
+    }
 
-        return Response(ResponseStatus.Success, response.body, response.bodyBytes);
-      case 400:
-      case 401:
-      case 402:
-      case 403:
-      case 404:
-        if (isAutoLogin && !isLogin && !isCookieValid()) {
-          ResponseStatus loginResponse = await LoginHelper().autoLogin();
-          if (loginResponse == ResponseStatus.Success) {
-            return await post(endpoint: endpoint, body: body, isLogin: isLogin, isAutoLogin: false);
-          }
-        }
+    if (response.statusCode == 200) {
+      if (response.headers["set-cookie"] != null) {
+        _cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]);
+      }
 
-        return Response(ResponseStatus.IncorrectData, null, null);
-      default:
-        return Response(ResponseStatus.Error, null, null);
+      return Response(ResponseStatus.Success, response.body, response.bodyBytes);
+    } else if (response.statusCode >= 400 && response.statusCode < 500) {
+      if (isAutoLogin && !isLogin && !isCookieValid()) {
+        ResponseStatus loginResponse = await LoginHelper().autoLogin();
+        if (loginResponse == ResponseStatus.Success) {
+          return await post(
+              endpoint: endpoint, body: body, isLogin: isLogin, isAutoLogin: false, isSilent: isSilent);
+        }
+      }
+
+      return Response(ResponseStatus.IncorrectData, null, null);
+    } else {
+      return Response(ResponseStatus.Error, null, null);
     }
   }
 
   // Puts file and returns a respond.
-  Future<Response> putFile({required String endpoint, required KeeperFile file}) async {
+  Future<Response> putFile(
+      {required String endpoint,
+      Map<String, String>? fields,
+      KeeperFile? file,
+      bool isAutoLogin = true}) async {
+    var request = DependenciesHelper().multipartRequest("PUT", Uri.parse("${AppPrefs().url}$endpoint"));
     Map<String, String> headers = {
       "cookie": isCookieValid() ? _cookie.toString() : "",
-      "Content-type": "multipart/form-data",
     };
-    var request = DependenciesHelper().multipartRequest("PUT", Uri.parse("${AppPrefs().url}$endpoint"));
-    http.StreamedResponse streamResponse;
-    http.Response response;
-
-    request.files.add(
-        http.MultipartFile.fromBytes(file.name, file.bytes, filename: file.name, contentType: file.type));
     request.headers.addAll(headers);
+
+    if (file != null) {
+      request.files.add(
+          http.MultipartFile.fromBytes(file.name, file.bytes, filename: file.name, contentType: file.type));
+    }
+
+    if (fields != null) {
+      request.fields.addAll(fields);
+    }
+
+    http.StreamedResponse streamResponse;
 
     try {
       streamResponse = await request.send().timeout(Duration(seconds: AppPrefs().timeout));
@@ -183,22 +204,23 @@ class RequestHelper extends ChangeNotifier {
       return Response(ResponseStatus.Error, null, null);
     }
 
-    response = await http.Response.fromStream(streamResponse);
+    http.Response response = await http.Response.fromStream(streamResponse);
 
     print("Put status: ${response.statusCode}");
 
-    switch (response.statusCode) {
-      case 200:
-        return Response(ResponseStatus.Success, response.body, response.bodyBytes);
-      case 400:
-      case 401:
-      case 402:
-      case 403:
-      case 404:
-        print("Error response: " + response.body.toString());
-        return Response(ResponseStatus.IncorrectData, null, null);
-      default:
-        return Response(ResponseStatus.Error, null, null);
+    if (response.statusCode == 200) {
+      return Response(ResponseStatus.Success, response.body, response.bodyBytes);
+    } else if (response.statusCode >= 400 && response.statusCode < 500) {
+      if (isAutoLogin && !isCookieValid()) {
+        ResponseStatus loginResponse = await LoginHelper().autoLogin();
+        if (loginResponse == ResponseStatus.Success) {
+          return await putFile(endpoint: endpoint, fields: fields, file: file, isAutoLogin: false);
+        }
+      }
+
+      return Response(ResponseStatus.IncorrectData, response.body, response.bodyBytes);
+    } else {
+      return Response(ResponseStatus.Error, null, null);
     }
   }
 
