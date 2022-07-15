@@ -122,25 +122,25 @@ class RequestHelper extends ChangeNotifier {
           .timeout(Duration(seconds: isLogin ? AppPrefs().loginTimeout : AppPrefs().timeout));
     } on TimeoutException catch (_) {
       if (!isSilent) {
-        _changeStatus(true);
+        _changeStatus(false);
       }
 
       return Response(ResponseStatus.TimeOut, null, null);
     } on SocketException catch (_) {
       if (!isSilent) {
-        _changeStatus(true);
+        _changeStatus(false);
       }
 
       return Response(ResponseStatus.Error, null, null);
     } on Exception catch (_) {
       if (!isSilent) {
-        _changeStatus(true);
+        _changeStatus(false);
       }
 
       return Response(ResponseStatus.Error, null, null);
     } catch (_) {
       if (!isSilent) {
-        _changeStatus(true);
+        _changeStatus(false);
       }
 
       return Response(ResponseStatus.Error, null, null);

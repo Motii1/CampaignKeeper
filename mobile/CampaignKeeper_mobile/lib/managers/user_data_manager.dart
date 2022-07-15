@@ -14,15 +14,10 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
   @override
   Future<void> attach(UserDataEntity entity) async {
-    await lockedOperation<void>(
-      () async {
-        _entity = entity;
-        Map data = _encodeEntity(_entity!);
+    _entity = entity;
+    Map data = _encodeEntity(_entity!);
 
-        CacheUtil().addSecure(_key, json.encode(data));
-      },
-      defaultResult: null,
-    );
+    CacheUtil().addSecure(_key, json.encode(data));
   }
 
   @override

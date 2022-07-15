@@ -45,6 +45,50 @@ class KeeperFieldTile extends StatelessWidget {
     );
   }
 
+  List<Widget> getChildren(BuildContext context) {
+    List<Widget> children = [];
+    children.add(Text(
+      fieldName,
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: Theme.of(context).colorScheme.onBackground,
+      ),
+    ));
+
+    if (values.isNotEmpty) {
+      children.add(SizedBox(
+        height: 10,
+      ));
+      children.add(Stack(
+        children: [
+          RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 16.5,
+                fontWeight: FontWeight.w400,
+                color: Colors.transparent,
+              ),
+              children: values.map((e) => formatValue(context, e, isBackground: true)).toList(),
+            ),
+          ),
+          RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 16.5,
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
+              children: values.map((e) => formatValue(context, e)).toList(),
+            ),
+          ),
+        ],
+      ));
+    }
+
+    return children;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -58,43 +102,7 @@ class KeeperFieldTile extends StatelessWidget {
           padding: EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                fieldName,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Stack(
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 16.5,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.transparent,
-                      ),
-                      children: values.map((e) => formatValue(context, e, isBackground: true)).toList(),
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 16.5,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                      children: values.map((e) => formatValue(context, e)).toList(),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            children: getChildren(context),
           ),
         ),
       ),

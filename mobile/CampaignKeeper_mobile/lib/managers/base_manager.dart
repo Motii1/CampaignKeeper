@@ -61,8 +61,8 @@ class BaseManager<T> extends ChangeNotifier {
   // Releases the lock.
   // Optionally the lock can return refresh parameters on release.
   void releaseOperation(Completer completer, {RefreshParameter? parameter}) {
-    completer.complete(parameter);
     lock = null;
+    completer.complete(parameter);
   }
 
   // Locks given async method so it won't run in a race
