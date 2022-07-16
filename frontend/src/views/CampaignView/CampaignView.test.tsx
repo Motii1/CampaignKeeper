@@ -10,7 +10,6 @@ type SessionPostBody = {
   name: string;
 };
 
-// TO-DO: add test for CampaignTile (will require state update outside of React Component)
 describe('CampaignView tests', () => {
   let component: RenderResult;
 
@@ -91,6 +90,7 @@ describe('CampaignView tests', () => {
         expect(screen.getByText('CANCEL')).toBeInTheDocument();
       });
     });
+
     test('opens context menu after right click on SessionTile', async () => {
       await waitFor(() => {
         expect(screen.getByText('Test Session 1')).toBeInTheDocument();
@@ -109,6 +109,7 @@ describe('CampaignView tests', () => {
       expect(screen.getByRole('button', { name: /DELETE/ })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /CANCEL/ })).toBeInTheDocument();
     });
+
     test('shows dialog asking for confirmation on delete', async () => {
       const sessionNameToDelete = 'Test Session 2';
       await waitFor(() => {

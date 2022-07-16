@@ -2,8 +2,8 @@ import { cleanup, screen } from '@testing-library/react';
 import { App } from './App';
 import { renderWithProviders } from './utils/test-utils';
 
-describe('App tests', () => {
-  test('renders learn react link', () => {
+describe('App test', () => {
+  test('renders landing page', () => {
     const component = renderWithProviders(<App />);
 
     expect(screen.getByAltText('Logo')).toBeInTheDocument();

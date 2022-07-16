@@ -10,6 +10,21 @@ type CampaignPostBody = {
 };
 
 describe('StartView tests', () => {
+  const testCampaignList = [
+    {
+      id: 1,
+      name: 'Test Campaign 1',
+      createdAt: '2022-03-10T10:10:50.026Z',
+      imageBase64: '',
+    },
+    {
+      id: 2,
+      name: 'Test Campaign 2',
+      createdAt: '2022-03-10T10:10:51.026Z',
+      imageBase64: '',
+    },
+  ];
+
   let component: RenderResult;
 
   const server = setupServer(
@@ -29,21 +44,6 @@ describe('StartView tests', () => {
     rest.patch('api/campaign/1', (_req, res, ctx) => res(ctx.status(200))),
     rest.delete('api/campaign/2', (_req, res, ctx) => res(ctx.status(200)))
   );
-
-  const testCampaignList = [
-    {
-      id: 1,
-      name: 'Test Campaign 1',
-      createdAt: '2022-03-10T10:10:50.026Z',
-      imageBase64: '',
-    },
-    {
-      id: 2,
-      name: 'Test Campaign 2',
-      createdAt: '2022-03-10T10:10:51.026Z',
-      imageBase64: '',
-    },
-  ];
 
   beforeAll(() => server.listen());
 

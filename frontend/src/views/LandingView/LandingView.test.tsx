@@ -1,65 +1,60 @@
-import { cleanup, fireEvent, screen } from '@testing-library/react';
+import { cleanup, fireEvent, RenderResult, screen } from '@testing-library/react';
 import { renderWithProviders } from '../../utils/test-utils';
 import { LandingView } from './LandingView';
 
-afterAll(cleanup);
+describe('LandingView tests', () => {
+  let component: RenderResult;
 
-test('renders LandingView', () => {
-  const component = renderWithProviders(<LandingView />);
+  afterAll(cleanup);
 
-  expect(screen.getByAltText('Logo')).toBeInTheDocument();
+  beforeEach(() => (component = renderWithProviders(<LandingView />, { route: '/' })));
+  afterEach(() => component.unmount());
 
-  expect(screen.getByText('Email or username')).toBeInTheDocument();
-  expect(screen.getByText('Password')).toBeInTheDocument();
-  expect(screen.getByText('Login')).toBeInTheDocument();
-  expect(screen.getByText('Register')).toBeInTheDocument();
+  test('renders LandingView', () => {
+    expect(screen.getByAltText('Logo')).toBeInTheDocument();
 
-  component.unmount();
-});
+    expect(screen.getByText('Email or username')).toBeInTheDocument();
+    expect(screen.getByText('Password')).toBeInTheDocument();
+    expect(screen.getByText('Login')).toBeInTheDocument();
+    expect(screen.getByText('Register')).toBeInTheDocument();
+  });
 
-test('switches from LoginForm to RegisterForm on click', async () => {
-  const component = renderWithProviders(<LandingView />);
+  test('switches from LoginForm to RegisterForm after click', async () => {
+    expect(screen.getByText('Register')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Register'));
 
-  expect(screen.getByText('Register')).toBeInTheDocument();
-  fireEvent.click(screen.getByText('Register'));
+    // checking if register form is on screen
+    expect(screen.getByText('Username')).toBeInTheDocument();
+    expect(screen.getByText('Email')).toBeInTheDocument();
+    expect(screen.getByText('Repeat email')).toBeInTheDocument();
+    expect(screen.getByText('Password')).toBeInTheDocument();
+    expect(screen.getByText('Repeat password')).toBeInTheDocument();
+    expect(screen.getByText('Register')).toBeInTheDocument();
+    expect(screen.getByText('Login')).toBeInTheDocument();
 
-  // checking if register form is on screen
-  expect(screen.getByText('Username')).toBeInTheDocument();
-  expect(screen.getByText('Email')).toBeInTheDocument();
-  expect(screen.getByText('Repeat email')).toBeInTheDocument();
-  expect(screen.getByText('Password')).toBeInTheDocument();
-  expect(screen.getByText('Repeat password')).toBeInTheDocument();
-  expect(screen.getByText('Register')).toBeInTheDocument();
-  expect(screen.getByText('Login')).toBeInTheDocument();
+    // checking if login form has been removed from screen
+    expect(screen.queryByText('Email or username')).toBeNull();
+  });
 
-  // checking if login form has been removed from screen
-  expect(screen.queryByText('Email or username')).toBeNull();
+  test('switches from RegisterForm to LoginForm on click', async () => {
+    // switching to RegisterForm
+    expect(screen.getByText('Register')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Register'));
 
-  component.unmount();
-});
+    // switching to LoginForm
+    expect(screen.getByText('Login')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Login'));
 
-test('switches from RegisterForm to LoginForm on click', async () => {
-  const component = renderWithProviders(<LandingView />);
+    // checking if login form is on screen
+    expect(screen.getByText('Email or username')).toBeInTheDocument();
+    expect(screen.getByText('Password')).toBeInTheDocument();
+    expect(screen.getByText('Login')).toBeInTheDocument();
+    expect(screen.getByText('Register')).toBeInTheDocument();
 
-  // switching to RegisterForm
-  expect(screen.getByText('Register')).toBeInTheDocument();
-  fireEvent.click(screen.getByText('Register'));
-
-  // switching to LoginForm
-  expect(screen.getByText('Login')).toBeInTheDocument();
-  fireEvent.click(screen.getByText('Login'));
-
-  // checking if login form is on screen
-  expect(screen.getByText('Email or username')).toBeInTheDocument();
-  expect(screen.getByText('Password')).toBeInTheDocument();
-  expect(screen.getByText('Login')).toBeInTheDocument();
-  expect(screen.getByText('Register')).toBeInTheDocument();
-
-  // checking if register form has been removed from screen
-  expect(screen.queryByText('Username')).toBeNull();
-  expect(screen.queryByText('Email')).toBeNull();
-  expect(screen.queryByText('Repeat email')).toBeNull();
-  expect(screen.queryByText('Repeat password')).toBeNull();
-
-  component.unmount();
+    // checking if register form has been removed from screen
+    expect(screen.queryByText('Username')).toBeNull();
+    expect(screen.queryByText('Email')).toBeNull();
+    expect(screen.queryByText('Repeat email')).toBeNull();
+    expect(screen.queryByText('Repeat password')).toBeNull();
+  });
 });
