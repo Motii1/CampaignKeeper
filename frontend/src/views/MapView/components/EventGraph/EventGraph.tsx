@@ -54,7 +54,7 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
     if (eventsList.length === 0)
       return (
         <EmptyPlaceholder
-          message={'Begin this adventure by adding its starting point, explorer!'}
+          message={'Begin this adventure by creating its starting point, explorer!'}
         />
       );
 
