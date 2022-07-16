@@ -39,7 +39,7 @@ export enum CustomSnackbarType {
 export enum EventTileType {
   Map,
   Explorer,
-  ExplorerParent,
+  ExplorerDialog,
 }
 
 export type ReferenceFieldMetadata = {

@@ -18,7 +18,7 @@ export const EventTile: React.FC<EventTileProps> = props => {
   const dispatch = useDispatch();
 
   const handleTileClick = () => {
-    if (props.type === EventTileType.ExplorerParent && props.setIsOpen) {
+    if (props.type === EventTileType.ExplorerDialog && props.setIsOpen) {
       dispatch(setCurrentEvent({ currentEvent: props.event }));
       props.setIsOpen(false);
     }
@@ -31,18 +31,23 @@ export const EventTile: React.FC<EventTileProps> = props => {
         backgroundColor:
           props.event.type === 'normal' ? 'customPalette.accent' : 'customPalette.red',
         borderRadius: 2,
-        width: props.type === EventTileType.Explorer ? '800px' : '400px',
+        width:
+          props.type === EventTileType.Explorer
+            ? '800px'
+            : props.type === EventTileType.Map
+            ? '400px'
+            : '350px',
         '& .MuiBox-root': {
           '& .css-0': {
             zIndex: '5',
           },
         },
-        cursor: props.type === EventTileType.ExplorerParent ? 'pointer' : 'default',
+        cursor: props.type === EventTileType.ExplorerDialog ? 'pointer' : 'default',
         position: 'relative',
         opacity: props.event.status === 'none' || props.type !== EventTileType.Map ? '1' : '0.8',
       }}
       id={props.id}
-      onClick={props.type === EventTileType.ExplorerParent ? handleTileClick : undefined}
+      onClick={props.type === EventTileType.ExplorerDialog ? handleTileClick : undefined}
     >
       <Stack
         direction="column"

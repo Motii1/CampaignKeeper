@@ -18,7 +18,7 @@ export const OtherEventsDialog: React.FC<OtherEventsDialogProps> = props => {
       props.otherEvents.map(event => (
         <EventTile
           event={event}
-          type={EventTileType.ExplorerParent}
+          type={EventTileType.ExplorerDialog}
           setIsOpen={props.setIsOpen}
           key={event.id}
         />
