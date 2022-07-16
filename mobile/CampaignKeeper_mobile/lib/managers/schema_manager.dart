@@ -69,7 +69,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
       if (cache != null) {
         List cacheData = json.decode(cache);
         cacheData.forEach((data) {
-          _attach(_decodeEntity(data));
+          _attach(SchemaEntity.decode(data));
         });
 
         notifyListeners();
@@ -85,7 +85,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<SchemaEntity> newEntities =
-            (responseData['schemas'] as List).map((e) => _decodeEntity(e)).toList();
+            (responseData['schemas'] as List).map((e) => SchemaEntity.decode(e)).toList();
 
         if (!_isEqual(parameterValue, newEntities)) {
           _map[parameterValue] = newEntities;
@@ -136,31 +136,11 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     _map.forEach(
       (key, list) {
         if (campaigns.isEmpty || campaigns.contains(key)) {
-          data.addAll(list.map((e) => _encodeEntity(e)));
+          data.addAll(list.map((e) => e.encode()));
         }
       },
     );
 
     CacheUtil().add(_key, json.encode(data));
-  }
-
-  SchemaEntity _decodeEntity(Map data) {
-    int id = data['id'];
-    int campaignId = data['campaignId'];
-    String title = data['title'];
-    List<String> fields = (data['fields'] as List<dynamic>).map((e) => e as String).toList();
-
-    return SchemaEntity(id: id, campaignId: campaignId, title: title, fields: fields);
-  }
-
-  Map _encodeEntity(SchemaEntity entity) {
-    Map data = {
-      "id": entity.id,
-      "campaignId": entity.campaignId,
-      "title": entity.title,
-      "fields": entity.fields,
-    };
-
-    return data;
   }
 }

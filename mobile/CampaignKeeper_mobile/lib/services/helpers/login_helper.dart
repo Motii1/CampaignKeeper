@@ -45,11 +45,7 @@ class LoginHelper {
     if (response.status == ResponseStatus.Success) {
       Map responseData = json.decode(response.data!);
 
-      userEntity = new UserDataEntity(
-          username: responseData["username"],
-          email: responseData["email"],
-          password: password,
-          imageData: responseData["image"]);
+      userEntity = UserDataEntity.decode(responseData);
     }
 
     return Tuple(

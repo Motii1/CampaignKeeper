@@ -71,7 +71,7 @@ class SessionManager extends BaseManager<SessionEntity> {
       if (cache != null) {
         List cacheData = json.decode(cache);
         cacheData.forEach((data) {
-          _attach(_decodeEntity(data));
+          _attach(SessionEntity.decode(data));
         });
 
         notifyListeners();
@@ -88,7 +88,7 @@ class SessionManager extends BaseManager<SessionEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<SessionEntity> newEntities =
-            (responseData['sessions'] as List).map((e) => _decodeEntity(e)).toList();
+            (responseData['sessions'] as List).map((e) => SessionEntity.decode(e)).toList();
 
         if (!_isEqual(parameterValue, newEntities)) {
           _map[parameterValue] = newEntities;
@@ -139,31 +139,11 @@ class SessionManager extends BaseManager<SessionEntity> {
     _map.forEach(
       (key, list) {
         if (campaigns.isEmpty || campaigns.contains(key)) {
-          data.addAll(list.map((e) => _encodeEntity(e)));
+          data.addAll(list.map((e) => e.encode()));
         }
       },
     );
 
     CacheUtil().add(_key, json.encode(data));
-  }
-
-  SessionEntity _decodeEntity(Map data) {
-    int id = data['id'];
-    int campaignId = data['campaignId'];
-    String name = data['name'];
-    DateTime createdAt = DateTime.parse(data['createdAt']);
-
-    return SessionEntity(id: id, campaignId: campaignId, name: name, createdAt: createdAt);
-  }
-
-  Map _encodeEntity(SessionEntity entity) {
-    Map data = {
-      "id": entity.id,
-      "campaignId": entity.campaignId,
-      "name": entity.name,
-      "createdAt": entity.createdAt.toString(),
-    };
-
-    return data;
   }
 }

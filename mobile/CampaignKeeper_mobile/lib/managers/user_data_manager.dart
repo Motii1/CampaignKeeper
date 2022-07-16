@@ -17,7 +17,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
     await lockedOperation(
       () async {
         _entity = entity;
-        Map data = _encodeEntity(_entity!);
+        Map data = _entity!.encode();
 
         CacheUtil().addSecure(_key, json.encode(data));
       },
@@ -85,7 +85,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
       String? cache = await CacheUtil().getSecure(_key);
 
       if (cache != null) {
-        _entity = _decodeEntity(json.decode(cache));
+        _entity = UserDataEntity.decode(json.decode(cache));
         notifyListeners();
       }
     }
@@ -111,7 +111,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
             notifyListeners();
 
-            Map data = _encodeEntity(_entity!);
+            Map data = _entity!.encode();
             CacheUtil().addSecure(_key, json.encode(data));
 
             return true;
@@ -126,32 +126,5 @@ class UserDataManager extends BaseManager<UserDataEntity> {
     }
 
     return false;
-  }
-
-  UserDataEntity? _decodeEntity(Map data) {
-    String? username = data["username"];
-    String? email = data["email"];
-    String? password = data["password"];
-    String? imageData = data["image"];
-
-    if (username != null && email != null) {
-      UserDataEntity ent =
-          new UserDataEntity(username: username, email: email, password: password, imageData: imageData);
-
-      return ent;
-    }
-
-    return null;
-  }
-
-  Map _encodeEntity(UserDataEntity ent) {
-    Map data = {
-      "username": ent.username,
-      "email": ent.email,
-      "password": ent.password,
-      "image": ent.imageData,
-    };
-
-    return data;
   }
 }

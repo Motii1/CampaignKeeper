@@ -69,7 +69,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
       if (cache != null) {
         List cacheData = json.decode(cache);
         cacheData.forEach((data) {
-          _attach(_decodeEntity(data));
+          _attach(ObjectEntity.decode(data));
         });
 
         notifyListeners();
@@ -85,7 +85,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<ObjectEntity> newEntities =
-            (responseData['objects'] as List).map((e) => _decodeEntity(e)).toList();
+            (responseData['objects'] as List).map((e) => ObjectEntity.decode(e)).toList();
 
         if (parameterName == EntityParameter.schema && !_isEqual(parameterValue, newEntities)) {
           if (_isEqual(parameterValue, newEntities)) {
@@ -166,34 +166,11 @@ class ObjectManager extends BaseManager<ObjectEntity> {
     _map.forEach(
       (key, list) {
         if (schemas.isEmpty || schemas.contains(key)) {
-          data.addAll(list.map((e) => _encodeEntity(e)));
+          data.addAll(list.map((e) => e.encode()));
         }
       },
     );
 
     CacheUtil().add(_key, json.encode(data));
-  }
-
-  ObjectEntity _decodeEntity(Map data) {
-    int id = data['id'];
-    int schemaId = data['schemaId'];
-    String title = data['title'];
-    String? imageData = data['imageBase64'];
-    List<FieldValue> values =
-        (data['metadataArray'] as List<dynamic>).map((e) => FieldValue.decode(e)).toList();
-
-    return ObjectEntity(id: id, schemaId: schemaId, title: title, imageData: imageData, values: values);
-  }
-
-  Map _encodeEntity(ObjectEntity entity) {
-    Map data = {
-      'id': entity.id,
-      'schemaId': entity.schemaId,
-      'title': entity.title,
-      'imageBase64': entity.imageData,
-      'metadataArray': entity.values.map((e) => FieldValue.encode(e)).toList(),
-    };
-
-    return data;
   }
 }
