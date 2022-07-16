@@ -58,7 +58,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
       if (cache != null && cache.isNotEmpty) {
         List cacheData = json.decode(cache);
 
-        _entities = cacheData.map((e) => _decodeEntity(e)).toList();
+        _entities = cacheData.map((e) => CampaignEntity.decode(e)).toList();
         notifyListeners();
       }
     }
@@ -69,7 +69,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<CampaignEntity> newEntities =
-            (responseData['campaigns'] as List).map((e) => _decodeEntity(e)).toList();
+            (responseData['campaigns'] as List).map((e) => CampaignEntity.decode(e)).toList();
 
         if (!_isEqual(newEntities)) {
           _entities = newEntities;
@@ -100,28 +100,8 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   }
 
   void _cacheAll() {
-    var data = _entities.map((e) => _encodeEntity(e)).toList();
+    var data = _entities.map((e) => e.encode()).toList();
 
     CacheUtil().add(_key, json.encode(data));
-  }
-
-  CampaignEntity _decodeEntity(Map data) {
-    int id = data['id'];
-    String name = data['name'];
-    DateTime createdAt = DateTime.parse(data['createdAt']);
-    String? imageData = data['imageBase64'];
-
-    return CampaignEntity(id: id, name: name, createdAt: createdAt, imageData: imageData);
-  }
-
-  Map _encodeEntity(CampaignEntity entity) {
-    Map data = {
-      "id": entity.id,
-      "name": entity.name,
-      "createdAt": entity.createdAt.toString(),
-      "imageBase64": entity.imageData,
-    };
-
-    return data;
   }
 }

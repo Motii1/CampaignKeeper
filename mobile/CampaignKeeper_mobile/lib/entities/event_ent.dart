@@ -1,21 +1,8 @@
+import 'package:campaign_keeper_mobile/entities/base_entity.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 
 // Entity representing an event.
-class EventEntity {
-  static const String endpoint = '/api/event/graph';
-
-  int id;
-  int sessionId;
-  String title;
-  String type;
-  String status;
-  String displayStatus;
-  List<FieldValue> characterValues;
-  List<FieldValue> placeValues;
-  List<FieldValue> descriptionValues;
-  List<int> parentIds;
-  List<int> childrenIds;
-
+class EventEntity implements BaseEntity {
   EventEntity({
     required this.id,
     required this.sessionId,
@@ -30,7 +17,63 @@ class EventEntity {
     required this.childrenIds,
   });
 
-  bool equals(EventEntity other) {
+  EventEntity.decode(Map data) {
+    id = data['id'];
+    sessionId = data['sessionId'];
+    title = data['title'];
+    type = data['type'];
+    status = data['status'];
+    displayStatus = data['displayStatus'];
+    characterValues = (data['charactersMetadataArray'] as List<dynamic>)
+        .map((e) => FieldValue.decode(e, defaultFieldName: 'characters'))
+        .toList();
+    placeValues = (data['placeMetadataArray'] as List<dynamic>)
+        .map((e) => FieldValue.decode(e, defaultFieldName: 'places'))
+        .toList();
+    descriptionValues = (data['descriptionMetadataArray'] as List<dynamic>)
+        .map((e) => FieldValue.decode(e, defaultFieldName: 'descriptions'))
+        .toList();
+    parentIds = (data['parentIds'] as List<dynamic>).map((e) => e as int).toList();
+    childrenIds = (data['childrenIds'] as List<dynamic>).map((e) => e as int).toList();
+  }
+
+  static const String endpoint = '/api/event/graph';
+
+  late int id;
+  late int sessionId;
+  late String title;
+  late String type;
+  late String status;
+  late String displayStatus;
+  late List<FieldValue> characterValues;
+  late List<FieldValue> placeValues;
+  late List<FieldValue> descriptionValues;
+  late List<int> parentIds;
+  late List<int> childrenIds;
+
+  Map encode() {
+    Map data = {
+      'id': id,
+      'sessionId': sessionId,
+      'title': title,
+      'type': type,
+      'status': status,
+      'displayStatus': displayStatus,
+      'charactersMetadataArray': characterValues.map((e) => FieldValue.encode(e)).toList(),
+      'placeMetadataArray': placeValues.map((e) => FieldValue.encode(e)).toList(),
+      'descriptionMetadataArray': descriptionValues.map((e) => FieldValue.encode(e)).toList(),
+      'parentIds': parentIds,
+      'childrenIds': childrenIds,
+    };
+
+    return data;
+  }
+
+  bool equals(Object? other) {
+    if (other == null || !(other is EventEntity)) {
+      return false;
+    }
+
     return id == other.id &&
         sessionId == other.sessionId &&
         title == other.title &&

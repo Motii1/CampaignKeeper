@@ -8,27 +8,24 @@ import '../../mocks/secure_storage_mock.dart';
 void main() {
   group("User Data Manager", () {
     final secureStorage = SecureStorageMock();
+    DependenciesHelper().useMocks(secureStorage: secureStorage);
 
-    test("Adding new user", () {
-      DependenciesHelper().useMocks(secureStorage: secureStorage);
-
+    test("Adding new user", () async {
       var manager = new UserDataManager();
 
       UserDataEntity? ent = manager.get();
       expect(ent == null, true);
 
       ent = new UserDataEntity(username: "Testtest", email: "Testtest@test.com", password: "Test");
-      manager.attach(ent);
+      await manager.attach(ent);
 
       expect(manager.get(), ent);
     });
-    test("Getting user in a list", () {
-      DependenciesHelper().useMocks(secureStorage: secureStorage);
-
+    test("Getting user in a list", () async {
       var manager = new UserDataManager();
       UserDataEntity ent =
           new UserDataEntity(username: "Testtest", email: "Testtest@test.com", password: "Test");
-      manager.attach(ent);
+      await manager.attach(ent);
 
       List list = manager.getList();
 

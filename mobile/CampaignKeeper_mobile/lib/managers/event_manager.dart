@@ -69,7 +69,7 @@ class EventManager extends BaseManager<EventEntity> {
       if (cache != null) {
         List cacheData = json.decode(cache);
         cacheData.forEach((data) {
-          _attach(_decodeEntity(data));
+          _attach(EventEntity.decode(data));
         });
 
         notifyListeners();
@@ -85,7 +85,7 @@ class EventManager extends BaseManager<EventEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<EventEntity> newEntities =
-            (responseData['events'] as List).map((e) => _decodeEntity(e)).toList();
+            (responseData['events'] as List).map((e) => EventEntity.decode(e)).toList();
 
         if (!_isEqual(parameterValue, newEntities)) {
           _map[parameterValue] = newEntities;
@@ -136,63 +136,11 @@ class EventManager extends BaseManager<EventEntity> {
     _map.forEach(
       (key, list) {
         if (sessions.isEmpty || sessions.contains(key)) {
-          data.addAll(list.map((e) => _encodeEntity(e)));
+          data.addAll(list.map((e) => e.encode()));
         }
       },
     );
 
     CacheUtil().add(_key, json.encode(data));
-  }
-
-  EventEntity _decodeEntity(Map data) {
-    int id = data['id'];
-    int sessionId = data['sessionId'];
-    String title = data['title'];
-    String type = data['type'];
-    String status = data['status'];
-    String displayStatus = data['displayStatus'];
-    List<FieldValue> characterValues = (data['charactersMetadataArray'] as List<dynamic>)
-        .map((e) => FieldValue.decode(e, defaultFieldName: 'characters'))
-        .toList();
-    List<FieldValue> placeValues = (data['placeMetadataArray'] as List<dynamic>)
-        .map((e) => FieldValue.decode(e, defaultFieldName: 'places'))
-        .toList();
-    List<FieldValue> descriptionValues = (data['descriptionMetadataArray'] as List<dynamic>)
-        .map((e) => FieldValue.decode(e, defaultFieldName: 'descriptions'))
-        .toList();
-    List<int> parentIds = (data['parentIds'] as List<dynamic>).map((e) => e as int).toList();
-    List<int> childrenIds = (data['childrenIds'] as List<dynamic>).map((e) => e as int).toList();
-
-    return EventEntity(
-      id: id,
-      sessionId: sessionId,
-      title: title,
-      type: type,
-      status: status,
-      displayStatus: displayStatus,
-      characterValues: characterValues,
-      placeValues: placeValues,
-      descriptionValues: descriptionValues,
-      parentIds: parentIds,
-      childrenIds: childrenIds,
-    );
-  }
-
-  Map _encodeEntity(EventEntity entity) {
-    Map data = {
-      'id': entity.id,
-      'sessionId': entity.sessionId,
-      'title': entity.title,
-      'type': entity.type,
-      'status': entity.status,
-      'displayStatus': entity.displayStatus,
-      'charactersMetadataArray': entity.characterValues.map((e) => FieldValue.encode(e)).toList(),
-      'placeMetadataArray': entity.placeValues.map((e) => FieldValue.encode(e)).toList(),
-      'descriptionMetadataArray': entity.descriptionValues.map((e) => FieldValue.encode(e)).toList(),
-      'parentIds': entity.parentIds,
-      'childrenIds': entity.childrenIds,
-    };
-
-    return data;
   }
 }
