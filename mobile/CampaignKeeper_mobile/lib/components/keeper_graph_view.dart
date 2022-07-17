@@ -51,8 +51,9 @@ class KeeperGraphView extends StatelessWidget {
           });
         }
 
-        if (event.displayStatus.toLowerCase() == 'shown') {
-          visibleNodes.add(id);
+        visibleNodes.add(id);
+
+        if (event.isShown) {
           event.childrenIds.forEach((e) {
             q.add(e);
           });
