@@ -20,6 +20,7 @@ export const ExplorerView: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
+  const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
 
   if (currentSessionId === '') history.push(viewsRoutes.CAMPAIGN);
   else if (!currentEvent) {
@@ -37,6 +38,8 @@ export const ExplorerView: React.FC = () => {
       setIsPrimaryOpen={setIsOpen}
       primaryDialogType={dialogType}
       setPrimaryDialogType={setDialogType}
+      isSecondaryOpen={isSecondaryOpen}
+      setIsSecondaryOpen={setIsSecondaryOpen}
       handleFab={currentEvent ? handleFab : undefined}
     >
       {currentEvent ? (

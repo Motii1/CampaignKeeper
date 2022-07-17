@@ -1,7 +1,7 @@
 import { SecondaryEventDialogType } from '../../../types/types';
 import { EventSecondaryDialog } from '../../components/EventSecondaryDialog/EventSecondaryDialog';
 
-type MapSecondaryDialogProps = {
+type ExplorerSecondaryDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
   setIsPrimaryOpen: (newIsOpen: boolean) => void;
@@ -9,9 +9,9 @@ type MapSecondaryDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
-export const MapSecondaryDialog: React.FC<MapSecondaryDialogProps> = props => (
+export const ExplorerSecondaryDialog: React.FC<ExplorerSecondaryDialogProps> = props => (
   <EventSecondaryDialog
-    type={SecondaryEventDialogType.Map}
+    type={SecondaryEventDialogType.Explorer}
     isOpen={props.isOpen}
     setIsOpen={props.setIsOpen}
     setIsPrimaryOpen={props.setIsPrimaryOpen}
