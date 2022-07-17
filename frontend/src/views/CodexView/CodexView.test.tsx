@@ -153,7 +153,7 @@ describe('CodexView tests', () => {
     beforeEach(() => (component = renderWithProviders(<CodexView />, { route: '/codex' })));
     afterEach(() => component.unmount());
 
-    test('renders CodexView fixed elements', async () => {
+    test('renders CodexView fixed elements', () => {
       expect(screen.getByText('New schema')).toBeInTheDocument();
       expect(screen.getByText('Select a schema, ye wise sage')).toBeInTheDocument();
       expect(screen.getByText('SCHEMAS')).toBeInTheDocument();

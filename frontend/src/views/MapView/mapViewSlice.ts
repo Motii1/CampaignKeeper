@@ -3,11 +3,13 @@ import { SessionEventWithPos } from './eventsSlice';
 
 type MapViewState = {
   currentSessionId: string;
+  currentSessionTitle: string;
   currentEvent: null | SessionEventWithPos;
 };
 
 const initialState: MapViewState = {
   currentSessionId: '',
+  currentSessionTitle: '',
   currentEvent: null,
 };
 
@@ -15,8 +17,9 @@ const mapViewSlice = createSlice({
   name: 'mapView',
   initialState,
   reducers: {
-    setSessionId: (state, action) => {
+    setCurrentSession: (state, action) => {
       state.currentSessionId = action.payload.currentSessionId;
+      state.currentSessionTitle = action.payload.currentSessionTitle;
       state.currentEvent = null;
     },
     setCurrentEvent: (state, action) => {
@@ -30,6 +33,6 @@ const mapViewSlice = createSlice({
   },
 });
 
-export const { setSessionId, setCurrentEvent, resetState } = mapViewSlice.actions;
+export const { setCurrentSession, setCurrentEvent, resetState } = mapViewSlice.actions;
 
 export default mapViewSlice.reducer;

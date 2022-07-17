@@ -106,7 +106,7 @@ const removeEventFromStore = (
   eventsList: SessionEventWithPos[]
 ) =>
   eventsList.map(event => {
-    // add info to new parent for orpahned events
+    // event is new parent
     if (event.id === newParentId)
       return {
         ...event,

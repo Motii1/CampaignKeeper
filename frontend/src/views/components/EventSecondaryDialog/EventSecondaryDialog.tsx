@@ -125,6 +125,9 @@ export const EventSecondaryDialog: React.FC<EventSecondaryDialogProps> = props =
         onCancel={handleCancel}
       >
         <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
+          <Typography variant="h6" sx={{ color: 'customPalette.onSurface', fontWeight: 'bold' }}>
+            {"This action can't be undone."}
+          </Typography>
           {currentEvent?.childrenIds.length !== 0 ? (
             <>
               <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface' }}>
@@ -140,9 +143,6 @@ export const EventSecondaryDialog: React.FC<EventSecondaryDialogProps> = props =
               </CustomSelect>
             </>
           ) : null}
-          <Typography variant="h6" sx={{ color: 'customPalette.onSurface', fontWeight: 'bold' }}>
-            {"This action can't be undone."}
-          </Typography>
         </Stack>
       </CustomDialog>
     </Box>

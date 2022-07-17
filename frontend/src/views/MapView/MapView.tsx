@@ -7,11 +7,13 @@ import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewW
 import viewsRoutes from '../viewsRoutes';
 import { EventGraph } from './components/EventGraph/EventGraph';
 import { fetchEvents } from './eventsSlice';
-import { setSessionId } from './mapViewSlice';
+import { setCurrentSession } from './mapViewSlice';
 
 export const MapView: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentSessionId } = useSelector((state: RootState) => state.mapView);
+  const { currentSessionId, currentSessionTitle } = useSelector(
+    (state: RootState) => state.mapView
+  );
   const { isEventsListDownloaded } = useSelector((state: RootState) => state.events);
   const { sessionsList } = useSelector((state: RootState) => state.sessions);
   const { currentCampaignId } = useSelector((state: RootState) => state.campaignView);
@@ -21,9 +23,17 @@ export const MapView: React.FC = () => {
   if (currentCampaignId === '') history.push(viewsRoutes.CAMPAIGN);
   else if (!isEventsListDownloaded) {
     const sessionIdForFetching =
-      currentSessionId !== '' ? currentSessionId : sessionsList[sessionsList.length - 1].id;
-    dispatch(setSessionId({ currentSessionId: sessionIdForFetching }));
-    dispatch(fetchEvents(sessionIdForFetching));
+      currentSessionId !== '' ? currentSessionId : sessionsList[sessionsList.length - 1]?.id;
+    if (sessionIdForFetching) {
+      dispatch(
+        setCurrentSession({
+          currentSessionId: sessionIdForFetching,
+          currentSessionTitle: sessionsList.find(session => session.id === sessionIdForFetching)
+            ?.name,
+        })
+      );
+      dispatch(fetchEvents(sessionIdForFetching));
+    } else history.push(viewsRoutes.CAMPAIGN);
   }
 
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +55,11 @@ export const MapView: React.FC = () => {
       setIsSecondaryOpen={setIsSecondaryOpen}
       handleFab={handleFab}
     >
-      <EventGraph setIsOpen={setIsOpen} setDialogType={setDialogType} />
+      <EventGraph
+        sessionName={currentSessionTitle}
+        setIsOpen={setIsOpen}
+        setDialogType={setDialogType}
+      />
     </ViewWithNavBarWrapper>
   );
 };
