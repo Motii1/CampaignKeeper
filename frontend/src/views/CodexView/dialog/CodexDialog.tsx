@@ -17,14 +17,14 @@ import { addEntry, CodexMetadataInstance, editEntry } from '../codexSlice';
 import { setCurrentEntry } from '../codexViewSlice';
 import { CodexFieldList } from './components/EditFieldList/CodexFieldList';
 
-type NewEntryData = {
+export type NewEntryData = {
   title: string;
   schemaId: string;
   imageBase64: string;
   metadataArray: CodexMetadataInstance[];
 };
 
-type EditEntryData = {
+export type EditEntryData = {
   title: string;
   imageBase64: string;
   metadataArray: CodexMetadataInstance[];
@@ -80,7 +80,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
     }
   }, [currentEntry, currentSchema, entries]);
 
-  useEffect(() => resetDialog(), [resetDialog, props.isOpen]);
+  // useEffect(() => resetDialog(), [resetDialog, props.isOpen]);
 
   const {
     isLoading: isLoadingNew,
@@ -95,9 +95,9 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       if (statusNew === 200 && currentSchema) {
         dispatch(addEntry({ newEntry: dataNew, schemaId: currentSchema.id }));
         dispatch(setCurrentEntry({ newEntry: dataNew }));
-        props.setSnackbarSuccess('Entry created');
-        props.setIsOpen(false);
         resetDialog();
+        props.setIsOpen(false);
+        props.setSnackbarSuccess('Entry created');
       } else if (statusNew === 400) {
         props.setSnackbarError('Error during entry creation');
       } else if (statusNew === 404) {
@@ -142,9 +142,9 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
           };
           dispatch(setCurrentEntry({ newEntry: editedEntry }));
           dispatch(editEntry({ schemaId: currentSchema.id, newEntry: editedEntry }));
-          props.setSnackbarSuccess('Entry edited');
-          props.setIsOpen(false);
           resetDialog();
+          props.setIsOpen(false);
+          props.setSnackbarSuccess('Entry edited');
         }
       } else if (statusEdit === 400) {
         props.setSnackbarError('Error during entry update');

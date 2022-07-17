@@ -49,7 +49,6 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
     [eventsList, props.setDialogType, props.setIsOpen]
   );
 
-  // TO-DO: show "Add an event, Grand Designer" when there are no events
   const renderGraph = useCallback(() => {
     if (eventsList.length === 0)
       return (

@@ -100,6 +100,7 @@ describe('CampaignView tests', () => {
         expect(screen.getByText('Edit')).toBeInTheDocument();
       });
     });
+
     test('opens CampaignDialog in edit mode after click on Edit', async () => {
       await waitFor(() => {
         fireEvent.contextMenu(screen.getByText('Test Session 2'));
