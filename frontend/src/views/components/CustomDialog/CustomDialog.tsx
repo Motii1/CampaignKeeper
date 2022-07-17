@@ -115,7 +115,3 @@ export const CustomDialog: React.FC<CustomDialogProps> = ({
     </Dialog>
   );
 };
-
-CustomDialog.defaultProps = {
-  isLarge: false,
-} as Partial<CustomDialogProps>;

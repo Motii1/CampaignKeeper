@@ -1,20 +1,20 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
 
-export interface Schema {
+export type Schema = {
   id: string;
   title: string;
   campaignId: string;
   fields: string[];
-}
+};
 
-export interface Entry {
+export type Entry = {
   id: string;
   title: string;
   schemaId: string;
   imageBase64: string;
   metadataArray: CodexMetadataInstance[];
-}
+};
 
 export type EntriesHashMap = { [schemaId: string]: Entry[] };
 

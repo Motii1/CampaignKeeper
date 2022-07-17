@@ -274,6 +274,6 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       </CustomDialog>
     );
 
-  props.setIsOpen(false);
+  // props.setIsOpen(false);
   return null;
 };
