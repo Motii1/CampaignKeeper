@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import Xarrow, { anchorType } from 'react-xarrows';
 import { RootState } from '../../../../../../../../store';
 
-type EventArrowProps = {
+export type EventArrowProps = {
   start: string;
   end: string;
   startAnchor: anchorType;

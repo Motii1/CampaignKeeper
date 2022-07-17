@@ -11,6 +11,7 @@ const CAMPAIGN_ID = 1;
 const CAMPAIGN_NAME = 'Test Campaign';
 
 const SESSION_ID = 1;
+const SESSION_NAME = 'Test Session';
 
 const eventsList = [
   {
@@ -106,8 +107,15 @@ const eventsList = [
   },
 ];
 
+jest.mock('./components/EventGraph/components/EventWrapper/components/EventArrow/EventArrow.tsx');
+
 describe('MapView tests', () => {
   let component: RenderResult;
+
+  // jest.mock('./components/EventGraph/components/EventWrapper/components/EventArrow/EventArrow.tsx');
+  // jest.mock(
+  //   '/home/pstasiuk/uni/CampaignKeeper/frontend/src/views/MapView/components/EventGraph/components/EventWrapper/components/EventArrow/EventArrow'
+  // );
 
   const server = setupServer(
     rest.get('api/event/graph/1', (_req, res, ctx) => res(ctx.json({ events: eventsList })))
@@ -121,7 +129,9 @@ describe('MapView tests', () => {
         campaignName: CAMPAIGN_NAME,
       })
     );
-    store.dispatch(setCurrentSession({ currentSessionId: SESSION_ID }));
+    store.dispatch(
+      setCurrentSession({ currentSessionId: SESSION_ID, currentSessionTitle: SESSION_NAME })
+    );
   });
 
   afterAll(() => {
@@ -135,13 +145,18 @@ describe('MapView tests', () => {
 
     test('renders MapView fixed elements', async () => {
       expect(screen.getByText('New entry')).toBeInTheDocument();
+      await waitFor(() => expect(screen.getByText(SESSION_NAME)).toBeInTheDocument());
     });
 
     test('renders MapView with graph build from events fetched from API', async () => {
       await waitFor(() => {
-        eventsList.forEach(event => {
-          expect(screen.getByText(event.title)).toBeInTheDocument();
-        });
+        expect(screen.getByText('Event 1')).toBeInTheDocument();
+        expect(screen.getByText('Event 2')).toBeInTheDocument();
+        expect(screen.getByText('Event 3')).toBeInTheDocument();
+        expect(screen.getByText('Event 4')).toBeInTheDocument();
+        expect(screen.getByText('Event 5')).toBeInTheDocument();
+        expect(screen.getByText('Event 6')).toBeInTheDocument();
+        expect(screen.getByText('Event 7')).toBeInTheDocument();
       });
     });
   });
