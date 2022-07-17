@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // Theme data generator.
 class _DefaultTheme {
   static const double _textColorOpacitySecondary = 0.7;
-  static const double _textColorOpacityPrimary = 0.9;
+  static const double _textColorOpacityPrimary = 0.95;
   static const double _radius = 12.5;
   static const double _inputRadius = 10;
 
@@ -145,17 +145,6 @@ class _DefaultTheme {
         borderRadius: BorderRadius.circular(20),
       ),
     ),
-    // radioTheme: RadioThemeData(
-    //   fillColor: MaterialStateColor.resolveWith(
-    //     (states) {
-    //       if (states.contains(MaterialState.selected)) {
-    //         return Color.alphaBlend(onBackground.withAlpha(90), primary);
-    //       }
-
-    //       return onBackground;
-    //     },
-    //   ),
-    // ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
@@ -241,7 +230,7 @@ class _DefaultTheme {
 
 // Apps theme provider.
 class KeeperThemes {
-  static const Color _primaryLight = Color(0xffa4c1f2);
+  static const Color _primaryLight = Color(0xffa1bbf5);
   static const Color _onPrimaryLight = Color(0xff242424);
 
   static final Color _secondaryLight = Color(0xffdaeced);
@@ -250,7 +239,7 @@ class KeeperThemes {
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  static const Color _light = Color(0xffe1ecf5);
+  static const Color _light = Color(0xffdce9f3);
   static const Color _lighterLight = Color(0xfff0f8fc);
 
   static const Color _primaryDark = Color(0xffffe082);

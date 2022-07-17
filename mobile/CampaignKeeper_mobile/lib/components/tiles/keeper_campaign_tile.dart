@@ -46,7 +46,9 @@ class KeeperCampaignTile extends StatelessWidget {
                         child: Text(
                           entity.name,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                                color: Theme.of(context).colorScheme.onSecondary,
+                              ),
                         ),
                       )),
                     ],
