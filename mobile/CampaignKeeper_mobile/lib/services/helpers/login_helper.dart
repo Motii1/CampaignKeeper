@@ -44,6 +44,7 @@ class LoginHelper {
 
     if (response.status == ResponseStatus.Success) {
       Map responseData = json.decode(response.data!);
+      responseData['password'] = password;
 
       userEntity = UserDataEntity.decode(responseData);
     }

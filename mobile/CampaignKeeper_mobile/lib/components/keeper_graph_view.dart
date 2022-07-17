@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/components/graph/event_node.dart';
 import 'package:campaign_keeper_mobile/components/graph/start_node.dart';
@@ -8,7 +9,9 @@ import 'package:graphview/GraphView.dart';
 
 // Produces functional graph for the given events.
 class KeeperGraphView extends StatelessWidget {
-  const KeeperGraphView({Key? key, required this.events, required this.startKey}) : super(key: key);
+  const KeeperGraphView({Key? key, required this.session, required this.events, required this.startKey})
+      : super(key: key);
+  final SessionEntity? session;
   final List<EventEntity> events;
   final startKey;
 
@@ -68,6 +71,7 @@ class KeeperGraphView extends StatelessWidget {
         width: 280,
         child: KeeperStartNode(
           key: startKey,
+          title: session?.name,
         ),
       );
     }

@@ -230,7 +230,7 @@ class _DefaultTheme {
 
 // Apps theme provider.
 class KeeperThemes {
-  static const Color _primaryLight = Color(0xffa1bbf5);
+  static const Color _primaryLight = Color(0xffb9cbe8);
   static const Color _onPrimaryLight = Color(0xff242424);
 
   static final Color _secondaryLight = Color(0xffdaeced);

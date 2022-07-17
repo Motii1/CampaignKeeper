@@ -31,16 +31,14 @@ class KeeperEventNode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isOmitted = entity?.status.toLowerCase() == 'omitted';
-
     return Material(
       color: Theme.of(context).colorScheme.background,
       borderRadius: BorderRadius.circular(16),
       clipBehavior: Clip.antiAlias,
       child: Opacity(
-        opacity: isOmitted ? 0.8 : 1,
+        opacity: entity?.isOmitted ?? false ? 0.8 : 1,
         child: Material(
-          color: entity?.type.toLowerCase() == 'fight'
+          color: (entity?.isFight ?? false)
               ? Theme.of(context).colorScheme.error
               : Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(16),
@@ -58,6 +56,7 @@ class KeeperEventNode extends StatelessWidget {
                     child: Text(
                       entity?.title ?? "No Data",
                       textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onPrimary,
                         fontWeight: FontWeight.w500,
@@ -66,7 +65,7 @@ class KeeperEventNode extends StatelessWidget {
                     ),
                   ),
                   Visibility(
-                    visible: entity?.displayStatus.toLowerCase() == 'shown' || forceShow,
+                    visible: (entity?.isShown ?? true) || forceShow,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,19 +74,19 @@ class KeeperEventNode extends StatelessWidget {
                           fieldName: "Places",
                           values: placeValues,
                           padding: EdgeInsets.zero,
-                          isProminent: entity?.type.toLowerCase() == 'fight',
+                          isProminent: entity?.isFight ?? false,
                         ),
                         KeeperChipTile(
                           fieldName: "Characters",
                           values: characterValues,
                           padding: EdgeInsets.zero,
-                          isProminent: entity?.type.toLowerCase() == 'fight',
+                          isProminent: entity?.isFight ?? false,
                         ),
                         KeeperFieldTile(
                           fieldName: "Description",
                           values: descriptionValues,
                           padding: EdgeInsets.zero,
-                          isProminent: entity?.type.toLowerCase() == 'fight',
+                          isProminent: entity?.isFight ?? false,
                         ),
                       ],
                     ),

@@ -51,6 +51,12 @@ class EventEntity implements BaseEntity {
   late List<int> parentIds;
   late List<int> childrenIds;
 
+  bool get isFight => type.toLowerCase() == 'fight';
+
+  bool get isShown => displayStatus.toLowerCase() == 'shown';
+
+  bool get isOmitted => status.toLowerCase() == 'omitted';
+
   Map encode() {
     Map data = {
       'id': id,

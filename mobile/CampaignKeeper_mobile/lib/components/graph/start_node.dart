@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 // Widget representing root node of the event graph.
 class KeeperStartNode extends StatelessWidget {
-  const KeeperStartNode({Key? key}) : super(key: key);
+  const KeeperStartNode({Key? key, this.title}) : super(key: key);
+
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +14,9 @@ class KeeperStartNode extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Text(
-            "START",
+            title ?? "START",
             textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,

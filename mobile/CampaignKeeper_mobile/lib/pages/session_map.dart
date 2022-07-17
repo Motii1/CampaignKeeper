@@ -171,6 +171,7 @@ class _SessionMapState extends KeeperState<SessionMap> {
               : KeeperInteractiveViewer(
                   centerKey: startKey,
                   child: KeeperGraphView(
+                    session: session,
                     events: events,
                     startKey: startKey,
                   ),
