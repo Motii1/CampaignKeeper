@@ -22,6 +22,9 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   } else if (type === CustomButtonType.Primary) {
     backgroundColor = 'customPalette.background';
     color = 'customPalette.onBackground';
+  } else if (type === CustomButtonType.Inverted) {
+    backgroundColor = 'customPalette.onSurface';
+    color = 'customPalette.surface';
   } else {
     backgroundColor = 'customPalette.red';
     color = 'customPalette.onRed';

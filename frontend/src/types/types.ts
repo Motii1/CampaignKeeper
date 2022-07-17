@@ -8,6 +8,7 @@ export enum CustomButtonType {
   Accent,
   Primary,
   Delete,
+  Inverted,
 }
 
 export enum FabIcon {
@@ -38,7 +39,7 @@ export enum CustomSnackbarType {
 export enum EventTileType {
   Map,
   Explorer,
-  ExplorerParent,
+  ExplorerDialog,
 }
 
 export type ReferenceFieldMetadata = {

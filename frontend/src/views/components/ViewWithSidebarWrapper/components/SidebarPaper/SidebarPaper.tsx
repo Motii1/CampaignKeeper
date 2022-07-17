@@ -4,7 +4,7 @@ import { SidebarLogo } from './components/SidebarLogo/SidebarLogo';
 export const SidebarPaper: React.FC = ({ children }) => (
   <Container sx={{ width: 360, marginTop: -1 }}>
     <Paper
-      elevation={6}
+      elevation={0}
       sx={{
         borderRadius: '20px',
         marginTop: '75px',

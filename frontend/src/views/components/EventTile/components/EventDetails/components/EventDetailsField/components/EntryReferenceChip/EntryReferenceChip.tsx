@@ -28,7 +28,7 @@ export const EntryReferenceChip: React.FC<EntryReferenceChipProps> = props => {
   return (
     <Typography
       noWrap={true}
-      variant={props.type === EventTileType.Explorer ? 'subtitle2' : 'subtitle1'}
+      variant={props.type === EventTileType.Explorer ? 'subtitle1' : 'subtitle2'}
       sx={{
         fontWeight: 'bold',
         color: 'customPalette.onAccent',

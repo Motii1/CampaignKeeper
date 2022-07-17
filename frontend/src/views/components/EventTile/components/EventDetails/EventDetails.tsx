@@ -24,7 +24,7 @@ export const EventDetails: React.FC<EventDetailsProps> = props => (
     <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={1}>
       <EventDetailsField title={'Place'} data={props.place} type={props.type} />
       <EventDetailsField title={'Characters'} data={props.characters} type={props.type} />
-      <EventDescriptionField title={'Description'} data={props.description} type={props.type} />
+      <EventDescriptionField data={props.description} type={props.type} />
     </Stack>
   </Paper>
 );

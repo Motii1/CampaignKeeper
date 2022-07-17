@@ -41,7 +41,7 @@ export const EventDetailsField: React.FC<EventDetailsFieldProps> = props => {
   return (
     <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0.5}>
       <Typography
-        variant={props.type === EventTileType.Explorer ? 'subtitle2' : 'subtitle1'}
+        variant={props.type === EventTileType.Explorer ? 'h6' : 'subtitle1'}
         sx={{ color: 'customPalette.onBackgroundVariant', fontWeight: 'medium' }}
       >
         {props.title}

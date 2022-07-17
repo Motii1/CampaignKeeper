@@ -98,7 +98,7 @@ export const CampaignView: React.FC = () => {
       setPrimaryDialogType={setDialogType}
       isSecondaryOpen={isSecondaryOpen}
       setIsSecondaryOpen={setIsSecondaryOpen}
-      handleFab={handleFab}
+      handleFab={currentCampaignId !== '' ? handleFab : undefined}
     >
       <Stack
         direction="column"

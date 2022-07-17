@@ -7,7 +7,6 @@ import { EventFieldMetadata } from '../../../../../../MapView/eventsSlice';
 import { ReferenceChip } from './ReferenceChip/ReferenceChip';
 
 type EventDescriptionFieldProps = {
-  title: string;
   data: EventFieldMetadata[];
   type: EventTileType;
 };
@@ -28,7 +27,7 @@ export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props
               width: 'fit-content',
               color: 'customPalette.onSurface',
             }}
-            variant={props.type === EventTileType.Explorer ? 'subtitle2' : 'subtitle1'}
+            variant={props.type === EventTileType.Explorer ? 'subtitle1' : 'subtitle2'}
             key={metadata.sequenceNumber}
           >
             {metadata.value}
@@ -40,7 +39,14 @@ export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props
       );
       const schema = schemas.find(element => element.id === entry?.schemaId);
       if (schema && entry)
-        return <ReferenceChip entry={entry} schema={schema} key={metadata.sequenceNumber} />;
+        return (
+          <ReferenceChip
+            entry={entry}
+            schema={schema}
+            type={props.type}
+            key={metadata.sequenceNumber}
+          />
+        );
 
       return null;
     });
@@ -56,8 +62,11 @@ export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props
         width: '100%',
       }}
     >
-      <Typography sx={{ color: 'customPalette.onBackgroundVariant', fontWeight: 'medium' }}>
-        {props.title}
+      <Typography
+        sx={{ color: 'customPalette.onBackgroundVariant', fontWeight: 'medium' }}
+        variant={props.type === EventTileType.Explorer ? 'h6' : 'subtitle1'}
+      >
+        Description
       </Typography>
       <Box sx={{ display: 'inline' }}>{renderValue()}</Box>
     </Stack>

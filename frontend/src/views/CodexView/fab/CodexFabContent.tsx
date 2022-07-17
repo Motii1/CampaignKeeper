@@ -6,5 +6,10 @@ import { FabContentWrapper } from '../../components/FabContentWrapper/FabContent
 export const CodexFabContent: React.FC = () => {
   const { currentEntry } = useSelector((state: RootState) => state.codexView);
 
-  return <FabContentWrapper icon={FabIcon.Add} text={currentEntry ? 'Edit entry' : 'New entry'} />;
+  return (
+    <FabContentWrapper
+      icon={currentEntry ? FabIcon.Edit : FabIcon.Add}
+      text={currentEntry ? 'Edit entry' : 'New entry'}
+    />
+  );
 };

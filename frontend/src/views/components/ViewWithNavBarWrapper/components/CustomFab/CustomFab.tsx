@@ -10,7 +10,7 @@ import viewsRoutes from '../../../../viewsRoutes';
 type CustomFabProps = {
   currentView: string;
   text?: string;
-  handleClick: () => void;
+  handleClick?: () => void;
 };
 
 export const CustomFab: React.FC<CustomFabProps> = props => {
@@ -37,6 +37,7 @@ export const CustomFab: React.FC<CustomFabProps> = props => {
       aria-label="custom-fab"
       onClick={props.handleClick}
       sx={{
+        height: props.handleClick ? '45px' : '0px',
         color: 'customPalette.onAccent',
         backgroundColor: 'customPalette.accent',
         boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 1)',
@@ -51,7 +52,7 @@ export const CustomFab: React.FC<CustomFabProps> = props => {
         },
       }}
     >
-      {renderFabContent()}
+      {props.handleClick ? renderFabContent() : null}
     </Fab>
   );
 };

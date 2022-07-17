@@ -42,10 +42,11 @@ type EventDialogProps = {
   isOpen: boolean;
   setIsOpen: (newIsOpen: boolean) => void;
   dialogType: NavBarViewDialog;
-  setIsSecondaryOpen: (newIsOpen: boolean) => void;
+  setIsSecondaryOpen?: (newIsOpen: boolean) => void;
   setSnackbarSuccess: (message: string) => void;
   setSnackbarError: (message: string) => void;
   isShownInExplorer?: boolean;
+  parentId?: string;
 };
 
 export const EventDialog: React.FC<EventDialogProps> = props => {
@@ -65,8 +66,13 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
   );
   const [eventTitleHelperText, setEventTitleHelperText] = useState<string>('');
   const [parentIds, setParentIds] = useState<string[]>(
-    props.isShownInExplorer && props.currentEvent ? props.currentEvent.parentIds : []
+    props.isShownInExplorer && props.parentId
+      ? [props.parentId]
+      : props.currentEvent
+      ? props.currentEvent.parentIds
+      : []
   );
+
   const [eventType, setEventType] = useState<string>(
     props.isShownInExplorer && props.currentEvent ? props.currentEvent.type : possibleType[0]
   );
@@ -84,7 +90,7 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
       setDialogTitle('Create new event');
       setEventTitle('');
       setEventTitleHelperText('');
-      setParentIds([]);
+      setParentIds(props.parentId ? [props.parentId] : []);
       setEventType(possibleType[0]);
       setEventStatus(possibleStatus[0]);
       setReferenceFields(createEmptyEventFields(referenceFieldNames));
@@ -123,6 +129,16 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
         props.setSnackbarSuccess('Event created');
         props.setIsOpen(false);
         resetDialog();
+        if (props.isShownInExplorer && dataNew) {
+          dispatch(
+            setCurrentEventExplorerView({
+              currentEvent: {
+                ...props.currentEvent,
+                childrenIds: props.currentEvent?.childrenIds.concat(dataNew.id),
+              },
+            })
+          );
+        }
       } else if (statusNew === 400) props.setSnackbarError('Error during event creation');
 
       resetQueryNew();
@@ -261,7 +277,7 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
   };
 
   const handleDelete = () => {
-    props.setIsSecondaryOpen(true);
+    if (props.setIsSecondaryOpen) props.setIsSecondaryOpen(true);
   };
 
   const renderParents = () =>
