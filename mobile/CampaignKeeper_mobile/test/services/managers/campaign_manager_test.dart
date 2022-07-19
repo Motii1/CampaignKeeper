@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 
 import '../../mocks/http_client_mock.dart';
 import '../../mocks/secure_storage_mock.dart';
@@ -42,6 +45,31 @@ void main() {
       expect(list[0], ent);
     });
 
-    test("Refresh", () async {});
+    test("Refresh", () async {
+      await dc.clear();
+
+      var ent = CampaignEntity(id: 1, name: "Test", createdAt: DateTime.now());
+      Map getResponseData = {
+        "campaigns": [ent.encode()],
+      };
+      String jsonData = json.encode(getResponseData);
+
+      client.getResponse = http.Response(jsonData, 200);
+
+      bool refreshResult = await dc.refresh<CampaignEntity>();
+
+      expect(refreshResult, true);
+
+      CampaignEntity? newEnt = dc.get(entId: 1);
+
+      expect(ent.equals(newEnt), true);
+
+      String storageValue = storage.value as String;
+
+      List storageData = json.decode(storageValue);
+      var storageEntity = CampaignEntity.decode(storageData[0]);
+
+      expect(ent.equals(storageEntity), true);
+    });
   });
 }
