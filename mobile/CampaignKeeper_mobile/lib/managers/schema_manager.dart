@@ -18,7 +18,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     lockedOperation(
       () async {
         _attach(entity);
-        _cacheAll();
+        await _cacheAll();
       },
       defaultResult: null,
     );
@@ -91,7 +91,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
           _map[parameterValue] = newEntities;
 
           notifyListeners();
-          _cacheAll();
+          await _cacheAll();
 
           return true;
         }
@@ -99,7 +99,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
         _map[parameterValue]?.clear();
 
         notifyListeners();
-        _cacheAll();
+        await _cacheAll();
       }
     }
 
@@ -129,7 +129,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     return true;
   }
 
-  void _cacheAll() {
+  Future<void> _cacheAll() async {
     var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
     var data = [];
 

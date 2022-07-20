@@ -102,6 +102,6 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   Future<void> _cacheAll() async {
     var data = _entities.map((e) => e.encode()).toList();
 
-    await CacheUtil().add(_key, json.encode(data));
+    CacheUtil().add(_key, json.encode(data));
   }
 }

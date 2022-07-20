@@ -69,6 +69,8 @@ void main() {
       List storageData = json.decode(storageValue);
       var storageEntity = CampaignEntity.decode(storageData[0]);
 
+      await Future.delayed(Duration(milliseconds: 500));
+
       expect(ent.equals(storageEntity), true);
     });
   });

@@ -18,7 +18,7 @@ class EventManager extends BaseManager<EventEntity> {
     lockedOperation<void>(
       () async {
         _attach(entity);
-        _cacheAll();
+        await _cacheAll();
       },
       defaultResult: null,
     );
@@ -91,7 +91,7 @@ class EventManager extends BaseManager<EventEntity> {
           _map[parameterValue] = newEntities;
 
           notifyListeners();
-          _cacheAll();
+          await _cacheAll();
 
           return true;
         }
@@ -99,7 +99,7 @@ class EventManager extends BaseManager<EventEntity> {
         _map[parameterValue]?.clear();
 
         notifyListeners();
-        _cacheAll();
+        await _cacheAll();
       }
     }
 
@@ -129,7 +129,7 @@ class EventManager extends BaseManager<EventEntity> {
     return true;
   }
 
-  void _cacheAll() {
+  Future<void> _cacheAll() async {
     var sessions = DataCarrier().getList<SessionEntity>().map((e) => e.id).toList();
     var data = [];
 

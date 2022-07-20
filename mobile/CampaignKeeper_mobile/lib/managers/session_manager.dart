@@ -20,7 +20,7 @@ class SessionManager extends BaseManager<SessionEntity> {
     lockedOperation(
       () async {
         _attach(entity);
-        _cacheAll();
+        await _cacheAll();
       },
       defaultResult: null,
     );
@@ -94,7 +94,7 @@ class SessionManager extends BaseManager<SessionEntity> {
           _map[parameterValue] = newEntities;
 
           notifyListeners();
-          _cacheAll();
+          await _cacheAll();
 
           return true;
         }
@@ -102,7 +102,7 @@ class SessionManager extends BaseManager<SessionEntity> {
         _map[parameterValue]?.clear();
 
         notifyListeners();
-        _cacheAll();
+        await _cacheAll();
       }
     }
 
@@ -132,7 +132,7 @@ class SessionManager extends BaseManager<SessionEntity> {
     return true;
   }
 
-  void _cacheAll() {
+  Future<void> _cacheAll() async {
     var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
     var data = [];
 

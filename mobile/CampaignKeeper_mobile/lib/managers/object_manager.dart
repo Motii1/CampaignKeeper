@@ -18,7 +18,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
     lockedOperation(
       () async {
         _attach(entity);
-        _cacheAll();
+        await _cacheAll();
       },
       defaultResult: null,
     );
@@ -118,7 +118,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
         }
 
         notifyListeners();
-        _cacheAll();
+        await _cacheAll();
 
         return true;
       } else if (userResponse.status == ResponseStatus.IncorrectData) {
@@ -129,7 +129,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
         }
 
         notifyListeners();
-        _cacheAll();
+        await _cacheAll();
       }
     }
 
@@ -159,7 +159,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
     return true;
   }
 
-  void _cacheAll() {
+  Future<void> _cacheAll() async {
     var schemas = DataCarrier().getList<SchemaEntity>().map((e) => e.id).toList();
     var data = [];
 
