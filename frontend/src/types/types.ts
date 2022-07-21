@@ -8,12 +8,14 @@ export enum CustomButtonType {
   Accent,
   Primary,
   Delete,
+  Inverted,
 }
 
 export enum FabIcon {
   Add,
   Save,
   Delete,
+  Edit,
 }
 
 export enum NavBarViewDialog {
@@ -24,6 +26,8 @@ export enum NavBarViewDialog {
   NewSchema,
   NewEntry,
   EditEntry,
+  NewEvent,
+  EditEvent,
 }
 
 export enum CustomSnackbarType {
@@ -31,3 +35,18 @@ export enum CustomSnackbarType {
   Success,
   Error,
 }
+
+export enum EventTileType {
+  Map,
+  Explorer,
+  ExplorerDialog,
+}
+
+export type ReferenceFieldMetadata = {
+  value: string;
+  id: null | string;
+};
+
+export type ReferenceFieldsState = {
+  [fieldName: string]: ReferenceFieldMetadata[];
+};

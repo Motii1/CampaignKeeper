@@ -12,7 +12,7 @@ export const SearchBar: React.FC<SearchBarProps> = props => {
 
   return (
     <Paper
-      elevation={6}
+      elevation={0}
       sx={{
         backgroundColor: 'customPalette.surface',
         borderRadius: 3.5,

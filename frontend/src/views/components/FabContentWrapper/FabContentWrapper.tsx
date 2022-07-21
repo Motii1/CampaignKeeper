@@ -1,4 +1,4 @@
-import { Add, Delete, QuestionMark, Save } from '@mui/icons-material';
+import { Add, Delete, ModeEdit, QuestionMark, Save } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { FabIcon } from '../../../types/types';
 
@@ -16,6 +16,8 @@ export const FabContentWrapper: React.FC<FabContentWrapperProps> = props => {
         return <Save />;
       case FabIcon.Delete:
         return <Delete />;
+      case FabIcon.Edit:
+        return <ModeEdit />;
       default:
         return <QuestionMark />;
     }
@@ -24,7 +26,16 @@ export const FabContentWrapper: React.FC<FabContentWrapperProps> = props => {
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={0.5}>
       {renderIcon()}
-      <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingTop: 0.5 }}>
+      <Typography
+        sx={{
+          fontWeight: 'bold',
+          textAlign: 'center',
+          height: '100%',
+          display: 'inline-block',
+          verticalAlign: 'middle',
+          lineHeight: 'normal',
+        }}
+      >
         {props.text}
       </Typography>
     </Stack>

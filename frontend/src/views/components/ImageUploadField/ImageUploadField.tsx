@@ -26,7 +26,7 @@ export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
     return (
       <UploadAreaWrapper handleChange={handleChange}>
         <Paper
-          elevation={2}
+          elevation={0}
           sx={{
             backgroundColor: 'customPalette.background',
             height: props.height ?? '100%',
@@ -56,7 +56,7 @@ export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
   return (
     <UploadAreaWrapper handleChange={handleChange}>
       <Paper
-        elevation={2}
+        elevation={0}
         sx={{
           backgroundColor: 'customPalette.background',
           height: props.height ?? '100%',

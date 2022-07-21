@@ -5,34 +5,29 @@ import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
 import { NavBarViewDialog } from '../../../types/types';
+import {
+  convertReferenceFieldToCodexMetadata,
+  createEmptyCodexFields,
+  createFilledCodexFields,
+} from '../../../utils/utils';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
 import { ImageUploadField } from '../../components/ImageUploadField/ImageUploadField';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
-import { addEntry, editEntry, MetadataInstance } from '../codexSlice';
+import { addEntry, CodexMetadataInstance, editEntry } from '../codexSlice';
 import { setCurrentEntry } from '../codexViewSlice';
-import { convertEditFieldToMetadata, createEmptyFields, createFilledFields } from '../utils';
-import { EditFieldList } from './components/EditFieldList/EditFieldList';
-
-export type EditFieldMetadata = {
-  value: string;
-  id: null | string;
-};
-
-export type EditFieldsState = {
-  [fieldName: string]: EditFieldMetadata[];
-};
+import { CodexFieldList } from './components/EditFieldList/CodexFieldList';
 
 type NewEntryData = {
   title: string;
   schemaId: string;
   imageBase64: string;
-  metadataArray: MetadataInstance[];
+  metadataArray: CodexMetadataInstance[];
 };
 
 type EditEntryData = {
   title: string;
   imageBase64: string;
-  metadataArray: MetadataInstance[];
+  metadataArray: CodexMetadataInstance[];
 };
 
 type CodexDialogProps = {
@@ -56,17 +51,17 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   );
   const [entryTitle, setEntryTitle] = useState<string>('');
   const [entryTitleHelperText, setEntryTitleHelperText] = useState<string>('');
-  const [fields, setFields] = useState(createEmptyFields(currentSchema));
+  const [fields, setFields] = useState(createEmptyCodexFields(currentSchema));
   const [entryImageBase64, setEntryImageBase64] = useState<string | null>(null);
 
   useEffect(() => {
     if (currentEntry) {
       setDialogTitle(`Edit ${currentSchema?.title} entry`);
-      setFields(createFilledFields(currentSchema, currentEntry, entries));
+      setFields(createFilledCodexFields(currentSchema, currentEntry, entries));
       setEntryTitle(currentEntry.title);
     } else {
       setDialogTitle('Create new entry');
-      setFields(createEmptyFields(currentSchema));
+      setFields(createEmptyCodexFields(currentSchema));
       setEntryTitle('');
     }
   }, [currentEntry, currentSchema, entries]);
@@ -74,12 +69,12 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const resetDialog = useCallback(() => {
     if (currentEntry) {
       setDialogTitle(`Edit ${currentSchema?.title} entry`);
-      setFields(createFilledFields(currentSchema, currentEntry, entries));
+      setFields(createFilledCodexFields(currentSchema, currentEntry, entries));
       setEntryTitle(currentEntry.title);
       setEntryImageBase64(currentEntry.imageBase64);
     } else {
       setDialogTitle('Create new entry');
-      setFields(createEmptyFields(currentSchema));
+      setFields(createEmptyCodexFields(currentSchema));
       setEntryTitle('');
       setEntryImageBase64(null);
     }
@@ -142,7 +137,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
             title: entryTitle,
             imageBase64: entryImageBase64,
             metadataArray: currentSchema?.fields
-              .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
+              .map(fieldName => convertReferenceFieldToCodexMetadata(fields[fieldName], fieldName))
               .flat(),
           };
           dispatch(setCurrentEntry({ newEntry: editedEntry }));
@@ -187,7 +182,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
           schemaId: currentSchema.id.toString(),
           imageBase64: entryImageBase64,
           metadataArray: currentSchema.fields
-            .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
+            .map(fieldName => convertReferenceFieldToCodexMetadata(fields[fieldName], fieldName))
             .flat(),
         });
       else
@@ -195,7 +190,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
           title: entryTitle,
           imageBase64: entryImageBase64,
           metadataArray: currentSchema.fields
-            .map(fieldName => convertEditFieldToMetadata(fields[fieldName], fieldName))
+            .map(fieldName => convertReferenceFieldToCodexMetadata(fields[fieldName], fieldName))
             .flat(),
         });
   };
@@ -233,7 +228,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
         setIsOpen={props.setIsOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-        onDelete={handleDelete}
+        onDelete={props.dialogType === NavBarViewDialog.EditEntry ? handleDelete : undefined}
       >
         <Stack
           direction="row"
@@ -264,7 +259,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
               onBlur={event => handleEntryTitleLeave(event)}
             />
             {currentSchema ? (
-              <EditFieldList currentSchema={currentSchema} fields={fields} setFields={setFields} />
+              <CodexFieldList currentSchema={currentSchema} fields={fields} setFields={setFields} />
             ) : null}
           </Stack>
           <ImageUploadField

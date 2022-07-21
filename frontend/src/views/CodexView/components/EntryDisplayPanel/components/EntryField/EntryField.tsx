@@ -1,11 +1,11 @@
-import { Stack, Typography } from '@mui/material';
-import { Entry, MetadataInstance } from '../../../../codexSlice';
-import { getEntryFromMetadata } from '../../../../utils';
+import { Box, Stack, Typography } from '@mui/material';
+import { getEntryFromMetadata } from '../../../../../../utils/utils';
+import { CodexMetadataInstance, Entry } from '../../../../codexSlice';
 import { ReferenceChip } from './components/ReferenceChip/ReferenceChip';
 
 type EntryFieldProps = {
   fieldName: string;
-  data: MetadataInstance[];
+  data: CodexMetadataInstance[];
   entries: Entry[];
 };
 
@@ -42,10 +42,10 @@ export const EntryField: React.FC<EntryFieldProps> = props => {
         width: '100%',
       }}
     >
-      <Typography variant={'h6'} sx={{ color: 'customPalette.onSurface' }}>
+      <Typography variant="h5" sx={{ color: 'customPalette.onSurface', fontWeight: 'medium' }}>
         {props.fieldName}
       </Typography>
-      <Typography sx={{ display: 'inline' }}>{renderValue()}</Typography>
+      <Box sx={{ display: 'inline' }}>{renderValue()}</Box>
     </Stack>
   );
 };

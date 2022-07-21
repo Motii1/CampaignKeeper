@@ -1,8 +1,8 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
+import { convertEntriesHashMapToList, getCodexMetadataByFieldName } from '../../../../utils/utils';
 import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlaceholder';
-import { convertEntriesHashMapToList, getMetadataByFieldName } from '../../utils';
 import { EntryField } from './components/EntryField/EntryField';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
 
@@ -14,7 +14,7 @@ export const EntryDisplayPanel: React.FC = () => {
     if (currentEntry) {
       const entriesAsList = convertEntriesHashMapToList(entries);
       const fields = currentSchema?.fields.map(fieldName =>
-        getMetadataByFieldName(fieldName, currentEntry.metadataArray)
+        getCodexMetadataByFieldName(fieldName, currentEntry.metadataArray)
       );
       if (fields)
         return fields.map(field => (
@@ -47,7 +47,7 @@ export const EntryDisplayPanel: React.FC = () => {
 
   return currentEntry ? (
     <Paper
-      elevation={6}
+      elevation={0}
       sx={{
         backgroundColor: 'customPalette.surface',
         borderRadius: 3,
@@ -74,8 +74,8 @@ export const EntryDisplayPanel: React.FC = () => {
         <Typography
           variant={'h4'}
           sx={{
-            color: 'customPalette.onBackgroundSecondary',
-            fontWeight: 'medium',
+            color: 'customPalette.onBackgroundVariant',
+            fontWeight: 'bold',
             marginTop: '25px',
           }}
         >

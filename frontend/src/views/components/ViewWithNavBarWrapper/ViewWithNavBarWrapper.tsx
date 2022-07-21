@@ -32,8 +32,11 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
         height: '100vh',
         maxHeight: '100%',
         width: '100%',
+        maxWidth: '100%',
         position: 'absolute',
         backgroundColor: 'customPalette.background',
+        zIndex: '-2',
+        overflow: 'hidden',
       }}
     >
       <Stack
@@ -45,6 +48,7 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
           height: '100%',
           maxHeight: '100%',
           width: '100%',
+          maxWidth: '100%',
         }}
       >
         <NavBar
@@ -58,18 +62,13 @@ export const ViewWithNavBarWrapper: React.FC<ViewWithNavBarWrapperProps> = props
             height: '100%',
             maxHeight: '100%',
             width: '100%',
-            overflow: 'hidden',
+            maxWidth: '100%',
           }}
         >
           {props.children}
         </Box>
       </Stack>
-      <CustomFab
-        currentView={currentView}
-        handleClick={
-          props.handleFab ? props.handleFab : () => props.setIsPrimaryOpen(!props.isPrimaryOpen)
-        }
-      />
+      <CustomFab currentView={currentView} handleClick={props.handleFab} />
       <PrimaryCustomDialogWrapper
         currentView={currentView}
         isOpen={props.isPrimaryOpen}

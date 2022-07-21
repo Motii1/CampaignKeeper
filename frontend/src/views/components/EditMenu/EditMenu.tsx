@@ -8,6 +8,7 @@ type EditMenuProps = {
 
 export const EditMenu: React.FC<EditMenuProps> = props => (
   <Menu
+    elevation={1}
     open={props.menuPos !== null}
     onClose={props.handleClose}
     anchorReference="anchorPosition"
@@ -19,6 +20,7 @@ export const EditMenu: React.FC<EditMenuProps> = props => (
         backgroundColor: 'customPalette.primary',
         borderRadius: 4,
         minWidth: 160,
+        boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 1)',
       },
     }}
     disableAutoFocusItem

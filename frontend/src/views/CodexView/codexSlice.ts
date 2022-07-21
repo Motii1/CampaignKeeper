@@ -13,12 +13,12 @@ export interface Entry {
   title: string;
   schemaId: string;
   imageBase64: string;
-  metadataArray: MetadataInstance[];
+  metadataArray: CodexMetadataInstance[];
 }
 
 export type EntriesHashMap = { [schemaId: string]: Entry[] };
 
-export type MetadataInstance = {
+export type CodexMetadataInstance = {
   type: string;
   sequenceNumber: number;
   value: string;

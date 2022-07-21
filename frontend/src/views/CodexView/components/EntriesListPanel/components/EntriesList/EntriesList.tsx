@@ -26,7 +26,7 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
       }}
     >
       <Paper
-        elevation={6}
+        elevation={0}
         sx={{
           backgroundColor: 'customPalette.surface',
           borderRadius: 3,
@@ -50,8 +50,8 @@ export const EntriesList: React.FC<EntriesListProps> = props => {
           <Typography
             variant={'h4'}
             sx={{
-              color: 'customPalette.onBackgroundSecondary',
-              fontWeight: 'medium',
+              color: 'customPalette.onBackgroundVariant',
+              fontWeight: 'bold',
               textTransform: 'uppercase',
             }}
           >

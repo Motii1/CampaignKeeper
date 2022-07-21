@@ -32,16 +32,17 @@ export const SchemasList: React.FC = () => {
   return (
     <Box>
       <Paper
-        elevation={6}
+        elevation={0}
         square
         sx={{
-          backgroundColor: 'customPalette.surface',
+          backgroundColor: 'customPalette.primary',
           position: 'absolute',
           left: 0,
           top: '50px',
           bottom: 0,
           height: 'calc(100vh - 50px)',
           width: 220,
+          boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 0.6)',
         }}
       >
         <Stack

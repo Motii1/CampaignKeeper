@@ -1,8 +1,13 @@
 import { Paper, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../../types/types';
 import { EditMenu } from '../../../components/EditMenu/EditMenu';
+import { setSessionId as setSessionIdExplorerView } from '../../../ExplorerView/explorerViewSlice';
+import { resetState as resetEventsState } from '../../../MapView/eventsSlice';
+import { setSessionId as setSessionIdMapView } from '../../../MapView/mapViewSlice';
+import viewsRoutes from '../../../viewsRoutes';
 import { updateState as updateStateCampaign } from '../../campaignViewSlice';
 
 type SessionTileProps = {
@@ -13,8 +18,16 @@ type SessionTileProps = {
 };
 
 export const SessionTile: React.FC<SessionTileProps> = props => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [menuPos, setMenuPos] = useState<null | { mouseX: number; mouseY: number }>(null);
+
+  const handleClick = () => {
+    dispatch(setSessionIdMapView({ currentSessionId: props.sessionId }));
+    dispatch(setSessionIdExplorerView({ currentSessionId: props.sessionId }));
+    dispatch(resetEventsState({}));
+    history.push(viewsRoutes.MAP);
+  };
 
   const handleContextMenu = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -41,6 +54,7 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
 
   return (
     <Paper
+      elevation={0}
       sx={{
         cursor: 'pointer',
         borderRadius: 2.5,
@@ -56,6 +70,7 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
       onContextMenu={handleContextMenu}
     >
       <Typography
+        onClick={handleClick}
         sx={{
           color: 'customPalette.onSurface',
           fontWeight: 'medium',

@@ -1,11 +1,10 @@
-// TO-DO (very low priority): add graphic to text
-
 import { Box, Typography } from '@mui/material';
 
 type EmptyPlaceholderProps = {
   message: string;
 };
 
+// TO-DO (very low priority): add graphic to text
 export const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = props => (
   <Box
     sx={{

@@ -15,7 +15,9 @@ import { SchemasList } from './components/SchemasList/SchemasList';
 export const CodexView: React.FC = () => {
   const dispatch = useDispatch();
   const { currentCampaignId } = useSelector((state: RootState) => state.campaignView);
-  const { codexCampaignId, currentEntry } = useSelector((state: RootState) => state.codexView);
+  const { codexCampaignId, currentSchema, currentEntry } = useSelector(
+    (state: RootState) => state.codexView
+  );
   const { isCodexDownloaded } = useSelector((state: RootState) => state.codex);
 
   const history = useHistory();
@@ -43,6 +45,7 @@ export const CodexView: React.FC = () => {
       setPrimaryDialogType={setDialogType}
       isSecondaryOpen={isSecondaryOpen}
       setIsSecondaryOpen={setIsSecondaryOpen}
+      handleFab={currentSchema || currentEntry ? () => setIsPrimaryOpen(!isPrimaryOpen) : undefined}
     >
       <Box sx={{ height: '100%', width: '100%' }}>
         <SchemasList />

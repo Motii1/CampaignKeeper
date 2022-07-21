@@ -7,6 +7,7 @@ export const lightTheme = createTheme({
         root: {
           '&::-webkit-scrollbar': {
             width: '26px',
+            height: '26px',
           },
           '&::-webkit-scrollbar-track': {
             margin: 0.1,
@@ -27,8 +28,9 @@ export const lightTheme = createTheme({
       styleOverrides: {
         root: {
           color: '#15191f',
-          fontWeight: 500,
+          fontWeight: 'normal',
           fontFamily: ['Roboto', 'cursive'].join(','),
+          textTransform: 'capitalize',
         },
       },
     },
@@ -40,23 +42,33 @@ export const lightTheme = createTheme({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 0.4)',
+          '&:hover': {
+            boxShadow: '0px 0px 15px -9px rgba(66, 68, 90, 1)',
+          },
+        },
+      },
+    },
   },
   palette: {
     customPalette: {
-      background: '#e9faff',
-      surface: '#d0edfc',
-      surfaceSecondary: '#f2e0f4',
-      primary: '#e4f2ff',
+      background: '#f4f9fb',
+      surface: '#e1ebf5',
+      primary: '#ecf3fa',
       secondary: '#f5ebf7',
+      tertiary: '#dceff0',
       onBackground: '#303d50',
-      onBackgroundSecondary: '#303d50',
+      onBackgroundVariant: '#446182',
       onSurface: '#262E38',
-      onSurfaceSecondary: '#262E38',
       onPrimary: '#262E38',
       onSecondary: '#242424',
+      onTertiary: '#262E38',
       error: '#f2d4d4',
       onError: '#b65757',
-      accent: '#f5d673',
+      accent: '#a7ccf7',
       onAccent: '#242424',
       red: '#ee7979',
       onRed: '#262E38',
@@ -85,6 +97,7 @@ export const darkTheme = createTheme({
         root: {
           '&::-webkit-scrollbar': {
             width: '26px',
+            height: '26px',
           },
           '&::-webkit-scrollbar-track': {
             margin: 0.1,
@@ -106,6 +119,7 @@ export const darkTheme = createTheme({
         root: {
           fontWeight: 'normal',
           fontFamily: ['Roboto', 'cursive'].join(','),
+          textTransform: 'capitalize',
         },
       },
     },
@@ -121,15 +135,15 @@ export const darkTheme = createTheme({
     customPalette: {
       background: '#262E38',
       surface: '#2B3D49',
-      surfaceSecondary: '#362C28',
       primary: '#425C71',
       secondary: '#A5C8E8',
+      tertiary: '#362C28',
       onBackground: '#f4f4f4',
-      onBackgroundSecondary: '#FFE082',
+      onBackgroundVariant: '#FFE082',
       onSurface: '#ffffff',
-      onSurfaceSecondary: '#FFE082',
       onPrimary: '#ffffff',
       onSecondary: '#2B3D49',
+      onTertiary: '#FFE082',
       error: '#604e57',
       onError: '#FF8282',
       accent: '#FFE082',
@@ -166,15 +180,15 @@ declare module '@mui/material/styles' {
     customPalette?: {
       background?: string;
       surface?: string;
-      surfaceSecondary?: string;
       primary?: string;
       secondary?: string;
+      tertiary?: string;
       onBackground?: string;
-      onBackgroundSecondary?: string;
+      onBackgroundVariant?: string;
       onSurface?: string;
-      onSurfaceSecondary?: string;
       onPrimary?: string;
       onSecondary?: string;
+      onTertiary?: string;
       error?: string;
       onError?: string;
       accent?: string;
