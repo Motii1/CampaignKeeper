@@ -1,3 +1,4 @@
+import 'package:campaign_keeper_mobile/entities/base_entity.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
@@ -51,13 +52,13 @@ class DataCarrier {
 
   Future<void> attach<T>(T entity) async {
     if (_managers.containsKey(T)) {
-      await _managers[T]!.attach(entity);
+      await _managers[T]!.attach(entity as BaseEntity);
     }
   }
 
   Future<bool> patch<T>({required T newEntity}) async {
     if (_managers.containsKey(T)) {
-      return await _managers[T]!.patch(newEntity: newEntity);
+      return await _managers[T]!.patch(newEntity: newEntity as BaseEntity);
     }
 
     return false;
@@ -65,7 +66,7 @@ class DataCarrier {
 
   T? get<T>({int entId = -1}) {
     if (_managers.containsKey(T)) {
-      return _managers[T]!.get(entId: entId);
+      return _managers[T]!.get(entId: entId) as T?;
     }
     return null;
   }

@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:campaign_keeper_mobile/entities/base_entity.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
 // A hollow class used as a base for proper managers
 // due to a lack of interfaces in dart.
-class BaseManager<T> extends ChangeNotifier {
+class BaseManager<T extends BaseEntity> extends ChangeNotifier {
   Future? lock;
   // Attaches given entity to the local base and caches it.
   // Might also update server.
