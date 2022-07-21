@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:campaign_keeper_mobile/entities/base_entity.dart';
+import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
@@ -83,5 +85,25 @@ class BaseManager<T extends BaseEntity> extends ChangeNotifier {
     releaseOperation(completer, parameter: parameter);
 
     return res;
+  }
+
+  Future<void> cacheList(List<T> list, String key) async {
+    var data = list.map((e) => e.encode()).toList();
+
+    CacheUtil().add(key, json.encode(data));
+  }
+
+  Future<void> cacheMap(Map<int, List<T>> map, String key, List<int> filter) async {
+    var data = [];
+
+    map.forEach(
+      (mapKey, list) {
+        if (filter.isEmpty || filter.contains(mapKey)) {
+          data.addAll(list.map((e) => e.encode()));
+        }
+      },
+    );
+
+    CacheUtil().add(key, json.encode(data));
   }
 }

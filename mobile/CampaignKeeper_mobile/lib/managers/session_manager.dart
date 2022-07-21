@@ -134,16 +134,7 @@ class SessionManager extends BaseManager<SessionEntity> {
 
   Future<void> _cacheAll() async {
     var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
-    var data = [];
 
-    _map.forEach(
-      (key, list) {
-        if (campaigns.isEmpty || campaigns.contains(key)) {
-          data.addAll(list.map((e) => e.encode()));
-        }
-      },
-    );
-
-    CacheUtil().add(_key, json.encode(data));
+    await cacheMap(_map, _key, campaigns);
   }
 }

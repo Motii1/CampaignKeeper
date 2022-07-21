@@ -131,16 +131,7 @@ class EventManager extends BaseManager<EventEntity> {
 
   Future<void> _cacheAll() async {
     var sessions = DataCarrier().getList<SessionEntity>().map((e) => e.id).toList();
-    var data = [];
 
-    _map.forEach(
-      (key, list) {
-        if (sessions.isEmpty || sessions.contains(key)) {
-          data.addAll(list.map((e) => e.encode()));
-        }
-      },
-    );
-
-    CacheUtil().add(_key, json.encode(data));
+    await cacheMap(_map, _key, sessions);
   }
 }

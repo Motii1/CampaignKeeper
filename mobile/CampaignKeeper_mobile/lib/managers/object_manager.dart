@@ -161,16 +161,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
 
   Future<void> _cacheAll() async {
     var schemas = DataCarrier().getList<SchemaEntity>().map((e) => e.id).toList();
-    var data = [];
 
-    _map.forEach(
-      (key, list) {
-        if (schemas.isEmpty || schemas.contains(key)) {
-          data.addAll(list.map((e) => e.encode()));
-        }
-      },
-    );
-
-    CacheUtil().add(_key, json.encode(data));
+    await cacheMap(_map, _key, schemas);
   }
 }

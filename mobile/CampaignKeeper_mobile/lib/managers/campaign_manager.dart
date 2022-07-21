@@ -18,7 +18,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
     lockedOperation(
       () async {
         _entities.add(entity);
-        await _cacheAll();
+        await cacheList(_entities, _key);
       },
       defaultResult: null,
     );
@@ -75,7 +75,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
           _entities = newEntities;
 
           notifyListeners();
-          await _cacheAll();
+          await cacheList(_entities, _key);
 
           return true;
         }
@@ -97,11 +97,5 @@ class CampaignManager extends BaseManager<CampaignEntity> {
     }
 
     return true;
-  }
-
-  Future<void> _cacheAll() async {
-    var data = _entities.map((e) => e.encode()).toList();
-
-    CacheUtil().add(_key, json.encode(data));
   }
 }
