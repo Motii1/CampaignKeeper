@@ -15,7 +15,7 @@ const SESSION_NAME = 'Test Session';
 
 const eventsList = [
   {
-    id: 1,
+    id: '1',
     sessionId: SESSION_ID,
     title: 'Event 1',
     placeMetadataArray: [{ value: 'Place event 1', sequenceNumber: 0, type: 'string' }],
@@ -23,12 +23,12 @@ const eventsList = [
     charactersMetadataArray: [{ value: 'Character event 1', sequenceNumber: 0, type: 'string' }],
     status: 'none',
     type: 'normal',
-    childrenIds: [2, 3],
+    childrenIds: ['2', '3'],
     parentIds: [],
     displayStatus: 'shown',
   },
   {
-    id: 2,
+    id: '2',
     sessionId: SESSION_ID,
     title: 'Event 2',
     placeMetadataArray: [{ value: 'Place event 2', sequenceNumber: 0, type: 'string' }],
@@ -36,12 +36,12 @@ const eventsList = [
     charactersMetadataArray: [{ value: 'Character event 2', sequenceNumber: 0, type: 'string' }],
     status: 'none',
     type: 'normal',
-    childrenIds: [4, 5],
-    parentIds: [1],
+    childrenIds: ['4', '5'],
+    parentIds: ['1'],
     displayStatus: 'shown',
   },
   {
-    id: 3,
+    id: '3',
     sessionId: SESSION_ID,
     title: 'Event 3',
     placeMetadataArray: [],
@@ -49,12 +49,12 @@ const eventsList = [
     charactersMetadataArray: [],
     status: 'none',
     type: 'normal',
-    childrenIds: [5, 6],
-    parentIds: [1],
+    childrenIds: ['5', '6'],
+    parentIds: ['1'],
     displayStatus: 'shown',
   },
   {
-    id: 4,
+    id: '4',
     sessionId: SESSION_ID,
     title: 'Event 4',
     placeMetadataArray: [],
@@ -62,12 +62,12 @@ const eventsList = [
     charactersMetadataArray: [],
     status: 'none',
     type: 'normal',
-    childrenIds: [7],
-    parentIds: [2],
+    childrenIds: ['7'],
+    parentIds: ['2'],
     displayStatus: 'shown',
   },
   {
-    id: 5,
+    id: '5',
     sessionId: SESSION_ID,
     title: 'Event 5',
     placeMetadataArray: [],
@@ -76,11 +76,11 @@ const eventsList = [
     status: 'none',
     type: 'normal',
     childrenIds: [],
-    parentIds: [2, 3],
+    parentIds: ['2', '3'],
     displayStatus: 'shown',
   },
   {
-    id: 6,
+    id: '6',
     sessionId: SESSION_ID,
     title: 'Event 6',
     placeMetadataArray: [],
@@ -89,11 +89,11 @@ const eventsList = [
     status: 'none',
     type: 'normal',
     childrenIds: [],
-    parentIds: [3],
+    parentIds: ['3'],
     displayStatus: 'shown',
   },
   {
-    id: 7,
+    id: '7',
     sessionId: SESSION_ID,
     title: 'Event 7',
     placeMetadataArray: [],
@@ -102,7 +102,7 @@ const eventsList = [
     status: 'none',
     type: 'normal',
     childrenIds: [],
-    parentIds: [4],
+    parentIds: ['4'],
     displayStatus: 'shown',
   },
 ];
@@ -243,6 +243,8 @@ describe('MapView tests', () => {
         expect(screen.getByText('Status')).toBeInTheDocument();
         expect(screen.getByText('none')).toBeInTheDocument();
 
+        expect(screen.getAllByRole('textbox')).toHaveLength(2);
+
         expect(screen.getByText('OK')).toBeInTheDocument();
         expect(screen.queryByText('DELETE')).toBeNull();
         expect(screen.getByText('CANCEL')).toBeInTheDocument();
@@ -273,6 +275,8 @@ describe('MapView tests', () => {
         expect(screen.getAllByText(eventsList[0].descriptionMetadataArray[0].value)).toHaveLength(
           2
         );
+
+        expect(screen.getAllByRole('textbox')).toHaveLength(2);
 
         expect(screen.getByText('OK')).toBeInTheDocument();
         expect(screen.getByText('DELETE')).toBeInTheDocument();
