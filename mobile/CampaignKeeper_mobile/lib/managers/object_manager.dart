@@ -87,13 +87,13 @@ class ObjectManager extends BaseManager<ObjectEntity> {
         List<ObjectEntity> newEntities =
             (responseData['objects'] as List).map((e) => ObjectEntity.decode(e)).toList();
 
-        if (parameterName == EntityParameter.schema && !_isEqual(parameterValue, newEntities)) {
+        if (parameterName == EntityParameter.schema) {
           if (_isEqual(parameterValue, newEntities)) {
             return false;
           }
 
           _map[parameterValue] = newEntities;
-        } else {
+        } else if (parameterName == EntityParameter.campaign) {
           var oldKeys = _map.keys.toList();
           var newKeys = newEntities.map((e) => e.schemaId).toSet();
           bool isEqual = newKeys.toList().equals(oldKeys);

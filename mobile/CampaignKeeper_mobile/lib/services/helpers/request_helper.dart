@@ -83,7 +83,7 @@ class RequestHelper extends ChangeNotifier {
       return Response(ResponseStatus.Error, null, null);
     }
 
-    print("Get status: ${response.statusCode}");
+    _printStatusCode("GET", response.statusCode);
 
     if (!isSilent) {
       _changeStatus(true);
@@ -116,9 +116,10 @@ class RequestHelper extends ChangeNotifier {
     Map<String, String> headers = {"cookie": isCookieValid() ? _cookie.toString() : ""};
     var response;
     try {
+      var uri = Uri.parse("${AppPrefs().url}$endpoint");
       response = await DependenciesHelper()
           .client
-          .post(Uri.parse("${AppPrefs().url}$endpoint"), body: body, headers: isLogin ? null : headers)
+          .post(uri, body: body, headers: isLogin ? null : headers)
           .timeout(Duration(seconds: isLogin ? AppPrefs().loginTimeout : AppPrefs().timeout));
     } on TimeoutException catch (_) {
       if (!isSilent) {
@@ -146,7 +147,7 @@ class RequestHelper extends ChangeNotifier {
       return Response(ResponseStatus.Error, null, null);
     }
 
-    print("Post status: ${response.statusCode}");
+    _printStatusCode("POST", response.statusCode);
 
     if (!isSilent) {
       _changeStatus(true);
@@ -206,7 +207,7 @@ class RequestHelper extends ChangeNotifier {
 
     http.Response response = await http.Response.fromStream(streamResponse);
 
-    print("Put status: ${response.statusCode}");
+    _printStatusCode("PUT", response.statusCode);
 
     if (response.statusCode == 200) {
       return Response(ResponseStatus.Success, response.body, response.bodyBytes);
@@ -246,6 +247,12 @@ class RequestHelper extends ChangeNotifier {
     if (status != _isOnline) {
       _isOnline = status;
       notifyListeners();
+    }
+  }
+
+  void _printStatusCode(String type, int code) {
+    if (AppPrefs().debug) {
+      print("${type} status: ${code}");
     }
   }
 }
