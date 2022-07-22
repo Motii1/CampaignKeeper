@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
+import { setSessionId } from '../ExplorerView/explorerViewSlice';
 import viewsRoutes from '../viewsRoutes';
 import { EventGraph } from './components/EventGraph/EventGraph';
 import { fetchEvents } from './eventsSlice';
@@ -32,6 +33,7 @@ export const MapView: React.FC = () => {
             ?.name,
         })
       );
+      dispatch(setSessionId({ currentSessionId: sessionIdForFetching }));
       dispatch(fetchEvents(sessionIdForFetching));
     } else history.push(viewsRoutes.CAMPAIGN);
   }
