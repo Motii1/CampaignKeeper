@@ -1,4 +1,4 @@
-import { cleanup, RenderResult, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, RenderResult, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { store } from '../../store';
@@ -112,13 +112,12 @@ jest.mock('./components/EventGraph/components/EventWrapper/components/EventArrow
 describe('MapView tests', () => {
   let component: RenderResult;
 
-  // jest.mock('./components/EventGraph/components/EventWrapper/components/EventArrow/EventArrow.tsx');
-  // jest.mock(
-  //   '/home/pstasiuk/uni/CampaignKeeper/frontend/src/views/MapView/components/EventGraph/components/EventWrapper/components/EventArrow/EventArrow'
-  // );
-
   const server = setupServer(
-    rest.get('api/event/graph/1', (_req, res, ctx) => res(ctx.json({ events: eventsList })))
+    rest.get('api/event/graph/1', (_req, res, ctx) => res(ctx.json({ events: eventsList }))),
+    rest.patch('api/event/1', (_req, res, ctx) => res(ctx.status(200))),
+    rest.patch('api/event/2', (_req, res, ctx) => res(ctx.status(200))),
+    rest.patch('api/event/3', (_req, res, ctx) => res(ctx.status(200))),
+    rest.delete('api/event/6', (_req, res, ctx) => res(ctx.status(200)))
   );
 
   beforeAll(() => {
@@ -139,24 +138,189 @@ describe('MapView tests', () => {
     cleanup();
   });
 
-  describe('rendering test', () => {
+  describe('rendering graph test', () => {
     beforeEach(() => (component = renderWithProviders(<MapView />, { route: '/map' })));
     afterEach(() => component.unmount());
 
-    test('renders MapView fixed elements', async () => {
-      expect(screen.getByText('New entry')).toBeInTheDocument();
-      await waitFor(() => expect(screen.getByText(SESSION_NAME)).toBeInTheDocument());
+    test('renders graph with event tiles build from data fetched from API', async () => {
+      await waitFor(() => {
+        eventsList.forEach(event => expect(screen.getByText(event.title)).toBeInTheDocument());
+      });
     });
 
-    test('renders MapView with graph build from events fetched from API', async () => {
+    test('renders graph with root arrows', async () => {
       await waitFor(() => {
-        expect(screen.getByText('Event 1')).toBeInTheDocument();
-        expect(screen.getByText('Event 2')).toBeInTheDocument();
-        expect(screen.getByText('Event 3')).toBeInTheDocument();
-        expect(screen.getByText('Event 4')).toBeInTheDocument();
-        expect(screen.getByText('Event 5')).toBeInTheDocument();
-        expect(screen.getByText('Event 6')).toBeInTheDocument();
-        expect(screen.getByText('Event 7')).toBeInTheDocument();
+        eventsList.forEach(event => {
+          if (event.parentIds.length === 0)
+            expect(screen.getByText(`root-node-event-${event.id}`)).toBeInTheDocument();
+        });
+      });
+    });
+
+    test('renders graph with children arrows', async () => {
+      await waitFor(() => {
+        eventsList.forEach(parentEvent => {
+          if (parentEvent.childrenIds.length > 0)
+            parentEvent.childrenIds.forEach(childEventId =>
+              expect(
+                screen.getByText(`event-${parentEvent.id}-event-${childEventId}`)
+              ).toBeInTheDocument()
+            );
+        });
+      });
+    });
+
+    test('renders eventTile', async () => {
+      await waitFor(() => {
+        const firstEvent = eventsList[0];
+        expect(screen.getByText(firstEvent.title)).toBeInTheDocument();
+        expect(screen.getAllByText('Place')).toHaveLength(eventsList.length);
+        expect(screen.getByText(firstEvent.placeMetadataArray[0].value)).toBeInTheDocument();
+        expect(screen.getAllByText('Characters')).toHaveLength(eventsList.length);
+        expect(screen.getByText(firstEvent.charactersMetadataArray[0].value)).toBeInTheDocument();
+        expect(screen.getAllByText('Description')).toHaveLength(eventsList.length);
+        expect(screen.getByText(firstEvent.descriptionMetadataArray[0].value)).toBeInTheDocument();
+
+        expect(screen.getAllByTestId('EditOutlinedIcon')).toHaveLength(eventsList.length);
+        expect(screen.getAllByTestId('VisibilityOutlinedIcon')).toHaveLength(eventsList.length);
+        expect(screen.getAllByTestId('CheckBoxOutlineBlankOutlinedIcon')).toHaveLength(
+          eventsList.length
+        );
+      });
+    });
+  });
+
+  describe('eventTile functionalities test', () => {
+    beforeEach(() => (component = renderWithProviders(<MapView />, { route: '/map' })));
+    afterEach(() => component.unmount());
+
+    test('hides content and descendants of collapsed element', async () => {
+      await waitFor(async () => {
+        act(() => {
+          fireEvent.click(screen.getAllByTestId('VisibilityOutlinedIcon')[1] as HTMLElement);
+        });
+
+        const secondEvent = eventsList[1];
+        expect(screen.getByText(eventsList[0].title)).toBeInTheDocument();
+        expect(screen.getByText(eventsList[1].title)).toBeInTheDocument();
+        expect(screen.getByText(eventsList[2].title)).toBeInTheDocument();
+        expect(screen.queryByText(eventsList[3].title)).toBeNull();
+        expect(screen.getByText(eventsList[4].title)).toBeInTheDocument();
+        expect(screen.getByText(eventsList[5].title)).toBeInTheDocument();
+        expect(screen.queryByText(eventsList[6].title)).toBeNull();
+
+        expect(screen.getAllByText('Place')).toHaveLength(eventsList.length - 3);
+        expect(screen.queryByText(secondEvent.placeMetadataArray[0].value)).toBeNull();
+        expect(screen.getAllByText('Characters')).toHaveLength(eventsList.length - 3);
+        expect(screen.queryByText(secondEvent.charactersMetadataArray[0].value)).toBeNull();
+        expect(screen.getAllByText('Description')).toHaveLength(eventsList.length - 3);
+        expect(screen.queryByText(secondEvent.descriptionMetadataArray[0].value)).toBeNull();
+      });
+    });
+  });
+
+  describe('dialog operations test', () => {
+    beforeEach(() => (component = renderWithProviders(<MapView />, { route: '/map' })));
+    afterEach(() => component.unmount());
+
+    test('opens dialog in New Event mode', async () => {
+      await waitFor(async () => {
+        fireEvent.click(screen.getByText('New entry'));
+
+        expect(screen.getAllByTestId('AddIcon')).toHaveLength(1 + 4);
+
+        expect(screen.getByTestId('ArrowBackIcon')).toBeInTheDocument();
+        expect(screen.getByText('BACK')).toBeInTheDocument();
+
+        expect(screen.getByText('Create new event')).toBeInTheDocument();
+        expect(screen.getByText('Title')).toBeInTheDocument();
+        expect(screen.getByText('Parents')).toBeInTheDocument();
+        expect(
+          screen.getByText("Event without parents will be session's starting event")
+        ).toBeInTheDocument();
+        expect(screen.getByText('Type')).toBeInTheDocument();
+        expect(screen.getByText('normal')).toBeInTheDocument();
+        expect(screen.getByText('Status')).toBeInTheDocument();
+        expect(screen.getByText('none')).toBeInTheDocument();
+
+        expect(screen.getByText('OK')).toBeInTheDocument();
+        expect(screen.queryByText('DELETE')).toBeNull();
+        expect(screen.getByText('CANCEL')).toBeInTheDocument();
+      });
+    });
+
+    test('opens dialog in Edit Event mode', async () => {
+      await waitFor(async () => {
+        fireEvent.click(screen.getAllByTestId('EditOutlinedIcon')[0] as HTMLElement);
+
+        expect(screen.getAllByTestId('AddIcon')).toHaveLength(1 + 4);
+
+        expect(screen.getByTestId('ArrowBackIcon')).toBeInTheDocument();
+        expect(screen.getByText('BACK')).toBeInTheDocument();
+
+        expect(screen.getByText('Edit event')).toBeInTheDocument();
+        expect(screen.getByText('Title')).toBeInTheDocument();
+        expect(screen.getByText('Parents')).toBeInTheDocument();
+        expect(
+          screen.getByText("Event without parents will be session's starting event")
+        ).toBeInTheDocument();
+        expect(screen.getByText('Type')).toBeInTheDocument();
+        expect(screen.getByText(eventsList[0].type)).toBeInTheDocument();
+        expect(screen.getByText('Status')).toBeInTheDocument();
+        expect(screen.getByText(eventsList[0].status)).toBeInTheDocument();
+        expect(screen.getAllByText(eventsList[0].placeMetadataArray[0].value)).toHaveLength(2);
+        expect(screen.getAllByText(eventsList[0].charactersMetadataArray[0].value)).toHaveLength(2);
+        expect(screen.getAllByText(eventsList[0].descriptionMetadataArray[0].value)).toHaveLength(
+          2
+        );
+
+        expect(screen.getByText('OK')).toBeInTheDocument();
+        expect(screen.getByText('DELETE')).toBeInTheDocument();
+        expect(screen.getByText('CANCEL')).toBeInTheDocument();
+      });
+    });
+
+    test('edits event', async () => {
+      await waitFor(async () => {
+        fireEvent.click(screen.getAllByTestId('EditOutlinedIcon')[0] as HTMLElement);
+
+        const sufix = 'bis';
+        const firstEvent = eventsList[0];
+        await waitFor(async () => {
+          const textBoxes = Array.from(screen.getAllByRole('textbox'));
+
+          fireEvent.change(textBoxes[0], {
+            target: { value: firstEvent.title.concat(sufix) },
+          });
+          fireEvent.click(screen.getAllByTestId('CancelIcon')[0] as HTMLElement);
+          fireEvent.change(textBoxes[1], {
+            target: { value: firstEvent.descriptionMetadataArray[0].value.concat(sufix) },
+          });
+          fireEvent.click(screen.getByText('OK'));
+
+          await waitFor(async () => {
+            expect(screen.getByText(firstEvent.title.concat(sufix))).toBeInTheDocument();
+            expect(screen.queryByTestId(firstEvent.placeMetadataArray[0].value)).toBeNull();
+            expect(
+              screen.getByText(firstEvent.charactersMetadataArray[0].value)
+            ).toBeInTheDocument();
+            expect(
+              screen.getByText(firstEvent.descriptionMetadataArray[0].value.concat(sufix))
+            ).toBeInTheDocument();
+          });
+        });
+      });
+    });
+
+    test('deletes event', async () => {
+      fireEvent.click(screen.getAllByTestId('EditOutlinedIcon')[4] as HTMLElement);
+      const deletedEvent = screen.getAllByRole('textbox')[0] as HTMLInputElement;
+      const deletedEventTitle = deletedEvent.value;
+      fireEvent.click(screen.getByText('DELETE'));
+      fireEvent.click(screen.getAllByText('OK')[1]);
+
+      await waitFor(async () => {
+        expect(screen.queryByText(deletedEventTitle)).toBeNull();
       });
     });
   });

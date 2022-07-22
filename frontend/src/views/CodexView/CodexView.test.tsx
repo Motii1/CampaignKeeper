@@ -196,7 +196,6 @@ describe('CodexView tests', () => {
     test('adds field to new schema', () => {
       fireEvent.click(screen.getByText('New schema'));
       fireEvent.click(screen.getAllByTestId('AddIcon')[1]);
-      // const fieldTextbox = ;
       fireEvent.change(screen.getByPlaceholderText('Enter new field name'), {
         target: { value: NEW_FIELD_NAME },
       });
