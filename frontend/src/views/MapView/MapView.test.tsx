@@ -281,33 +281,29 @@ describe('MapView tests', () => {
     });
 
     test('edits event', async () => {
+      fireEvent.click(screen.getAllByTestId('EditOutlinedIcon')[0] as HTMLElement);
+
+      const sufix = 'bis';
+      const firstEvent = eventsList[0];
       await waitFor(async () => {
-        fireEvent.click(screen.getAllByTestId('EditOutlinedIcon')[0] as HTMLElement);
+        const textBoxes = Array.from(screen.getAllByRole('textbox'));
 
-        const sufix = 'bis';
-        const firstEvent = eventsList[0];
+        fireEvent.change(textBoxes[0], {
+          target: { value: firstEvent.title.concat(sufix) },
+        });
+        fireEvent.click(screen.getAllByTestId('CancelIcon')[0] as HTMLElement);
+        fireEvent.change(textBoxes[1], {
+          target: { value: firstEvent.descriptionMetadataArray[0].value.concat(sufix) },
+        });
+        fireEvent.click(screen.getByText('OK'));
+
         await waitFor(async () => {
-          const textBoxes = Array.from(screen.getAllByRole('textbox'));
-
-          fireEvent.change(textBoxes[0], {
-            target: { value: firstEvent.title.concat(sufix) },
-          });
-          fireEvent.click(screen.getAllByTestId('CancelIcon')[0] as HTMLElement);
-          fireEvent.change(textBoxes[1], {
-            target: { value: firstEvent.descriptionMetadataArray[0].value.concat(sufix) },
-          });
-          fireEvent.click(screen.getByText('OK'));
-
-          await waitFor(async () => {
-            expect(screen.getByText(firstEvent.title.concat(sufix))).toBeInTheDocument();
-            expect(screen.queryByTestId(firstEvent.placeMetadataArray[0].value)).toBeNull();
-            expect(
-              screen.getByText(firstEvent.charactersMetadataArray[0].value)
-            ).toBeInTheDocument();
-            expect(
-              screen.getByText(firstEvent.descriptionMetadataArray[0].value.concat(sufix))
-            ).toBeInTheDocument();
-          });
+          expect(screen.getByText(firstEvent.title.concat(sufix))).toBeInTheDocument();
+          expect(screen.queryByTestId(firstEvent.placeMetadataArray[0].value)).toBeNull();
+          expect(screen.getByText(firstEvent.charactersMetadataArray[0].value)).toBeInTheDocument();
+          expect(
+            screen.getByText(firstEvent.descriptionMetadataArray[0].value.concat(sufix))
+          ).toBeInTheDocument();
         });
       });
     });
