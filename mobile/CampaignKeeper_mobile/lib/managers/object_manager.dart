@@ -14,9 +14,14 @@ class ObjectManager extends BaseManager<ObjectEntity> {
   Map<int, List<ObjectEntity>> _map = {};
 
   @override
-  void attach(ObjectEntity entity) {
-    _attach(entity);
-    _cacheAll();
+  Future<void> attach(ObjectEntity entity) async {
+    lockedOperation(
+      () async {
+        _attach(entity);
+        await _cacheAll();
+      },
+      defaultResult: null,
+    );
   }
 
   @override
@@ -40,53 +45,95 @@ class ObjectManager extends BaseManager<ObjectEntity> {
   }
 
   @override
-  Future<bool> refresh({int groupId = -1, bool online = true}) async {
-    if (_map.isEmpty) {
-      String? cache = await CacheUtil().get(_key);
-      if (cache != null) {
-        List cacheData = json.decode(cache);
-        cacheData.forEach((data) {
-          _attach(_decodeEntity(data));
-        });
+  Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
+    var refreshValue = RefreshParameter(parameter: parameterName, value: parameterValue);
 
-        notifyListeners();
-      }
-    }
-
-    if (online && groupId > -1) {
-      Response userResponse = await RequestHelper()
-          .get(endpoint: ObjectEntity.endpoint, params: [RequestParameter(name: "schemaId", value: groupId)]);
-
-      if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
-        Map responseData = json.decode(userResponse.data!);
-        List<ObjectEntity> newEntities =
-            (responseData['objects'] as List).map((e) => _decodeEntity(e)).toList();
-
-        if (_isEqual(groupId, newEntities)) {
-          return false;
-        }
-
-        _map[groupId] = newEntities;
-
-        notifyListeners();
-        _cacheAll();
-
-        return true;
-      } else if (userResponse.status == ResponseStatus.IncorrectData) {
-        _map[groupId]?.clear();
-
-        notifyListeners();
-        _cacheAll();
-      }
-    }
-
-    return false;
+    return await lockedOperation<bool>(
+      () async {
+        return await _refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
+      },
+      parameter: refreshValue,
+      defaultResult: true,
+    );
   }
 
   @override
   void clear() {
     _map.clear();
     _cacheAll();
+  }
+
+  Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
+    if (_map.isEmpty) {
+      String? cache = await CacheUtil().get(_key);
+      if (cache != null) {
+        List cacheData = json.decode(cache);
+        cacheData.forEach((data) {
+          _attach(ObjectEntity.decode(data));
+        });
+
+        notifyListeners();
+      }
+    }
+
+    parameterName = parameterName ?? EntityParameter.schema;
+
+    if (online && parameterValue != null) {
+      var parameter = RequestParameter(name: parameterName.name, value: parameterValue);
+      Response userResponse = await RequestHelper().get(endpoint: ObjectEntity.endpoint, params: [parameter]);
+
+      if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
+        Map responseData = json.decode(userResponse.data!);
+        List<ObjectEntity> newEntities =
+            (responseData['objects'] as List).map((e) => ObjectEntity.decode(e)).toList();
+
+        if (parameterName == EntityParameter.schema) {
+          if (_isEqual(parameterValue, newEntities)) {
+            return false;
+          }
+
+          _map[parameterValue] = newEntities;
+        } else if (parameterName == EntityParameter.campaign) {
+          var oldKeys = _map.keys.toList();
+          var newKeys = newEntities.map((e) => e.schemaId).toSet();
+          bool isEqual = newKeys.toList().equals(oldKeys);
+          int iter = 0;
+
+          while (isEqual && iter < oldKeys.length) {
+            var key = oldKeys[iter];
+            isEqual &= _isEqual(key, newEntities.where((e) => e.schemaId == key).toList());
+
+            iter++;
+          }
+
+          if (isEqual) {
+            return false;
+          }
+
+          _map.clear();
+
+          newKeys.forEach((key) {
+            _map[key] = newEntities.where((e) => e.schemaId == key).toList();
+          });
+        }
+
+        notifyListeners();
+        await _cacheAll();
+
+        return true;
+      } else if (userResponse.status == ResponseStatus.IncorrectData) {
+        if (parameterName == EntityParameter.schema) {
+          _map[parameterValue]?.clear();
+        } else {
+          _map.clear();
+        }
+
+        notifyListeners();
+        await _cacheAll();
+      }
+    }
+
+    return false;
   }
 
   void _attach(ObjectEntity entity) {
@@ -112,41 +159,9 @@ class ObjectManager extends BaseManager<ObjectEntity> {
     return true;
   }
 
-  void _cacheAll() {
+  Future<void> _cacheAll() async {
     var schemas = DataCarrier().getList<SchemaEntity>().map((e) => e.id).toList();
-    var data = [];
 
-    _map.forEach(
-      (key, list) {
-        if (schemas.isEmpty || schemas.contains(key)) {
-          data.addAll(list.map((e) => _encodeEntity(e)));
-        }
-      },
-    );
-
-    CacheUtil().add(_key, json.encode(data));
-  }
-
-  ObjectEntity _decodeEntity(Map data) {
-    int id = data['id'];
-    int schemaId = data['schemaId'];
-    String title = data['title'];
-    String? imageData = data['imageBase64'];
-    List<FieldValue> values =
-        (data['metadataArray'] as List<dynamic>).map((e) => FieldValue.decode(e)).toList();
-
-    return ObjectEntity(id: id, schemaId: schemaId, title: title, imageData: imageData, values: values);
-  }
-
-  Map _encodeEntity(ObjectEntity entity) {
-    Map data = {
-      'id': entity.id,
-      'schemaId': entity.schemaId,
-      'title': entity.title,
-      'imageBase64': entity.imageData,
-      'metadataArray': entity.values.map((e) => FieldValue.encode(e)).toList(),
-    };
-
-    return data;
+    await cacheMap(_map, _key, schemas);
   }
 }

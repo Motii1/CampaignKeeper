@@ -1,6 +1,7 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_search_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_anim_sliver_replacer.dart';
+import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_object_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
@@ -30,10 +31,12 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
   late List<ObjectEntity> objects = DataCarrier().getList(groupId: schema?.id ?? -1);
 
   Future<void> onRefresh() async {
-    DataCarrier().refresh<UserDataEntity>();
-    DataCarrier().refresh<CampaignEntity>();
-    await DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    await DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
+    await Future.wait([
+      DataCarrier().refresh<UserDataEntity>(),
+      DataCarrier().refresh<CampaignEntity>(),
+      DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId),
+      DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id),
+    ]);
   }
 
   Future<void> onSchemaRefresh() async {
@@ -95,13 +98,13 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
 
   @override
   void onReturn() async {
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
+    DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id);
   }
 
   @override
   void onEveryResume() async {
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
   }
 
   @override
@@ -109,8 +112,8 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
     super.initState();
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);
     DataCarrier().addListener<ObjectEntity>(onObjectsRefresh);
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
+    DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id);
   }
 
   @override
@@ -122,7 +125,7 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return KeeperScaffold(
       body: KeeperSearchBar(
         title: schema?.title ?? "",
         popup: KeeperPopup.settings(context),

@@ -1,15 +1,19 @@
+import 'package:campaign_keeper_mobile/entities/base_entity.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/managers/campaign_manager.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
+import 'package:campaign_keeper_mobile/managers/event_manager.dart';
 import 'package:campaign_keeper_mobile/managers/object_manager.dart';
 import 'package:campaign_keeper_mobile/managers/session_manager.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
 import 'package:campaign_keeper_mobile/managers/schema_manager.dart';
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
 // Service used throught the whole app to unify
@@ -31,6 +35,7 @@ class DataCarrier {
     _managers[SessionEntity] = new SessionManager();
     _managers[SchemaEntity] = new SchemaManager();
     _managers[ObjectEntity] = new ObjectManager();
+    _managers[EventEntity] = new EventManager();
   }
 
   void addListener<T>(VoidCallback listener) {
@@ -45,15 +50,15 @@ class DataCarrier {
     }
   }
 
-  void attach<T>(T entity) {
+  Future<void> attach<T>(T entity) async {
     if (_managers.containsKey(T)) {
-      _managers[T]!.attach(entity);
+      await _managers[T]!.attach(entity as BaseEntity);
     }
   }
 
   Future<bool> patch<T>({required T newEntity}) async {
     if (_managers.containsKey(T)) {
-      return await _managers[T]!.patch(newEntity: newEntity);
+      return await _managers[T]!.patch(newEntity: newEntity as BaseEntity);
     }
 
     return false;
@@ -61,7 +66,7 @@ class DataCarrier {
 
   T? get<T>({int entId = -1}) {
     if (_managers.containsKey(T)) {
-      return _managers[T]!.get(entId: entId);
+      return _managers[T]!.get(entId: entId) as T?;
     }
     return null;
   }
@@ -73,9 +78,10 @@ class DataCarrier {
     return [];
   }
 
-  Future<bool> refresh<T>({int groupId = -1, bool online = true}) async {
+  Future<bool> refresh<T>({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_managers.containsKey(T)) {
-      return await _managers[T]!.refresh(groupId: groupId, online: online);
+      return await _managers[T]!
+          .refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
     }
 
     return false;

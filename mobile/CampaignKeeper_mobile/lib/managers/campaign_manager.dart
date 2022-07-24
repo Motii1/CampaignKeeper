@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
@@ -13,9 +14,14 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   CampaignManager();
 
   @override
-  void attach(CampaignEntity entity) {
-    _entities.add(entity);
-    _cacheAll();
+  Future<void> attach(CampaignEntity entity) async {
+    lockedOperation(
+      () async {
+        _entities.add(entity);
+        await cacheList(_entities, _key);
+      },
+      defaultResult: null,
+    );
   }
 
   @override
@@ -29,13 +35,30 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   }
 
   @override
-  Future<bool> refresh({int groupId = -1, bool online = true}) async {
+  Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
+    var refreshValue = RefreshParameter(parameter: parameterName, value: parameterValue);
+
+    return await lockedOperation(
+      () async {
+        return await _refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
+      },
+      parameter: refreshValue,
+      defaultResult: true,
+    );
+  }
+
+  @override
+  void clear() {
+    _entities.clear();
+  }
+
+  Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_entities.isEmpty) {
       String? cache = await CacheUtil().get(_key);
       if (cache != null && cache.isNotEmpty) {
         List cacheData = json.decode(cache);
 
-        _entities = cacheData.map((e) => _decodeEntity(e)).toList();
+        _entities = cacheData.map((e) => CampaignEntity.decode(e)).toList();
         notifyListeners();
       }
     }
@@ -46,25 +69,20 @@ class CampaignManager extends BaseManager<CampaignEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<CampaignEntity> newEntities =
-            (responseData['campaigns'] as List).map((e) => _decodeEntity(e)).toList();
+            (responseData['campaigns'] as List).map((e) => CampaignEntity.decode(e)).toList();
 
-        if (_isEqual(newEntities)) {
-          return false;
+        if (!_isEqual(newEntities)) {
+          _entities = newEntities;
+
+          notifyListeners();
+          await cacheList(_entities, _key);
+
+          return true;
         }
-
-        _entities = newEntities;
-        notifyListeners();
-        _cacheAll();
-        return true;
       }
     }
 
     return false;
-  }
-
-  @override
-  void clear() {
-    _entities.clear();
   }
 
   bool _isEqual(List<CampaignEntity> newEntities) {
@@ -79,31 +97,5 @@ class CampaignManager extends BaseManager<CampaignEntity> {
     }
 
     return true;
-  }
-
-  void _cacheAll() {
-    var data = _entities.map((e) => _encodeEntity(e)).toList();
-
-    CacheUtil().add(_key, json.encode(data));
-  }
-
-  CampaignEntity _decodeEntity(Map data) {
-    int id = data['id'];
-    String name = data['name'];
-    DateTime createdAt = DateTime.parse(data['createdAt']);
-    String? imageData = data['imageBase64'];
-
-    return CampaignEntity(id: id, name: name, createdAt: createdAt, imageData: imageData);
-  }
-
-  Map _encodeEntity(CampaignEntity entity) {
-    Map data = {
-      "id": entity.id,
-      "name": entity.name,
-      "createdAt": entity.createdAt.toString(),
-      "imageBase64": entity.imageData,
-    };
-
-    return data;
   }
 }

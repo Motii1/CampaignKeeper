@@ -13,10 +13,17 @@ class DependenciesHelper {
   FlutterSecureStorage _secureStorage = new FlutterSecureStorage();
   SharedPreferences? _storage;
   http.Client _client = http.Client();
+  http.MultipartRequest Function(String, Uri) _multipartRequest =
+      (type, uri) => http.MultipartRequest(type, uri);
 
   DependenciesHelper._internal();
 
-  void useMocks({FlutterSecureStorage? secureStorage, SharedPreferences? storage, http.Client? client}) {
+  void useMocks({
+    FlutterSecureStorage? secureStorage,
+    SharedPreferences? storage,
+    http.Client? client,
+    http.MultipartRequest Function(String, Uri)? multipartRequest,
+  }) {
     if (secureStorage != null) {
       _secureStorage = secureStorage;
     }
@@ -27,6 +34,10 @@ class DependenciesHelper {
 
     if (client != null) {
       _client = client;
+    }
+
+    if (multipartRequest != null) {
+      _multipartRequest = multipartRequest;
     }
   }
 
@@ -44,5 +55,9 @@ class DependenciesHelper {
 
   http.Client get client {
     return _client;
+  }
+
+  http.MultipartRequest Function(String, Uri) get multipartRequest {
+    return _multipartRequest;
   }
 }

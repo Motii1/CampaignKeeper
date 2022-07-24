@@ -5,9 +5,10 @@ import 'package:campaign_keeper_mobile/search_controllers/base_search_controller
 import 'package:flutter/material.dart';
 
 class SessionSearchController extends BaseSearchController<SessionEntity> {
-  int campaignId;
+  final int campaignId;
 
-  SessionSearchController({required this.campaignId, String heroTag = 'search'}) : super(heroTag: heroTag);
+  const SessionSearchController({required this.campaignId, String heroTag = 'search'})
+      : super(heroTag: heroTag);
 
   @override
   List filterEntities(String input) {

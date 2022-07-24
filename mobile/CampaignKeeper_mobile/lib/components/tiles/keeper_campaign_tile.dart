@@ -13,6 +13,7 @@ class KeeperCampaignTile extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(5.0),
       child: Card(
+        color: Theme.of(context).colorScheme.secondary,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10.0),
           child: Stack(
@@ -45,7 +46,9 @@ class KeeperCampaignTile extends StatelessWidget {
                         child: Text(
                           entity.name,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                                color: Theme.of(context).colorScheme.onSecondary,
+                              ),
                         ),
                       )),
                     ],

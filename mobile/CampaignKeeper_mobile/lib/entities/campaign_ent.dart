@@ -1,25 +1,33 @@
 import 'dart:convert';
+import 'package:campaign_keeper_mobile/entities/base_entity.dart';
 import 'package:flutter/material.dart';
 
 // Entity representing an campaign.
-class CampaignEntity {
+class CampaignEntity implements BaseEntity {
+  CampaignEntity({required this.id, required this.name, required this.createdAt, String? imageData}) {
+    this.imageData = imageData;
+  }
+
+  CampaignEntity.decode(Map data) {
+    id = data['id'];
+    name = data['name'];
+    createdAt = DateTime.parse(data['createdAt']);
+    imageData = data['imageBase64'];
+  }
+
   static const String endpoint = "/api/campaign/list";
 
   Image _imageCache = Image.asset("assets/campaign_default.png");
   String? _imageData;
 
-  int id;
-  String name;
-  DateTime createdAt;
-
-  CampaignEntity({required this.id, required this.name, required this.createdAt, String? imageData}) {
-    this.imageData = imageData;
-  }
+  late int id;
+  late String name;
+  late DateTime createdAt;
 
   String? get imageData => _imageData;
 
   // A setter that also updates an cached image.
-  void set imageData(String? value) {
+  set imageData(String? value) {
     _imageData = value;
 
     if (value != null) {
@@ -32,7 +40,22 @@ class CampaignEntity {
 
   Image get image => _imageCache;
 
-  bool equals(CampaignEntity other) {
+  Map encode() {
+    Map data = {
+      "id": id,
+      "name": name,
+      "createdAt": createdAt.toString(),
+      "imageBase64": imageData,
+    };
+
+    return data;
+  }
+
+  bool equals(Object? other) {
+    if (other == null || !(other is CampaignEntity)) {
+      return false;
+    }
+
     return id == other.id &&
         name == other.name &&
         createdAt == other.createdAt &&

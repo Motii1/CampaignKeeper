@@ -99,46 +99,53 @@ class _SearchScaffold extends StatelessWidget {
           child: Material(
             color: Theme.of(context).colorScheme.surface,
             child: InkWell(
-              child: SafeArea(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    KeeperBackButton(),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 2),
-                        child: TextField(
-                          controller: searchTextController,
-                          focusNode: searchFocusNode,
-                          style: TextStyle(
-                            fontSize: 19,
-                          ),
-                          onChanged: onChanged,
-                          decoration: InputDecoration(
-                            hintText: "Search",
-                            hintStyle: TextStyle(
-                                color: Theme.of(context).appBarTheme.titleTextStyle!.color!.withOpacity(0.7)),
-                            fillColor: Colors.transparent,
-                            contentPadding: EdgeInsets.zero,
-                            focusedBorder: border,
-                            enabledBorder: border,
-                            disabledBorder: border,
-                            border: border,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).padding.top + 3,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      KeeperBackButton(),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 2),
+                          child: TextField(
+                            controller: searchTextController,
+                            focusNode: searchFocusNode,
+                            style: TextStyle(
+                              fontSize: 19,
+                            ),
+                            onChanged: onChanged,
+                            decoration: InputDecoration(
+                              hintText: "Search",
+                              hintStyle: TextStyle(
+                                  color:
+                                      Theme.of(context).appBarTheme.titleTextStyle!.color!.withOpacity(0.7)),
+                              fillColor: Colors.transparent,
+                              contentPadding: EdgeInsets.zero,
+                              focusedBorder: border,
+                              enabledBorder: border,
+                              disabledBorder: border,
+                              border: border,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: onClear,
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      icon: Icon(
-                        Icons.clear,
-                        color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                      IconButton(
+                        onPressed: onClear,
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        icon: Icon(
+                          Icons.clear,
+                          color: Theme.of(context).appBarTheme.titleTextStyle!.color,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  )
+                ],
               ),
             ),
           ),

@@ -40,98 +40,98 @@ class KeeperSearchBar extends StatelessWidget {
     return navigator != null && navigator.canPop() && autoLeading;
   }
 
-  Future<void> _refresh() {
-    return Future.delayed(Duration(seconds: 0));
-  }
-
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<OverscrollIndicatorNotification>(
-      onNotification: (overScroll) {
-        overScroll.disallowIndicator();
-        return false;
-      },
-      child: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverAppBar(
-                automaticallyImplyLeading: false,
-                elevation: innerBoxIsScrolled ? 5 : 0,
-                shadowColor: Theme.of(context).colorScheme.brightness == Brightness.light
-                    ? Colors.black.withOpacity(0.25)
-                    : Colors.white.withOpacity(0.075),
-                forceElevated: true,
-                pinned: true,
-                collapsedHeight: _collapsedHeight,
-                expandedHeight: _expandedHeight,
-                flexibleSpace: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    double _realAppBarHeight = MediaQuery.of(context).padding.top + _collapsedHeight;
-                    double expandedPercent = min(
-                        (constraints.biggest.height - _realAppBarHeight) /
-                            (_expandedHeight - _realAppBarHeight),
-                        1.0);
-                    return Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        ClipRect(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: SizedBox(
-                              width: constraints.biggest.width,
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: 60, left: 14, right: 14),
-                                child: Text(
-                                  title,
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground
-                                        .withOpacity(expandedPercent),
-                                    overflow: TextOverflow.ellipsis,
-                                    fontSize: 27 + expandedPercent * 2,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return [
+          SliverOverlapAbsorber(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: SliverAppBar(
+              automaticallyImplyLeading: false,
+              elevation: innerBoxIsScrolled ? 5 : 0,
+              shadowColor: Theme.of(context).colorScheme.brightness == Brightness.light
+                  ? Colors.black.withOpacity(0.25)
+                  : Colors.white.withOpacity(0.075),
+              forceElevated: true,
+              pinned: true,
+              collapsedHeight: _collapsedHeight,
+              expandedHeight: _expandedHeight,
+              flexibleSpace: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  double _realAppBarHeight = MediaQuery.of(context).padding.top + _collapsedHeight;
+                  double expandedPercent = min(
+                      (constraints.biggest.height - _realAppBarHeight) /
+                          (_expandedHeight - _realAppBarHeight),
+                      1.0);
+                  return Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      ClipRect(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: SizedBox(
+                            width: constraints.biggest.width,
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 60, left: 14, right: 14),
+                              child: Text(
+                                title,
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onBackground.withOpacity(expandedPercent),
+                                  overflow: TextOverflow.ellipsis,
+                                  fontSize: 27 + expandedPercent * 2,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        SearchBar(
-                            autoLeading: autoLeading,
-                            popup: popup,
-                            heroTag: heroTag,
-                            searchController: searchController),
-                      ],
-                    );
-                  },
-                ),
+                      ),
+                      SearchBar(
+                          autoLeading: autoLeading,
+                          popup: popup,
+                          heroTag: heroTag,
+                          searchController: searchController),
+                    ],
+                  );
+                },
               ),
             ),
-          ];
-        },
-        body: RefreshIndicator(
-          onRefresh: onRefresh ?? _refresh,
-          edgeOffset: 55,
-          color: Theme.of(context).colorScheme.onBackground,
-          displacement: onRefresh == null ? 0 : 40,
-          strokeWidth: 2.5,
-          child: Builder(
-            builder: (BuildContext context) {
-              return CustomScrollView(
-                slivers: [
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                  ),
-                  sliver,
-                ],
-              );
-            },
           ),
-        ),
-      ),
+        ];
+      },
+      body: onRefresh != null
+          ? RefreshIndicator(
+              onRefresh: onRefresh!,
+              edgeOffset: 55,
+              color: Theme.of(context).colorScheme.onBackground,
+              strokeWidth: 2.5,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return CustomScrollView(
+                    slivers: [
+                      SliverOverlapInjector(
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                      ),
+                      sliver,
+                    ],
+                  );
+                },
+              ),
+            )
+          : LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return CustomScrollView(
+                  slivers: [
+                    SliverOverlapInjector(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                    ),
+                    sliver,
+                  ],
+                );
+              },
+            ),
     );
   }
 }

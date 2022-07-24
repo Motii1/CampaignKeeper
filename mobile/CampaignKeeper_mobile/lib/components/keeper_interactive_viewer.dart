@@ -1,49 +1,68 @@
-import 'dart:math';
+import 'package:campaign_keeper_mobile/types/widget_types.dart';
 import 'package:flutter/material.dart';
 
 // Simple interactive viewer that lets move
-// drag and scale it's content.
+// drag and scale it's child.
+// Allows to center the content.
 class KeeperInteractiveViewer extends StatefulWidget {
-  const KeeperInteractiveViewer({Key? key, required this.child}) : super(key: key);
+  const KeeperInteractiveViewer({Key? key, required this.child, required this.centerKey}) : super(key: key);
   final Widget child;
+  final GlobalKey centerKey;
 
   @override
   State<KeeperInteractiveViewer> createState() => _KeeperInteractiveViewerState();
 }
 
-class _KeeperInteractiveViewerState extends State<KeeperInteractiveViewer> {
-  var offset = Offset(-10.0, 90.0); // x, y
-  double scale = 1.0;
-  double scaleFactor = 1.0;
+class _KeeperInteractiveViewerState extends State<KeeperInteractiveViewer> with WidgetsBindingObserver {
+  final controller = TransformationController();
+  var opacity = 0.0;
+
+  Size get screenSize {
+    return MediaQuery.of(context).size;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      var bounds = widget.centerKey.globalPaintBounds;
+      if (bounds != null) {
+        double posY = bounds.left;
+        double widgetWidth = widget.centerKey.currentContext!.size!.width;
+        double screenWidth = MediaQuery.of(context).size.width;
+
+        double padding = (screenWidth - widgetWidth) / 2 - 3;
+        double deltaY = posY - padding;
+
+        double paddingTop = MediaQuery.of(context).padding.top;
+
+        controller.value = Matrix4.translationValues(-deltaY, paddingTop + 55, 0);
+
+        setState(() {
+          opacity = 1.0;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onScaleStart: (details) {
-        scaleFactor = scale;
-      },
-      onScaleUpdate: (details) {
-        setState(() {
-          scale = min(3.0, max(0.5, scaleFactor * details.scale));
-          offset = offset.translate(details.focalPointDelta.dx, details.focalPointDelta.dy);
-        });
-      },
-      child: Container(
-        color: Theme.of(context).colorScheme.background,
-        child: OverflowBox(
-          alignment: Alignment.topCenter,
-          minWidth: 0.0,
-          minHeight: 0.0,
-          maxWidth: double.infinity,
-          maxHeight: double.infinity,
-          child: Transform.translate(
-            offset: offset,
-            child: Transform.scale(
-              scale: scale,
-              child: widget.child,
-            ),
-          ),
-        ),
+    return AnimatedOpacity(
+      opacity: opacity,
+      duration: Duration(milliseconds: 250),
+      child: InteractiveViewer(
+        constrained: false,
+        boundaryMargin: EdgeInsets.symmetric(vertical: screenSize.height, horizontal: screenSize.width),
+        minScale: 0.5,
+        maxScale: 2.0,
+        child: widget.child,
+        transformationController: controller,
       ),
     );
   }

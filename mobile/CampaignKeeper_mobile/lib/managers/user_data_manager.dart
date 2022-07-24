@@ -3,6 +3,7 @@ import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
 
 class UserDataManager extends BaseManager<UserDataEntity> {
@@ -12,30 +13,42 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   UserDataManager();
 
   @override
-  void attach(UserDataEntity entity) {
-    _entity = entity;
-    Map data = _encodeEntity(_entity!);
+  Future<void> attach(UserDataEntity entity) async {
+    await lockedOperation(
+      () async {
+        _entity = entity;
+        Map data = _entity!.encode();
 
-    CacheUtil().addSecure(_key, json.encode(data));
+        CacheUtil().addSecure(_key, json.encode(data));
+      },
+      defaultResult: null,
+    );
   }
 
   @override
   Future<bool> patch({required UserDataEntity newEntity}) async {
-    if (newEntity.imageData != null) {
-      var bytes = base64Decode(newEntity.imageData!);
-      var file = KeeperFile(name: 'image-file', type: KeeperMediaType.image, bytes: bytes);
+    return await lockedOperation<bool>(
+      () async {
+        if (newEntity.imageData != null) {
+          var bytes = base64Decode(newEntity.imageData!);
+          var file = KeeperFile(name: 'image-file', type: KeeperMediaType.image, bytes: bytes);
 
-      var response = await RequestHelper().putFile(endpoint: UserDataEntity.imageEndpoint, file: file);
+          var response = await RequestHelper()
+              .putFile(endpoint: UserDataEntity.imageEndpoint, file: file, isAutoLogin: false);
 
-      if (response.status == ResponseStatus.Success) {
-        _entity!.imageData = newEntity.imageData;
+          if (response.status == ResponseStatus.Success) {
+            _entity!.imageData = newEntity.imageData;
 
-        notifyListeners();
-        return true;
-      }
-    }
+            notifyListeners();
 
-    return false;
+            return true;
+          }
+        }
+
+        return false;
+      },
+      defaultResult: false,
+    );
   }
 
   @override
@@ -49,12 +62,30 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   }
 
   @override
-  Future<bool> refresh({int groupId = -1, bool online = true}) async {
+  Future<bool> refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
+    var refreshValue = RefreshParameter(parameter: parameterName, value: parameterValue);
+
+    return await lockedOperation<bool>(
+      () async {
+        return await _refresh(parameterName: parameterName, parameterValue: parameterValue, online: online);
+      },
+      parameter: refreshValue,
+      defaultResult: true,
+    );
+  }
+
+  @override
+  void clear() {
+    _entity = null;
+    CacheUtil().deleteSecure();
+  }
+
+  Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_entity == null) {
       String? cache = await CacheUtil().getSecure(_key);
 
       if (cache != null) {
-        _entity = _decodeEntity(json.decode(cache));
+        _entity = UserDataEntity.decode(json.decode(cache));
         notifyListeners();
       }
     }
@@ -80,7 +111,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
             notifyListeners();
 
-            Map data = _encodeEntity(_entity!);
+            Map data = _entity!.encode();
             CacheUtil().addSecure(_key, json.encode(data));
 
             return true;
@@ -91,44 +122,9 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
         CacheUtil().deleteSecure();
         notifyListeners();
-
-        return false;
       }
     }
 
     return false;
-  }
-
-  @override
-  void clear() {
-    _entity = null;
-    CacheUtil().deleteSecure();
-  }
-
-  UserDataEntity? _decodeEntity(Map data) {
-    String? username = data["username"];
-    String? email = data["email"];
-    String? password = data["password"];
-    String? imageData = data["image"];
-
-    if (username != null && email != null) {
-      UserDataEntity ent =
-          new UserDataEntity(username: username, email: email, password: password, imageData: imageData);
-
-      return ent;
-    }
-
-    return null;
-  }
-
-  Map _encodeEntity(UserDataEntity ent) {
-    Map data = {
-      "username": ent.username,
-      "email": ent.email,
-      "password": ent.password,
-      "image": ent.imageData,
-    };
-
-    return data;
   }
 }

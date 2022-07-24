@@ -1,19 +1,10 @@
 import 'dart:convert';
+import 'package:campaign_keeper_mobile/entities/base_entity.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
 // Entity representing an object.
-class ObjectEntity {
-  static const String endpoint = "/api/object/list";
-
-  int id;
-  int schemaId;
-  String title;
-  List<FieldValue> values;
-
-  Image? _imageCache;
-  String? _imageData;
-
+class ObjectEntity implements BaseEntity {
   ObjectEntity(
       {required this.id,
       required this.schemaId,
@@ -23,10 +14,28 @@ class ObjectEntity {
     this.imageData = imageData;
   }
 
+  ObjectEntity.decode(Map data) {
+    id = data['id'];
+    schemaId = data['schemaId'];
+    title = data['title'];
+    imageData = data['imageBase64'];
+    values = (data['metadataArray'] as List<dynamic>).map((e) => FieldValue.decode(e)).toList();
+  }
+
+  static const String endpoint = "/api/object/list";
+
+  late int id;
+  late int schemaId;
+  late String title;
+  late List<FieldValue> values;
+
+  Image? _imageCache;
+  String? _imageData;
+
   String? get imageData => _imageData;
 
-  // A setter that also updates an cached image.
-  void set imageData(String? value) {
+  // A setter that also updates the cached image.
+  set imageData(String? value) {
     _imageData = value == "" ? null : value;
 
     if (_imageData != null) {
@@ -43,25 +52,27 @@ class ObjectEntity {
 
   Image? get image => _imageCache;
 
-  bool equals(ObjectEntity other) {
+  Map encode() {
+    Map data = {
+      'id': id,
+      'schemaId': schemaId,
+      'title': title,
+      'imageBase64': imageData,
+      'metadataArray': values.map((e) => FieldValue.encode(e)).toList(),
+    };
+
+    return data;
+  }
+
+  bool equals(Object? other) {
+    if (other == null || !(other is ObjectEntity)) {
+      return false;
+    }
+
     return id == other.id &&
         schemaId == other.schemaId &&
         title == other.title &&
         imageData == other.imageData &&
-        _valuesEquals(other.values);
-  }
-
-  bool _valuesEquals(List<FieldValue> other) {
-    if (values.length == other.length) {
-      for (int i = 0; i < values.length; i++) {
-        if (!values[i].equals(other[i])) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    return false;
+        values.equals(other.values);
   }
 }

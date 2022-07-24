@@ -18,6 +18,7 @@ class KeeperTitleTile extends StatelessWidget {
             style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).colorScheme.onBackground,
             ),
           ),
         ),

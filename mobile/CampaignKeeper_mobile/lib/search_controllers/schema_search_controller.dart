@@ -5,9 +5,10 @@ import 'package:campaign_keeper_mobile/search_controllers/base_search_controller
 import 'package:flutter/material.dart';
 
 class SchemaSearchController extends BaseSearchController<SchemaEntity> {
-  int campaignId;
+  final int campaignId;
 
-  SchemaSearchController({required this.campaignId, String heroTag = 'search'}) : super(heroTag: heroTag);
+  const SchemaSearchController({required this.campaignId, String heroTag = 'search'})
+      : super(heroTag: heroTag);
 
   @override
   List filterEntities(String input) {

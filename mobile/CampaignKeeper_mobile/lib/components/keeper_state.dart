@@ -1,6 +1,4 @@
-import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/main.dart';
-import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:flutter/material.dart';
 
 // An extension of a classic widget state.
@@ -16,20 +14,6 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
 
   // Function run on the return to this widget.
   void onReturn() async {}
-
-  // It shows a snackbar with a connection status info
-  // when connection status changes.
-  void showStatus() {
-    bool isOnline = RequestHelper().isOnline;
-    ScaffoldMessengerState scaffold = ScaffoldMessenger.of(context);
-    if (ModalRoute.of(context)!.isCurrent && this.mounted && scaffold.mounted) {
-      if (isOnline) {
-        scaffold.showSnackBar(KeeperSnackBars.online);
-      } else {
-        scaffold.showSnackBar(KeeperSnackBars.offline);
-      }
-    }
-  }
 
   // Allows to return to the specific page in a stack.
   // Will work only if current widget is a currently
@@ -71,13 +55,11 @@ class KeeperState<T extends StatefulWidget> extends State<T> with WidgetsBinding
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    RequestHelper().addListener(showStatus);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
-    RequestHelper().removeListener(showStatus);
     routeObserver.unsubscribe(this);
     super.dispose();
   }

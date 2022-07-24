@@ -1,6 +1,7 @@
 import 'package:campaign_keeper_mobile/components/keeper_logo_card.dart';
 import 'package:campaign_keeper_mobile/components/keeper_snack_bars.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
@@ -88,11 +89,14 @@ class _LoginCardState extends State<LoginCard> {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
 
     if (_formKey.currentState!.validate()) {
-      ResponseStatus status = await LoginHelper().login(loginController.text, passwordController.text);
+      var tuple = await LoginHelper().login(loginController.text, passwordController.text);
+      ResponseStatus status = tuple.first;
+      UserDataEntity? userEnt = tuple.second;
 
       if (ModalRoute.of(context)!.isCurrent) {
         switch (status) {
           case ResponseStatus.Success:
+            await DataCarrier().attach(userEnt!);
             await DataCarrier().refresh<CampaignEntity>();
 
             if (canPop()) {

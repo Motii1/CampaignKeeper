@@ -1,12 +1,7 @@
 // Entity representing a session.
-class SessionEntity {
-  static const String endpoint = "/api/session/list";
+import 'package:campaign_keeper_mobile/entities/base_entity.dart';
 
-  int id;
-  int campaignId;
-  String name;
-  DateTime createdAt;
-
+class SessionEntity implements BaseEntity {
   SessionEntity({
     required this.id,
     required this.campaignId,
@@ -14,7 +9,36 @@ class SessionEntity {
     required this.createdAt,
   });
 
-  bool equals(SessionEntity other) {
+  SessionEntity.decode(Map data) {
+    id = data['id'];
+    campaignId = data['campaignId'];
+    name = data['name'];
+    createdAt = DateTime.parse(data['createdAt']);
+  }
+
+  static const String endpoint = "/api/session/list";
+
+  late int id;
+  late int campaignId;
+  late String name;
+  late DateTime createdAt;
+
+  Map encode() {
+    Map data = {
+      "id": id,
+      "campaignId": campaignId,
+      "name": name,
+      "createdAt": createdAt.toString(),
+    };
+
+    return data;
+  }
+
+  bool equals(Object? other) {
+    if (other == null || !(other is SessionEntity)) {
+      return false;
+    }
+
     return id == other.id &&
         campaignId == other.campaignId &&
         name == other.name &&

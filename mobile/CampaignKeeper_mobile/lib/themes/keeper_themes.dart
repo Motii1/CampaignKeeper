@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // Theme data generator.
 class _DefaultTheme {
   static const double _textColorOpacitySecondary = 0.7;
-  static const double _textColorOpacityPrimary = 0.9;
+  static const double _textColorOpacityPrimary = 0.95;
   static const double _radius = 12.5;
   static const double _inputRadius = 10;
 
@@ -25,6 +25,7 @@ class _DefaultTheme {
   final TextStyle textColorTitle;
 
   late ThemeData theme = ThemeData(
+    useMaterial3: true,
     appBarTheme: AppBarTheme(
       elevation: 0.0,
       backgroundColor: background,
@@ -144,16 +145,65 @@ class _DefaultTheme {
         borderRadius: BorderRadius.circular(20),
       ),
     ),
-    radioTheme: RadioThemeData(
-      fillColor: MaterialStateColor.resolveWith(
-        (states) {
-          if (states.contains(MaterialState.selected)) {
-            return Color.alphaBlend(onBackground.withAlpha(90), primary);
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+          var color = Color.alphaBlend(onSurface.withOpacity(0.5), primary);
+
+          if (states.contains(MaterialState.disabled)) {
+            color = color.withOpacity(0.7);
           }
 
-          return onBackground;
-        },
+          return color;
+        }),
+        backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) => background),
+        side: MaterialStateProperty.resolveWith<BorderSide?>((states) {
+          var color = onSurface.withOpacity(0.25);
+
+          if (states.contains(MaterialState.disabled)) {
+            color = color.withOpacity(0.65);
+          }
+
+          return BorderSide(
+            width: 2,
+            color: color,
+          );
+        }),
       ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+          var color = primary;
+
+          if (states.contains(MaterialState.disabled)) {
+            color = color.withOpacity(0.65);
+          }
+
+          return color;
+        }),
+        elevation: MaterialStateProperty.resolveWith<double?>((states) {
+          if (states.contains(MaterialState.pressed)) {
+            return 3;
+          }
+
+          return 1;
+        }),
+      ),
+    ),
+    chipTheme: ChipThemeData(
+      pressElevation: 1.5,
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(17),
+      ),
+      backgroundColor: primary,
+      foregroundColor: onPrimary,
+      elevation: 2,
+      focusElevation: 2,
+      hoverElevation: 2,
+      highlightElevation: 2,
     ),
   );
 
@@ -180,23 +230,23 @@ class _DefaultTheme {
 
 // Apps theme provider.
 class KeeperThemes {
-  static const Color _primaryLight = Color.fromARGB(255, 167, 205, 247);
+  static const Color _primaryLight = Color(0xffb9cbe8);
   static const Color _onPrimaryLight = Color(0xff242424);
 
-  static final Color _secondaryLight = Color.fromARGB(255, 254, 156, 226);
+  static final Color _secondaryLight = Color(0xffdaeced);
   static const Color _onSecondaryLight = Color(0xff242424);
 
   static const Color _errorLight = Colors.redAccent;
   static const Color _onErrorLight = Color(0xff242424);
 
-  static const Color _light = Color(0xffdce9f5);
-  static const Color _lighterLight = Color(0xffeef6fa);
+  static const Color _light = Color(0xffdce9f3);
+  static const Color _lighterLight = Color(0xfff0f8fc);
 
   static const Color _primaryDark = Color(0xffffe082);
   static const Color _onPrimaryDark = Color(0xff242424);
 
-  static const Color _secondaryDark = Color.fromARGB(255, 36, 223, 248);
-  static const Color _onSecondaryDark = Color(0xff242424);
+  static const Color _secondaryDark = Color.fromARGB(255, 66, 94, 112);
+  static const Color _onSecondaryDark = Color.fromARGB(255, 250, 253, 255);
 
   static const Color _errorDark = Colors.redAccent;
   static const Color _onErrorDark = Color(0xff242424);

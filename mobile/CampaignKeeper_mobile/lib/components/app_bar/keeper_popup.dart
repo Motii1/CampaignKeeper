@@ -14,19 +14,29 @@ class KeeperPopup extends StatefulWidget {
   _KeeperPopupState createState() => _KeeperPopupState();
 
   // A function returning a popup with most common options.
-  static KeeperPopup settings(BuildContext context) {
+  // Has an ability to easily add more choices.
+  static KeeperPopup settings(BuildContext context,
+      {List<PopupMenuEntry<dynamic>> Function(BuildContext)? itemBuilder,
+      void Function(dynamic)? onSelected}) {
     return KeeperPopup(
-      itemBuilder: (BuildContext context) => [
-        PopupMenuItem<String>(
+      itemBuilder: (BuildContext context) {
+        List<PopupMenuEntry<dynamic>> list = itemBuilder == null ? [] : itemBuilder(context);
+        list.add(PopupMenuItem<String>(
           value: "Settings",
           child: Text("Settings"),
-        )
-      ],
+        ));
+
+        return list;
+      },
       onSelected: (dynamic value) {
         switch (value) {
           case "Settings":
             Navigator.pushNamed(context, "/settings");
-            break;
+            return;
+        }
+
+        if (onSelected != null) {
+          onSelected(value);
         }
       },
     );

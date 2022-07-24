@@ -7,15 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/main.dart';
 
 // Used to store any information that are app specific
-// not related to the account and tthe service.
+// and not related to the account and the service.
 class AppPrefs {
   static final AppPrefs _app = AppPrefs._internal();
   final String milestone = "Eden Prime";
   final String _key = "app_prefs";
-  final String _url = "http://10.0.2.2:4000";
-  final bool debug = true;
-  final int _timeout = 5;
-  final int _loginTimeout = 2;
+  final String _url = "https://campaignkeeper.herokuapp.com";
+  final bool debug = false;
+  final int _timeout = 60;
+  final int _loginTimeout = 120;
 
   String _debugUrl = "";
   int _debugTimeout = 0;
@@ -70,9 +70,9 @@ class AppPrefs {
   factory AppPrefs() => _app;
 
   AppPrefs._internal() {
-    _debugUrl = _url;
-    _debugTimeout = _timeout;
-    _debugLoginTimeout = _loginTimeout;
+    _debugUrl = "http://10.0.2.2:4000";
+    _debugTimeout = 5;
+    _debugLoginTimeout = 2;
   }
 
   // Loads cached user settings and applies a theme.

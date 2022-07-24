@@ -1,4 +1,5 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
+import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_field_tile.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_image_tile.dart';
@@ -27,9 +28,11 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
   bool isScrolledToTop = true;
 
   Future<void> onRefresh() async {
-    DataCarrier().refresh<UserDataEntity>();
-    await DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    await DataCarrier().refresh<ObjectEntity>(groupId: schema?.id ?? -1);
+    await Future.wait([
+      DataCarrier().refresh<UserDataEntity>(),
+      DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId),
+      DataCarrier().refresh<ObjectEntity>(parameterValue: schema?.id),
+    ]);
   }
 
   Future<void> onObjectRefresh() async {
@@ -67,7 +70,9 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
   Widget objectItemBuilder(BuildContext context, int index) {
     if (index == 0) {
       return KeeperImageTile(image: object?.image);
-    } else if (index == 1) {
+    }
+
+    if (index == 1) {
       return VisibilityDetector(
         key: Key('object-title'),
         child: KeeperTitleTile(title: object?.title ?? ""),
@@ -81,44 +86,47 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
           }
         },
       );
-    } else if (schema != null && schema!.fields.length >= index - 2) {
+    }
+
+    if (schema != null && schema!.fields.length >= index - 2) {
       var fieldName = schema!.fields[index - 2];
       var values = object!.values.where((e) => e.fieldName == fieldName).toList()
         ..sort(((a, b) => a.sequence.compareTo(b.sequence)));
 
       return KeeperFieldTile(fieldName: fieldName, values: values);
-    } else {
-      return Center(
-        child: Text("Error"),
-      );
     }
+
+    return Center(
+      child: Text("Error"),
+    );
   }
 
   @override
   void onReturn() async {
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    DataCarrier().refresh<ObjectEntity>(groupId: object?.schemaId ?? -1);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
+    DataCarrier().refresh<ObjectEntity>(parameterValue: object?.schemaId);
   }
 
   @override
   void onResume() async {
-    DataCarrier().refresh<ObjectEntity>(groupId: object?.schemaId ?? -1);
+    DataCarrier().refresh<ObjectEntity>(parameterValue: object?.schemaId);
   }
 
   @override
   void initState() {
     super.initState();
-    VisibilityDetectorController.instance.updateInterval = Duration(milliseconds: 300);
+    VisibilityDetectorController.instance.updateInterval = Duration(milliseconds: 250);
     scrollController.addListener(scrollListener);
     DataCarrier().addListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);
-    DataCarrier().refresh<SchemaEntity>(groupId: schema?.campaignId ?? -1);
-    DataCarrier().refresh<ObjectEntity>(groupId: object?.schemaId ?? -1);
+    DataCarrier().refresh<SchemaEntity>(parameterValue: schema?.campaignId);
+    DataCarrier().refresh<ObjectEntity>(parameterValue: object?.schemaId);
   }
 
   @override
   void dispose() {
     scrollController.removeListener(scrollListener);
+    scrollController.dispose();
     DataCarrier().removeListener<ObjectEntity>(onObjectRefresh);
     DataCarrier().removeListener<SchemaEntity>(onSchemaRefresh);
     super.dispose();
@@ -126,7 +134,7 @@ class _ObjectExplorerState extends KeeperState<ObjectExplorer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return KeeperScaffold(
       appBar: AppBar(
         title: AnimatedOpacity(
           duration: Duration(milliseconds: 120),

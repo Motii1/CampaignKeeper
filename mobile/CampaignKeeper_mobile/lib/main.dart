@@ -1,4 +1,5 @@
 import 'package:campaign_keeper_mobile/pages/account.dart';
+import 'package:campaign_keeper_mobile/pages/event_explorer.dart';
 import 'package:campaign_keeper_mobile/pages/object_explorer.dart';
 import 'package:campaign_keeper_mobile/pages/schema_objects.dart';
 import 'package:campaign_keeper_mobile/pages/session_map.dart';
@@ -65,6 +66,8 @@ class MainApp extends StatelessWidget {
                     SchemaObjects(schemaId: settings.arguments as int),
                 '/start/campaign/schema_objects/object_explorer': (context) =>
                     ObjectExplorer(objectId: settings.arguments as int),
+                '/start/campaign/session_map/event_explorer': (context) =>
+                    EventExplorer(eventId: settings.arguments as int),
               };
               WidgetBuilder builder = routes[settings.name]!;
               return MaterialPageRoute(builder: (ctx) => builder(ctx));
@@ -72,9 +75,8 @@ class MainApp extends StatelessWidget {
             navigatorObservers: [routeObserver],
             builder: (context, child) {
               return ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(
-                  physics: BouncingScrollPhysics(),
-                  overscroll: false,
+                behavior: MaterialScrollBehavior(
+                  androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
                 ),
                 child: child!,
               );

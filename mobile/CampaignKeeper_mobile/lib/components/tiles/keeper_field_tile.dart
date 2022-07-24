@@ -4,11 +4,15 @@ import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-// Lisr element presenting FieldValues with a header.
+// List element presenting FieldValues with a header.
 class KeeperFieldTile extends StatelessWidget {
-  const KeeperFieldTile({Key? key, required this.fieldName, required this.values}) : super(key: key);
+  const KeeperFieldTile(
+      {Key? key, required this.fieldName, required this.values, this.padding, this.isProminent = false})
+      : super(key: key);
   final String fieldName;
   final List<FieldValue> values;
+  final EdgeInsets? padding;
+  final bool isProminent;
 
   // isBackground determines if chips should be drawn with a rectangle backrgound
   // or just rounded outline, as Flutter can't do both at the same time.
@@ -18,7 +22,7 @@ class KeeperFieldTile extends StatelessWidget {
         text: DataCarrier().get<ObjectEntity>(entId: value.id)?.title ?? "Error",
         style: TextStyle(
             color: isBackground ? Colors.transparent : Theme.of(context).colorScheme.onPrimary,
-            fontSize: (17.5 * MediaQuery.textScaleFactorOf(context)) - 2,
+            fontSize: 16.5 - 1.5 / MediaQuery.textScaleFactorOf(context),
             fontWeight: FontWeight.w500,
             background: Paint()
               ..color = Theme.of(context).colorScheme.primary
@@ -41,52 +45,64 @@ class KeeperFieldTile extends StatelessWidget {
     );
   }
 
+  List<Widget> getChildren(BuildContext context) {
+    List<Widget> children = [];
+    children.add(Text(
+      fieldName,
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: Theme.of(context).colorScheme.onBackground,
+      ),
+    ));
+
+    if (values.isNotEmpty) {
+      children.add(SizedBox(
+        height: 10,
+      ));
+      children.add(Stack(
+        children: [
+          RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 16.5,
+                fontWeight: FontWeight.w400,
+                color: Colors.transparent,
+              ),
+              children: values.map((e) => formatValue(context, e, isBackground: true)).toList(),
+            ),
+          ),
+          RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 16.5,
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
+              children: values.map((e) => formatValue(context, e)).toList(),
+            ),
+          ),
+        ],
+      ));
+    }
+
+    return children;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 9, vertical: 4.5),
+      padding: padding ?? EdgeInsets.symmetric(horizontal: 9, vertical: 4.5),
       child: Card(
+        color: isProminent
+            ? Color.alphaBlend(
+                Theme.of(context).colorScheme.error.withOpacity(0.3), Theme.of(context).colorScheme.surface)
+            : null,
         child: Padding(
           padding: EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                fieldName,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Stack(
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 17.5,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.transparent,
-                      ),
-                      children: values.map((e) => formatValue(context, e, isBackground: true)).toList(),
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 17.5,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                      children: values.map((e) => formatValue(context, e)).toList(),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            children: getChildren(context),
           ),
         ),
       ),
