@@ -11,7 +11,7 @@ import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextI
 import { addCampaign, editCampaign } from '../campaignsSlice';
 import { resetState, setCurrentImage, setCurrentName } from '../startViewSlice';
 
-export type SingleCampaignData = {
+type SingleCampaignData = {
   id: number;
   name: string;
   createdAt: Date;
@@ -27,6 +27,12 @@ type StartDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Component serving as main dialog in StartView, used for creation of new campaigns
+ * and editing/deleting existing campaigns. Can be opened in "create new campaign" mode
+ * (all fields are empty) by FAB or in "edit campaign" mode (fields are filled
+ * with data from existing campaign) by context menu in EventTiles
+ */
 export const StartDialog: React.FC<StartDialogProps> = props => {
   const dispatch = useDispatch();
 
@@ -173,7 +179,6 @@ export const StartDialog: React.FC<StartDialogProps> = props => {
     resetDialog();
   };
 
-  // important: secondaryDialog is responsible for handling deletion, here we only open it
   const handleDelete = () => {
     props.setIsSecondaryOpen(true);
   };

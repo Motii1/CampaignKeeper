@@ -18,11 +18,18 @@ const initialState: CampaignsState = {
   isCampaignsListDownloaded: false,
 };
 
+/**
+ * Async function responsible for fetching data about campaigns from API,
+ * launched on first render of StartView
+ */
 export const fetchCampaigns = createAsyncThunk('campaigns/fetchCampaigns', async () => {
   const response = await protectedApiClient.get('api/campaign/list');
   return response;
 });
 
+/**
+ * Redux Slice used to store data about all campaigns on desktop app
+ */
 const campaignsSlice = createSlice({
   name: 'campaigns',
   initialState,
