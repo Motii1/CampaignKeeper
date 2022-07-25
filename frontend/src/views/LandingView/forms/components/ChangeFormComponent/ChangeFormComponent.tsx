@@ -9,6 +9,12 @@ type ChangeFormComponentProps = {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
+/**
+ * Component (button) responsible for switching from LoginForm to RegisterForm
+ * and vice-versa in LandingView when user clicks it
+ * @param props
+ * @returns
+ */
 export const ChangeFormComponent: React.FC<ChangeFormComponentProps> = props => (
   <Stack
     direction="column"

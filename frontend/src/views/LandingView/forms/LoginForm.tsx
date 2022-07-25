@@ -6,12 +6,13 @@ import { useHistory } from 'react-router-dom';
 import protectedApiClient from '../../../axios/axios';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
+import { FormProps, UserData } from '../../../types/types';
 import { CustomButton } from '../../components/CustomButton/CustomButton';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
-import { AUTH_URL, FormProps } from './RegisterForm';
+import { AUTH_URL } from './RegisterForm';
 import {
   handleTextFieldChange,
   handleTextFieldLeave,
@@ -22,18 +23,23 @@ import {
   validateUsernameLogin,
 } from './utils';
 
+/**
+ * Function responsible for logging user via API
+ * @param username
+ * @param password
+ * @returns
+ */
 export const login = (username: string, password: string): Promise<AxiosResponse> =>
   protectedApiClient.post(`${AUTH_URL}/login`, {
     username: username,
     password: password,
   });
 
-export type UserData = {
-  username: string;
-  email: string;
-  image: string;
-};
-
+/**
+ * Component responsible for displaying login form and logging user
+ * @param props
+ * @returns
+ */
 export const LoginForm: React.FC<FormProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();

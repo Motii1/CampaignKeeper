@@ -4,12 +4,12 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
+import { FormProps, UserData } from '../../../types/types';
 import { CustomButton } from '../../components/CustomButton/CustomButton';
 import { LabeledTextInput } from '../../components/LabeledTextInput/LabeledTextInput';
 import viewsRoutes from '../../viewsRoutes';
 import { updateDetails } from '../userDetailsSlice';
 import { ChangeFormComponent } from './components/ChangeFormComponent/ChangeFormComponent';
-import { UserData } from './LoginForm';
 import {
   handleTextFieldChange,
   handleTextFieldLeave,
@@ -29,12 +29,14 @@ type RegisterData = {
   message: string;
 };
 
-export type FormProps = {
-  onChangeForm: (event: React.FormEvent<HTMLFormElement>) => void;
-};
-
 export const AUTH_URL = '/api/auth';
 
+/**
+ * Component responsible for displaying register form, registering user
+ * and login them in if registration is successful
+ * @param props
+ * @returns
+ */
 export const RegisterForm: React.FC<FormProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();
