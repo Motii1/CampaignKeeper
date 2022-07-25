@@ -1,6 +1,10 @@
 import { Paper, Typography } from '@mui/material';
 
-export const RootNode: React.FC = () => (
+type RootNodeProps = {
+  sessionName: string;
+};
+
+export const RootNode: React.FC<RootNodeProps> = props => (
   <Paper
     id="root-node"
     elevation={0}
@@ -26,7 +30,7 @@ export const RootNode: React.FC = () => (
           textTransform: 'uppercase',
         }}
       >
-        START
+        {props.sessionName}
       </Typography>
     </Paper>
   </Paper>

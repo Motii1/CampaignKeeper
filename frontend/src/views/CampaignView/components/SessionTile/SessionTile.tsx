@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { NavBarViewDialog } from '../../../../types/types';
 import { EditMenu } from '../../../components/EditMenu/EditMenu';
-import { setSessionId as setSessionIdExplorerView } from '../../../ExplorerView/explorerViewSlice';
+import { setSessionId as setSessionIdExplorer } from '../../../ExplorerView/explorerViewSlice';
 import { resetState as resetEventsState } from '../../../MapView/eventsSlice';
-import { setSessionId as setSessionIdMapView } from '../../../MapView/mapViewSlice';
+import { setCurrentSession as setSessionMapView } from '../../../MapView/mapViewSlice';
 import viewsRoutes from '../../../viewsRoutes';
 import { updateState as updateStateCampaign } from '../../campaignViewSlice';
 
@@ -23,8 +23,13 @@ export const SessionTile: React.FC<SessionTileProps> = props => {
   const [menuPos, setMenuPos] = useState<null | { mouseX: number; mouseY: number }>(null);
 
   const handleClick = () => {
-    dispatch(setSessionIdMapView({ currentSessionId: props.sessionId }));
-    dispatch(setSessionIdExplorerView({ currentSessionId: props.sessionId }));
+    dispatch(
+      setSessionMapView({
+        currentSessionId: props.sessionId,
+        currentSessionTitle: props.sessionName,
+      })
+    );
+    dispatch(setSessionIdExplorer({ currentSessionId: props.sessionId }));
     dispatch(resetEventsState({}));
     history.push(viewsRoutes.MAP);
   };

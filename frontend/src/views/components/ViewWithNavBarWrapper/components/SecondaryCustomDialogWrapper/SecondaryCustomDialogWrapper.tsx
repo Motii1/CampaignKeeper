@@ -1,5 +1,6 @@
 import { CampaignSecondaryDialog } from '../../../../CampaignView/secondaryDialog/CampaignSecondaryDialog';
 import { CodexSecondaryDialog } from '../../../../CodexView/secondaryDialog/CodexSecondaryDialog';
+import { ExplorerSecondaryDialog } from '../../../../ExplorerView/secondaryDialog/ExplorerSecondaryDialog';
 import { MapSecondaryDialog } from '../../../../MapView/secondaryDialog/MapSecondaryDialog';
 import { StartSecondaryDialog } from '../../../../StartView/secondaryDialog/StartSecondaryDialog';
 import viewsRoutes from '../../../../viewsRoutes';
@@ -49,6 +50,16 @@ export const SecondaryDialogWrapper: React.FC<SecondaryDialogWrapperProps> = pro
     case viewsRoutes.MAP:
       return (
         <MapSecondaryDialog
+          isOpen={props.isOpen}
+          setIsOpen={props.setIsOpen}
+          setIsPrimaryOpen={props.setIsPrimaryOpen}
+          setSnackbarSuccess={props.setSnackbarSuccess}
+          setSnackbarError={props.setSnackbarError}
+        />
+      );
+    case viewsRoutes.EXPLORER:
+      return (
+        <ExplorerSecondaryDialog
           isOpen={props.isOpen}
           setIsOpen={props.setIsOpen}
           setIsPrimaryOpen={props.setIsPrimaryOpen}

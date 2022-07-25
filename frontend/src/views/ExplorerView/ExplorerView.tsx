@@ -15,13 +15,16 @@ export const ExplorerView: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const { currentCampaignId } = useSelector((state: RootState) => state.campaignView);
   const { currentEvent, currentSessionId } = useSelector((state: RootState) => state.explorerView);
-  const { eventsList } = useSelector((state: RootState) => state.events);
+  const { eventsList, isEventsListDownloaded } = useSelector((state: RootState) => state.events);
 
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
+  const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
 
-  if (currentSessionId === '') history.push(viewsRoutes.CAMPAIGN);
+  if (currentCampaignId === '') history.push(viewsRoutes.CAMPAIGN);
+  else if (!isEventsListDownloaded || currentSessionId === '') history.push(viewsRoutes.MAP);
   else if (!currentEvent) {
     const rootEvent = eventsList.find(event => event.parentIds.length === 0);
     if (rootEvent) dispatch(setCurrentEvent({ currentEvent: rootEvent }));
@@ -37,6 +40,8 @@ export const ExplorerView: React.FC = () => {
       setIsPrimaryOpen={setIsOpen}
       primaryDialogType={dialogType}
       setPrimaryDialogType={setDialogType}
+      isSecondaryOpen={isSecondaryOpen}
+      setIsSecondaryOpen={setIsSecondaryOpen}
       handleFab={currentEvent ? handleFab : undefined}
     >
       {currentEvent ? (

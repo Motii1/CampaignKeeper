@@ -42,6 +42,11 @@ export enum EventTileType {
   ExplorerDialog,
 }
 
+export enum SecondaryEventDialogType {
+  Map,
+  Explorer,
+}
+
 export type ReferenceFieldMetadata = {
   value: string;
   id: null | string;

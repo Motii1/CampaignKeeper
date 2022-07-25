@@ -10,7 +10,21 @@ type SessionPostBody = {
   name: string;
 };
 
-// TO-DO: add test for CampaignTile (will require state update outside of React Component)
+const testSessionList = [
+  {
+    id: 1,
+    name: 'Test Session 1',
+    createdAt: '2022-03-10T10:10:50.026Z',
+    campaignId: 1,
+  },
+  {
+    id: 2,
+    name: 'Test Session 2',
+    createdAt: '2022-03-10T10:10:51.026Z',
+    campaignId: 1,
+  },
+];
+
 describe('CampaignView tests', () => {
   let component: RenderResult;
 
@@ -27,23 +41,10 @@ describe('CampaignView tests', () => {
       )
     ),
     rest.patch('api/session/1', (_req, res, ctx) => res(ctx.status(200))),
-    rest.delete('api/session/2', (_req, res, ctx) => res(ctx.status(200)))
+    rest.delete('api/session/2', (_req, res, ctx) => res(ctx.status(200))),
+    rest.get('api/schema/list', (_req, res, ctx) => res(ctx.json({ schemas: [] }))),
+    rest.get('api/object/list', (_req, res, ctx) => res(ctx.json({ objects: [] })))
   );
-
-  const testSessionList = [
-    {
-      id: 1,
-      name: 'Test Session 1',
-      createdAt: '2022-03-10T10:10:50.026Z',
-      campaignId: 1,
-    },
-    {
-      id: 2,
-      name: 'Test Session 2',
-      createdAt: '2022-03-10T10:10:51.026Z',
-      campaignId: 1,
-    },
-  ];
 
   const campaignName = 'Test Campaign';
 
@@ -91,6 +92,7 @@ describe('CampaignView tests', () => {
         expect(screen.getByText('CANCEL')).toBeInTheDocument();
       });
     });
+
     test('opens context menu after right click on SessionTile', async () => {
       await waitFor(() => {
         expect(screen.getByText('Test Session 1')).toBeInTheDocument();
@@ -98,6 +100,7 @@ describe('CampaignView tests', () => {
         expect(screen.getByText('Edit')).toBeInTheDocument();
       });
     });
+
     test('opens CampaignDialog in edit mode after click on Edit', async () => {
       await waitFor(() => {
         fireEvent.contextMenu(screen.getByText('Test Session 2'));
@@ -109,6 +112,7 @@ describe('CampaignView tests', () => {
       expect(screen.getByRole('button', { name: /DELETE/ })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /CANCEL/ })).toBeInTheDocument();
     });
+
     test('shows dialog asking for confirmation on delete', async () => {
       const sessionNameToDelete = 'Test Session 2';
       await waitFor(() => {

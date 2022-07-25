@@ -12,6 +12,7 @@ import { EventWrapper } from './components/EventWrapper/EventWrapper';
 import { RootNode } from './components/RootNode/RootNode';
 
 type EventGraphProsp = {
+  sessionName: string;
   setIsOpen: (newIsOpen: boolean) => void;
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
@@ -49,7 +50,6 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
     [eventsList, props.setDialogType, props.setIsOpen]
   );
 
-  // TO-DO: show "Add an event, Grand Designer" when there are no events
   const renderGraph = useCallback(() => {
     if (eventsList.length === 0)
       return (
@@ -90,13 +90,13 @@ export const EventGraph: React.FC<EventGraphProsp> = props => {
           maxHeight: 'max-content',
         }}
       >
-        <RootNode />
+        <RootNode sessionName={props.sessionName} />
         {rowIndexes.map(index =>
           renderRow(eventsToShow.filter((node: SessionEventWithPos) => node.y === index))
         )}
       </Stack>
     );
-  }, [eventsList, renderRow]);
+  }, [eventsList, props.sessionName, renderRow]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleScroll = (_event: React.UIEvent<HTMLElement>) => {

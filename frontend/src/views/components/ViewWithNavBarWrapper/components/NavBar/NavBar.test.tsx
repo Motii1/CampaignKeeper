@@ -9,7 +9,7 @@ const setMessageMock = (message: string) => {
   console.log(message);
 };
 
-describe('NavBar tests', () => {
+describe('NavBar test', () => {
   let component: RenderResult;
 
   afterAll(cleanup);
@@ -29,17 +29,17 @@ describe('NavBar tests', () => {
   afterEach(() => component.unmount());
 
   describe('buttons tests', () => {
-    test('renders main buttons', () => {
+    test('renders logo', () => {
       expect(screen.getByAltText('Logo')).toBeInTheDocument();
+    });
 
+    test('renders main buttons', () => {
       expect(screen.getByText('START')).toBeInTheDocument();
       expect(screen.getByText('CAMPAIGN')).toBeInTheDocument();
       expect(screen.getByText('NOTES')).toBeInTheDocument();
     });
 
     test('renders campaign buttons', () => {
-      expect(screen.getByAltText('Logo')).toBeInTheDocument();
-
       expect(screen.getByText('MAP')).toBeInTheDocument();
       expect(screen.getByText('EXPLORER')).toBeInTheDocument();
       expect(screen.getByText('CODEX')).toBeInTheDocument();

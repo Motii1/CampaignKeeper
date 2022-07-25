@@ -106,7 +106,7 @@ const removeEventFromStore = (
   eventsList: SessionEventWithPos[]
 ) =>
   eventsList.map(event => {
-    // add info to new parent for orpahned events
+    // event is new parent
     if (event.id === newParentId)
       return {
         ...event,
@@ -207,6 +207,16 @@ const eventsSlice = createSlice({
       state.isEventsListDownloaded = false;
       state.eventsList = [];
     },
+    initializeState: (state, action) => {
+      const eventsWithoutPositions = action.payload.events;
+      eventsWithoutPositions.forEach((event: SessionEventWithPos) => {
+        event.x = -1;
+        event.y = -1;
+      });
+      const eventsWithPositions = setPositions(eventsWithoutPositions);
+      state.isEventsListDownloaded = true;
+      state.eventsList = eventsWithPositions;
+    },
   },
   extraReducers: builder => {
     builder.addCase(fetchEvents.fulfilled, (state, action) => {
@@ -232,6 +242,7 @@ export const {
   showEvent,
   changeEventStatus,
   resetState,
+  initializeState,
 } = eventsSlice.actions;
 
 export default eventsSlice.reducer;
