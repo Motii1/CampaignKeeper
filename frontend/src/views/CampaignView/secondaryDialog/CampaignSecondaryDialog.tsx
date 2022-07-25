@@ -16,6 +16,12 @@ type CampaignSecondaryDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Component used as secondary dialog in CampaignView to ask user
+ * for reconfirmation that they want to delete selected session
+ * @param props
+ * @returns
+ */
 export const CampaignSecondaryDialog: React.FC<CampaignSecondaryDialogProps> = props => {
   const dispatch = useDispatch();
   const sessionId = useSelector((state: RootState) => state.campaignView.sessionId);

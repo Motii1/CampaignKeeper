@@ -28,7 +28,7 @@ export const fetchCampaigns = createAsyncThunk('campaigns/fetchCampaigns', async
 });
 
 /**
- * Redux Slice used to store data about all campaigns on desktop app
+ * Redux slice used to store data about all campaigns on desktop app
  */
 const campaignsSlice = createSlice({
   name: 'campaigns',
