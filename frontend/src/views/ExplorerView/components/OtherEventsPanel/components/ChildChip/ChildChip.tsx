@@ -7,6 +7,12 @@ type ChildChipProps = {
   event: SessionEventWithPos;
 };
 
+/**
+ * Component serving as button allowing to select event
+ * which name it displays as currently selected event in ExplorerView
+ * @param props
+ * @returns
+ */
 export const ChildChip: React.FC<ChildChipProps> = props => {
   const dispatch = useDispatch();
 
