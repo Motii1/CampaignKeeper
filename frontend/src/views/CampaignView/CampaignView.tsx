@@ -18,8 +18,9 @@ import { fetchSessions, updateCampaignId } from './sessionsSlice';
 
 /**
  * Component responsible for UI and logic of CampaignView which displays campaign selected
- * by user in StartView, list of sessions in it, allows creation of new session and editing
- * existing ones
+ * by user in StartView, list of sessions in it, allows creation of new session
+ * and editing/deleting existing ones
+ * @returns
  */
 export const CampaignView: React.FC = () => {
   const dispatch = useDispatch();

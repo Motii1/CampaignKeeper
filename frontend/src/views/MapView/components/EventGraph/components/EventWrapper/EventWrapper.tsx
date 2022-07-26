@@ -22,6 +22,12 @@ const getOffsets = (numberOfArrows: number) => {
   return arrowsEndOffsets;
 };
 
+/**
+ * Components used as wrapper on EventTile (actual event info)
+ * and its arrows (conneting it with its children events and root if necessary)
+ * @param props
+ * @returns
+ */
 export const EventWrapper: React.FC<EventWrapperProps> = props => {
   const renderRootArrow = () => (
     <EventArrow

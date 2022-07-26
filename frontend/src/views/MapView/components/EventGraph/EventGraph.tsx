@@ -17,6 +17,12 @@ type EventGraphProsp = {
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
+/**
+ * Components responsible for rendering interactive graph
+ * of all events in current session
+ * @param props
+ * @returns
+ */
 export const EventGraph: React.FC<EventGraphProsp> = props => {
   const { isEventsListDownloaded, eventsList } = useSelector((state: RootState) => state.events);
   const { isLight } = useSelector((state: RootState) => state.theme);

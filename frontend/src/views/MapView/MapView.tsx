@@ -10,6 +10,11 @@ import { EventGraph } from './components/EventGraph/EventGraph';
 import { fetchEvents } from './eventsSlice';
 import { setCurrentSession } from './mapViewSlice';
 
+/**
+ * Component responsible for UI and logic of MapView which displays graph of events
+ * from currently selected session, allows creation of new events
+ * and editing/removing existing ones
+ */
 export const MapView: React.FC = () => {
   const dispatch = useDispatch();
   const { currentSessionId, currentSessionTitle } = useSelector(

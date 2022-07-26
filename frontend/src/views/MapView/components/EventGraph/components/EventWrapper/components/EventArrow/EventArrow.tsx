@@ -10,6 +10,14 @@ export type EventArrowProps = {
   color?: string;
 };
 
+/**
+ * Arrow made with react-xarrows library
+ * used to connect parent event (or root)
+ * with its children.
+ * NOTE:
+ * @param props
+ * @returns
+ */
 export const EventArrow: React.FC<EventArrowProps> = props => {
   const { isLight } = useSelector((state: RootState) => state.theme);
   const arrowColor = props.color ? props.color : isLight ? '#303d50' : '#ffffff';
