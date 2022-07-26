@@ -7,6 +7,12 @@ type FieldProps = {
   setFields: (newFields: string[]) => void;
 };
 
+/**
+ * Components used to display name of field during schema creation
+ * and providing option to remove it by clicking on delete icon
+ * @param props
+ * @returns
+ */
 export const Field: React.FC<FieldProps> = props => {
   const onDelete = () => {
     const newFields = props.fields;

@@ -23,6 +23,12 @@ type NewSchemaDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Component seriving as dialog for creating new schema - allows setting new schemat title
+ * and its fields (by another dialog), opens on NewSchemaButton click
+ * @param props
+ * @returns
+ */
 export const NewSchemaDialog: React.FC<NewSchemaDialogProps> = props => {
   const dispatch = useDispatch();
   const { currentCampaignId } = useSelector((state: RootState) => state.campaignView);

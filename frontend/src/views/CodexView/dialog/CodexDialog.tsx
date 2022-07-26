@@ -39,6 +39,15 @@ type CodexDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Component serving as main dialog in CodexView, used for creation of new entries
+ * and editing/deleting existing ones. Can be opened in "create new event" mode
+ * (all fields are empty) by FAB when schema is selected and no entry is selected
+ * or in "edit entry" mode (title is filled with data from existing entry)
+ * by FAB when entry is selected
+ * @param props
+ * @returns
+ */
 export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const dispatch = useDispatch();
   const { currentSchema, currentEntry } = useSelector((state: RootState) => state.codexView);

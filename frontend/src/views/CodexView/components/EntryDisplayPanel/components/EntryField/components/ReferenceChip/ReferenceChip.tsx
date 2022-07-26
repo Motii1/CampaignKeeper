@@ -8,6 +8,12 @@ type ReferenceChipProps = {
   entry: Entry | null;
 };
 
+/**
+ * Component responsible for displaying another entry, referenced
+ * in currently displayed entry in distinct way and opening that entry on click
+ * @param props
+ * @returns
+ */
 export const ReferenceChip: React.FC<ReferenceChipProps> = props => {
   const dispatch = useDispatch();
   const { schemas } = useSelector((state: RootState) => state.codex);

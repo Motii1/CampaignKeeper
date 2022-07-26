@@ -3,6 +3,11 @@ import { Stack, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { setCurrentEntry } from '../../../../codexViewSlice';
 
+/**
+ * Component responsible for displaying option to return from currently displayed entry
+ * (EntryDisplayPanel) to list of all entries in selected schema (EntriesListPanel) on click
+ * @returns
+ */
 export const ReturnBar: React.FC = () => {
   const dispatch = useDispatch();
   const onClick = () => {

@@ -29,10 +29,10 @@ type CampaignDialogProps = {
 };
 
 /**
- * Component serving as main dialog in CampaignDialog, used for creation of new sessions
+ * Component serving as main dialog in CampaignView, used for creation of new sessions
  * and editing/deleting existing ones. Can be opened in "create new session" mode
  * (title is empty) by FAB or in "edit session" mode (title is filled with data from
- * existing session) by context menu in SessionTile.
+ * existing session) by context menu in SessionTile
  * @param props
  * @returns
  */

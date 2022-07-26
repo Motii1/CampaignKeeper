@@ -6,6 +6,11 @@ import { EmptyPlaceholder } from '../../../components/EmptyPlaceholder/EmptyPlac
 import { EntryField } from './components/EntryField/EntryField';
 import { ReturnBar } from './components/ReturnBar/ReturnBar';
 
+/**
+ * Component responsible for displaying content of single selected entry,
+ * with chips allowing opening referenced objects
+ * @returns
+ */
 export const EntryDisplayPanel: React.FC = () => {
   const { currentSchema, currentEntry } = useSelector((state: RootState) => state.codexView);
   const { entries } = useSelector((state: RootState) => state.codex);

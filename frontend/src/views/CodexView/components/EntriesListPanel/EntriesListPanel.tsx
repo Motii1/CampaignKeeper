@@ -12,6 +12,12 @@ type EntriesListPanelProps = {
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
+/**
+ * Component responsible for displaying list of entries from currently selected schema
+ * and search bar which allows to filter them by name
+ * @param props
+ * @returns
+ */
 export const EntriesListPanel: React.FC<EntriesListPanelProps> = props => {
   const { currentSchema, currentEntry } = useSelector((state: RootState) => state.codexView);
   const { entries } = useSelector((state: RootState) => state.codex);

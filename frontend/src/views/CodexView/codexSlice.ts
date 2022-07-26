@@ -37,6 +37,10 @@ const initialState: CodexViewState = {
   isCodexDownloaded: false,
 };
 
+/**
+ * Async function responsible for fetching data about schemas and objects
+ * from currently selected campaign from API
+ */
 export const fetchSchemasAndEntries = createAsyncThunk(
   'codex/fetchSchemas',
   async (campaignId: string) => {
@@ -53,6 +57,10 @@ export const fetchSchemasAndEntries = createAsyncThunk(
   }
 );
 
+/**
+ * Redux slice used to store and operate on information about schemas and entries
+ * belonging to currently selected campaign
+ */
 const codexViewSlice = createSlice({
   name: 'codex',
   initialState,

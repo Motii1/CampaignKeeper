@@ -8,6 +8,12 @@ type FieldsBarProps = {
   setFields: (newFields: string[]) => void;
 };
 
+/**
+ * Component responsible for adding new fields to schema during its creation
+ * via dedicated dialog
+ * @param props
+ * @returns
+ */
 export const FieldsBar: React.FC<FieldsBarProps> = props => {
   const [isOpen, setIsOpen] = useState(false);
 
