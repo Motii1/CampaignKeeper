@@ -2,6 +2,7 @@ import { App, ControllerWithRoute } from './Application/App/App';
 import { AuthController } from './Application/Controller/AuthController/AuthController';
 import { CampaignController } from './Application/Controller/CampaignController/CampaignController';
 import { EventController } from './Application/Controller/EventController/EventController';
+import { NotesController } from './Application/Controller/NotesController/NotesController';
 import { ObjectController } from './Application/Controller/ObjectController/ObjectController';
 import { OpsController } from './Application/Controller/OpsController/OpsController';
 import { SchemaContoller } from './Application/Controller/SchemaController/SchemaController';
@@ -18,6 +19,7 @@ const controllers: ControllerWithRoute[] = [
   ['/schema', new SchemaContoller()],
   ['/object', new ObjectController()],
   ['/event', new EventController()],
+  ['/note', new NotesController()],
 ];
 
 const app = new App(controllers);
