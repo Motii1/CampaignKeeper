@@ -8,6 +8,11 @@ type CustomSelectProps = {
   renderValue: (value: string) => ReactNode;
 };
 
+/**
+ * Standard MUI Select with styling and props allowing its control from parent component
+ * @param props
+ * @returns
+ */
 export const CustomSelect: React.FC<CustomSelectProps> = props => (
   <FormControl fullWidth>
     <Select

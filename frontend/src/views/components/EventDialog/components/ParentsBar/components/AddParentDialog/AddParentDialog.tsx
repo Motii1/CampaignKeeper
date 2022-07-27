@@ -14,6 +14,11 @@ type AddParentDialogProps = {
   setParents: (newFields: string[]) => void;
 };
 
+/**
+ * Dialog used to add another parent to event's parents list in EventDialog
+ * @param props
+ * @returns
+ */
 export const AddParentDialog: React.FC<AddParentDialogProps> = props => {
   const { eventsList } = useSelector((state: RootState) => state.events);
 

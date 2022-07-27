@@ -14,6 +14,14 @@ export type LabeledInputProps = {
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 };
 
+/**
+ * Component used as TextField input with label (title), actual input,
+ * validation mechanism and helper text which can display default text (default color,
+ * e.g. explaining password requirements) or alert text (alert color,
+ * e.g. informing that password doesn't meet requirements)
+ * @param props
+ * @returns
+ */
 export const LabeledTextInput: React.FC<LabeledInputProps> = props => {
   const { isLight } = useSelector((state: RootState) => state.theme);
 

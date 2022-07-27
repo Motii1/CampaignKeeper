@@ -3,9 +3,12 @@ import { Box, Typography } from '@mui/material';
 type QuoteLineProps = {
   text: string;
 };
-// TO-DO: discuss entire quote functionality with rest of the team
-// TO-DO: decide if quotes should be fetched from backend or imported
-// TO-DO: establish contraints on quote length
+
+/**
+ * Component used to display popculture quotes in CampaignView and StartView
+ * @param props
+ * @returns
+ */
 export const QuoteLine: React.FC<QuoteLineProps> = props => (
   <Box
     component="div"

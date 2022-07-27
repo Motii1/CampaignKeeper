@@ -24,6 +24,12 @@ type AddReferenceDialogProps = {
 const codexItemsToSelectItems = (items: Schema[] | Entry[]): ReferenceSelectItem[] =>
   items.map(item => ({ name: item.title, id: item.id }));
 
+/**
+ * Dialog used to add references in text field of codex entries
+ * and events description fields
+ * @param props
+ * @returns
+ */
 export const AddReferenceDialog: React.FC<AddReferenceDialogProps> = props => {
   const { schemas, entries } = useSelector((state: RootState) => state.codex);
 

@@ -9,6 +9,12 @@ type useSnackbarArgs = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Custom React hook used to simplify control of CustomSnackbar
+ * in its parent componentand sometimes allow children components
+ * to control it as well (by passing control functions as props)
+ * @returns
+ */
 export const useSnackbar = (): useSnackbarArgs => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarType, setSnackbarType] = useState<CustomSnackbarType>(CustomSnackbarType.Info);

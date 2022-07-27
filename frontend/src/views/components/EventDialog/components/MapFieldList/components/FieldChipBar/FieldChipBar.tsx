@@ -8,6 +8,12 @@ type FieldChipBarProps = {
   setIsAddDialogOpen: (newIsOpen: boolean) => void;
 };
 
+/**
+ * Component used to display name of Places and Characters fields
+ * and open dialog which allows to add more references to them
+ * @param props
+ * @returns
+ */
 export const FieldChipBar: React.FC<FieldChipBarProps> = props => (
   <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={0.5}>
     <Typography variant="subtitle1" sx={{ color: 'customPalette.onSurface', paddingLeft: 1 }}>

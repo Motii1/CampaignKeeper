@@ -16,6 +16,12 @@ type CustomDialogProps = {
   onClose?: () => void;
 };
 
+/**
+ * Component used as wrapper on all dialogs in application,
+ * providing its handling, buttons and styling
+ * @param param0
+ * @returns
+ */
 export const CustomDialog: React.FC<CustomDialogProps> = ({
   isTitleRed = false,
   ...otherProps

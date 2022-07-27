@@ -12,6 +12,12 @@ type DisplayStatusIconProps = {
   event: SessionEventWithPos;
 };
 
+/**
+ * Icon serving as button for changing event display status (hiding and showing event),
+ * changes status from one to another on click
+ * @param props
+ * @returns
+ */
 export const DisplayStatusIcon: React.FC<DisplayStatusIconProps> = props => {
   const dispatch = useDispatch();
 

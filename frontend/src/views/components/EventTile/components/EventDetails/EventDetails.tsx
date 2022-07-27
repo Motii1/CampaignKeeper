@@ -11,6 +11,12 @@ type EventDetailsProps = {
   type: EventTileType;
 };
 
+/**
+ * Component used to display event data (characters, places, description),
+ * hidden if event's display status is set to "hidden"
+ * @param props
+ * @returns
+ */
 export const EventDetails: React.FC<EventDetailsProps> = props => (
   <Paper
     elevation={0}

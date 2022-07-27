@@ -9,6 +9,12 @@ type ParentsBarProps = {
   setParents: (newParents: string[]) => void;
 };
 
+/**
+ * Component used to display name of Parents field
+ * and open dialog which allows to add more events to it
+ * @param props
+ * @returns
+ */
 export const ParentsBar: React.FC<ParentsBarProps> = props => {
   const [isOpen, setIsOpen] = useState(false);
 

@@ -5,6 +5,10 @@ import { store } from '../../store';
 import { ViewWithSidebarWrapper } from '../components/ViewWithSidebarWrapper/ViewWithSidebarWrapper';
 import { clearError } from './errorSlice';
 
+/**
+ * Component shown in error boundary
+ * @returns
+ */
 export const ErrorView: React.FC = () => {
   const { isError, message } = store.getState().error;
   const dispatch = useDispatch();

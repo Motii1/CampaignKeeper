@@ -19,6 +19,11 @@ type CampaignTileProps = {
   isClickable?: boolean;
 };
 
+/**
+ * Component used to display campaign tile consisting of campaign name
+ * and campaign picture (it user haven't provided graphic during campaign creation,
+ * server will provide default one)
+ */
 export const CampaignTile: React.FC<CampaignTileProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();

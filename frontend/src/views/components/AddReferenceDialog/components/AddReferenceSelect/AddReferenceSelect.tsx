@@ -11,6 +11,11 @@ type AddReferenceSelectProps = {
   items: ReferenceSelectItem[] | null;
 };
 
+/**
+ * Select used to choose reference in AddReferenceDialog
+ * @param props
+ * @returns
+ */
 export const AddReferenceSelect: React.FC<AddReferenceSelectProps> = props => {
   const handleChange = (event: SelectChangeEvent) => {
     if (props.items) {

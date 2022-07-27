@@ -11,6 +11,12 @@ type EventDescriptionFieldProps = {
   type: EventTileType;
 };
 
+/**
+ * Component used to display event's description in EventTile, with its references
+ * shown in distinct, interactive way
+ * @param props
+ * @returns
+ */
 export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props => {
   const { schemas, entries } = useSelector((state: RootState) => state.codex);
 

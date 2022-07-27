@@ -24,6 +24,13 @@ type AddChipReferenceDialogProps = {
 const codexItemsToSelectItems = (items: Schema[] | Entry[]): ReferenceSelectItem[] =>
   items.map(item => ({ name: item.title, id: item.id }));
 
+/**
+ * Dialog used to add reference to Places and Characters fields in EventDialog.
+ * It may be a reference to entry in Codex or simple string, used as reference
+ * to object which doesn't have representation in Codex
+ * @param props
+ * @returns
+ */
 export const AddChipReferenceDialog: React.FC<AddChipReferenceDialogProps> = props => {
   const { schemas, entries } = useSelector((state: RootState) => state.codex);
 

@@ -14,6 +14,17 @@ type EventTileProps = {
   type: EventTileType;
 };
 
+/**
+ * Component used to display event content (its title, characters, places, description).
+ * In MapView allows changing editing event and changing its execution status and display status.
+ * NOTE1: EventTile is used in both MapView (as part of graph) and ExplorerView (selected event
+ * displayed in center of the view and parent/children events in corresponding dialog)
+ * and therefore has props allowing control of its UI and styling.
+ * NOTE2: In MapView if Event display status is set to hidden
+ * only its header (EventBar) is shown to user.
+ * @param props
+ * @returns
+ */
 export const EventTile: React.FC<EventTileProps> = props => {
   const dispatch = useDispatch();
 

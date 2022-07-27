@@ -13,6 +13,12 @@ type StatusIconProps = {
   event: SessionEventWithPos;
 };
 
+/**
+ * Icon serving as button which changes event execution on click
+ * NOTE: statuses are circulary changed (none->done->omitted->none->...)
+ * @param props
+ * @returns
+ */
 export const StatusIcon: React.FC<StatusIconProps> = props => {
   const dispatch = useDispatch();
 

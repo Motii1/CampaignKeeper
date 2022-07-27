@@ -9,6 +9,14 @@ type FieldTextAreaProps = {
   setIsAddDialogOpen: (newIsOpen: boolean) => void;
 };
 
+/**
+ * Component used to display TextAreas which can contain references
+ * to entries from Codex, used in MapView and CodexView.
+ * Provides all options necessary to handle adding reference to entry
+ * (which is done in seperate dialog)
+ * @param props
+ * @returns
+ */
 export const FieldTextArea: React.FC<FieldTextAreaProps> = props => (
   <Stack
     direction="column"

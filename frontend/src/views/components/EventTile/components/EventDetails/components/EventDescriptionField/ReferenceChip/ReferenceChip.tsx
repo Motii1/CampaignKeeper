@@ -12,6 +12,12 @@ type ReferenceChipProps = {
   type: EventTileType;
 };
 
+/**
+ * Chip used to display references to entries from Codex in EventTile in distinct way.
+ * Allows transition to referenced entry on click
+ * @param props
+ * @returns
+ */
 export const ReferenceChip: React.FC<ReferenceChipProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();
