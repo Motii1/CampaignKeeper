@@ -23,8 +23,8 @@ type UserPanelProps = {
 
 /**
  * Component used to display currently logged in user avatar and username in NavBar
- * with drop-down menu in which user can change their data, display info about application
- * and log out.
+ * with drop-down menu in which user can change their data, display info about application,
+ * switch themes and log out.
  * @param props
  * @returns
  */
