@@ -7,6 +7,13 @@ type SecondaryNavBarButtonProps = {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
+/**
+ * Component used as button for all secondary views (Map, Explorer, Codex),
+ * is accented when its view is selected, moves user to its view on click.
+ * Hidden unless user has selected CampaignView or one of secondary views
+ * @param props
+ * @returns
+ */
 export const SecondaryNavBarButton: React.FC<SecondaryNavBarButtonProps> = props => {
   const outerPaperStyle = {
     backgroundColor: 'customPalette.primary',

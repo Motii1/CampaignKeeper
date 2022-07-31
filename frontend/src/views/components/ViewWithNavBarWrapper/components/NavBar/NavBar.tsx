@@ -22,6 +22,17 @@ const secondaryButtonDisplayableViews = [
   viewsRoutes.CODEX,
 ];
 
+/**
+ * Component serving as navigation bar displayed on top of the screen,
+ * used to navigate between views in application, display info about currently
+ * logged user and menu in which they can change their data, display information
+ * about application and log out.
+ * It has two sets of buttons, primary (Start, Campaign and Notes) which is always displayed
+ * and secondary (Map, Explorer, Codex) which is displayed only if user is CampaignView
+ * or one of its subviews (MapView, ExplorerView, CodexView). *
+ * @param props
+ * @returns
+ */
 export const NavBar: React.FC<NavBarProps> = props => {
   const history = useHistory();
 

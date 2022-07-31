@@ -21,6 +21,13 @@ type UserPanelProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Component used to display currently logged in user avatar and username in NavBar
+ * with drop-down menu in which user can change their data, display info about application
+ * and log out.
+ * @param props
+ * @returns
+ */
 export const UserPanel: React.FC<UserPanelProps> = props => {
   const dispatch = useDispatch();
   const history = useHistory();

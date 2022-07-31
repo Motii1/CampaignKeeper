@@ -17,6 +17,10 @@ type ChangeAvatarFormProps = {
   runQueryDetails: (payload?: unknown) => void;
 };
 
+/**
+ * Form in which user can change their avatar
+ * @returns
+ */
 export const ChangeAvatarForm: React.FC<ChangeAvatarFormProps> = props => {
   const { username, avatar } = useSelector((state: RootState) => state.user);
 
