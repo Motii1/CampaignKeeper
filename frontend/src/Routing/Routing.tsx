@@ -11,6 +11,12 @@ import viewsRoutes from '../views/viewsRoutes';
 import { ProtectedRouteWrapper } from './ProtectedRouteWrapper/ProtectedRouteWrapper';
 import { RouteWrapper } from './RouteWrapper/RouteWrapper';
 
+/**
+ * Component acting as router for application, rendering adequate views
+ * based on current path and safeguarding some views (those who can be accessed
+ * only by logged users) from unauthorized access
+ * @returns
+ */
 export const Routing: React.FC = () => (
   <Switch>
     <ProtectedRouteWrapper path={viewsRoutes.START}>

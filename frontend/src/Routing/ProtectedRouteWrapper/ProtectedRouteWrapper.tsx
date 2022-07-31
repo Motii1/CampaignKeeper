@@ -9,6 +9,13 @@ type ProtectedRouteWrapperProps = {
   path: string;
 } & Record<string, unknown>;
 
+/**
+ * Wrapper on our custom RouteWrapper used to check if user has access
+ * to requested route (that is: if user is logged in) and throwing an error
+ * if user doesn't have access
+ * @param param0
+ * @returns
+ */
 export const ProtectedRouteWrapper: React.FC<ProtectedRouteWrapperProps> = ({
   path,
   children,
