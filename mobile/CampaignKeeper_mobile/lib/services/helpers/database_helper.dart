@@ -1,4 +1,3 @@
-import 'package:campaign_keeper_mobile/entities/base_entity.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
@@ -61,14 +60,6 @@ class DatabaseHelper {
   }
 
   Future<void> clear() async {
-    var tables = (await _database.query('sqlite_master', where: 'type = ?', whereArgs: ['table']))
-        .map((row) => row['name'] as String)
-        .toList(growable: false);
-
-    for (var tableName in tables) {
-      if (!tableName.contains('metadata')) {
-        await delete(tableName);
-      }
-    }
+    await delete(CampaignEntity.tableName);
   }
 }
