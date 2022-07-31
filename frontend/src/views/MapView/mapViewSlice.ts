@@ -32,6 +32,7 @@ const mapViewSlice = createSlice({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resetState: (state, _action) => {
       state.currentSessionId = '';
+      state.currentSessionTitle = '';
       state.currentEvent = null;
     },
   },

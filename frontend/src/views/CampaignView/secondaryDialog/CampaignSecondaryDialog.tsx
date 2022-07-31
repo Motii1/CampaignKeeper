@@ -5,7 +5,9 @@ import requestMethods from '../../../axios/requestMethods';
 import { useQuery } from '../../../axios/useQuery';
 import { RootState } from '../../../store';
 import { CustomDialog } from '../../components/CustomDialog/CustomDialog';
-import { resetState } from '../campaignViewSlice';
+import { resetState as resetStateExplorer } from '../../ExplorerView/explorerViewSlice';
+import { resetState as resetStateMap } from '../../MapView/mapViewSlice';
+import { resetState as resetStateCampaign } from '../campaignViewSlice';
 import { deleteSession } from '../sessionsSlice';
 
 type CampaignSecondaryDialogProps = {
@@ -25,6 +27,7 @@ type CampaignSecondaryDialogProps = {
 export const CampaignSecondaryDialog: React.FC<CampaignSecondaryDialogProps> = props => {
   const dispatch = useDispatch();
   const sessionId = useSelector((state: RootState) => state.campaignView.sessionId);
+  const sessionIdMapView = useSelector((state: RootState) => state.mapView.currentSessionId);
 
   const {
     isLoading: isLoadingDelete,
@@ -37,7 +40,13 @@ export const CampaignSecondaryDialog: React.FC<CampaignSecondaryDialogProps> = p
     if (!isLoadingDelete && statusDelete) {
       if (statusDelete === 200) {
         dispatch(deleteSession({ id: sessionId }));
-        dispatch(resetState({}));
+        dispatch(resetStateCampaign({}));
+        if (sessionId === sessionIdMapView) {
+          // eslint-disable-next-line no-console
+          console.log('reset');
+          dispatch(resetStateMap({}));
+          dispatch(resetStateExplorer({}));
+        }
         props.setSnackbarSuccess('Session deleted');
         props.setIsOpen(false);
         props.setIsPrimaryOpen(false);
@@ -47,7 +56,15 @@ export const CampaignSecondaryDialog: React.FC<CampaignSecondaryDialogProps> = p
       }
       resetQueryDelete();
     }
-  }, [dispatch, isLoadingDelete, props, resetQueryDelete, sessionId, statusDelete]);
+  }, [
+    dispatch,
+    isLoadingDelete,
+    props,
+    resetQueryDelete,
+    sessionId,
+    sessionIdMapView,
+    statusDelete,
+  ]);
 
   useEffect(() => {
     handleRunQueryDelete();

@@ -26,7 +26,7 @@ export const MapView: React.FC = () => {
 
   const history = useHistory();
 
-  if (currentCampaignId === '') history.push(viewsRoutes.CAMPAIGN);
+  if (currentCampaignId === '' || currentSessionId === '') history.push(viewsRoutes.CAMPAIGN);
   else if (!isEventsListDownloaded) {
     const sessionIdForFetching =
       currentSessionId !== '' ? currentSessionId : sessionsList[sessionsList.length - 1]?.id;
