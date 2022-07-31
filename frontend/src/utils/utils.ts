@@ -48,6 +48,16 @@ export const convertReferenceFieldToCodexMetadata = (
 ): CodexMetadataInstance[] => {
   let index = 0;
   const metadata: CodexMetadataInstance[] = [];
+  // no data is present in field, but it must be provided to validate request on backend
+  if (fieldMetadata.length === 0)
+    return [
+      {
+        type: 'string',
+        sequenceNumber: 0,
+        value: '',
+        fieldName: fieldName,
+      },
+    ];
   fieldMetadata.forEach(field => {
     if (field.value !== '')
       if (field.id)
