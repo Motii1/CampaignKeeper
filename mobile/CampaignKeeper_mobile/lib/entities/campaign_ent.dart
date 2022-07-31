@@ -17,12 +17,12 @@ class CampaignEntity implements BaseEntity {
 
   static const String endpoint = "/api/campaign/list";
 
-  Image _imageCache = Image.asset("assets/campaign_default.png");
-  String? _imageData;
-
   late int id;
   late String name;
   late DateTime createdAt;
+
+  Image _imageCache = Image.asset("assets/campaign_default.png");
+  String? _imageData;
 
   String? get imageData => _imageData;
 

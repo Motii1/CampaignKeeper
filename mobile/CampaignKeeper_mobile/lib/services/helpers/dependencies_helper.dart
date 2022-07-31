@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 
 // Helper used as an dependency injection tool.
 class DependenciesHelper {
+  DependenciesHelper._internal();
+
   static final DependenciesHelper _deps = DependenciesHelper._internal();
 
   factory DependenciesHelper() {
@@ -19,8 +21,6 @@ class DependenciesHelper {
   http.Client _client = http.Client();
   http.MultipartRequest Function(String, Uri) _multipartRequest =
       (type, uri) => http.MultipartRequest(type, uri);
-
-  DependenciesHelper._internal();
 
   void useMocks({
     FlutterSecureStorage? secureStorage,
