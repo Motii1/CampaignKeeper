@@ -65,7 +65,7 @@ void main() {
         fields: [],
       );
       Map getResponseData = {
-        "schemas": [ent.encode()],
+        "schemas": [ent.toMap()],
       };
       String jsonData = json.encode(getResponseData);
 
@@ -82,7 +82,7 @@ void main() {
       String storageValue = storage.value as String;
 
       List storageData = json.decode(storageValue);
-      var storageEntity = SchemaEntity.decode(storageData[0]);
+      var storageEntity = SchemaEntity.fromMap(storageData[0]);
 
       await Future.delayed(Duration(milliseconds: 500));
 

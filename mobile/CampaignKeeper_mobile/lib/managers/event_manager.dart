@@ -69,7 +69,7 @@ class EventManager extends BaseManager<EventEntity> {
       if (cache != null) {
         List cacheData = json.decode(cache);
         cacheData.forEach((data) {
-          _attach(EventEntity.decode(data));
+          _attach(EventEntity.fromMap(data));
         });
 
         notifyListeners();
@@ -85,7 +85,7 @@ class EventManager extends BaseManager<EventEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<EventEntity> newEntities =
-            (responseData['events'] as List).map((e) => EventEntity.decode(e)).toList();
+            (responseData['events'] as List).map((e) => EventEntity.fromMap(e)).toList();
 
         if (!_isEqual(parameterValue, newEntities)) {
           _map[parameterValue] = newEntities;

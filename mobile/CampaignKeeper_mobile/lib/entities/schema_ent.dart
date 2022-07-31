@@ -10,7 +10,7 @@ class SchemaEntity implements BaseEntity {
     required this.fields,
   });
 
-  SchemaEntity.decode(Map data) {
+  SchemaEntity.fromMap(Map data) {
     id = data['id'];
     campaignId = data['campaignId'];
     title = data['title'];
@@ -24,7 +24,7 @@ class SchemaEntity implements BaseEntity {
   late String title;
   late List<String> fields;
 
-  Map encode() {
+  Map toMap() {
     Map data = {
       "id": id,
       "campaignId": campaignId,

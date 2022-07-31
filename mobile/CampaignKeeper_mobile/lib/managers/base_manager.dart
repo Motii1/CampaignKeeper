@@ -88,7 +88,7 @@ class BaseManager<T extends BaseEntity> extends ChangeNotifier {
   }
 
   Future<void> cacheList(List<T> list, String key) async {
-    var data = list.map((e) => e.encode()).toList();
+    var data = list.map((e) => e.toMap()).toList();
 
     CacheUtil().add(key, json.encode(data));
   }
@@ -99,7 +99,7 @@ class BaseManager<T extends BaseEntity> extends ChangeNotifier {
     map.forEach(
       (mapKey, list) {
         if (filter.isEmpty || filter.contains(mapKey)) {
-          data.addAll(list.map((e) => e.encode()));
+          data.addAll(list.map((e) => e.toMap()));
         }
       },
     );

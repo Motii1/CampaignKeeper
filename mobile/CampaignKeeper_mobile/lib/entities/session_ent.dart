@@ -9,7 +9,7 @@ class SessionEntity implements BaseEntity {
     required this.createdAt,
   });
 
-  SessionEntity.decode(Map data) {
+  SessionEntity.fromMap(Map data) {
     id = data['id'];
     campaignId = data['campaignId'];
     name = data['name'];
@@ -23,7 +23,7 @@ class SessionEntity implements BaseEntity {
   late String name;
   late DateTime createdAt;
 
-  Map encode() {
+  Map toMap() {
     Map data = {
       "id": id,
       "campaignId": campaignId,

@@ -8,7 +8,7 @@ class CampaignEntity implements BaseEntity {
     this.imageData = imageData;
   }
 
-  CampaignEntity.decode(Map data) {
+  CampaignEntity.fromMap(Map data) {
     id = data['id'];
     name = data['name'];
     createdAt = DateTime.parse(data['createdAt']);
@@ -40,7 +40,7 @@ class CampaignEntity implements BaseEntity {
 
   Image get image => _imageCache;
 
-  Map encode() {
+  Map toMap() {
     Map data = {
       "id": id,
       "name": name,

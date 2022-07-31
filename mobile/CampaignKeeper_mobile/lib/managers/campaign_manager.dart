@@ -58,7 +58,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
       if (cache != null && cache.isNotEmpty) {
         List cacheData = json.decode(cache);
 
-        _entities = cacheData.map((e) => CampaignEntity.decode(e)).toList();
+        _entities = cacheData.map((e) => CampaignEntity.fromMap(e)).toList();
         notifyListeners();
       }
     }
@@ -69,7 +69,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<CampaignEntity> newEntities =
-            (responseData['campaigns'] as List).map((e) => CampaignEntity.decode(e)).toList();
+            (responseData['campaigns'] as List).map((e) => CampaignEntity.fromMap(e)).toList();
 
         if (!_isEqual(newEntities)) {
           _entities = newEntities;

@@ -10,7 +10,11 @@ class DependenciesHelper {
     return _deps;
   }
 
-  FlutterSecureStorage _secureStorage = new FlutterSecureStorage();
+  FlutterSecureStorage _secureStorage = new FlutterSecureStorage(
+    aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+    ),
+  );
   SharedPreferences? _storage;
   http.Client _client = http.Client();
   http.MultipartRequest Function(String, Uri) _multipartRequest =

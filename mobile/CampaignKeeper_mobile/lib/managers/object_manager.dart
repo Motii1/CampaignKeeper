@@ -69,7 +69,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
       if (cache != null) {
         List cacheData = json.decode(cache);
         cacheData.forEach((data) {
-          _attach(ObjectEntity.decode(data));
+          _attach(ObjectEntity.fromMap(data));
         });
 
         notifyListeners();
@@ -85,7 +85,7 @@ class ObjectManager extends BaseManager<ObjectEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<ObjectEntity> newEntities =
-            (responseData['objects'] as List).map((e) => ObjectEntity.decode(e)).toList();
+            (responseData['objects'] as List).map((e) => ObjectEntity.fromMap(e)).toList();
 
         if (parameterName == EntityParameter.schema) {
           if (_isEqual(parameterValue, newEntities)) {

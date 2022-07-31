@@ -71,7 +71,7 @@ class SessionManager extends BaseManager<SessionEntity> {
       if (cache != null) {
         List cacheData = json.decode(cache);
         cacheData.forEach((data) {
-          _attach(SessionEntity.decode(data));
+          _attach(SessionEntity.fromMap(data));
         });
 
         notifyListeners();
@@ -88,7 +88,7 @@ class SessionManager extends BaseManager<SessionEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<SessionEntity> newEntities =
-            (responseData['sessions'] as List).map((e) => SessionEntity.decode(e)).toList();
+            (responseData['sessions'] as List).map((e) => SessionEntity.fromMap(e)).toList();
 
         if (!_isEqual(parameterValue, newEntities)) {
           _map[parameterValue] = newEntities;

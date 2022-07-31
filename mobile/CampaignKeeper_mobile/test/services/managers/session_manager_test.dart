@@ -65,7 +65,7 @@ void main() {
         createdAt: DateTime.now(),
       );
       Map getResponseData = {
-        "sessions": [ent.encode()],
+        "sessions": [ent.toMap()],
       };
       String jsonData = json.encode(getResponseData);
 
@@ -82,7 +82,7 @@ void main() {
       String storageValue = storage.value as String;
 
       List storageData = json.decode(storageValue);
-      var storageEntity = SessionEntity.decode(storageData[0]);
+      var storageEntity = SessionEntity.fromMap(storageData[0]);
 
       await Future.delayed(Duration(milliseconds: 500));
 

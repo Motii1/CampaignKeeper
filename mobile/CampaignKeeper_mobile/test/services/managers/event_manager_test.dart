@@ -86,7 +86,7 @@ void main() {
         childrenIds: [],
       );
       Map getResponseData = {
-        "events": [ent.encode()],
+        "events": [ent.toMap()],
       };
       String jsonData = json.encode(getResponseData);
 
@@ -103,7 +103,7 @@ void main() {
       String storageValue = storage.value as String;
 
       List storageData = json.decode(storageValue);
-      var storageEntity = EventEntity.decode(storageData[0]);
+      var storageEntity = EventEntity.fromMap(storageData[0]);
 
       await Future.delayed(Duration(milliseconds: 500));
 

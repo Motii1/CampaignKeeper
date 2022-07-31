@@ -17,7 +17,7 @@ class EventEntity implements BaseEntity {
     required this.childrenIds,
   });
 
-  EventEntity.decode(Map data) {
+  EventEntity.fromMap(Map data) {
     id = data['id'];
     sessionId = data['sessionId'];
     title = data['title'];
@@ -57,7 +57,7 @@ class EventEntity implements BaseEntity {
 
   bool get isOmitted => status.toLowerCase() == 'omitted';
 
-  Map encode() {
+  Map toMap() {
     Map data = {
       'id': id,
       'sessionId': sessionId,

@@ -69,7 +69,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
       if (cache != null) {
         List cacheData = json.decode(cache);
         cacheData.forEach((data) {
-          _attach(SchemaEntity.decode(data));
+          _attach(SchemaEntity.fromMap(data));
         });
 
         notifyListeners();
@@ -85,7 +85,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<SchemaEntity> newEntities =
-            (responseData['schemas'] as List).map((e) => SchemaEntity.decode(e)).toList();
+            (responseData['schemas'] as List).map((e) => SchemaEntity.fromMap(e)).toList();
 
         if (!_isEqual(parameterValue, newEntities)) {
           _map[parameterValue] = newEntities;

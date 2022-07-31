@@ -50,7 +50,7 @@ void main() {
 
       var ent = CampaignEntity(id: 1, name: "Test", createdAt: DateTime.now());
       Map getResponseData = {
-        "campaigns": [ent.encode()],
+        "campaigns": [ent.toMap()],
       };
       String jsonData = json.encode(getResponseData);
 
@@ -67,7 +67,7 @@ void main() {
       String storageValue = storage.value as String;
 
       List storageData = json.decode(storageValue);
-      var storageEntity = CampaignEntity.decode(storageData[0]);
+      var storageEntity = CampaignEntity.fromMap(storageData[0]);
 
       await Future.delayed(Duration(milliseconds: 500));
 

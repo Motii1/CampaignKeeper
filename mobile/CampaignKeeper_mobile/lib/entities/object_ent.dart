@@ -14,7 +14,7 @@ class ObjectEntity implements BaseEntity {
     this.imageData = imageData;
   }
 
-  ObjectEntity.decode(Map data) {
+  ObjectEntity.fromMap(Map data) {
     id = data['id'];
     schemaId = data['schemaId'];
     title = data['title'];
@@ -52,7 +52,7 @@ class ObjectEntity implements BaseEntity {
 
   Image? get image => _imageCache;
 
-  Map encode() {
+  Map toMap() {
     Map data = {
       'id': id,
       'schemaId': schemaId,
