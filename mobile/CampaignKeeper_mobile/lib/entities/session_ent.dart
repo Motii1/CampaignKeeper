@@ -23,8 +23,8 @@ class SessionEntity implements BaseEntity {
   late String name;
   late DateTime createdAt;
 
-  Map toMap() {
-    Map data = {
+  Map<String, Object?> toMap() {
+    Map<String, Object?> data = {
       "id": id,
       "campaignId": campaignId,
       "name": name,

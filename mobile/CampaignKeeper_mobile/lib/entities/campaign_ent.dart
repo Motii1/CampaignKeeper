@@ -15,7 +15,8 @@ class CampaignEntity implements BaseEntity {
     imageData = data['imageBase64'];
   }
 
-  static const String endpoint = "/api/campaign/list";
+  static const String endpoint = '/api/campaign/list';
+  static const String tableName = 'campaigns';
 
   late int id;
   late String name;
@@ -40,8 +41,8 @@ class CampaignEntity implements BaseEntity {
 
   Image get image => _imageCache;
 
-  Map toMap() {
-    Map data = {
+  Map<String, Object?> toMap() {
+    Map<String, Object?> data = {
       "id": id,
       "name": name,
       "createdAt": createdAt.toString(),

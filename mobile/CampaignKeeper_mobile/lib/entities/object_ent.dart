@@ -52,8 +52,8 @@ class ObjectEntity implements BaseEntity {
 
   Image? get image => _imageCache;
 
-  Map toMap() {
-    Map data = {
+  Map<String, Object?> toMap() {
+    Map<String, Object?> data = {
       'id': id,
       'schemaId': schemaId,
       'title': title,

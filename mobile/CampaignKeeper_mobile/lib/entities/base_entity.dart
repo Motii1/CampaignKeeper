@@ -1,7 +1,7 @@
 abstract class BaseEntity {
   BaseEntity.fromMap(Map data);
 
-  Map toMap();
+  Map<String, Object?> toMap();
 
   bool equals(Object? other);
 }

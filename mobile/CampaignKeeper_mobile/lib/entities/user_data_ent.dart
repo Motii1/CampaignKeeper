@@ -49,8 +49,8 @@ class UserDataEntity implements BaseEntity {
 
   Image get image => _imageCache;
 
-  Map toMap() {
-    Map data = {
+  Map<String, Object?> toMap() {
+    Map<String, Object?> data = {
       "username": username,
       "email": email,
       "password": password,

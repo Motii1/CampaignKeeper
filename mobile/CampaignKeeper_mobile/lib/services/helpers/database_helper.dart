@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/entities/base_entity.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -16,71 +17,58 @@ class DatabaseHelper {
   Future<void> initialize() async {
     if (_initialized) return;
 
+    WidgetsFlutterBinding.ensureInitialized();
+
     _database = await openDatabase(
       join(await getDatabasesPath(), 'campaign_database.db'),
       onCreate: ((db, version) {
         return db.execute(
-            'CREATE TABLE ${_getEntityTableName(CampaignEntity)}(id INTEGER PRIMARY KEY, name TEXT, createdAt TEXT, imageBase64 TEXT)');
+            'CREATE TABLE ${CampaignEntity.tableName}(id INTEGER PRIMARY KEY, name TEXT, createdAt TEXT, imageBase64 TEXT)');
       }),
       version: 1,
     );
     _initialized = true;
   }
 
-  Future<void> insertToTable(String tableName, Map<String, Object?> data) async {
-    await _database.insert(tableName, data);
+  Future<void> insert(String tableName, Map<String, Object?> data) async {
+    await _database.insert(
+      tableName,
+      data,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
-  Future<void> insert<T extends BaseEntity>(Map<String, Object?> data) async {
-    String? tableName = _getEntityTableName(T);
-
-    if (tableName == null) {
-      throw Exception("This entity is not supported by database");
-    }
-
-    await insertToTable(tableName, data);
-  }
-
-  Future<void> insertListToTable(String tableName, List<Map<String, Object?>> data) async {
+  Future<void> insertList(String tableName, List<Map<String, Object?>> data) async {
     Batch batch = _database.batch();
 
     data.forEach((element) {
-      batch.insert(tableName, element);
+      batch.insert(
+        tableName,
+        element,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     });
 
     await batch.commit(noResult: true);
   }
 
-  Future<void> insertList<T extends BaseEntity>(List<Map<String, Object?>> data) async {
-    String? tableName = _getEntityTableName(T);
-
-    if (tableName == null) {
-      throw Exception("This entity is not supported by database");
-    }
-
-    await insertListToTable(tableName, data);
-  }
-
-  Future<List<Map>> getFromTable(String tableName, {String? where, List<Object?>? whereArgs}) async {
+  Future<List<Map>> get(String tableName, {String? where, List<Object?>? whereArgs}) async {
     return await _database.query(tableName, where: where, whereArgs: whereArgs);
   }
 
-  Future<List<Map>> get<T extends BaseEntity>({String? where, List<Object?>? whereArgs}) async {
-    String? tableName = _getEntityTableName(T);
-
-    if (tableName == null) {
-      throw Exception("This entity is not supported by database");
-    }
-
-    return await getFromTable(tableName, where: where, whereArgs: whereArgs);
+  Future<void> delete(String tableName, {String? where, List<Object?>? whereArgs}) async {
+    await _database.delete(tableName, where: where, whereArgs: whereArgs);
   }
 
-  String? _getEntityTableName(Type T) {
-    switch (T) {
-      case CampaignEntity:
-        return 'campaigns';
-      default:
-        return null;
+  Future<void> clear() async {
+    var tables = (await _database.query('sqlite_master', where: 'type = ?', whereArgs: ['table']))
+        .map((row) => row['name'] as String)
+        .toList(growable: false);
+
+    for (var tableName in tables) {
+      if (!tableName.contains('metadata')) {
+        await delete(tableName);
+      }
     }
   }
 }
