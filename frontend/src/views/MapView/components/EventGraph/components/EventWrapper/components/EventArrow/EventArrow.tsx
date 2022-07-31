@@ -18,13 +18,11 @@ const getColorOpacity = (index: number) => {
 };
 
 /**
- * Arrow made with react-xarrows library
- * used to connect parent event (or root)
- * with its children.
+ * Arrow made with react-xarrows library used to connect parent event (or root)
+ * with its children. Arrow color depends on its position on child
  * @param props
  * @returns
  */
-// eslint-disable-next-line arrow-body-style
 export const EventArrow: React.FC<EventArrowProps> = props => {
   const { isLight } = useSelector((state: RootState) => state.theme);
   const arrowColor = isLight ? '#303d50' : '#f4f4f4';
