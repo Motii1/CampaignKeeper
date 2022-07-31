@@ -289,6 +289,11 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
   };
 
   const handleDelete = () => {
+    if (parentIds.length === 0 && eventsList.length > 1) {
+      props.setSnackbarError('Cannot delete root with existing children!');
+      handleCancel();
+      return;
+    }
     if (props.setIsSecondaryOpen) props.setIsSecondaryOpen(true);
   };
 

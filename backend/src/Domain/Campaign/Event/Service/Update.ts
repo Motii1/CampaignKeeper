@@ -17,6 +17,10 @@ export const updateEvent = async (
 ): Promise<Event> => {
   const toUpdate: Event = { ...event };
   try {
+    if (dto.parentIds?.includes(event.id)) {
+      throw new Error('Event cannot be parent of itself!');
+    }
+
     if (dto.parentIds) {
       const parents = await validateRelatedEventsWithLoad(dto.parentIds, session);
       toUpdate.parents = parents;

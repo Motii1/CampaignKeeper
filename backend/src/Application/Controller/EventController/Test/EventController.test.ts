@@ -172,4 +172,10 @@ describe('EventController', () => {
       ])
     );
   });
+
+  it('should throw if trying to set parent of event to itself', async () => {
+    const response = await insertEvent(MOCKED_EVENT_INSERT_BASE);
+    const badResponse = await updateEvent(response.body.id, { parentIds: [response.body.id] });
+    expect(badResponse.status).toEqual(400);
+  });
 });
