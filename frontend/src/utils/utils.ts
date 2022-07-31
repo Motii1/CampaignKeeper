@@ -11,6 +11,11 @@ import {
   SessionEventWithPos,
 } from '../views/MapView/eventsSlice';
 
+/**
+ * Used to convert files into base64
+ * @param file
+ * @returns
+ */
 export const toBase64 = (file: File): Promise<null | string | ArrayBuffer> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -19,12 +24,24 @@ export const toBase64 = (file: File): Promise<null | string | ArrayBuffer> =>
     reader.onerror = error => reject(error);
   });
 
-// takes file, converts it to base64 and removes first part with file type
+/**
+ * Used to convert images (files) into base64 encoding
+ * while removing part of base64 string which contains info about file type
+ * @param file
+ * @returns
+ */
 export const convertImageToBase64 = async (file: File): Promise<string> => {
   const imageAsBase64 = (await toBase64(file)) as string;
   return imageAsBase64.split(',')[1];
 };
 
+/**
+ * Used to convert metadata from ReferenceField to metadata from Codex,
+ * which allows using them in query
+ * @param fieldMetadata
+ * @param fieldName
+ * @returns
+ */
 export const convertReferenceFieldToCodexMetadata = (
   fieldMetadata: ReferenceFieldMetadata[],
   fieldName: string
@@ -52,6 +69,12 @@ export const convertReferenceFieldToCodexMetadata = (
   return metadata;
 };
 
+/**
+ * Used to convert metadata from ReferenceField to metadata from Event,
+ * which allows using them in query
+ * @param fieldMetadata
+ * @returns
+ */
 export const convertReferenceFieldToEventMetadata = (
   fieldMetadata: ReferenceFieldMetadata[]
 ): EventFieldMetadata[] => {
@@ -106,6 +129,12 @@ const convertMetadataToEventField = (
   }));
 };
 
+/**
+ * Used to find entery referenced in Codex metadata in Codex entries list
+ * @param metadata
+ * @param entries
+ * @returns
+ */
 export const getEntryFromMetadata = (
   metadata: CodexMetadataInstance,
   entries: Entry[]
@@ -114,16 +143,34 @@ export const getEntryFromMetadata = (
   return entry ? entry : null;
 };
 
+/**
+ * Used to find all metadata related to provided field (by its name)
+ * @param fieldName
+ * @param metadata
+ * @returns
+ */
 export const getCodexMetadataByFieldName = (
   fieldName: string,
   metadata: CodexMetadataInstance[]
 ): CodexMetadataInstance[] => metadata.filter(element => element.fieldName === fieldName);
 
+/**
+ * Used to find name of entry from Codex by its id
+ * @param id
+ * @param entries
+ * @returns
+ */
 const getEntryNameById = (id: string, entries: Entry[]): string => {
   const entry = entries.find(entry => `${entry.id}` === id);
   return entry ? entry.title : 'REFERENCE_NOT_FOUND';
 };
 
+/**
+ * Used to convert entries from hash map (as they stored in codex) to list
+ * (in which form they are more accessible for multiple operations)
+ * @param entries
+ * @returns
+ */
 export const convertEntriesHashMapToList = (entries: EntriesHashMap): Entry[] => {
   let entriesAsLists: Entry[] = [];
   Object.keys(entries).forEach(schemaId => {
@@ -132,6 +179,12 @@ export const convertEntriesHashMapToList = (entries: EntriesHashMap): Entry[] =>
   return entriesAsLists;
 };
 
+/**
+ * Used to update metadata of ReferenceField after user input
+ * @param oldEditField
+ * @param fieldValue
+ * @returns
+ */
 export const getUpdatedReferenceField = (
   oldEditField: ReferenceFieldMetadata[],
   fieldValue: string
@@ -152,9 +205,20 @@ export const getUpdatedReferenceField = (
   return newEditField;
 };
 
+/**
+ * Used to convert metadata of ReferenceField to displayable string
+ * which can be shown in an input field
+ * @param editField
+ * @returns
+ */
 export const convertReferenceFieldToString = (editField: ReferenceFieldMetadata[]): string =>
   editField.map(field => (field.id ? `|${field.value}|` : field.value)).join('');
 
+/**
+ * Used to create state of CodexDialog form with all fields empty
+ * @param schema
+ * @returns
+ */
 export const createEmptyCodexFields = (schema: null | Schema): ReferenceFieldsState => {
   const currentFields: ReferenceFieldsState = {};
   schema?.fields.forEach(field => {
@@ -163,6 +227,11 @@ export const createEmptyCodexFields = (schema: null | Schema): ReferenceFieldsSt
   return currentFields;
 };
 
+/**
+ * Used to create state of EventDialog form with all fields empty
+ * @param fieldNames
+ * @returns
+ */
 export const createEmptyEventFields = (fieldNames: string[]): ReferenceFieldsState => {
   const currentFields: ReferenceFieldsState = {};
   fieldNames.forEach(field => {
@@ -171,6 +240,12 @@ export const createEmptyEventFields = (fieldNames: string[]): ReferenceFieldsSta
   return currentFields;
 };
 
+/**
+ * Used to create state of CodexDialog form with all fields filled
+ * with data from store (from existing entry which CodexDialogs opens for edition)
+ * @param schema
+ * @returns
+ */
 export const createFilledCodexFields = (
   schema: null | Schema,
   entry: Entry | null,
@@ -190,6 +265,14 @@ export const createFilledCodexFields = (
   return currentFields;
 };
 
+/**
+ * Used to create state of EventDialog form with all fields filled
+ * with data from store (from existing event which EventDialog opens for edition)
+ * @param fieldNames
+ * @param event
+ * @param entries
+ * @returns
+ */
 export const createFilledEventFields = (
   fieldNames: string[],
   event: SessionEvent,
@@ -214,18 +297,37 @@ export const createFilledEventFields = (
   return currentFields;
 };
 
+/**
+ * Used to compare events by their title (alphabetically ASC)
+ * @param e1
+ * @param e2
+ * @returns
+ */
 export const compareEventsByTitle = (e1: SessionEventWithPos, e2: SessionEventWithPos): number => {
   if (e1.title < e2.title) return -1;
   if (e1.title > e2.title) return 1;
   return 0;
 };
 
+/**
+ * Used to compare events by their horizontal (x) position in EventGraph (ASC)
+ * @param e1
+ * @param e2
+ * @returns
+ */
 export const compareEventsByX = (e1: SessionEventWithPos, e2: SessionEventWithPos): number => {
   if (e1.x < e2.x) return -1;
   if (e1.x > e2.x) return 1;
   return 0;
 };
 
+/**
+ * Used to compare events by their horizontal (x) position in EventGraph (ASC)
+ * and if position is equal by their id (ASC)
+ * @param e1
+ * @param e2
+ * @returns
+ */
 export const compareEventsByXThenId = (
   e1: SessionEventWithPos,
   e2: SessionEventWithPos
