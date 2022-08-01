@@ -9,6 +9,10 @@ type EntriesListElementProps = {
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
+/**
+ * Component reponsible for displaying name of entry,
+ * allows opening it in EntryDisplayPanel on click
+ */
 export const EntriesListElement: React.FC<EntriesListElementProps> = props => {
   const dispatch = useDispatch();
 

@@ -3,6 +3,11 @@ import { useHistory } from 'react-router-dom';
 import LogoGraphic from '../../../../../../../graphics/logo.svg';
 import viewsRoutes from '../../../../../../viewsRoutes';
 
+/**
+ * Campaign Keeper logo displayed in sidebar,
+ * moves to '/' (landing page) on click
+ * @returns
+ */
 export const SidebarLogo: React.FC = () => {
   const history = useHistory();
   return (

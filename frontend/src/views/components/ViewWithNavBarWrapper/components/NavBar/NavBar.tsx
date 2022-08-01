@@ -22,16 +22,30 @@ const secondaryButtonDisplayableViews = [
   viewsRoutes.CODEX,
 ];
 
+/**
+ * Component serving as navigation bar displayed on top of the screen,
+ * used to navigate between views in application, display info about currently
+ * logged user and menu in which they can change their data, display information
+ * about application and log out.
+ * It has two sets of buttons, primary (Start, Campaign and Notes) which is always displayed
+ * and secondary (Map, Explorer, Codex) which is displayed only if user is CampaignView
+ * or one of its subviews (MapView, ExplorerView, CodexView). *
+ * @param props
+ * @returns
+ */
 export const NavBar: React.FC<NavBarProps> = props => {
   const history = useHistory();
 
-  const { currentCampaignId } = useSelector((state: RootState) => state.campaignView);
+  const sessionIdMapView = useSelector((state: RootState) => state.mapView.currentSessionId);
+  const sessionIdExplorerView = useSelector(
+    (state: RootState) => state.explorerView.currentSessionId
+  );
 
   const areSecondaryButtonsDisplayed = secondaryButtonDisplayableViews.includes(props.currentView);
 
-  const moveToSecondaryView = (name: string, viewRoute: string) => {
-    if (currentCampaignId !== '') history.push(viewRoute);
-    else props.setSnackbarError(`You can't open ${name} without selecting campaign`);
+  const moveToSessionView = (name: string, sessionId: string, viewRoute: string) => {
+    if (sessionId !== '') history.push(viewRoute);
+    else props.setSnackbarError(`You can't open ${name} without selecting session`);
   };
 
   return (
@@ -62,19 +76,19 @@ export const NavBar: React.FC<NavBarProps> = props => {
           text="MAP"
           isChosen={props.currentView === viewsRoutes.MAP}
           isDisplayed={areSecondaryButtonsDisplayed}
-          onClick={() => moveToSecondaryView('Map', viewsRoutes.MAP)}
+          onClick={() => moveToSessionView('Map', sessionIdMapView, viewsRoutes.MAP)}
         />
         <SecondaryNavBarButton
           text="EXPLORER"
           isChosen={props.currentView === viewsRoutes.EXPLORER}
           isDisplayed={areSecondaryButtonsDisplayed}
-          onClick={() => moveToSecondaryView('Explorer', viewsRoutes.EXPLORER)}
+          onClick={() => moveToSessionView('Explorer', sessionIdExplorerView, viewsRoutes.EXPLORER)}
         />
         <SecondaryNavBarButton
           text="CODEX"
           isChosen={props.currentView === viewsRoutes.CODEX}
           isDisplayed={areSecondaryButtonsDisplayed}
-          onClick={() => moveToSecondaryView('Codex', viewsRoutes.CODEX)}
+          onClick={() => history.push(viewsRoutes.CODEX)}
         />
         <PrimaryNavBarButton
           text="NOTES"

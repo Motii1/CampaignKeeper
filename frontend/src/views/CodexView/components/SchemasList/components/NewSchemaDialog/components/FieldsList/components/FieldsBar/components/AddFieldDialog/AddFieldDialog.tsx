@@ -9,6 +9,12 @@ type AddFieldDialogProps = {
   setFields: (newFields: string[]) => void;
 };
 
+/**
+ * Component responsible for adding new field to schema during its creation
+ * (field name is typed by user)
+ * @param props
+ * @returns
+ */
 export const AddFieldDialog: React.FC<AddFieldDialogProps> = props => {
   const [name, setName] = useState('');
   const [helperText, setHelperText] = useState<null | string>(null);

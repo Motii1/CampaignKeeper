@@ -9,6 +9,11 @@ type EventSelectProps = {
   items: string[];
 };
 
+/**
+ * Select used for selecting event type and status in EventDialog
+ * @param props
+ * @returns
+ */
 export const EventSelect: React.FC<EventSelectProps> = props => {
   const handleChange = (event: SelectChangeEvent) => {
     props.setValue(event.target.value);

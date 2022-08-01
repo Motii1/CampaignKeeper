@@ -17,6 +17,11 @@ type StartSecondaryDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Component used as secondary dialog in StartView
+ * to ask user for reconfirmation that they want to delete selected dialog
+ * @returns
+ */
 export const StartSecondaryDialog: React.FC<StartSecondaryDialogProps> = props => {
   const dispatch = useDispatch();
   const campaignId = useSelector((state: RootState) => state.startView.startCampaignId);

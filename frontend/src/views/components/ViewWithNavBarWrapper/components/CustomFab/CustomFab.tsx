@@ -13,6 +13,12 @@ type CustomFabProps = {
   handleClick?: () => void;
 };
 
+/**
+ * Wrapper on Floating Action Button (oprens primary dialogs),
+ * returns adequate FAB based on current view (path)
+ * @param props
+ * @returns
+ */
 export const CustomFab: React.FC<CustomFabProps> = props => {
   const renderFabContent = () => {
     switch (props.currentView) {

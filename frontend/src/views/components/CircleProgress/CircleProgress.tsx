@@ -1,5 +1,9 @@
 import { CircularProgress, Stack } from '@mui/material';
 
+/**
+ * Component serving as unified loading animation in form of spinning circle
+ * @returns
+ */
 export const CircleProgress: React.FC = () => (
   <Stack
     direction="column"

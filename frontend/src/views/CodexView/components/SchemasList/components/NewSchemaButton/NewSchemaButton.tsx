@@ -5,6 +5,10 @@ type NewSchemaButtonProps = {
   setIsOpen: (newIsOpen: boolean) => void;
 };
 
+/**
+ * Button responsible for opening NewSchemaDialog in which user can create new schema
+ * @returns
+ */
 const ButtonContent: React.FC = () => (
   <Stack direction="row" justifyContent="center" alignItems="center" spacing={0.5}>
     <Add />

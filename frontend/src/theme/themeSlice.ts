@@ -12,6 +12,9 @@ const initialState: ThemeState = {
   isLight: false,
 };
 
+/**
+ * Redux slice used to store info about currently selected theme
+ */
 const themeSlice = createSlice({
   name: 'app',
   initialState,

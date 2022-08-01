@@ -7,32 +7,34 @@ import viewsRoutes from '../viewsRoutes';
 import { LoginForm } from './forms/LoginForm';
 import { RegisterForm } from './forms/RegisterForm';
 
+/**
+ * Component responsible for display and operations of landing page (login/register)
+ * @returns
+ */
 export const LandingView: React.FC = () => {
   const userState = useSelector((state: RootState) => state.user);
   const history = useHistory();
   if (userState.isDownloaded) history.push(viewsRoutes.START);
 
   const [currentForm, setCurrentForm] = useState('login');
-  const loginForm = (
-    <LoginForm
-      onChangeForm={(event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setCurrentForm('register');
-      }}
-    />
-  );
-  const registerForm = (
-    <RegisterForm
-      onChangeForm={(event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setCurrentForm('login');
-      }}
-    />
-  );
 
   return (
     <ViewWithSidebarWrapper>
-      {currentForm === 'login' ? loginForm : registerForm}
+      {currentForm === 'login' ? (
+        <LoginForm
+          onChangeForm={(event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            setCurrentForm('register');
+          }}
+        />
+      ) : (
+        <RegisterForm
+          onChangeForm={(event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            setCurrentForm('login');
+          }}
+        />
+      )}
     </ViewWithSidebarWrapper>
   );
 };

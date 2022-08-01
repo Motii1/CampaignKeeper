@@ -15,6 +15,12 @@ type CodexFieldListProps = {
   setFields: (newEntryFields: ReferenceFieldsState) => void;
 };
 
+/**
+ * Component responsible for displaying all fields from new/edited entry.
+ * Contains dialog used to add reference to another object to entry field
+ * @param props
+ * @returns
+ */
 export const CodexFieldList: React.FC<CodexFieldListProps> = props => {
   const [currentField, setCurrentField] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);

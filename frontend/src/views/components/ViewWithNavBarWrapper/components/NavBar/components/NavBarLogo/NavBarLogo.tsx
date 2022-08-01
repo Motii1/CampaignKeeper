@@ -3,6 +3,10 @@ import { useHistory } from 'react-router-dom';
 import LogoGraphic from '../../../../../../../graphics/logo.svg';
 import viewsRoutes from '../../../../../../viewsRoutes';
 
+/**
+ * Campaign Keepr logo shown in NavBar, changes view to StartView on click
+ * @returns
+ */
 export const NavBarLogo: React.FC = () => {
   const history = useHistory();
   return (

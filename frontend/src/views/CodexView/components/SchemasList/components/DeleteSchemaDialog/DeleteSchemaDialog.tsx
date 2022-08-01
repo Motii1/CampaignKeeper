@@ -16,6 +16,14 @@ type DeleteSchemaDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Component used as dialog for confirmation of schema deletion
+ * and performing API call to remove schema from database,
+ * opened by SchemasListElement context menu
+ * NOTE: deleting schema is impossible when it has at least one entry
+ * @param props
+ * @returns
+ */
 export const DeleteSchemaDialog: React.FC<DeleteSchemaDialogProps> = props => {
   const dispatch = useDispatch();
   const { entries } = useSelector((state: RootState) => state.codex);

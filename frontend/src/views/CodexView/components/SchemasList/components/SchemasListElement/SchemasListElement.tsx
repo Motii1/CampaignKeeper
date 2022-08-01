@@ -13,6 +13,13 @@ type SchemaListElementProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Component responsible for displaying single schema name,
+ * opening EntriesListPanel with its entries on click
+ * and providing option to delete schema on context menu
+ * @param props
+ * @returns
+ */
 export const SchemasListElement: React.FC<SchemaListElementProps> = props => {
   const dispatch = useDispatch();
   const { currentSchema } = useSelector((state: RootState) => state.codexView);

@@ -9,6 +9,12 @@ type CustomButtonProps = {
   onClick?: () => void;
 };
 
+/**
+ * Standard MUI Button with custom styles and props allowing to specify its role (form button,
+ * upload button, button that causes execution of function)
+ * @param param0
+ * @returns
+ */
 export const CustomButton: React.FC<CustomButtonProps> = ({
   behavior = CustomButtonBehavior.Submit,
   type = CustomButtonType.Accent,

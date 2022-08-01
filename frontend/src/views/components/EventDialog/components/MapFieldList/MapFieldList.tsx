@@ -18,6 +18,12 @@ type MapFieldListProps = {
   setFields: (newEntryFields: ReferenceFieldsState) => void;
 };
 
+/**
+ * Component used to display characters, places and description fields
+ * in EventDialog (their contents and titles)
+ * @param props
+ * @returns
+ */
 export const MapFieldList: React.FC<MapFieldListProps> = props => {
   const [currentChipField, setCurrentChipField] = useState('');
   const [isChipDialogOpen, setIsChipDialogOpen] = useState(false);

@@ -5,6 +5,12 @@ type SearchBarProps = {
   setSearchPhrase: (newSearchPhrase: string) => void;
 };
 
+/**
+ * Component responsible for allowing user to filter displayed entries' names
+ * by given phrase
+ * @param props
+ * @returns
+ */
 export const SearchBar: React.FC<SearchBarProps> = props => {
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setSearchPhrase(event.target.value);

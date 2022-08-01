@@ -20,6 +20,10 @@ const initialState: SessionsState = {
   sessionsCampaignId: '',
 };
 
+/**
+ * Async function responsible for fetching session list
+ * belonging to currently selected campaign
+ */
 export const fetchSessions = createAsyncThunk(
   'sessions/fetchSessions',
   async (campaignId: string) => {
@@ -28,6 +32,10 @@ export const fetchSessions = createAsyncThunk(
   }
 );
 
+/**
+ * Redux slice used to store and operate on information about sessions belonging
+ * to currently selected campaign
+ */
 const sessionsSlice = createSlice({
   name: 'sessions',
   initialState,

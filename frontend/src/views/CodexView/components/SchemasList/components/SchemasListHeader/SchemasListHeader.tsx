@@ -1,5 +1,9 @@
 import { Paper, Typography } from '@mui/material';
 
+/**
+ * Component serving as header of SchemasList informing user of that sidepanel purpose
+ * @returns
+ */
 export const SchemasListHeader: React.FC = () => (
   <Paper
     elevation={0}

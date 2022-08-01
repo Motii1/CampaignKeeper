@@ -16,6 +16,13 @@ type CodexSecondaryDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Component used as secondary dialog in Codex to ask user
+ * for confirmation that they want to delete selected entry
+ * NOTE: deleting entry is impossible if it is referenced in another entry
+ * @param props
+ * @returns
+ */
 export const CodexSecondaryDialog: React.FC<CodexSecondaryDialogProps> = props => {
   const dispatch = useDispatch();
   const { currentSchema, currentEntry } = useSelector((state: RootState) => state.codexView);

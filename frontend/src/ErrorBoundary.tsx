@@ -10,6 +10,9 @@ interface State {
   hasError: boolean;
 }
 
+/**
+ * Component used to render Error Boundary when an unexpected error occurs
+ */
 export class ErrorBoundary extends Component<Props, State> {
   override state: State = {
     hasError: false,
@@ -19,9 +22,8 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true };
   }
 
-  override componentDidCatch(_error: Error, _errorInfo: ErrorInfo): void {
-    // TBD/TODO: logging errors on backend
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  override componentDidCatch(_error: Error, _errorInfo: ErrorInfo): void {}
 
   override render(): ReactNode {
     if (this.state.hasError) {

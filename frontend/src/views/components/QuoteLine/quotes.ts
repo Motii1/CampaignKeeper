@@ -1,4 +1,6 @@
-// TO—DO: divide quotes into { quoteText: string, quoteAuthor: string}?
+/**
+ * List of popculture quotes which we deemed the most epic, interesting or great
+ */
 export const quotes: Array<string> = [
   // Star Wars
   '“Do or do not. There is no try.” — Yoda',

@@ -12,6 +12,10 @@ const initialState: StartViewState = {
   startCampaignImageBase64: null,
 };
 
+/**
+ * Redux slice used in StartView to display selected campaign view
+ * or create new one in StartDialog
+ */
 const startViewSlice = createSlice({
   name: 'startView',
   initialState,

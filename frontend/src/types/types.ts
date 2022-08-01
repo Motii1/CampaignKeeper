@@ -55,3 +55,13 @@ export type ReferenceFieldMetadata = {
 export type ReferenceFieldsState = {
   [fieldName: string]: ReferenceFieldMetadata[];
 };
+
+export type UserData = {
+  username: string;
+  email: string;
+  image: string;
+};
+
+export type FormProps = {
+  onChangeForm: (event: React.FormEvent<HTMLFormElement>) => void;
+};

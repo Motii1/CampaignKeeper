@@ -9,6 +9,11 @@ type EntryFieldProps = {
   entries: Entry[];
 };
 
+/**
+ * Component responsible for displaying one entry field
+ * @param props
+ * @returns
+ */
 export const EntryField: React.FC<EntryFieldProps> = props => {
   const renderValue = () =>
     props.data.map(metadata =>

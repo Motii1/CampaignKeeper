@@ -9,6 +9,10 @@ import { checkAndSetTheme } from './theme/themeSlice';
 import { fetchUserDetails } from './views/LandingView/userDetailsSlice';
 import { fetchCampaigns } from './views/StartView/campaignsSlice';
 
+/**
+ * Main component of desktop app
+ * @returns
+ */
 export const App: React.FC = () => {
   const dispatch = useDispatch();
 

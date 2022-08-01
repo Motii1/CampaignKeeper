@@ -11,6 +11,11 @@ type FieldChipProps = {
   setFields: (newEntryFields: ReferenceFieldsState) => void;
 };
 
+/**
+ * Chips used to represent reference to Codex entry or object outside of it in EventDialog
+ * @param props
+ * @returns
+ */
 export const FieldChip: React.FC<FieldChipProps> = props => {
   const { isLight } = useSelector((state: RootState) => state.theme);
 

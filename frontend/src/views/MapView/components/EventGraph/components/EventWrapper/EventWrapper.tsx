@@ -12,8 +12,6 @@ type EventWrapperProps = {
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
-const arrowColors = ['#6E85B7', '#B2C8DF', '#C4D7E0', '#F8F9D7'];
-
 const getOffsets = (numberOfArrows: number) => {
   const firstOffset =
     numberOfArrows % 2 === 0 ? 0.5 * numberOfArrows * -10 + 5 : 0.5 * numberOfArrows * -20 + 10;
@@ -22,6 +20,12 @@ const getOffsets = (numberOfArrows: number) => {
   return arrowsEndOffsets;
 };
 
+/**
+ * Components used as wrapper on EventTile (actual event info)
+ * and its arrows (conneting it with its children events and root if necessary)
+ * @param props
+ * @returns
+ */
 export const EventWrapper: React.FC<EventWrapperProps> = props => {
   const renderRootArrow = () => (
     <EventArrow
@@ -30,6 +34,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
       end={`event-${props.event.id}`}
       startAnchor="bottom"
       endAnchor="top"
+      index={1}
     />
   );
 
@@ -60,7 +65,7 @@ export const EventWrapper: React.FC<EventWrapperProps> = props => {
             position: 'top',
             offset: { x: endOffset },
           }}
-          color={arrowColors[currentEventIndexOnParentList % 4]}
+          index={currentEventIndexOnParentList}
         />
       );
     });

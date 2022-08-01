@@ -16,6 +16,13 @@ const initialState: CampaignViewState = {
   sessionName: '',
 };
 
+/**
+ * Redux slice used to store and operate on information about campaign
+ * currently displayed in CampaignView and session currently edited in CampaignDialog.
+ * Note: other views (MapView, ExplorerView and CodexView) access this slice
+ * to determine which campaign is currently avaiable for user operations (and whose
+ * data should be fetched from API and stored in their slices)
+ */
 const campaignViewSlice = createSlice({
   name: 'campaignView',
   initialState,

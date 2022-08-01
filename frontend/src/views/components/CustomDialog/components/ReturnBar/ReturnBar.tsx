@@ -5,6 +5,12 @@ type ReturnBarProps = {
   setOpen: (newState: boolean) => void;
 };
 
+/**
+ * Component allowing user to close all dialogs in application
+ * without resetting their state
+ * @param props
+ * @returns
+ */
 export const ReturnBar: React.FC<ReturnBarProps> = props => (
   <Stack
     direction="row"

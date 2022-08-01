@@ -6,6 +6,12 @@ type PrimaryNavBarButtonProps = {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
+/**
+ * Component used as button for all primary views (Start, Campaign, Notes),
+ * is accented when its view is selected, moves user to its view on click
+ * @param props
+ * @returns
+ */
 export const PrimaryNavBarButton: React.FC<PrimaryNavBarButtonProps> = props => {
   if (props.isChosen)
     return (

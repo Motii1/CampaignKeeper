@@ -6,6 +6,13 @@ type EditMenuProps = {
   handleClose: () => void;
 };
 
+/**
+ * Context menu used to start process of edit of element it was open on
+ * (e.g. by opening dialog which allows to change element properties)
+ * - process execution depends on function passed from parent (handleEdit)
+ * @param props
+ * @returns
+ */
 export const EditMenu: React.FC<EditMenuProps> = props => (
   <Menu
     elevation={1}

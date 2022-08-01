@@ -5,6 +5,12 @@ type NewChildChipProps = {
   setIsOpen: (newIsOpen: boolean) => void;
 };
 
+/**
+ * Component serving as button allowing to create new children event
+ * of currently selected event in ExplorerView by opening AddChildDialog
+ * @param props
+ * @returns
+ */
 export const NewChildChip: React.FC<NewChildChipProps> = props => {
   const handleClick = () => {
     props.setIsOpen(true);

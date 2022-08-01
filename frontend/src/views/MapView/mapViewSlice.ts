@@ -13,6 +13,10 @@ const initialState: MapViewState = {
   currentEvent: null,
 };
 
+/**
+ * Redux slice used to store data about session and event currently displayed/selected
+ * in MapView
+ */
 const mapViewSlice = createSlice({
   name: 'mapView',
   initialState,
@@ -28,6 +32,7 @@ const mapViewSlice = createSlice({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resetState: (state, _action) => {
       state.currentSessionId = '';
+      state.currentSessionTitle = '';
       state.currentEvent = null;
     },
   },

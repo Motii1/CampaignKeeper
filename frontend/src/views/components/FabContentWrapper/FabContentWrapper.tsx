@@ -7,6 +7,12 @@ type FabContentWrapperProps = {
   icon: FabIcon;
 };
 
+/**
+ * Component serving as wrapper on FABs from views,
+ * adds icon to FAB text to simplify control of icons in FABs
+ * @param props
+ * @returns
+ */
 export const FabContentWrapper: React.FC<FabContentWrapperProps> = props => {
   const renderIcon = () => {
     switch (props.icon) {

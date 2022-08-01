@@ -10,6 +10,11 @@ import { NewSchemaDialog } from './components/NewSchemaDialog/NewSchemaDialog';
 import { SchemasListElement } from './components/SchemasListElement/SchemasListElement';
 import { SchemasListHeader } from './components/SchemasListHeader/SchemasListHeader';
 
+/**
+ * Component responsible for displaying all schemas from currently selected campaign
+ * and opening EntriesDisplayList with all objects from selected schema on click
+ * @returns
+ */
 export const SchemasList: React.FC = () => {
   const { schemas } = useSelector((state: RootState) => state.codex);
 
