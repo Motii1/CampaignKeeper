@@ -17,6 +17,7 @@ class SessionEntity implements BaseEntity {
   }
 
   static const String endpoint = "/api/session/list";
+  static const String tableName = 'sessions';
 
   late int id;
   late int campaignId;

@@ -10,7 +10,7 @@ import 'package:campaign_keeper_mobile/main.dart';
 // and not related to the account and the service.
 class AppPrefs {
   static final AppPrefs _app = AppPrefs._internal();
-  final String milestone = "Eden Prime";
+  final String milestone = "Terra Nova";
   final String _key = "app_prefs";
   final String _url = "https://campaignkeeper.herokuapp.com";
   final bool debug = true;

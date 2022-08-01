@@ -38,6 +38,7 @@ class EventEntity implements BaseEntity {
   }
 
   static const String endpoint = '/api/event/graph';
+  static const String tableName = 'events';
 
   late int id;
   late int sessionId;

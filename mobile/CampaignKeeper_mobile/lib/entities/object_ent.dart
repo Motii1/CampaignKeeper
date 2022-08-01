@@ -23,6 +23,7 @@ class ObjectEntity implements BaseEntity {
   }
 
   static const String endpoint = "/api/object/list";
+  static const String tableName = 'objects';
 
   late int id;
   late int schemaId;

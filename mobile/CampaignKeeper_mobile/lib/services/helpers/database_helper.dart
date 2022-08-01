@@ -1,4 +1,6 @@
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
+import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -24,7 +26,14 @@ class DatabaseHelper {
         return db.execute(
             'CREATE TABLE ${CampaignEntity.tableName}(id INTEGER PRIMARY KEY, name TEXT, createdAt TEXT, imageBase64 TEXT)');
       }),
-      version: 1,
+      onUpgrade: (db, version, oldVersion) async {
+        await db.execute(
+            'CREATE TABLE ${SchemaEntity.tableName}(id INTEGER PRIMARY KEY, campaignId INTEGER, title TEXT)');
+        await db.execute('CREATE TABLE ${SchemaEntity.tableName}_fields(schemaId INTEGER, field TEXT)');
+        return db.execute(
+            'CREATE TABLE ${SessionEntity.tableName}(id INTEGER PRIMARY KEY, campaignId INTEGER, name TEXT, createdAt TEXT)');
+      },
+      version: 2,
     );
     _initialized = true;
   }
@@ -61,5 +70,8 @@ class DatabaseHelper {
 
   Future<void> clear() async {
     await delete(CampaignEntity.tableName);
+    await delete(SchemaEntity.tableName);
+    await delete('${SchemaEntity.tableName}_fields');
+    await delete(SessionEntity.tableName);
   }
 }

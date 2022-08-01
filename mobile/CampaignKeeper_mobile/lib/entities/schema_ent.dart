@@ -18,6 +18,7 @@ class SchemaEntity implements BaseEntity {
   }
 
   static const String endpoint = "/api/schema/list";
+  static const String tableName = 'schemas';
 
   late int id;
   late int campaignId;

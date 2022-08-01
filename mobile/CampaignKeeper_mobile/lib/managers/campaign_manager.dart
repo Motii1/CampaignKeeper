@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
@@ -9,7 +8,6 @@ import 'package:campaign_keeper_mobile/types/http_types.dart';
 
 class CampaignManager extends BaseManager<CampaignEntity> {
   final String tableName = CampaignEntity.tableName;
-  final _db = DatabaseHelper();
   List<CampaignEntity> _entities = [];
 
   CampaignManager();
@@ -19,7 +17,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
     lockedOperation(
       () async {
         _entities.add(entity);
-        await cacheToDb();
+        await cacheListToDb(tableName, _entities);
       },
       defaultResult: null,
     );
@@ -55,7 +53,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
 
   Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_entities.isEmpty) {
-      var cache = await _db.get(tableName);
+      var cache = await getListFromDb(tableName);
       if (cache.isNotEmpty) {
         _entities = cache.map((e) => CampaignEntity.fromMap(e)).toList();
         notifyListeners();
@@ -74,7 +72,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
           _entities = newEntities;
 
           notifyListeners();
-          await cacheToDb();
+          await cacheListToDb(tableName, _entities);
 
           return true;
         }
@@ -96,10 +94,5 @@ class CampaignManager extends BaseManager<CampaignEntity> {
     }
 
     return true;
-  }
-
-  Future<void> cacheToDb() async {
-    List<Map<String, Object?>> maps = _entities.map((e) => e.toMap()).toList();
-    await _db.insertList(tableName, maps);
   }
 }
