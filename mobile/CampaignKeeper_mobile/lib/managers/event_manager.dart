@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
@@ -10,7 +10,7 @@ import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 
 class EventManager extends BaseManager<EventEntity> {
-  static const String _key = "Event";
+  final String tableName = EventEntity.tableName;
   Map<int, List<EventEntity>> _map = {};
 
   @override
@@ -65,10 +65,9 @@ class EventManager extends BaseManager<EventEntity> {
 
   Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
-      String? cache = await CacheUtil().get(_key);
-      if (cache != null) {
-        List cacheData = json.decode(cache);
-        cacheData.forEach((data) {
+      var cache = await _getCache();
+      if (cache.isNotEmpty) {
+        cache.forEach((data) {
           _attach(EventEntity.fromMap(data));
         });
 
@@ -129,9 +128,119 @@ class EventManager extends BaseManager<EventEntity> {
     return true;
   }
 
+  Future<List<Map>> _getCache() async {
+    List<Map> resMaps = [];
+    List<Map> entMaps = await getListFromDb(tableName);
+    List<Map> charactersMaps = await getListFromDb('${tableName}_characters');
+    List<Map> placesMaps = await getListFromDb('${tableName}_places');
+    List<Map> descriptionMaps = await getListFromDb('${tableName}_description');
+    List<Map> parentsMaps = await getListFromDb('${tableName}_parents');
+    List<Map> childrenMaps = await getListFromDb('${tableName}_children');
+
+    var characterDict = charactersMaps.groupListsBy((e) => e['eventId']);
+    var placesDict = placesMaps.groupListsBy((e) => e['eventId']);
+    var descriptionDict = descriptionMaps.groupListsBy((e) => e['eventId']);
+    var parentsDict = parentsMaps.groupListsBy((e) => e['eventId']);
+    var childrenDict = childrenMaps.groupListsBy((e) => e['eventId']);
+
+    entMaps.forEach((ent) {
+      var newEntity = Map.from(ent);
+
+      var characters = characterDict[ent['id']] ?? [];
+      var places = placesDict[ent['id']] ?? [];
+      var description = descriptionDict[ent['id']] ?? [];
+
+      var parents = (parentsDict[ent['id']] ?? []).map((e) => e['parentId'] as int).toList();
+      var children = (childrenDict[ent['id']] ?? []).map((e) => e['childId'] as int).toList();
+
+      newEntity['charactersMetadataArray'] = characters;
+      newEntity['placeMetadataArray'] = places;
+      newEntity['descriptionMetadataArray'] = description;
+      newEntity['parentIds'] = parents;
+      newEntity['childrenIds'] = children;
+
+      resMaps.add(newEntity);
+    });
+
+    return resMaps;
+  }
+
+  List<Map<String, int>> _idsToMapList(int entId, List<int> ids, String fieldName) {
+    return ids
+        .map((e) => {
+              'eventId': entId,
+              fieldName: e,
+            })
+        .toList();
+  }
+
+  List<Map<String, Object>> _fieldsToMapList(int entId, List<FieldValue> fields) {
+    return fields.map((e) {
+      var map = FieldValue.encode(e);
+      map['eventId'] = entId;
+
+      return map;
+    }).toList();
+  }
+
   Future<void> _cacheAll() async {
+    var database = DatabaseHelper();
     var sessions = DataCarrier().getList<SessionEntity>().map((e) => e.id).toList();
 
-    await cacheMap(_map, _key, sessions);
+    List<EventEntity> entities = [];
+
+    _map.forEach((key, value) {
+      if (sessions.contains(key) || sessions.isEmpty) {
+        entities.addAll(value);
+      }
+    });
+
+    List<Map<String, Object>> charactersMaps = [];
+    List<Map<String, Object>> placesMaps = [];
+    List<Map<String, Object>> descriptionMaps = [];
+    List<Map<String, Object>> parentsMaps = [];
+    List<Map<String, Object>> childMaps = [];
+
+    entities.forEach((e) {
+      var characters = _fieldsToMapList(e.id, e.characterValues);
+      var places = _fieldsToMapList(e.id, e.placeValues);
+      var description = _fieldsToMapList(e.id, e.descriptionValues);
+      var parents = _idsToMapList(e.id, e.parentIds, 'parentId');
+      var children = _idsToMapList(e.id, e.childrenIds, 'childId');
+
+      charactersMaps.addAll(characters);
+      placesMaps.addAll(places);
+      descriptionMaps.addAll(description);
+      parentsMaps.addAll(parents);
+      childMaps.addAll(children);
+    });
+
+    var entitiesMaps = entities.map((e) {
+      var map = e.toMap();
+      map.remove('parentIds');
+      map.remove('childrenIds');
+      map.remove('charactersMetadataArray');
+      map.remove('placeMetadataArray');
+      map.remove('descriptionMetadataArray');
+
+      return map;
+    }).toList();
+
+    await Future.wait([
+      database.delete(tableName),
+      database.delete('${tableName}_characters'),
+      database.delete('${tableName}_places'),
+      database.delete('${tableName}_description'),
+      database.delete('${tableName}_parents'),
+      database.delete('${tableName}_children'),
+    ]);
+    await Future.wait([
+      database.insertList(tableName, entitiesMaps),
+      database.insertList('${tableName}_characters', charactersMaps),
+      database.insertList('${tableName}_places', placesMaps),
+      database.insertList('${tableName}_description', descriptionMaps),
+      database.insertList('${tableName}_parents', parentsMaps),
+      database.insertList('${tableName}_children', childMaps),
+    ]);
   }
 }

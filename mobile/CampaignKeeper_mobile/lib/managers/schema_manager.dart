@@ -65,7 +65,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
 
   Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
-      var cache = await getListFromDb(tableName);
+      var cache = await _getCache();
       if (cache.isNotEmpty) {
         cache.forEach((data) {
           _attach(SchemaEntity.fromMap(data));
@@ -128,22 +128,16 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     return true;
   }
 
-  @override
-  Future<List<Map>> getListFromDb(String tableName) async {
+  Future<List<Map>> _getCache() async {
     List<Map> resMaps = [];
-    List<Map> entMaps = await super.getListFromDb(tableName);
-    List<Map> fieldsMaps = await super.getListFromDb('${tableName}_fields');
+    List<Map> entMaps = await getListFromDb(tableName);
+    List<Map> fieldsMaps = await getListFromDb('${tableName}_fields');
 
     var dict = fieldsMaps.groupListsBy((e) => e['schemaId']);
 
     entMaps.forEach((ent) {
       var newEntity = Map.from(ent);
-      var fields = [];
-      var maps = dict[ent['id']] ?? [];
-
-      maps.forEach((map) {
-        fields.add(map['field']);
-      });
+      var fields = (dict[ent['id']] ?? []).map((e) => e['field'] as String).toList();
 
       newEntity['fields'] = fields;
       resMaps.add(newEntity);
@@ -179,8 +173,20 @@ class SchemaManager extends BaseManager<SchemaEntity> {
       }
     });
 
-    await cacheListToDb(tableName, entities, excludedColumns: ['fields']);
-    await database.delete('${tableName}_fields');
-    await database.insertList('${tableName}_fields', fieldsMaps);
+    var entitiesMaps = entities.map((e) {
+      var map = e.toMap();
+      map.remove('fields');
+
+      return map;
+    }).toList();
+
+    await Future.wait([
+      database.delete(tableName),
+      database.delete('${tableName}_fields'),
+    ]);
+    await Future.wait([
+      database.insertList(tableName, entitiesMaps),
+      database.insertList('${tableName}_fields', fieldsMaps),
+    ]);
   }
 }

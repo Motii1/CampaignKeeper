@@ -1,4 +1,5 @@
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:flutter/widgets.dart';
@@ -22,18 +23,50 @@ class DatabaseHelper {
 
     _database = await openDatabase(
       join(await getDatabasesPath(), 'campaign_database.db'),
-      onCreate: ((db, version) {
-        return db.execute(
-            'CREATE TABLE ${CampaignEntity.tableName}(id INTEGER PRIMARY KEY, name TEXT, createdAt TEXT, imageBase64 TEXT)');
-      }),
-      onUpgrade: (db, version, oldVersion) async {
+      onCreate: ((db, version) async {
         await db.execute(
             'CREATE TABLE ${SchemaEntity.tableName}(id INTEGER PRIMARY KEY, campaignId INTEGER, title TEXT)');
         await db.execute('CREATE TABLE ${SchemaEntity.tableName}_fields(schemaId INTEGER, field TEXT)');
-        return db.execute(
+        await db.execute(
             'CREATE TABLE ${SessionEntity.tableName}(id INTEGER PRIMARY KEY, campaignId INTEGER, name TEXT, createdAt TEXT)');
+        await db.execute(
+            'CREATE TABLE ${CampaignEntity.tableName}(id INTEGER PRIMARY KEY, name TEXT, createdAt TEXT, imageBase64 TEXT)');
+        await db.execute(
+            'CREATE TABLE ${EventEntity.tableName}(id INTEGER PRIMARY KEY, sessionId INTEGER, title TEXT, type TEXT, status TEXT, displayStatus TEXT)');
+        await db.execute(
+            'CREATE TABLE ${EventEntity.tableName}_characters(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
+        await db.execute(
+            'CREATE TABLE ${EventEntity.tableName}_places(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
+        await db.execute(
+            'CREATE TABLE ${EventEntity.tableName}_description(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
+        await db.execute('CREATE TABLE ${EventEntity.tableName}_parents(eventId INTEGER, parentId INTEGER)');
+        await db.execute('CREATE TABLE ${EventEntity.tableName}_children(eventId INTEGER, childId INTEGER)');
+      }),
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute(
+              'CREATE TABLE ${SchemaEntity.tableName}(id INTEGER PRIMARY KEY, campaignId INTEGER, title TEXT)');
+          await db.execute('CREATE TABLE ${SchemaEntity.tableName}_fields(schemaId INTEGER, field TEXT)');
+          await db.execute(
+              'CREATE TABLE ${SessionEntity.tableName}(id INTEGER PRIMARY KEY, campaignId INTEGER, name TEXT, createdAt TEXT)');
+        }
+
+        if (oldVersion < 3) {
+          await db.execute(
+              'CREATE TABLE ${EventEntity.tableName}(id INTEGER PRIMARY KEY, sessionId INTEGER, title TEXT, type TEXT, status TEXT, displayStatus TEXT)');
+          await db.execute(
+              'CREATE TABLE ${EventEntity.tableName}_characters(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
+          await db.execute(
+              'CREATE TABLE ${EventEntity.tableName}_places(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
+          await db.execute(
+              'CREATE TABLE ${EventEntity.tableName}_description(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
+          await db
+              .execute('CREATE TABLE ${EventEntity.tableName}_parents(eventId INTEGER, parentId INTEGER)');
+          await db
+              .execute('CREATE TABLE ${EventEntity.tableName}_children(eventId INTEGER, childId INTEGER)');
+        }
       },
-      version: 2,
+      version: 3,
     );
     _initialized = true;
   }

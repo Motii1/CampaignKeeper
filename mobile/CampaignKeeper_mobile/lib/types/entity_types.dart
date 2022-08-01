@@ -24,7 +24,7 @@ class FieldValue {
         fieldName == fieldName;
   }
 
-  static Map encode(FieldValue value) {
+  static Map<String, Object> encode(FieldValue value) {
     var data = {
       'type': value.type == FieldValueType.Text ? "string" : "id",
       'sequenceNumber': value.sequence,

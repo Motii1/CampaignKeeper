@@ -49,6 +49,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   @override
   void clear() {
     _entities.clear();
+    cacheListToDb(tableName, _entities);
   }
 
   Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
