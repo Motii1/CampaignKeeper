@@ -24,7 +24,7 @@ type NewSchemaDialogProps = {
 };
 
 /**
- * Component seriving as dialog for creating new schema - allows setting new schemat title
+ * Component seriving as dialog for creating new schema - allows setting new schema title
  * and its fields (by another dialog), opens on NewSchemaButton click
  * @param props
  * @returns

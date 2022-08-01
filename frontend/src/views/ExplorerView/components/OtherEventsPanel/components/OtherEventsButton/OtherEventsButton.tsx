@@ -7,7 +7,7 @@ type OtherEventsButton = {
 };
 
 /**
- * Button opemning OtherEventsPanel with children or parents of event
+ * Button opening OtherEventsPanel with children or parents of event
  * currently selected in ExplorerView (depends on content)
  * @param props
  * @returns
