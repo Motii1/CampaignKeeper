@@ -25,7 +25,7 @@ class DatabaseHelper {
     WidgetsFlutterBinding.ensureInitialized();
 
     _database = await DependenciesHelper().openDatabase(
-      join(await getDatabasesPath(), 'campaign_database.db'),
+      join(await DependenciesHelper().databasePath, 'campaign_database.db'),
       onCreate: ((db, version) async {
         await db
             .execute('CREATE TABLE strings(entityTable TEXT, entityType Text, entityId INTEGER, value TEXT)');

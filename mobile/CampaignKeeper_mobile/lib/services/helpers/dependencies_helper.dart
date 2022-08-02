@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:sqflite/sqflite.dart' as sqflite;
+import 'package:sqflite/sqflite.dart';
 
 // Helper used as an dependency injection tool.
 class DependenciesHelper {
@@ -33,6 +34,7 @@ class DependenciesHelper {
     bool readOnly,
     bool singleInstance,
   }) _databaseFun = sqflite.openDatabase;
+  String? _databasePath;
 
   void useMocks({
     FlutterSecureStorage? secureStorage,
@@ -51,6 +53,7 @@ class DependenciesHelper {
       bool singleInstance,
     })?
         databaseFun,
+    String? databasePath,
   }) {
     if (secureStorage != null) {
       _secureStorage = secureStorage;
@@ -70,6 +73,10 @@ class DependenciesHelper {
 
     if (databaseFun != null) {
       _databaseFun = databaseFun;
+    }
+
+    if (databasePath != null) {
+      _databasePath = databasePath;
     }
   }
 
@@ -105,5 +112,9 @@ class DependenciesHelper {
     bool singleInstance,
   }) get openDatabase {
     return _databaseFun;
+  }
+
+  Future<String> get databasePath async {
+    return _databasePath ?? await getDatabasesPath();
   }
 }
