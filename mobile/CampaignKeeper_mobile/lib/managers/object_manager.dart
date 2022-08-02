@@ -93,13 +93,26 @@ class ObjectManager extends BaseManager<ObjectEntity> {
 
           _map[parameterValue] = newEntities;
         } else if (parameterName == EntityParameter.campaign) {
-          var oldKeys = _map.keys.toList();
-          var newKeys = newEntities.map((e) => e.schemaId).toSet();
-          bool isEqual = newKeys.toList().equals(oldKeys);
+          var oldSchemaIds =
+              DataCarrier().getList<SchemaEntity>(groupId: parameterValue).map((e) => e.id).toSet().toList();
+          var newSchemaIds = newEntities.map((e) => e.schemaId).toSet();
+          bool isEqual = false;
+
+          if (oldSchemaIds.isNotEmpty) {
+            isEqual = true;
+
+            for (int id in oldSchemaIds) {
+              if (!newSchemaIds.contains(id)) {
+                isEqual = false;
+                _map.remove(id);
+              }
+            }
+          }
+
           int iter = 0;
 
-          while (isEqual && iter < oldKeys.length) {
-            var key = oldKeys[iter];
+          while (isEqual && iter < oldSchemaIds.length) {
+            var key = oldSchemaIds[iter];
             isEqual &= _isEqual(key, newEntities.where((e) => e.schemaId == key).toList());
 
             iter++;
@@ -109,10 +122,8 @@ class ObjectManager extends BaseManager<ObjectEntity> {
             return false;
           }
 
-          _map.clear();
-
-          newKeys.forEach((key) {
-            _map[key] = newEntities.where((e) => e.schemaId == key).toList();
+          newSchemaIds.forEach((id) {
+            _map[id] = newEntities.where((e) => e.schemaId == id).toList();
           });
         }
 

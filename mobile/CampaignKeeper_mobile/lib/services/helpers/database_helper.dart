@@ -3,6 +3,7 @@ import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
+import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
@@ -23,7 +24,7 @@ class DatabaseHelper {
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    _database = await openDatabase(
+    _database = await DependenciesHelper().openDatabase(
       join(await getDatabasesPath(), 'campaign_database.db'),
       onCreate: ((db, version) async {
         await db
