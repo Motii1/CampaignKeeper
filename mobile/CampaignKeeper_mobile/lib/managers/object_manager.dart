@@ -1,16 +1,16 @@
 import 'dart:convert';
+import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
 
 class ObjectManager extends BaseManager<ObjectEntity> {
-  static const String _key = "Object";
+  final String tableName = ObjectEntity.tableName;
   Map<int, List<ObjectEntity>> _map = {};
 
   @override
@@ -65,10 +65,9 @@ class ObjectManager extends BaseManager<ObjectEntity> {
 
   Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
-      String? cache = await CacheUtil().get(_key);
-      if (cache != null) {
-        List cacheData = json.decode(cache);
-        cacheData.forEach((data) {
+      var cache = await _getCache();
+      if (cache.isNotEmpty) {
+        cache.forEach((data) {
           _attach(ObjectEntity.fromMap(data));
         });
 
@@ -159,9 +158,64 @@ class ObjectManager extends BaseManager<ObjectEntity> {
     return true;
   }
 
+  Future<List<Map>> _getCache() async {
+    List<Map> resMaps = [];
+    List<Map> entMaps = await getListFromDb(tableName);
+    List<Map> fieldsMaps = await getListFromDb(
+      FieldValue.tableName,
+      where: 'entityTable = ?',
+      whereArgs: [tableName],
+    );
+
+    var fieldsDict = fieldsMaps.groupListsBy((e) => e['entityId']);
+
+    entMaps.forEach((ent) {
+      var newEntity = Map.from(ent);
+
+      var fields = fieldsDict[ent['id']] ?? [];
+
+      newEntity['metadataArray'] = fields;
+
+      resMaps.add(newEntity);
+    });
+
+    return resMaps;
+  }
+
   Future<void> _cacheAll() async {
+    var database = DatabaseHelper();
     var schemas = DataCarrier().getList<SchemaEntity>().map((e) => e.id).toList();
 
-    await cacheMap(_map, _key, schemas);
+    List<ObjectEntity> entities = [];
+
+    _map.forEach((key, value) {
+      if (schemas.contains(key) || schemas.isEmpty) {
+        entities.addAll(value);
+      }
+    });
+
+    List<Map<String, Object>> fieldsMaps = [];
+
+    entities.forEach((e) {
+      var fields = e.values.map((f) => f.toMap(entityTable: tableName, entityId: e.id, entityType: ''));
+
+      fieldsMaps.addAll(fields);
+    });
+
+    var entitiesMaps = entities.map((e) {
+      var map = e.toMap();
+      map.remove('metadataArray');
+
+      return map;
+    }).toList();
+
+    await Future.wait([
+      database.delete(tableName),
+      database.delete(FieldValue.tableName, where: 'entityTable = ?', whereArgs: [tableName]),
+    ]);
+    await Future.wait([
+      database.insertList(tableName, entitiesMaps),
+      database.insertList(FieldValue.tableName, fieldsMaps),
+    ]);
   }
 }

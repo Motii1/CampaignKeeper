@@ -1,5 +1,6 @@
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/event_ent.dart';
+import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
@@ -39,6 +40,8 @@ class DatabaseHelper {
             'CREATE TABLE ${CampaignEntity.tableName}(id INTEGER PRIMARY KEY, name TEXT, createdAt TEXT, imageBase64 TEXT)');
         await db.execute(
             'CREATE TABLE ${EventEntity.tableName}(id INTEGER PRIMARY KEY, sessionId INTEGER, title TEXT, type TEXT, status TEXT, displayStatus TEXT)');
+        await db.execute(
+            'CREATE TABLE ${ObjectEntity.tableName}(id INTEGER PRIMARY KEY, schemaId INTEGER, title TEXT, imageBase64 TEXT)');
       }),
       onUpgrade: (db, oldVersion, newVersion) async {},
       version: 1,
@@ -83,5 +86,7 @@ class DatabaseHelper {
     await delete(CampaignEntity.tableName);
     await delete(SchemaEntity.tableName);
     await delete(SessionEntity.tableName);
+    await delete(EventEntity.tableName);
+    await delete(ObjectEntity.tableName);
   }
 }
