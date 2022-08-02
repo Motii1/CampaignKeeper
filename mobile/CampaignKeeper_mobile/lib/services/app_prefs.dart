@@ -13,7 +13,7 @@ class AppPrefs {
   final String milestone = "Terra Nova";
   final String _key = "app_prefs";
   final String _url = "https://campaignkeeper.herokuapp.com";
-  final bool debug = true;
+  final bool debug = false;
   final int _timeout = 60;
   final int _loginTimeout = 120;
 
