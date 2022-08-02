@@ -1,6 +1,9 @@
 import { Grid } from '@mui/material';
 import WorldImage from '../../../../../graphics/world.jpg';
 
+/**
+ * Background graphic for ViewWithSidebarWrapper
+ */
 export const BackgroundGraphic: React.FC = () => (
   <Grid
     item

@@ -1,5 +1,13 @@
 import { Grid } from '@mui/material';
 
+/**
+ * Component used to display sets of components on grid
+ * which size (number of elements in column) adjusts to screen resolution.
+ * NOTE: when the grid overflows (there are more items than screen can fit),
+ * the grid is scrollable horizontally
+ * @param props
+ * @returns
+ */
 export const CustomGrid: React.FC = props => (
   <Grid
     container

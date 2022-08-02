@@ -18,6 +18,12 @@ type EventBarProps = {
   type: EventTileType;
 };
 
+/**
+ * Component used as event header, displays its title everywhere
+ * and allows user to access event control menu in MapView.
+ * @param props
+ * @returns
+ */
 export const EventBar: React.FC<EventBarProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();

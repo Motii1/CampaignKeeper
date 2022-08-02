@@ -6,6 +6,11 @@ type EntryTextChipProps = {
   type: EventTileType;
 };
 
+/**
+ * Chip used to display reference to object NOT in Codex
+ * @param props
+ * @returns
+ */
 export const EntryTextChip: React.FC<EntryTextChipProps> = props => (
   <Typography
     noWrap={true}

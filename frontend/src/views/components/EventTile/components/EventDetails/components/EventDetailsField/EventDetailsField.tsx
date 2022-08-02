@@ -14,6 +14,12 @@ type EventDetailsFieldProps = {
   type: EventTileType;
 };
 
+/**
+ * Component used to display Places and Characters fields in EventTile,
+ * its titles and contents (displayed as distinct chips)
+ * @param props
+ * @returns
+ */
 export const EventDetailsField: React.FC<EventDetailsFieldProps> = props => {
   const { schemas, entries } = useSelector((state: RootState) => state.codex);
 

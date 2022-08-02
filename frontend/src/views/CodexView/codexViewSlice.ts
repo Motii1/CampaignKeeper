@@ -13,6 +13,10 @@ const initialState: CodexViewState = {
   currentEntry: null,
 };
 
+/**
+ * Redux slice used to store info about currently selected/displayed
+ * schema and entry in CodexView
+ */
 const codexViewSlice = createSlice({
   name: 'codexView',
   initialState,

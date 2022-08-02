@@ -31,7 +31,7 @@ const checkAllParents = (node: NodePositionInfo, nodes: NodePositionInfo[]) =>
 
 const getHighestY = (nodes: NodePositionInfo[]) => Math.max(...nodes.map(node => node.y));
 
-// removing unimportant information and events which aren't shown
+// also removing unimportant information and events which aren't shown
 const convertEventsToNodes = (events: SessionEventWithPos[]): NodePositionInfo[] => {
   const eventsAsNodes = events.map((event: SessionEventWithPos) => ({
     id: event.id,
@@ -80,7 +80,7 @@ const setYPos = (nodes: NodePositionInfo[]): NodePositionInfo[] => {
   return newNodes;
 };
 
-export const setXPos = (nodes: NodePositionInfo[]): NodePositionInfo[] => {
+const setXPos = (nodes: NodePositionInfo[]): NodePositionInfo[] => {
   const maxY = Math.max(...nodes.map(node => node.y));
   const rows: { [row: string]: NodePositionInfo[] } = {};
   for (let index = 0; index <= maxY; index++) rows[index] = nodes.filter(node => node.y === index);
@@ -113,6 +113,13 @@ export const setXPos = (nodes: NodePositionInfo[]): NodePositionInfo[] => {
     .flat();
 };
 
+/**
+ * Function responsible for determining position of events in graph (their XY coordinates)
+ * and attaching them to events, called every time graph structure may change
+ * (e.g. new event is added, exisiting event is removed or edited)
+ * @param events
+ * @returns
+ */
 export const setPositions = (events: SessionEventWithPos[]): SessionEventWithPos[] => {
   if (events.length === 0) return [];
 

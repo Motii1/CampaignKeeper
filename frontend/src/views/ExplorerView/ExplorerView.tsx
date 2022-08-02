@@ -11,6 +11,10 @@ import viewsRoutes from '../viewsRoutes';
 import { OtherEventsPanel } from './components/OtherEventsPanel/OtherEventsPanel';
 import { setCurrentEvent } from './explorerViewSlice';
 
+/**
+ * Component responsible for UI and logic of ExplorerView which displays single event,
+ * allows its editing/deleting and easy navigation between it and its parents/children
+ */
 export const ExplorerView: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();

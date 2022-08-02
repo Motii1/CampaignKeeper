@@ -6,6 +6,13 @@ type DeleteMenuProps = {
   handleClose: () => void;
 };
 
+/**
+ * Context menu used to start process of deletion of element it was open on
+ * (e.g. by opening dialog which asks for confrmation) - process execution depends
+ * on function passed from parent (handleDelete)
+ * @param props
+ * @returns
+ */
 export const DeleteMenu: React.FC<DeleteMenuProps> = props => (
   <Menu
     open={props.menuPos !== null}

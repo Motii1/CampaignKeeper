@@ -300,27 +300,22 @@ describe('ExplorerView tests', () => {
       fireEvent.click(screen.getByText('Edit'));
 
       const sufix = 'bis';
-      await waitFor(async () => {
-        const textBoxes = Array.from(screen.getAllByRole('textbox'));
-        fireEvent.change(textBoxes[0], {
-          target: { value: currentEvent.title.concat(sufix) },
-        });
-        fireEvent.click(screen.getAllByTestId('CancelIcon')[0] as HTMLElement);
-        fireEvent.change(textBoxes[1], {
-          target: { value: currentEvent.descriptionMetadataArray[0].value.concat(sufix) },
-        });
-        fireEvent.click(screen.getByText('OK'));
+      const textBoxes = Array.from(screen.getAllByRole('textbox'));
+      fireEvent.change(textBoxes[0], {
+        target: { value: currentEvent.title.concat(sufix) },
+      });
+      fireEvent.change(textBoxes[1], {
+        target: { value: currentEvent.descriptionMetadataArray[0].value.concat(sufix) },
+      });
+      fireEvent.click(screen.getByText('OK'));
 
-        await waitFor(async () => {
-          expect(screen.getByText(currentEvent.title.concat(sufix))).toBeInTheDocument();
-          expect(screen.queryByTestId(currentEvent.placeMetadataArray[0].value)).toBeNull();
-          expect(
-            screen.getByText(currentEvent.charactersMetadataArray[0].value)
-          ).toBeInTheDocument();
-          expect(
-            screen.getByText(currentEvent.descriptionMetadataArray[0].value.concat(sufix))
-          ).toBeInTheDocument();
-        });
+      await waitFor(async () => {
+        expect(screen.getByText(currentEvent.title.concat(sufix))).toBeInTheDocument();
+        expect(screen.queryByTestId(currentEvent.placeMetadataArray[0].value)).toBeNull();
+        expect(screen.getByText(currentEvent.charactersMetadataArray[0].value)).toBeInTheDocument();
+        expect(
+          screen.getByText(currentEvent.descriptionMetadataArray[0].value.concat(sufix))
+        ).toBeInTheDocument();
       });
     });
 

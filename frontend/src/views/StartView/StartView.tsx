@@ -1,9 +1,10 @@
-import { Box, CircularProgress, Grid, Stack } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavBarViewDialog } from '../../types/types';
 import { CampaignTile } from '../components/CampaignTile/CampaignTile';
+import { CircleProgress } from '../components/CircleProgress/CircleProgress';
 import { CustomGrid } from '../components/CustomGrid/CustomGrid';
 import { EmptyPlaceholder } from '../components/EmptyPlaceholder/EmptyPlaceholder';
 import { QuoteLine } from '../components/QuoteLine/QuoteLine';
@@ -11,6 +12,11 @@ import { quotes } from '../components/QuoteLine/quotes';
 import { ViewWithNavBarWrapper } from '../components/ViewWithNavBarWrapper/ViewWithNavBarWrapper';
 import { fetchCampaigns } from './campaignsSlice';
 
+/**
+ * Component responsible for UI and logic of StartView (view shown after user logs in, in which
+ * they can create new campaign or select/edit an existing one)
+ * @returns
+ */
 export const StartView: React.FC = () => {
   const dispatch = useDispatch();
   const { isCampaignsListDownloaded: isCampaignListDownloaded, campaignsList } = useSelector(
@@ -30,7 +36,6 @@ export const StartView: React.FC = () => {
     setIsOpen(true);
   };
 
-  // TO-DO: maybe we need small, medium, large CustomCircularProgress components?
   const renderCampaignsGrid = () => {
     if (isCampaignListDownloaded)
       return campaignsList.length > 0 ? (
@@ -63,13 +68,7 @@ export const StartView: React.FC = () => {
       ) : (
         <EmptyPlaceholder message={'Go wild and start your new journey, worldshaper'} />
       );
-    return (
-      <CircularProgress
-        size={64}
-        thickness={6}
-        sx={{ color: 'customPalette.onBackground', margin: 'auto' }}
-      />
-    );
+    return <CircleProgress />;
   };
 
   return (

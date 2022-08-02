@@ -9,6 +9,14 @@ export type CustomSnackbarProps = {
   setIsOpen: (newIsOpen: boolean) => void;
 };
 
+/**
+ * Standard MUI Snackbar rendered in Portal,
+ * used for displaying all kinds of feedback to user actions,
+ * e.g. information about success or fail of actions
+ * which require comunication with server (create event, delete event, edit event etc.)
+ * @param props
+ * @returns
+ */
 export const CustomSnackbar: React.FC<CustomSnackbarProps> = props => (
   <Portal>
     <Snackbar

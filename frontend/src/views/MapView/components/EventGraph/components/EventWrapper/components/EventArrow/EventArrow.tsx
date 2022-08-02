@@ -7,19 +7,32 @@ export type EventArrowProps = {
   end: string;
   startAnchor: anchorType;
   endAnchor: anchorType;
-  color?: string;
+  index: number;
 };
 
+const getColorOpacity = (index: number) => {
+  if (index % 4 === 0) return 'FF';
+  if (index % 4 === 1) return 'D4';
+  if (index % 4 === 2) return 'AB';
+  return '80';
+};
+
+/**
+ * Arrow made with react-xarrows library used to connect parent event (or root)
+ * with its children. Arrow color depends on its position on child
+ * @param props
+ * @returns
+ */
 export const EventArrow: React.FC<EventArrowProps> = props => {
   const { isLight } = useSelector((state: RootState) => state.theme);
-  const arrowColor = props.color ? props.color : isLight ? '#303d50' : '#ffffff';
+  const arrowColor = isLight ? '#303d50' : '#f4f4f4';
+  const colorOpacity = getColorOpacity(props.index);
 
   return (
     <Xarrow
       start={props.start}
       end={props.end}
-      color={arrowColor}
-      lineColor={arrowColor}
+      color={arrowColor.concat(colorOpacity)}
       headSize={4}
       showTail={true}
       tailShape="circle"

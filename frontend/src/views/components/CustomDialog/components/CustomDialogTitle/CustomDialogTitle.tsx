@@ -5,6 +5,11 @@ type CustomDialogTitleProps = {
   isTitleRed?: boolean;
 };
 
+/**
+ * Component displaying dialog name in CustomDialog, allows coloring the title in red
+ * @param props
+ * @returns
+ */
 export const CustomDialogTitle: React.FC<CustomDialogTitleProps> = props => {
   const sx = {
     color: props.isTitleRed ? 'customPalette.red' : 'customPalette.onBackgroundVariant',

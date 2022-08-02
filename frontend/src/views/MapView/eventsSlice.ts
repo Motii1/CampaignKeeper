@@ -37,6 +37,10 @@ const initialState: EventsState = {
   eventsList: [],
 };
 
+/**
+ * Async function responsible for fetching data about events
+ * from currently selected session from API
+ */
 export const fetchEvents = createAsyncThunk('session/fetchEvents', async (sessionId: string) => {
   const response = await protectedApiClient.get(`api/event/graph/${sessionId}`);
   return response;
@@ -130,6 +134,9 @@ const removeEventFromStore = (
     return event;
   });
 
+/**
+ * Redux slice used to store and operate on events belonging to currently selected session
+ */
 const eventsSlice = createSlice({
   name: 'session',
   initialState,

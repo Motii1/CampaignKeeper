@@ -11,6 +11,10 @@ const initialState: ExplorerViewSlice = {
   currentEvent: null,
 };
 
+/**
+ * Redux slice used to store data about session and event currently displayed/selected
+ * in CodexView
+ */
 const explorerViewSlice = createSlice({
   name: 'explorerView',
   initialState,

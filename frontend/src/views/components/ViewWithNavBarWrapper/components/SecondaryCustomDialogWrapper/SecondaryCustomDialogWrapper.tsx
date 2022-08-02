@@ -15,6 +15,12 @@ type SecondaryDialogWrapperProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Wrapper on secondary dialog (confirmation of e.g. session deletion),
+ * returns adequate dialog based on current view (path)
+ * @param props
+ * @returns
+ */
 export const SecondaryDialogWrapper: React.FC<SecondaryDialogWrapperProps> = props => {
   switch (props.currentView) {
     case viewsRoutes.START:

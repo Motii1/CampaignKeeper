@@ -17,6 +17,12 @@ type PrimaryCustomDialogWrapperProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Wrapper on primary dialog (forms creating/editing objects e.g. campaigns),
+ * returns adequate dialog based on current view (path)
+ * @param props
+ * @returns
+ */
 export const PrimaryCustomDialogWrapper: React.FC<PrimaryCustomDialogWrapperProps> = props => {
   switch (props.currentView) {
     case viewsRoutes.START:

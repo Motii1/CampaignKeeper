@@ -1,5 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+/**
+ * Redux slice responsible for storing data about error
+ * which occured in our application (or not)
+ */
 const errorSlice = createSlice({
   name: 'error',
   initialState: {

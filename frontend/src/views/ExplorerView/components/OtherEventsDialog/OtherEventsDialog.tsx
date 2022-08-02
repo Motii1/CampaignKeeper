@@ -12,6 +12,13 @@ type OtherEventsDialogProps = {
   otherEvents: SessionEventWithPos[];
 };
 
+/**
+ * Dialog used to check data and navigate between event currently displayed in ExplorerView
+ * and its children/parents by showing their EventTiles with all data and no menu
+ * and switching to their display on click
+ * @param props
+ * @returns
+ */
 export const OtherEventsDialog: React.FC<OtherEventsDialogProps> = props => {
   const renderOtherEvents = () =>
     props.otherEvents.length > 0 ? (

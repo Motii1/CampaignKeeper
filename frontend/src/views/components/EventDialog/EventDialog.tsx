@@ -49,6 +49,18 @@ type EventDialogProps = {
   parentId?: string;
 };
 
+/**
+ * Dialog used to create, edit and delete events in MapView and ExplorerView.
+ * Due to similiarity in UI and slight diffrence in field content,
+ * MapDialog and ExplorerDialog are actually just wrapper on EventDialog
+ * and pass props required for its opening in proper mode.
+ * That is EventDialog in MapView can be opened in "new event" (all fields are empty)
+ * and "edit event" mode (all fields are filled with data from some event)
+ * and in ExplorerView it can be opened in "edit event" (as above) and "new child event"
+ * (all field empty except for parents field which contains parent of new event)
+ * @param props
+ * @returns
+ */
 export const EventDialog: React.FC<EventDialogProps> = props => {
   const dispatch = useDispatch();
   const { eventsList } = useSelector((state: RootState) => state.events);

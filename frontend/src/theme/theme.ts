@@ -1,5 +1,8 @@
 import { createTheme } from '@mui/material/styles';
 
+/**
+ * Light version of our custom theme
+ */
 export const lightTheme = createTheme({
   components: {
     MuiPaper: {
@@ -90,6 +93,9 @@ export const lightTheme = createTheme({
   },
 });
 
+/**
+ * Dark (and default) version of our custom theme
+ */
 export const darkTheme = createTheme({
   components: {
     MuiPaper: {

@@ -11,6 +11,12 @@ type EntriesListProps = {
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
+/**
+ * Component responsible for displaying names of entries from currently selected schema
+ * (optionally filtered by search phrase)
+ * @param props
+ * @returns
+ */
 export const EntriesList: React.FC<EntriesListProps> = props => {
   const renderListElements = () =>
     props.entriesToRender.map(entry => (

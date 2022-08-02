@@ -25,6 +25,14 @@ type EventSecondaryDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Secondary dialog for MapView and ExplorerView,
+ * used to ask for confirmation of deleting event.
+ * NOTE: if event has children, user must point new parents for them in this dialog
+ * before deleting event is possible.
+ * @param props
+ * @returns
+ */
 export const EventSecondaryDialog: React.FC<EventSecondaryDialogProps> = props => {
   const dispatch = useDispatch();
   const currentEventMap = useSelector((state: RootState) => state.mapView.currentEvent);

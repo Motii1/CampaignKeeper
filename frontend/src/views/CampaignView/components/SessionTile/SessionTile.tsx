@@ -17,6 +17,14 @@ type SessionTileProps = {
   setDialogType: (newDialogType: NavBarViewDialog) => void;
 };
 
+/**
+ * Component used to display single session to user, opens said session in MapView (graph)
+ * on click and allows to edit session name on context menu (via CampaignDialog).
+ * Takes session id and its name as arguments alongside functions responsible for opening
+ * CampaignDialog in "edit session" mode
+ * @param props
+ * @returns
+ */
 export const SessionTile: React.FC<SessionTileProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();

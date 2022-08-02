@@ -12,6 +12,12 @@ type AddChildDialogProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Dialog used to add new event-child to event currently displayed in ExplorerView
+ * NOTE: basically standard EventDialog but with parent section containing parent event
+ * @param props
+ * @returns
+ */
 export const AddChildDialog: React.FC<AddChildDialogProps> = props => (
   <EventDialog
     currentSessionId={props.currentSessionId}

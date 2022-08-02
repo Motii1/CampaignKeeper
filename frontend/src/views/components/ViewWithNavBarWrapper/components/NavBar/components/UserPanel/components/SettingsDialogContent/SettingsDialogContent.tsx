@@ -18,6 +18,10 @@ type SettingsDialogContentProps = {
   setSnackbarError: (message: string) => void;
 };
 
+/**
+ * Dialog in which user can change their avatar and password
+ * @returns
+ */
 export const SettingsDialogContent: React.FC<SettingsDialogContentProps> = props => {
   const dispatch = useDispatch();
 

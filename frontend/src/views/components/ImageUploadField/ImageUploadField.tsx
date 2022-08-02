@@ -11,6 +11,11 @@ type GraphicUploadFieldProps = {
   setImage: (newImage: string) => void;
 };
 
+/**
+ * Component used to upload image in application
+ * @param props
+ * @returns
+ */
 export const ImageUploadField: React.FC<GraphicUploadFieldProps> = props => {
   const handleChange = async (files: null | FileList) => {
     if (files) {

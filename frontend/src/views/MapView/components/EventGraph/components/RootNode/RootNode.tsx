@@ -4,6 +4,14 @@ type RootNodeProps = {
   sessionName: string;
 };
 
+/**
+ * Component serving as "root" of EventGraph, displays name of session
+ * from which graph has been built.
+ * NOTE: while the actual root of graph is an event (withouth any parents),
+ * this components is important as it shows session name to user
+ * @param props
+ * @returns
+ */
 export const RootNode: React.FC<RootNodeProps> = props => (
   <Paper
     id="root-node"

@@ -1,5 +1,12 @@
-import { Grid } from '@mui/material';
+import { Container, Grid, Paper } from '@mui/material';
+import { SidebarLogo } from './components/SidebarLogo/SidebarLogo';
 
+/**
+ * Sidebar for ViewWithSidebarWrapper, most important component of its views
+ * in which all relevant information/components are contained
+ * @param param0
+ * @returns
+ */
 export const Sidebar: React.FC = ({ children }) => (
   <Grid
     item
@@ -15,6 +22,20 @@ export const Sidebar: React.FC = ({ children }) => (
       paddingBottom: 2,
     }}
   >
-    {children}
+    <Container sx={{ width: 360, marginTop: -1 }}>
+      <Paper
+        elevation={0}
+        sx={{
+          borderRadius: '20px',
+          marginTop: '75px',
+          backgroundColor: 'customPalette.surface',
+          paddingBottom: '10px',
+        }}
+      >
+        <SidebarLogo />
+        <Container sx={{ height: 15 }} />
+        {children}
+      </Paper>
+    </Container>
   </Grid>
 );

@@ -12,6 +12,12 @@ type EntryReferenceChipProps = {
   type: EventTileType;
 };
 
+/**
+ * Chip used to display reference to entry in Codex,
+ * allows transition to referenced entry on click
+ * @param props
+ * @returns
+ */
 export const EntryReferenceChip: React.FC<EntryReferenceChipProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();

@@ -28,6 +28,10 @@ type ChangePasswordFormProps = {
   runQueryDetails: (payload?: unknown) => void;
 };
 
+/**
+ * Form in which user can change their password
+ * @returns
+ */
 export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = props => {
   const [currentPassword, setCurrentPassword] = useState<TextFieldState>(initalState);
   const [newPassword, setNewPassword] = useState<TextFieldState>(initalState);

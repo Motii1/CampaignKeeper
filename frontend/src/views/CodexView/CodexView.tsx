@@ -12,6 +12,11 @@ import { EntriesListPanel } from './components/EntriesListPanel/EntriesListPanel
 import { EntryDisplayPanel } from './components/EntryDisplayPanel/EntryDisplayPanel';
 import { SchemasList } from './components/SchemasList/SchemasList';
 
+/**
+ * Component responsible for UI and logic of CodexView which displays schemas and their instances
+ * (codex entries) from currently selected campaign, allows creation on new schema
+ * as well as new entries and editing/deleting existing ones
+ */
 export const CodexView: React.FC = () => {
   const dispatch = useDispatch();
   const { currentCampaignId } = useSelector((state: RootState) => state.campaignView);
