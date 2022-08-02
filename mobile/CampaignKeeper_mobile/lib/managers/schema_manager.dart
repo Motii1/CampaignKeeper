@@ -131,13 +131,13 @@ class SchemaManager extends BaseManager<SchemaEntity> {
   Future<List<Map>> _getCache() async {
     List<Map> resMaps = [];
     List<Map> entMaps = await getListFromDb(tableName);
-    List<Map> fieldsMaps = await getListFromDb('${tableName}_fields');
+    List<Map> fieldsMaps = await getValues<String>(entityTable: tableName);
 
-    var dict = fieldsMaps.groupListsBy((e) => e['schemaId']);
+    var dict = fieldsMaps.groupListsBy((e) => e['entityId']);
 
     entMaps.forEach((ent) {
       var newEntity = Map.from(ent);
-      var fields = (dict[ent['id']] ?? []).map((e) => e['field'] as String).toList();
+      var fields = (dict[ent['id']] ?? []).map((e) => e['value'] as String).toList();
 
       newEntity['fields'] = fields;
       resMaps.add(newEntity);
@@ -161,12 +161,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     List<Map<String, Object>> fieldsMaps = [];
 
     entities.forEach((e) {
-      var fields = e.fields
-          .map((f) => {
-                'schemaId': e.id,
-                'field': f,
-              })
-          .toList();
+      var fields = listToValueMaps(e.fields, entityId: e.id, entityTable: tableName);
 
       if (fields.isNotEmpty) {
         fieldsMaps.addAll(fields);
@@ -182,11 +177,11 @@ class SchemaManager extends BaseManager<SchemaEntity> {
 
     await Future.wait([
       database.delete(tableName),
-      database.delete('${tableName}_fields'),
+      database.delete('strings', where: 'entityTable = ?', whereArgs: [tableName]),
     ]);
     await Future.wait([
       database.insertList(tableName, entitiesMaps),
-      database.insertList('${tableName}_fields', fieldsMaps),
+      database.insertList('strings', fieldsMaps),
     ]);
   }
 }

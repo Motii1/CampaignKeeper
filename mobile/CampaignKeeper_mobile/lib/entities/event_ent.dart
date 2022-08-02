@@ -25,13 +25,13 @@ class EventEntity implements BaseEntity {
     status = data['status'];
     displayStatus = data['displayStatus'];
     characterValues = (data['charactersMetadataArray'] as List<dynamic>)
-        .map((e) => FieldValue.decode(e, defaultFieldName: 'characters'))
+        .map((e) => FieldValue.fromMap(e, defaultFieldName: 'characters'))
         .toList();
     placeValues = (data['placeMetadataArray'] as List<dynamic>)
-        .map((e) => FieldValue.decode(e, defaultFieldName: 'places'))
+        .map((e) => FieldValue.fromMap(e, defaultFieldName: 'places'))
         .toList();
     descriptionValues = (data['descriptionMetadataArray'] as List<dynamic>)
-        .map((e) => FieldValue.decode(e, defaultFieldName: 'descriptions'))
+        .map((e) => FieldValue.fromMap(e, defaultFieldName: 'descriptions'))
         .toList();
     parentIds = (data['parentIds'] as List<dynamic>).map((e) => e as int).toList();
     childrenIds = (data['childrenIds'] as List<dynamic>).map((e) => e as int).toList();
@@ -66,9 +66,9 @@ class EventEntity implements BaseEntity {
       'type': type,
       'status': status,
       'displayStatus': displayStatus,
-      'charactersMetadataArray': characterValues.map((e) => FieldValue.encode(e)).toList(),
-      'placeMetadataArray': placeValues.map((e) => FieldValue.encode(e)).toList(),
-      'descriptionMetadataArray': descriptionValues.map((e) => FieldValue.encode(e)).toList(),
+      'charactersMetadataArray': characterValues.map((e) => e.toMap()).toList(),
+      'placeMetadataArray': placeValues.map((e) => e.toMap()).toList(),
+      'descriptionMetadataArray': descriptionValues.map((e) => e.toMap()).toList(),
       'parentIds': parentIds,
       'childrenIds': childrenIds,
     };

@@ -131,17 +131,29 @@ class EventManager extends BaseManager<EventEntity> {
   Future<List<Map>> _getCache() async {
     List<Map> resMaps = [];
     List<Map> entMaps = await getListFromDb(tableName);
-    List<Map> charactersMaps = await getListFromDb('${tableName}_characters');
-    List<Map> placesMaps = await getListFromDb('${tableName}_places');
-    List<Map> descriptionMaps = await getListFromDb('${tableName}_description');
-    List<Map> parentsMaps = await getListFromDb('${tableName}_parents');
-    List<Map> childrenMaps = await getListFromDb('${tableName}_children');
+    List<Map> charactersMaps = await getListFromDb(
+      FieldValue.tableName,
+      where: 'entityTable = ? and entityType = ?',
+      whereArgs: [tableName, 'characters'],
+    );
+    List<Map> placesMaps = await getListFromDb(
+      FieldValue.tableName,
+      where: 'entityTable = ? and entityType = ?',
+      whereArgs: [tableName, 'places'],
+    );
+    List<Map> descriptionMaps = await getListFromDb(
+      FieldValue.tableName,
+      where: 'entityTable = ? and entityType = ?',
+      whereArgs: [tableName, 'description'],
+    );
+    List<Map> parentsMaps = await getValues<int>(entityTable: tableName, entityType: 'parents');
+    List<Map> childrenMaps = await getValues<int>(entityTable: tableName, entityType: 'children');
 
-    var characterDict = charactersMaps.groupListsBy((e) => e['eventId']);
-    var placesDict = placesMaps.groupListsBy((e) => e['eventId']);
-    var descriptionDict = descriptionMaps.groupListsBy((e) => e['eventId']);
-    var parentsDict = parentsMaps.groupListsBy((e) => e['eventId']);
-    var childrenDict = childrenMaps.groupListsBy((e) => e['eventId']);
+    var characterDict = charactersMaps.groupListsBy((e) => e['entityId']);
+    var placesDict = placesMaps.groupListsBy((e) => e['entityId']);
+    var descriptionDict = descriptionMaps.groupListsBy((e) => e['entityId']);
+    var parentsDict = parentsMaps.groupListsBy((e) => e['entityId']);
+    var childrenDict = childrenMaps.groupListsBy((e) => e['entityId']);
 
     entMaps.forEach((ent) {
       var newEntity = Map.from(ent);
@@ -150,8 +162,8 @@ class EventManager extends BaseManager<EventEntity> {
       var places = placesDict[ent['id']] ?? [];
       var description = descriptionDict[ent['id']] ?? [];
 
-      var parents = (parentsDict[ent['id']] ?? []).map((e) => e['parentId'] as int).toList();
-      var children = (childrenDict[ent['id']] ?? []).map((e) => e['childId'] as int).toList();
+      var parents = (parentsDict[ent['id']] ?? []).map((e) => e['value'] as int).toList();
+      var children = (childrenDict[ent['id']] ?? []).map((e) => e['value'] as int).toList();
 
       newEntity['charactersMetadataArray'] = characters;
       newEntity['placeMetadataArray'] = places;
@@ -163,24 +175,6 @@ class EventManager extends BaseManager<EventEntity> {
     });
 
     return resMaps;
-  }
-
-  List<Map<String, int>> _idsToMapList(int entId, List<int> ids, String fieldName) {
-    return ids
-        .map((e) => {
-              'eventId': entId,
-              fieldName: e,
-            })
-        .toList();
-  }
-
-  List<Map<String, Object>> _fieldsToMapList(int entId, List<FieldValue> fields) {
-    return fields.map((e) {
-      var map = FieldValue.encode(e);
-      map['eventId'] = entId;
-
-      return map;
-    }).toList();
   }
 
   Future<void> _cacheAll() async {
@@ -195,24 +189,27 @@ class EventManager extends BaseManager<EventEntity> {
       }
     });
 
-    List<Map<String, Object>> charactersMaps = [];
-    List<Map<String, Object>> placesMaps = [];
-    List<Map<String, Object>> descriptionMaps = [];
-    List<Map<String, Object>> parentsMaps = [];
-    List<Map<String, Object>> childMaps = [];
+    List<Map<String, Object>> fieldsMaps = [];
+    List<Map<String, Object>> idsMaps = [];
 
     entities.forEach((e) {
-      var characters = _fieldsToMapList(e.id, e.characterValues);
-      var places = _fieldsToMapList(e.id, e.placeValues);
-      var description = _fieldsToMapList(e.id, e.descriptionValues);
-      var parents = _idsToMapList(e.id, e.parentIds, 'parentId');
-      var children = _idsToMapList(e.id, e.childrenIds, 'childId');
+      var characters = e.characterValues
+          .map((f) => f.toMap(entityTable: tableName, entityId: e.id, entityType: 'characters'));
+      var places =
+          e.placeValues.map((f) => f.toMap(entityTable: tableName, entityId: e.id, entityType: 'places'));
+      var description = e.descriptionValues
+          .map((f) => f.toMap(entityTable: tableName, entityId: e.id, entityType: 'description'));
+      var parents =
+          listToValueMaps(e.parentIds, entityId: e.id, entityTable: tableName, entityType: 'parents');
+      var children =
+          listToValueMaps(e.childrenIds, entityId: e.id, entityTable: tableName, entityType: 'children');
 
-      charactersMaps.addAll(characters);
-      placesMaps.addAll(places);
-      descriptionMaps.addAll(description);
-      parentsMaps.addAll(parents);
-      childMaps.addAll(children);
+      fieldsMaps.addAll(characters);
+      fieldsMaps.addAll(places);
+      fieldsMaps.addAll(description);
+
+      idsMaps.addAll(parents);
+      idsMaps.addAll(children);
     });
 
     var entitiesMaps = entities.map((e) {
@@ -228,19 +225,13 @@ class EventManager extends BaseManager<EventEntity> {
 
     await Future.wait([
       database.delete(tableName),
-      database.delete('${tableName}_characters'),
-      database.delete('${tableName}_places'),
-      database.delete('${tableName}_description'),
-      database.delete('${tableName}_parents'),
-      database.delete('${tableName}_children'),
+      database.delete(FieldValue.tableName, where: 'entityTable = ?', whereArgs: [tableName]),
+      database.delete('integers', where: 'entityTable = ?', whereArgs: [tableName]),
     ]);
     await Future.wait([
       database.insertList(tableName, entitiesMaps),
-      database.insertList('${tableName}_characters', charactersMaps),
-      database.insertList('${tableName}_places', placesMaps),
-      database.insertList('${tableName}_description', descriptionMaps),
-      database.insertList('${tableName}_parents', parentsMaps),
-      database.insertList('${tableName}_children', childMaps),
+      database.insertList(FieldValue.tableName, fieldsMaps),
+      database.insertList('integers', idsMaps),
     ]);
   }
 }

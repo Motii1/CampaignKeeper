@@ -19,7 +19,7 @@ class ObjectEntity implements BaseEntity {
     schemaId = data['schemaId'];
     title = data['title'];
     imageData = data['imageBase64'];
-    values = (data['metadataArray'] as List<dynamic>).map((e) => FieldValue.decode(e)).toList();
+    values = (data['metadataArray'] as List<dynamic>).map((e) => FieldValue.fromMap(e)).toList();
   }
 
   static const String endpoint = "/api/object/list";
@@ -59,7 +59,7 @@ class ObjectEntity implements BaseEntity {
       'schemaId': schemaId,
       'title': title,
       'imageBase64': imageData,
-      'metadataArray': values.map((e) => FieldValue.encode(e)).toList(),
+      'metadataArray': values.map((e) => e.toMap()).toList(),
     };
 
     return data;

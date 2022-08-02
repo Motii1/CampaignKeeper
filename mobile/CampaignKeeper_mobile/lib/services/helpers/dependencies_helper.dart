@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:sqflite/sqflite.dart' as sqflite;
 
 // Helper used as an dependency injection tool.
 class DependenciesHelper {
@@ -21,12 +22,35 @@ class DependenciesHelper {
   http.Client _client = http.Client();
   http.MultipartRequest Function(String, Uri) _multipartRequest =
       (type, uri) => http.MultipartRequest(type, uri);
+  Future<sqflite.Database> Function(
+    String, {
+    int? version,
+    sqflite.OnDatabaseConfigureFn? onConfigure,
+    sqflite.OnDatabaseCreateFn? onCreate,
+    sqflite.OnDatabaseVersionChangeFn? onUpgrade,
+    sqflite.OnDatabaseVersionChangeFn? onDowngrade,
+    sqflite.OnDatabaseOpenFn? onOpen,
+    bool readOnly,
+    bool singleInstance,
+  }) _databaseFun = sqflite.openDatabase;
 
   void useMocks({
     FlutterSecureStorage? secureStorage,
     SharedPreferences? storage,
     http.Client? client,
     http.MultipartRequest Function(String, Uri)? multipartRequest,
+    Future<sqflite.Database> Function(
+      String, {
+      int? version,
+      sqflite.OnDatabaseConfigureFn? onConfigure,
+      sqflite.OnDatabaseCreateFn? onCreate,
+      sqflite.OnDatabaseVersionChangeFn? onUpgrade,
+      sqflite.OnDatabaseVersionChangeFn? onDowngrade,
+      sqflite.OnDatabaseOpenFn? onOpen,
+      bool readOnly,
+      bool singleInstance,
+    })?
+        databaseFun,
   }) {
     if (secureStorage != null) {
       _secureStorage = secureStorage;
@@ -42,6 +66,10 @@ class DependenciesHelper {
 
     if (multipartRequest != null) {
       _multipartRequest = multipartRequest;
+    }
+
+    if (databaseFun != null) {
+      _databaseFun = databaseFun;
     }
   }
 
@@ -63,5 +91,19 @@ class DependenciesHelper {
 
   http.MultipartRequest Function(String, Uri) get multipartRequest {
     return _multipartRequest;
+  }
+
+  Future<sqflite.Database> Function(
+    String, {
+    int? version,
+    sqflite.OnDatabaseConfigureFn? onConfigure,
+    sqflite.OnDatabaseCreateFn? onCreate,
+    sqflite.OnDatabaseVersionChangeFn? onUpgrade,
+    sqflite.OnDatabaseVersionChangeFn? onDowngrade,
+    sqflite.OnDatabaseOpenFn? onOpen,
+    bool readOnly,
+    bool singleInstance,
+  }) get openDatabase {
+    return _databaseFun;
   }
 }

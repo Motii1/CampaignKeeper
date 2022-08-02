@@ -2,6 +2,7 @@ import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/event_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -24,49 +25,23 @@ class DatabaseHelper {
     _database = await openDatabase(
       join(await getDatabasesPath(), 'campaign_database.db'),
       onCreate: ((db, version) async {
+        await db
+            .execute('CREATE TABLE strings(entityTable TEXT, entityType Text, entityId INTEGER, value TEXT)');
+        await db.execute(
+            'CREATE TABLE integers(entityTable TEXT, entityType Text, entityId INTEGER, value INTEGER)');
+        await db.execute(
+            'CREATE TABLE ${FieldValue.tableName}(entityTable TEXT, entityType Text, entityId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
         await db.execute(
             'CREATE TABLE ${SchemaEntity.tableName}(id INTEGER PRIMARY KEY, campaignId INTEGER, title TEXT)');
-        await db.execute('CREATE TABLE ${SchemaEntity.tableName}_fields(schemaId INTEGER, field TEXT)');
         await db.execute(
             'CREATE TABLE ${SessionEntity.tableName}(id INTEGER PRIMARY KEY, campaignId INTEGER, name TEXT, createdAt TEXT)');
         await db.execute(
             'CREATE TABLE ${CampaignEntity.tableName}(id INTEGER PRIMARY KEY, name TEXT, createdAt TEXT, imageBase64 TEXT)');
         await db.execute(
             'CREATE TABLE ${EventEntity.tableName}(id INTEGER PRIMARY KEY, sessionId INTEGER, title TEXT, type TEXT, status TEXT, displayStatus TEXT)');
-        await db.execute(
-            'CREATE TABLE ${EventEntity.tableName}_characters(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
-        await db.execute(
-            'CREATE TABLE ${EventEntity.tableName}_places(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
-        await db.execute(
-            'CREATE TABLE ${EventEntity.tableName}_description(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
-        await db.execute('CREATE TABLE ${EventEntity.tableName}_parents(eventId INTEGER, parentId INTEGER)');
-        await db.execute('CREATE TABLE ${EventEntity.tableName}_children(eventId INTEGER, childId INTEGER)');
       }),
-      onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 2) {
-          await db.execute(
-              'CREATE TABLE ${SchemaEntity.tableName}(id INTEGER PRIMARY KEY, campaignId INTEGER, title TEXT)');
-          await db.execute('CREATE TABLE ${SchemaEntity.tableName}_fields(schemaId INTEGER, field TEXT)');
-          await db.execute(
-              'CREATE TABLE ${SessionEntity.tableName}(id INTEGER PRIMARY KEY, campaignId INTEGER, name TEXT, createdAt TEXT)');
-        }
-
-        if (oldVersion < 3) {
-          await db.execute(
-              'CREATE TABLE ${EventEntity.tableName}(id INTEGER PRIMARY KEY, sessionId INTEGER, title TEXT, type TEXT, status TEXT, displayStatus TEXT)');
-          await db.execute(
-              'CREATE TABLE ${EventEntity.tableName}_characters(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
-          await db.execute(
-              'CREATE TABLE ${EventEntity.tableName}_places(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
-          await db.execute(
-              'CREATE TABLE ${EventEntity.tableName}_description(eventId INTEGER, type TEXT, sequenceNumber INTEGER, value TEXT, fieldName TEXT)');
-          await db
-              .execute('CREATE TABLE ${EventEntity.tableName}_parents(eventId INTEGER, parentId INTEGER)');
-          await db
-              .execute('CREATE TABLE ${EventEntity.tableName}_children(eventId INTEGER, childId INTEGER)');
-        }
-      },
-      version: 3,
+      onUpgrade: (db, oldVersion, newVersion) async {},
+      version: 1,
     );
     _initialized = true;
   }
@@ -102,9 +77,11 @@ class DatabaseHelper {
   }
 
   Future<void> clear() async {
+    await delete(FieldValue.tableName);
+    await delete('strings');
+    await delete('integers');
     await delete(CampaignEntity.tableName);
     await delete(SchemaEntity.tableName);
-    await delete('${SchemaEntity.tableName}_fields');
     await delete(SessionEntity.tableName);
   }
 }

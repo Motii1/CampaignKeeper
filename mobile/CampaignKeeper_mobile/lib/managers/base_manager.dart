@@ -126,7 +126,36 @@ class BaseManager<T extends BaseEntity> extends ChangeNotifier {
     await _db.insertList(tableName, maps);
   }
 
-  Future<List<Map>> getListFromDb(String tableName) async {
-    return await _db.get(tableName);
+  Future<List<Map>> getListFromDb(String tableName, {String? where, List<Object?>? whereArgs}) async {
+    return await _db.get(tableName, where: where, whereArgs: whereArgs);
+  }
+
+  Future<List<Map>> getValues<T>({required String entityTable, String entityType = ''}) async {
+    String valueTable = '';
+
+    if (T == String) {
+      valueTable = 'strings';
+    } else if (T == int) {
+      valueTable = 'integers';
+    } else {
+      return [];
+    }
+
+    return await _db
+        .get(valueTable, where: 'entityTable = ? and entityType = ?', whereArgs: [entityTable, entityType]);
+  }
+
+  List<Map<String, Object>> listToValueMaps(List<Object> data,
+      {required int entityId, required String entityTable, String entityType = ''}) {
+    var valueMaps = data
+        .map((e) => {
+              'entityTable': entityTable,
+              'entityType': entityType,
+              'entityId': entityId,
+              'value': e,
+            })
+        .toList();
+
+    return valueMaps;
   }
 }
