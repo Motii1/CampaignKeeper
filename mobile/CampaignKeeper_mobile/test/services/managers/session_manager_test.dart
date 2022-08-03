@@ -2,26 +2,30 @@ import 'dart:convert';
 
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
+import '../../mocks/database_mock.dart';
 import '../../mocks/http_client_mock.dart';
 import '../../mocks/secure_storage_mock.dart';
 import '../../mocks/shared_storage_mock.dart';
 
-void main() {
+void main() async {
+  final dc = DataCarrier();
+  final client = HttpClientMock();
+  final storage = SharedStorageMock();
+  final secureStorage = SecureStorageMock();
+  DependenciesHelper().useMocks(
+    client: client,
+    storage: storage,
+    secureStorage: secureStorage,
+    databaseFun: DatabaseMock.openDatabase,
+    databasePath: '',
+  );
+  await DatabaseHelper().initialize();
   group("Schema manager test", () {
-    final dc = DataCarrier();
-    final client = HttpClientMock();
-    final storage = SharedStorageMock();
-    final secureStorage = SecureStorageMock();
-    DependenciesHelper().useMocks(
-      client: client,
-      storage: storage,
-      secureStorage: secureStorage,
-    );
-
     test("Get entity", () async {
       var ent = SessionEntity(
         id: 1,
@@ -79,14 +83,17 @@ void main() {
 
       expect(ent.equals(newEnt), true);
 
-      String storageValue = storage.value as String;
+      List<Map>? storageValues = DatabaseMock.db.map[SessionEntity.tableName];
 
-      List storageData = json.decode(storageValue);
-      var storageEntity = SessionEntity.fromMap(storageData[0]);
+      expect(storageValues == null, false);
 
-      await Future.delayed(Duration(milliseconds: 500));
+      expect(storageValues!.length, 1);
 
-      expect(ent.equals(storageEntity), true);
+      Map storageValue = storageValues[0];
+
+      var storageEnt = SessionEntity.fromMap(storageValue);
+
+      expect(ent.equals(storageEnt), true);
     });
   });
 }

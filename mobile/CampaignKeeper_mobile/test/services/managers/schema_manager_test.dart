@@ -2,26 +2,31 @@ import 'dart:convert';
 
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
+import '../../mocks/database_mock.dart';
 import '../../mocks/http_client_mock.dart';
 import '../../mocks/secure_storage_mock.dart';
 import '../../mocks/shared_storage_mock.dart';
 
-void main() {
-  group("Schema manager test", () {
-    final dc = DataCarrier();
-    final client = HttpClientMock();
-    final storage = SharedStorageMock();
-    final secureStorage = SecureStorageMock();
-    DependenciesHelper().useMocks(
-      client: client,
-      storage: storage,
-      secureStorage: secureStorage,
-    );
+void main() async {
+  final dc = DataCarrier();
+  final client = HttpClientMock();
+  final storage = SharedStorageMock();
+  final secureStorage = SecureStorageMock();
+  DependenciesHelper().useMocks(
+    client: client,
+    storage: storage,
+    secureStorage: secureStorage,
+    databaseFun: DatabaseMock.openDatabase,
+    databasePath: '',
+  );
+  await DatabaseHelper().initialize();
 
+  group("Schema manager test", () {
     test("Get entity", () async {
       var ent = SchemaEntity(
         id: 1,
@@ -79,14 +84,18 @@ void main() {
 
       expect(ent.equals(newEnt), true);
 
-      String storageValue = storage.value as String;
+      List<Map>? storageValues = DatabaseMock.db.map[SchemaEntity.tableName];
 
-      List storageData = json.decode(storageValue);
-      var storageEntity = SchemaEntity.fromMap(storageData[0]);
+      expect(storageValues == null, false);
 
-      await Future.delayed(Duration(milliseconds: 500));
+      expect(storageValues!.length, 1);
 
-      expect(ent.equals(storageEntity), true);
+      Map storageValue = storageValues[0];
+      storageValue['fields'] = [];
+
+      var storageEnt = SchemaEntity.fromMap(storageValue);
+
+      expect(ent.equals(storageEnt), true);
     });
   });
 }

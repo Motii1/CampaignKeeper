@@ -2,22 +2,30 @@ import 'dart:convert';
 
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
+import '../../mocks/database_mock.dart';
 import '../../mocks/http_client_mock.dart';
 import '../../mocks/secure_storage_mock.dart';
 
-void main() {
+void main() async {
   final dc = DataCarrier();
-  group("Login helper test", () {
-    final secureStorage = SecureStorageMock();
-    final client = HttpClientMock();
-    DependenciesHelper().useMocks(secureStorage: secureStorage, client: client);
+  final secureStorage = SecureStorageMock();
+  final client = HttpClientMock();
+  DependenciesHelper().useMocks(
+    secureStorage: secureStorage,
+    client: client,
+    databaseFun: DatabaseMock.openDatabase,
+    databasePath: '',
+  );
+  await DatabaseHelper().initialize();
 
+  group("Login helper test", () {
     test("Auto login succeed", () async {
       UserDataEntity? ent = UserDataEntity(
         username: "Test",
