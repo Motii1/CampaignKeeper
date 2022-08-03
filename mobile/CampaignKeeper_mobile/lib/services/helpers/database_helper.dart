@@ -9,7 +9,24 @@ import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+// Helper that gives a layer of abstraction and configuration
+// to the sqlite database operations.
 class DatabaseHelper {
+  // Maps an list of objects into a list of maps ready to be cached.
+  static List<Map<String, Object>> listToValueMaps(List<Object> data,
+      {required int entityId, required String entityTable, String entityType = ''}) {
+    var valueMaps = data
+        .map((e) => {
+              'entityTable': entityTable,
+              'entityType': entityType,
+              'entityId': entityId,
+              'value': e,
+            })
+        .toList();
+
+    return valueMaps;
+  }
+
   DatabaseHelper._internal();
 
   static final DatabaseHelper _dbHelper = DatabaseHelper._internal();
@@ -74,6 +91,22 @@ class DatabaseHelper {
 
   Future<List<Map>> get(String tableName, {String? where, List<Object?>? whereArgs}) async {
     return await _database.query(tableName, where: where, whereArgs: whereArgs);
+  }
+
+  // Gets values from either 'strings' or 'integers' table.
+  Future<List<Map>> getValues<T>({required String entityTable, String entityType = ''}) async {
+    String valueTable = '';
+
+    if (T == String) {
+      valueTable = 'strings';
+    } else if (T == int) {
+      valueTable = 'integers';
+    } else {
+      return [];
+    }
+
+    return await get(valueTable,
+        where: 'entityTable = ? and entityType = ?', whereArgs: [entityTable, entityType]);
   }
 
   Future<void> delete(String tableName, {String? where, List<Object?>? whereArgs}) async {

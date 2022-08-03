@@ -131,7 +131,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
   Future<List<Map>> _getCache() async {
     List<Map> resMaps = [];
     List<Map> entMaps = await getListFromDb(tableName);
-    List<Map> fieldsMaps = await getValues<String>(entityTable: tableName);
+    List<Map> fieldsMaps = await DatabaseHelper().getValues<String>(entityTable: tableName);
 
     var dict = fieldsMaps.groupListsBy((e) => e['entityId']);
 
@@ -161,7 +161,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     List<Map<String, Object>> fieldsMaps = [];
 
     entities.forEach((e) {
-      var fields = listToValueMaps(e.fields, entityId: e.id, entityTable: tableName);
+      var fields = DatabaseHelper.listToValueMaps(e.fields, entityId: e.id, entityTable: tableName);
 
       if (fields.isNotEmpty) {
         fieldsMaps.addAll(fields);

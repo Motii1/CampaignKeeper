@@ -1,8 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:campaign_keeper_mobile/entities/base_entity.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
@@ -89,38 +86,9 @@ class BaseManager<T extends BaseEntity> extends ChangeNotifier {
     return res;
   }
 
-  Future<void> cacheList(List<T> list, String key) async {
-    var data = list.map((e) => e.toMap()).toList();
-
-    CacheUtil().add(key, json.encode(data));
-  }
-
-  Future<void> cacheMap(Map<int, List<T>> map, String key, List<int> filter) async {
-    var data = [];
-
-    map.forEach(
-      (mapKey, list) {
-        if (filter.isEmpty || filter.contains(mapKey)) {
-          data.addAll(list.map((e) => e.toMap()));
-        }
-      },
-    );
-
-    CacheUtil().add(key, json.encode(data));
-  }
-
-  Future<void> cacheListToDb(String tableName, List<T> entities, {List<String>? excludedColumns}) async {
-    List<Map<String, Object?>> maps = entities.map((e) {
-      var map = e.toMap();
-
-      if (excludedColumns != null && excludedColumns.isNotEmpty) {
-        excludedColumns.forEach((column) {
-          map.remove(column);
-        });
-      }
-
-      return map;
-    }).toList();
+  // Caches list of entities ensuring there's no leftovers.
+  Future<void> cacheListToDb(String tableName, List<T> entities) async {
+    List<Map<String, Object?>> maps = entities.map((e) => e.toMap()).toList();
 
     await _db.delete(tableName);
     await _db.insertList(tableName, maps);
@@ -128,34 +96,5 @@ class BaseManager<T extends BaseEntity> extends ChangeNotifier {
 
   Future<List<Map>> getListFromDb(String tableName, {String? where, List<Object?>? whereArgs}) async {
     return await _db.get(tableName, where: where, whereArgs: whereArgs);
-  }
-
-  Future<List<Map>> getValues<T>({required String entityTable, String entityType = ''}) async {
-    String valueTable = '';
-
-    if (T == String) {
-      valueTable = 'strings';
-    } else if (T == int) {
-      valueTable = 'integers';
-    } else {
-      return [];
-    }
-
-    return await _db
-        .get(valueTable, where: 'entityTable = ? and entityType = ?', whereArgs: [entityTable, entityType]);
-  }
-
-  List<Map<String, Object>> listToValueMaps(List<Object> data,
-      {required int entityId, required String entityTable, String entityType = ''}) {
-    var valueMaps = data
-        .map((e) => {
-              'entityTable': entityTable,
-              'entityType': entityType,
-              'entityId': entityId,
-              'value': e,
-            })
-        .toList();
-
-    return valueMaps;
   }
 }

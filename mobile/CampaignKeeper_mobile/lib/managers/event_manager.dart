@@ -146,8 +146,10 @@ class EventManager extends BaseManager<EventEntity> {
       where: 'entityTable = ? and entityType = ?',
       whereArgs: [tableName, 'description'],
     );
-    List<Map> parentsMaps = await getValues<int>(entityTable: tableName, entityType: 'parents');
-    List<Map> childrenMaps = await getValues<int>(entityTable: tableName, entityType: 'children');
+    List<Map> parentsMaps =
+        await DatabaseHelper().getValues<int>(entityTable: tableName, entityType: 'parents');
+    List<Map> childrenMaps =
+        await DatabaseHelper().getValues<int>(entityTable: tableName, entityType: 'children');
 
     var characterDict = charactersMaps.groupListsBy((e) => e['entityId']);
     var placesDict = placesMaps.groupListsBy((e) => e['entityId']);
@@ -199,10 +201,10 @@ class EventManager extends BaseManager<EventEntity> {
           e.placeValues.map((f) => f.toMap(entityTable: tableName, entityId: e.id, entityType: 'places'));
       var description = e.descriptionValues
           .map((f) => f.toMap(entityTable: tableName, entityId: e.id, entityType: 'description'));
-      var parents =
-          listToValueMaps(e.parentIds, entityId: e.id, entityTable: tableName, entityType: 'parents');
-      var children =
-          listToValueMaps(e.childrenIds, entityId: e.id, entityTable: tableName, entityType: 'children');
+      var parents = DatabaseHelper.listToValueMaps(e.parentIds,
+          entityId: e.id, entityTable: tableName, entityType: 'parents');
+      var children = DatabaseHelper.listToValueMaps(e.childrenIds,
+          entityId: e.id, entityTable: tableName, entityType: 'children');
 
       fieldsMaps.addAll(characters);
       fieldsMaps.addAll(places);
