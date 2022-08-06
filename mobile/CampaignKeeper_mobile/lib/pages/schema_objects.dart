@@ -73,17 +73,6 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
     }
 
     if (objects.length > 0) {
-      // return SliverList(
-      //   delegate: SliverChildBuilderDelegate(
-      //     (context, index) => KeeperObjectGridTile(
-      //       entity: objects[index],
-      //       onTap: () {
-      //         openObject(objects[index].id);
-      //       },
-      //     ),
-      //     childCount: objects.length,
-      //   ),
-      // );
       return KeeperObjectsGrid(
           tiles: objects
               .map((e) => KeeperObjectGridTile(
