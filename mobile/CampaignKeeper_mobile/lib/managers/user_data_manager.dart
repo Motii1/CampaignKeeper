@@ -17,7 +17,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
     await lockedOperation(
       () async {
         _entity = entity;
-        Map data = _entity!.encode();
+        Map data = _entity!.toMap();
 
         CacheUtil().addSecure(_key, json.encode(data));
       },
@@ -85,7 +85,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
       String? cache = await CacheUtil().getSecure(_key);
 
       if (cache != null) {
-        _entity = UserDataEntity.decode(json.decode(cache));
+        _entity = UserDataEntity.fromMap(json.decode(cache));
         notifyListeners();
       }
     }
@@ -111,7 +111,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
 
             notifyListeners();
 
-            Map data = _entity!.encode();
+            Map data = _entity!.toMap();
             CacheUtil().addSecure(_key, json.encode(data));
 
             return true;

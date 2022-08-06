@@ -17,7 +17,7 @@ class EventEntity implements BaseEntity {
     required this.childrenIds,
   });
 
-  EventEntity.decode(Map data) {
+  EventEntity.fromMap(Map data) {
     id = data['id'];
     sessionId = data['sessionId'];
     title = data['title'];
@@ -25,19 +25,20 @@ class EventEntity implements BaseEntity {
     status = data['status'];
     displayStatus = data['displayStatus'];
     characterValues = (data['charactersMetadataArray'] as List<dynamic>)
-        .map((e) => FieldValue.decode(e, defaultFieldName: 'characters'))
+        .map((e) => FieldValue.fromMap(e, defaultFieldName: 'characters'))
         .toList();
     placeValues = (data['placeMetadataArray'] as List<dynamic>)
-        .map((e) => FieldValue.decode(e, defaultFieldName: 'places'))
+        .map((e) => FieldValue.fromMap(e, defaultFieldName: 'places'))
         .toList();
     descriptionValues = (data['descriptionMetadataArray'] as List<dynamic>)
-        .map((e) => FieldValue.decode(e, defaultFieldName: 'descriptions'))
+        .map((e) => FieldValue.fromMap(e, defaultFieldName: 'descriptions'))
         .toList();
     parentIds = (data['parentIds'] as List<dynamic>).map((e) => e as int).toList();
     childrenIds = (data['childrenIds'] as List<dynamic>).map((e) => e as int).toList();
   }
 
   static const String endpoint = '/api/event/graph';
+  static const String tableName = 'events';
 
   late int id;
   late int sessionId;
@@ -57,17 +58,17 @@ class EventEntity implements BaseEntity {
 
   bool get isOmitted => status.toLowerCase() == 'omitted';
 
-  Map encode() {
-    Map data = {
+  Map<String, Object?> toMap() {
+    Map<String, Object?> data = {
       'id': id,
       'sessionId': sessionId,
       'title': title,
       'type': type,
       'status': status,
       'displayStatus': displayStatus,
-      'charactersMetadataArray': characterValues.map((e) => FieldValue.encode(e)).toList(),
-      'placeMetadataArray': placeValues.map((e) => FieldValue.encode(e)).toList(),
-      'descriptionMetadataArray': descriptionValues.map((e) => FieldValue.encode(e)).toList(),
+      'charactersMetadataArray': characterValues.map((e) => e.toMap()).toList(),
+      'placeMetadataArray': placeValues.map((e) => e.toMap()).toList(),
+      'descriptionMetadataArray': descriptionValues.map((e) => e.toMap()).toList(),
       'parentIds': parentIds,
       'childrenIds': childrenIds,
     };

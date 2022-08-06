@@ -6,11 +6,10 @@ import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
 
 class SessionManager extends BaseManager<SessionEntity> {
-  static const String _key = "Session";
+  final String tableName = SessionEntity.tableName;
   Map<int, List<SessionEntity>> _map = {};
 
   SessionManager();
@@ -67,11 +66,10 @@ class SessionManager extends BaseManager<SessionEntity> {
 
   Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
-      String? cache = await CacheUtil().get(_key);
-      if (cache != null) {
-        List cacheData = json.decode(cache);
-        cacheData.forEach((data) {
-          _attach(SessionEntity.decode(data));
+      var cache = await getListFromDb(tableName);
+      if (cache.isNotEmpty) {
+        cache.forEach((data) {
+          _attach(SessionEntity.fromMap(data));
         });
 
         notifyListeners();
@@ -88,7 +86,7 @@ class SessionManager extends BaseManager<SessionEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<SessionEntity> newEntities =
-            (responseData['sessions'] as List).map((e) => SessionEntity.decode(e)).toList();
+            (responseData['sessions'] as List).map((e) => SessionEntity.fromMap(e)).toList();
 
         if (!_isEqual(parameterValue, newEntities)) {
           _map[parameterValue] = newEntities;
@@ -135,6 +133,14 @@ class SessionManager extends BaseManager<SessionEntity> {
   Future<void> _cacheAll() async {
     var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
 
-    await cacheMap(_map, _key, campaigns);
+    List<SessionEntity> entities = [];
+
+    _map.forEach((key, value) {
+      if (campaigns.contains(key) || campaigns.isEmpty) {
+        entities.addAll(value);
+      }
+    });
+
+    await cacheListToDb(tableName, entities);
   }
 }

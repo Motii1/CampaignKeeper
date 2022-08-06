@@ -16,7 +16,7 @@ class UserDataEntity implements BaseEntity {
     this.imageData = base;
   }
 
-  UserDataEntity.decode(Map data) {
+  UserDataEntity.fromMap(Map data) {
     username = data["username"];
     email = data["email"];
     password = data["password"];
@@ -49,8 +49,8 @@ class UserDataEntity implements BaseEntity {
 
   Image get image => _imageCache;
 
-  Map encode() {
-    Map data = {
+  Map<String, Object?> toMap() {
+    Map<String, Object?> data = {
       "username": username,
       "email": email,
       "password": password,

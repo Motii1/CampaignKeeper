@@ -1,7 +1,7 @@
 abstract class BaseEntity {
-  BaseEntity.decode(Map data);
+  BaseEntity.fromMap(Map data);
 
-  Map encode();
+  Map<String, Object?> toMap();
 
   bool equals(Object? other);
 }

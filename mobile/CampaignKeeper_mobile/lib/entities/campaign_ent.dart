@@ -8,21 +8,22 @@ class CampaignEntity implements BaseEntity {
     this.imageData = imageData;
   }
 
-  CampaignEntity.decode(Map data) {
+  CampaignEntity.fromMap(Map data) {
     id = data['id'];
     name = data['name'];
     createdAt = DateTime.parse(data['createdAt']);
     imageData = data['imageBase64'];
   }
 
-  static const String endpoint = "/api/campaign/list";
-
-  Image _imageCache = Image.asset("assets/campaign_default.png");
-  String? _imageData;
+  static const String endpoint = '/api/campaign/list';
+  static const String tableName = 'campaigns';
 
   late int id;
   late String name;
   late DateTime createdAt;
+
+  Image _imageCache = Image.asset("assets/campaign_default.png");
+  String? _imageData;
 
   String? get imageData => _imageData;
 
@@ -40,8 +41,8 @@ class CampaignEntity implements BaseEntity {
 
   Image get image => _imageCache;
 
-  Map encode() {
-    Map data = {
+  Map<String, Object?> toMap() {
+    Map<String, Object?> data = {
       "id": id,
       "name": name,
       "createdAt": createdAt.toString(),

@@ -4,11 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
 
 class CampaignManager extends BaseManager<CampaignEntity> {
-  static const String _key = "Campaign";
+  final String tableName = CampaignEntity.tableName;
   List<CampaignEntity> _entities = [];
 
   CampaignManager();
@@ -18,7 +17,7 @@ class CampaignManager extends BaseManager<CampaignEntity> {
     lockedOperation(
       () async {
         _entities.add(entity);
-        await cacheList(_entities, _key);
+        await cacheListToDb(tableName, _entities);
       },
       defaultResult: null,
     );
@@ -50,15 +49,14 @@ class CampaignManager extends BaseManager<CampaignEntity> {
   @override
   void clear() {
     _entities.clear();
+    cacheListToDb(tableName, _entities);
   }
 
   Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_entities.isEmpty) {
-      String? cache = await CacheUtil().get(_key);
-      if (cache != null && cache.isNotEmpty) {
-        List cacheData = json.decode(cache);
-
-        _entities = cacheData.map((e) => CampaignEntity.decode(e)).toList();
+      var cache = await getListFromDb(tableName);
+      if (cache.isNotEmpty) {
+        _entities = cache.map((e) => CampaignEntity.fromMap(e)).toList();
         notifyListeners();
       }
     }
@@ -69,13 +67,13 @@ class CampaignManager extends BaseManager<CampaignEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<CampaignEntity> newEntities =
-            (responseData['campaigns'] as List).map((e) => CampaignEntity.decode(e)).toList();
+            (responseData['campaigns'] as List).map((e) => CampaignEntity.fromMap(e)).toList();
 
         if (!_isEqual(newEntities)) {
           _entities = newEntities;
 
           notifyListeners();
-          await cacheList(_entities, _key);
+          await cacheListToDb(tableName, _entities);
 
           return true;
         }

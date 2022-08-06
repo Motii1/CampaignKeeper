@@ -13,6 +13,7 @@ import 'package:campaign_keeper_mobile/services/cache_util.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
 import 'package:campaign_keeper_mobile/managers/schema_manager.dart';
+import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
@@ -91,6 +92,9 @@ class DataCarrier {
   // a specific managers data, but it's clearing
   // everything at once.
   Future<void> clear() async {
+    var db = DatabaseHelper();
+    await db.clear();
+
     _managers.forEach((key, value) {
       value.clear();
     });

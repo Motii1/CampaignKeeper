@@ -1,14 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:campaign_keeper_mobile/entities/base_entity.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
+import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
 // A hollow class used as a base for proper managers
 // due to a lack of interfaces in dart.
 class BaseManager<T extends BaseEntity> extends ChangeNotifier {
+  final _db = DatabaseHelper();
   Future? lock;
   // Attaches given entity to the local base and caches it.
   // Might also update server.
@@ -87,23 +86,15 @@ class BaseManager<T extends BaseEntity> extends ChangeNotifier {
     return res;
   }
 
-  Future<void> cacheList(List<T> list, String key) async {
-    var data = list.map((e) => e.encode()).toList();
+  // Caches list of entities ensuring there's no leftovers.
+  Future<void> cacheListToDb(String tableName, List<T> entities) async {
+    List<Map<String, Object?>> maps = entities.map((e) => e.toMap()).toList();
 
-    CacheUtil().add(key, json.encode(data));
+    await _db.delete(tableName);
+    await _db.insertList(tableName, maps);
   }
 
-  Future<void> cacheMap(Map<int, List<T>> map, String key, List<int> filter) async {
-    var data = [];
-
-    map.forEach(
-      (mapKey, list) {
-        if (filter.isEmpty || filter.contains(mapKey)) {
-          data.addAll(list.map((e) => e.encode()));
-        }
-      },
-    );
-
-    CacheUtil().add(key, json.encode(data));
+  Future<List<Map>> getListFromDb(String tableName, {String? where, List<Object?>? whereArgs}) async {
+    return await _db.get(tableName, where: where, whereArgs: whereArgs);
   }
 }

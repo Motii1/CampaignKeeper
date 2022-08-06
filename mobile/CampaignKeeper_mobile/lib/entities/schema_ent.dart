@@ -10,7 +10,7 @@ class SchemaEntity implements BaseEntity {
     required this.fields,
   });
 
-  SchemaEntity.decode(Map data) {
+  SchemaEntity.fromMap(Map data) {
     id = data['id'];
     campaignId = data['campaignId'];
     title = data['title'];
@@ -18,14 +18,15 @@ class SchemaEntity implements BaseEntity {
   }
 
   static const String endpoint = "/api/schema/list";
+  static const String tableName = 'schemas';
 
   late int id;
   late int campaignId;
   late String title;
   late List<String> fields;
 
-  Map encode() {
-    Map data = {
+  Map<String, Object?> toMap() {
+    Map<String, Object?> data = {
       "id": id,
       "campaignId": campaignId,
       "title": title,

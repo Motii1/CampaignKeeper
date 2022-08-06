@@ -9,7 +9,7 @@ class SessionEntity implements BaseEntity {
     required this.createdAt,
   });
 
-  SessionEntity.decode(Map data) {
+  SessionEntity.fromMap(Map data) {
     id = data['id'];
     campaignId = data['campaignId'];
     name = data['name'];
@@ -17,14 +17,15 @@ class SessionEntity implements BaseEntity {
   }
 
   static const String endpoint = "/api/session/list";
+  static const String tableName = 'sessions';
 
   late int id;
   late int campaignId;
   late String name;
   late DateTime createdAt;
 
-  Map encode() {
-    Map data = {
+  Map<String, Object?> toMap() {
+    Map<String, Object?> data = {
       "id": id,
       "campaignId": campaignId,
       "name": name,

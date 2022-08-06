@@ -46,7 +46,7 @@ class LoginHelper {
       Map responseData = json.decode(response.data!);
       responseData['password'] = password;
 
-      userEntity = UserDataEntity.decode(responseData);
+      userEntity = UserDataEntity.fromMap(responseData);
     }
 
     return Tuple(

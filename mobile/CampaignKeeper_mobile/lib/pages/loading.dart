@@ -3,6 +3,7 @@ import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/services/app_prefs.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
+import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/login_helper.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,7 @@ class _LoadingState extends State<Loading> {
       _loaded = true;
 
       await loadAssets();
+      await DatabaseHelper().initialize();
 
       autoLogin();
     }

@@ -6,6 +6,8 @@ import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_schema_tile.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_session_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
+import 'package:campaign_keeper_mobile/entities/event_ent.dart';
+import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/entities/session_ent.dart';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
@@ -13,6 +15,7 @@ import 'package:campaign_keeper_mobile/search_controllers/schema_search_controll
 import 'package:campaign_keeper_mobile/search_controllers/session_search_controller.dart';
 import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:campaign_keeper_mobile/search_controllers/base_search_controller.dart';
+import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -63,6 +66,21 @@ class _CampaignState extends KeeperState<Campaign> {
   Future<void> onSchemaRefresh() async {
     schemas = DataCarrier().getList(groupId: widget.campaignId);
     controller.replace(buildBody());
+  }
+
+  void refreshCampaign() async {
+    await Future.wait([
+      DataCarrier().refresh<CampaignEntity>(),
+      DataCarrier().refresh<SessionEntity>(parameterValue: widget.campaignId),
+      DataCarrier().refresh<SchemaEntity>(parameterValue: widget.campaignId),
+    ]);
+
+    DataCarrier()
+        .refresh<ObjectEntity>(parameterName: EntityParameter.campaign, parameterValue: widget.campaignId);
+
+    DataCarrier().getList<SessionEntity>(groupId: widget.campaignId).forEach((session) {
+      DataCarrier().refresh<EventEntity>(parameterValue: session.id);
+    });
   }
 
   void openSession(int id) async {
@@ -132,9 +150,7 @@ class _CampaignState extends KeeperState<Campaign> {
     DataCarrier().addListener<CampaignEntity>(onCampaignRefresh);
     DataCarrier().addListener<SessionEntity>(onSessionRefresh);
     DataCarrier().addListener<SchemaEntity>(onSchemaRefresh);
-    DataCarrier().refresh<CampaignEntity>();
-    DataCarrier().refresh<SessionEntity>(parameterValue: widget.campaignId);
-    DataCarrier().refresh<SchemaEntity>(parameterValue: widget.campaignId);
+    refreshCampaign();
   }
 
   @override

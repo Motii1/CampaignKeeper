@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:campaign_keeper_mobile/services/helpers/database_helper.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:collection/collection.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
@@ -7,10 +8,9 @@ import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/types/http_types.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
 
 class SchemaManager extends BaseManager<SchemaEntity> {
-  static const String _key = "Schema";
+  final String tableName = SchemaEntity.tableName;
   Map<int, List<SchemaEntity>> _map = {};
 
   @override
@@ -65,11 +65,10 @@ class SchemaManager extends BaseManager<SchemaEntity> {
 
   Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_map.isEmpty) {
-      String? cache = await CacheUtil().get(_key);
-      if (cache != null) {
-        List cacheData = json.decode(cache);
-        cacheData.forEach((data) {
-          _attach(SchemaEntity.decode(data));
+      var cache = await _getCache();
+      if (cache.isNotEmpty) {
+        cache.forEach((data) {
+          _attach(SchemaEntity.fromMap(data));
         });
 
         notifyListeners();
@@ -85,7 +84,7 @@ class SchemaManager extends BaseManager<SchemaEntity> {
       if (userResponse.status == ResponseStatus.Success && userResponse.data != null) {
         Map responseData = json.decode(userResponse.data!);
         List<SchemaEntity> newEntities =
-            (responseData['schemas'] as List).map((e) => SchemaEntity.decode(e)).toList();
+            (responseData['schemas'] as List).map((e) => SchemaEntity.fromMap(e)).toList();
 
         if (!_isEqual(parameterValue, newEntities)) {
           _map[parameterValue] = newEntities;
@@ -129,9 +128,60 @@ class SchemaManager extends BaseManager<SchemaEntity> {
     return true;
   }
 
+  Future<List<Map>> _getCache() async {
+    List<Map> resMaps = [];
+    List<Map> entMaps = await getListFromDb(tableName);
+    List<Map> fieldsMaps = await DatabaseHelper().getValues<String>(entityTable: tableName);
+
+    var dict = fieldsMaps.groupListsBy((e) => e['entityId']);
+
+    entMaps.forEach((ent) {
+      var newEntity = Map.from(ent);
+      var fields = (dict[ent['id']] ?? []).map((e) => e['value'] as String).toList();
+
+      newEntity['fields'] = fields;
+      resMaps.add(newEntity);
+    });
+
+    return resMaps;
+  }
+
   Future<void> _cacheAll() async {
+    var database = DatabaseHelper();
     var campaigns = DataCarrier().getList<CampaignEntity>().map((e) => e.id).toList();
 
-    await cacheMap(_map, _key, campaigns);
+    List<SchemaEntity> entities = [];
+
+    _map.forEach((key, value) {
+      if (campaigns.contains(key) || campaigns.isEmpty) {
+        entities.addAll(value);
+      }
+    });
+
+    List<Map<String, Object>> fieldsMaps = [];
+
+    entities.forEach((e) {
+      var fields = DatabaseHelper.listToValueMaps(e.fields, entityId: e.id, entityTable: tableName);
+
+      if (fields.isNotEmpty) {
+        fieldsMaps.addAll(fields);
+      }
+    });
+
+    var entitiesMaps = entities.map((e) {
+      var map = e.toMap();
+      map.remove('fields');
+
+      return map;
+    }).toList();
+
+    await Future.wait([
+      database.delete(tableName),
+      database.delete('strings', where: 'entityTable = ?', whereArgs: [tableName]),
+    ]);
+    await Future.wait([
+      database.insertList(tableName, entitiesMaps),
+      database.insertList('strings', fieldsMaps),
+    ]);
   }
 }

@@ -7,6 +7,7 @@ enum FieldValueType {
 
 // Class representing part of an objects field.
 class FieldValue {
+  static const String tableName = 'field_values';
   FieldValueType type;
   int sequence;
   String text;
@@ -24,18 +25,30 @@ class FieldValue {
         fieldName == fieldName;
   }
 
-  static Map encode(FieldValue value) {
+  Map<String, Object> toMap({String? entityTable, int? entityId, String? entityType}) {
     var data = {
-      'type': value.type == FieldValueType.Text ? "string" : "id",
-      'sequenceNumber': value.sequence,
-      'value': value.type == FieldValueType.Text ? value.text : value.id,
-      'fieldName': value.fieldName,
+      'type': type == FieldValueType.Text ? "string" : "id",
+      'sequenceNumber': sequence,
+      'value': type == FieldValueType.Text ? text : id,
+      'fieldName': fieldName,
     };
+
+    if (entityTable != null) {
+      data['entityTable'] = entityTable;
+    }
+
+    if (entityId != null) {
+      data['entityId'] = entityId;
+    }
+
+    if (entityType != null) {
+      data['entityType'] = entityType;
+    }
 
     return data;
   }
 
-  static FieldValue decode(Map data, {defaultFieldName = ""}) {
+  static FieldValue fromMap(Map data, {defaultFieldName = ""}) {
     if (!data.containsKey('type') || !data.containsKey('sequenceNumber') || !data.containsKey('value')) {
       throw Exception("Wrong FieldValue data map.");
     }
