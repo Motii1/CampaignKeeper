@@ -2,11 +2,14 @@ import 'package:campaign_keeper_mobile/components/tiles/keeper_object_grid_tile.
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
 import 'package:flutter/material.dart';
 
+// Uneven grid displaying in an compelling format
+// object tiles.
 class KeeperObjectsGrid extends StatelessWidget {
   const KeeperObjectsGrid({Key? key, required this.tiles}) : super(key: key);
 
   final List<KeeperObjectGridTile> tiles;
 
+  // Returns two lists of widgets representing columns.
   Tuple<List<Widget>, List<Widget>> orderWidgets() {
     List<Widget> leftColumn = [];
     List<Widget> rightColumn = [];

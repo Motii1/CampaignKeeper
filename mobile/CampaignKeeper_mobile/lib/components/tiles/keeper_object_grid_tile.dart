@@ -1,6 +1,8 @@
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:flutter/material.dart';
 
+// Grid element representing an object.
+// Shows an image if available.
 class KeeperObjectGridTile extends StatelessWidget {
   const KeeperObjectGridTile({Key? key, required this.entity, this.onTap}) : super(key: key);
 

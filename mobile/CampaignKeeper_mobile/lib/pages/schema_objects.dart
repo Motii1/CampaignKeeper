@@ -5,7 +5,6 @@ import 'package:campaign_keeper_mobile/components/keeper_objects_grid.dart';
 import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_object_grid_tile.dart';
-import 'package:campaign_keeper_mobile/components/tiles/keeper_object_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
 import 'package:campaign_keeper_mobile/entities/schema_ent.dart';
@@ -15,7 +14,7 @@ import 'package:campaign_keeper_mobile/services/data_carrier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-// Page displaying a list of objects corresponding
+// Page displaying a grid of objects corresponding
 // to a particular schema.
 class SchemaObjects extends StatefulWidget {
   const SchemaObjects({Key? key, required this.schemaId}) : super(key: key);
