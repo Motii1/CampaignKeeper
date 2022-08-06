@@ -1,8 +1,10 @@
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_popup.dart';
 import 'package:campaign_keeper_mobile/components/app_bar/keeper_search_bar.dart';
 import 'package:campaign_keeper_mobile/components/keeper_anim_sliver_replacer.dart';
+import 'package:campaign_keeper_mobile/components/keeper_objects_grid.dart';
 import 'package:campaign_keeper_mobile/components/keeper_scaffold.dart';
 import 'package:campaign_keeper_mobile/components/keeper_state.dart';
+import 'package:campaign_keeper_mobile/components/tiles/keeper_object_grid_tile.dart';
 import 'package:campaign_keeper_mobile/components/tiles/keeper_object_tile.dart';
 import 'package:campaign_keeper_mobile/entities/campaign_ent.dart';
 import 'package:campaign_keeper_mobile/entities/object_ent.dart';
@@ -72,17 +74,26 @@ class _SchemaObjectsState extends KeeperState<SchemaObjects> {
     }
 
     if (objects.length > 0) {
-      return SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) => KeeperObjectTile(
-            entity: objects[index],
-            onTap: () {
-              openObject(objects[index].id);
-            },
-          ),
-          childCount: objects.length,
-        ),
-      );
+      // return SliverList(
+      //   delegate: SliverChildBuilderDelegate(
+      //     (context, index) => KeeperObjectGridTile(
+      //       entity: objects[index],
+      //       onTap: () {
+      //         openObject(objects[index].id);
+      //       },
+      //     ),
+      //     childCount: objects.length,
+      //   ),
+      // );
+      return KeeperObjectsGrid(
+          tiles: objects
+              .map((e) => KeeperObjectGridTile(
+                    entity: e,
+                    onTap: () {
+                      openObject(e.id);
+                    },
+                  ))
+              .toList());
     }
 
     return SliverFillRemaining(

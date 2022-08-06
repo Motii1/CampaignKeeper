@@ -43,7 +43,6 @@ class ObjectEntity implements BaseEntity {
       _imageCache = Image.memory(
         base64.decode(_imageData!),
         gaplessPlayback: true,
-        width: double.infinity,
         fit: BoxFit.fitWidth,
       );
     } else {
