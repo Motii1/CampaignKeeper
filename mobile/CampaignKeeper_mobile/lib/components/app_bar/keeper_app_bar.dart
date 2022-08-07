@@ -95,28 +95,24 @@ class KeeperAppBar extends StatelessWidget {
           ),
         ];
       },
-      body: onRefresh != null
-          ? RefreshIndicator(
-              edgeOffset: 55,
-              onRefresh: onRefresh!,
-              color: Theme.of(context).colorScheme.onBackground,
-              strokeWidth: 2.5,
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  return CustomScrollView(
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return onRefresh != null
+              ? RefreshIndicator(
+                  edgeOffset: 55,
+                  onRefresh: onRefresh!,
+                  color: Theme.of(context).colorScheme.onBackground,
+                  strokeWidth: 2.5,
+                  child: CustomScrollView(
                     slivers: [
                       SliverOverlapInjector(
                         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                       ),
                       sliver,
                     ],
-                  );
-                },
-              ),
-            )
-          : LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return CustomScrollView(
+                  ),
+                )
+              : CustomScrollView(
                   slivers: [
                     SliverOverlapInjector(
                       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
@@ -124,8 +120,8 @@ class KeeperAppBar extends StatelessWidget {
                     sliver,
                   ],
                 );
-              },
-            ),
+        },
+      ),
     );
   }
 }
