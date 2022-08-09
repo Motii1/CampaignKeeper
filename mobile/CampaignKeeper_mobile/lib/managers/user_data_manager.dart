@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
+import 'package:campaign_keeper_mobile/services/helpers/cache_helper.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/services/helpers/request_helper.dart';
 import 'package:campaign_keeper_mobile/types/entity_types.dart';
@@ -19,7 +19,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
         _entity = entity;
         Map data = _entity!.toMap();
 
-        CacheUtil().addSecure(_key, json.encode(data));
+        CacheHelper().addSecure(_key, json.encode(data));
       },
       defaultResult: null,
     );
@@ -77,12 +77,12 @@ class UserDataManager extends BaseManager<UserDataEntity> {
   @override
   void clear() {
     _entity = null;
-    CacheUtil().deleteSecure();
+    CacheHelper().deleteSecure();
   }
 
   Future<bool> _refresh({EntityParameter? parameterName, int? parameterValue, bool online = true}) async {
     if (_entity == null) {
-      String? cache = await CacheUtil().getSecure(_key);
+      String? cache = await CacheHelper().getSecure(_key);
 
       if (cache != null) {
         _entity = UserDataEntity.fromMap(json.decode(cache));
@@ -112,7 +112,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
             notifyListeners();
 
             Map data = _entity!.toMap();
-            CacheUtil().addSecure(_key, json.encode(data));
+            CacheHelper().addSecure(_key, json.encode(data));
 
             return true;
           }
@@ -120,7 +120,7 @@ class UserDataManager extends BaseManager<UserDataEntity> {
       } else if (userResponse.status == ResponseStatus.IncorrectData) {
         _entity = null;
 
-        CacheUtil().deleteSecure();
+        CacheHelper().deleteSecure();
         notifyListeners();
       }
     }

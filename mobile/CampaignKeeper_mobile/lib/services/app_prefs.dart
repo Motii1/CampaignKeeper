@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io' show Platform;
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
+import 'package:campaign_keeper_mobile/services/helpers/cache_helper.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/main.dart';
@@ -77,7 +77,7 @@ class AppPrefs {
 
   // Loads cached user settings and applies a theme.
   Future<void> refresh(BuildContext context) async {
-    var val = await CacheUtil().get(_key);
+    var val = await CacheHelper().get(_key);
 
     if (val != null) {
       Map decodedPrefs = {};
@@ -85,7 +85,7 @@ class AppPrefs {
       try {
         decodedPrefs = json.decode(val);
       } catch (e) {
-        CacheUtil().delete(key: _key);
+        CacheHelper().delete(key: _key);
       }
 
       _debugUrl = decodedPrefs["debugUrl"] ?? _url;
@@ -178,6 +178,6 @@ class AppPrefs {
       "debugTimeout": _debugTimeout,
       "debugLoginTimeout": _debugLoginTimeout,
     };
-    CacheUtil().add(_key, json.encode(prefs));
+    CacheHelper().add(_key, json.encode(prefs));
   }
 }

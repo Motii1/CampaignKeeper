@@ -1,15 +1,15 @@
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Util used to cache information.
-class CacheUtil {
-  static final CacheUtil _cache = CacheUtil._internal();
+// Helper used to cache information.
+class CacheHelper {
+  static final CacheHelper _cache = CacheHelper._internal();
 
-  factory CacheUtil() {
+  factory CacheHelper() {
     return _cache;
   }
 
-  CacheUtil._internal();
+  CacheHelper._internal();
 
   Future<void> addSecure(String key, String value) async {
     await DependenciesHelper().secureStorage.write(key: key, value: value);

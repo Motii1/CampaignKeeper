@@ -9,7 +9,7 @@ import 'package:campaign_keeper_mobile/entities/user_data_ent.dart';
 import 'package:campaign_keeper_mobile/managers/event_manager.dart';
 import 'package:campaign_keeper_mobile/managers/object_manager.dart';
 import 'package:campaign_keeper_mobile/managers/session_manager.dart';
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
+import 'package:campaign_keeper_mobile/services/helpers/cache_helper.dart';
 import 'package:campaign_keeper_mobile/managers/base_manager.dart';
 import 'package:campaign_keeper_mobile/managers/user_data_manager.dart';
 import 'package:campaign_keeper_mobile/managers/schema_manager.dart';
@@ -99,7 +99,7 @@ class DataCarrier {
       value.clear();
     });
 
-    await CacheUtil().deleteSecure();
-    await CacheUtil().delete();
+    await CacheHelper().deleteSecure();
+    await CacheHelper().delete();
   }
 }

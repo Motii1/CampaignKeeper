@@ -1,14 +1,14 @@
-import 'package:campaign_keeper_mobile/services/cache_util.dart';
+import 'package:campaign_keeper_mobile/services/helpers/cache_helper.dart';
 import 'package:campaign_keeper_mobile/services/helpers/dependencies_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../mocks/secure_storage_mock.dart';
+import '../../mocks/secure_storage_mock.dart';
 
 void main() {
   group("Secure storage test", () {
     final secureStorage = SecureStorageMock();
     DependenciesHelper().useMocks(secureStorage: secureStorage);
-    final cacheUtil = CacheUtil();
+    final cacheUtil = CacheHelper();
 
     test("Write", () async {
       await cacheUtil.addSecure("Key", "Test value");
@@ -38,7 +38,7 @@ void main() {
   });
 
   group("Storage test", () {
-    final cacheUtil = CacheUtil();
+    final cacheUtil = CacheHelper();
 
     test("Write and read", () async {
       await cacheUtil.add("Key", "Test value");
