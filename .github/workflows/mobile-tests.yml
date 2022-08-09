@@ -1,0 +1,26 @@
+name: mobile tests
+
+defaults:
+  run:
+    working-directory: mobile/CampaignKeeper_mobile
+
+on:
+  push:
+    branches:
+      - master
+      - production
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  mobile_tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '2.10.3'
+      - run: flutter pub get
+      - run: flutter test
+
