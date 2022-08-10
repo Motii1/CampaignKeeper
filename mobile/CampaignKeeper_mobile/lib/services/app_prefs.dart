@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io' show Platform;
 import 'package:campaign_keeper_mobile/services/helpers/cache_helper.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:campaign_keeper_mobile/main.dart';
 
@@ -118,7 +118,7 @@ class AppPrefs {
 
     if (Platform.isAndroid) {
       final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.version.sdkInt;
+      return androidInfo.version.sdkInt ?? 0;
     }
 
     return 0;
