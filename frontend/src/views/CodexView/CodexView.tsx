@@ -36,11 +36,13 @@ export const CodexView: React.FC = () => {
     else setDialogType(NavBarViewDialog.NewEntry);
   }, [currentEntry]);
 
-  if (currentCampaignId === '') history.push(viewsRoutes.CAMPAIGN);
-  else if (!isCodexDownloaded || codexCampaignId !== currentCampaignId) {
-    dispatch(fetchSchemasAndEntries(currentCampaignId));
-    dispatch(updateCampaignId({ campaignId: currentCampaignId }));
-  }
+  useEffect(() => {
+    if (currentCampaignId === '') history.push(viewsRoutes.CAMPAIGN);
+    else if (!isCodexDownloaded || codexCampaignId !== currentCampaignId) {
+      dispatch(fetchSchemasAndEntries(currentCampaignId));
+      dispatch(updateCampaignId({ campaignId: currentCampaignId }));
+    }
+  }, [codexCampaignId, currentCampaignId, dispatch, history, isCodexDownloaded]);
 
   return (
     <ViewWithNavBarWrapper

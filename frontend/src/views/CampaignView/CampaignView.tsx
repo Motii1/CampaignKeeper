@@ -39,24 +39,26 @@ export const CampaignView: React.FC = () => {
 
   useEffect(() => setQuote(quotes[Math.floor(Math.random() * quotes.length)]), []);
 
-  if (currentCampaignId === '') {
-    const lastCampaign = campaignsList[campaignsList.length - 1];
-    if (lastCampaign) {
-      dispatch(
-        updateSelectedCampaignData({
-          campaignId: lastCampaign.id,
-          campaignName: lastCampaign.name,
-          campaignImageBase64: lastCampaign.imageBase64,
-        })
-      );
-      dispatch(fetchSchemasAndEntries(lastCampaign.id));
+  useEffect(() => {
+    if (currentCampaignId === '') {
+      const lastCampaign = campaignsList[campaignsList.length - 1];
+      if (lastCampaign) {
+        dispatch(
+          updateSelectedCampaignData({
+            campaignId: lastCampaign.id,
+            campaignName: lastCampaign.name,
+            campaignImageBase64: lastCampaign.imageBase64,
+          })
+        );
+        dispatch(fetchSchemasAndEntries(lastCampaign.id));
+      }
+    } else if (!isSessionsListDownloaded || sessionsCampaignId !== currentCampaignId) {
+      dispatch(fetchSessions(currentCampaignId));
+      dispatch(fetchSchemasAndEntries(currentCampaignId));
+      dispatch(resetCurrent({}));
+      dispatch(updateCampaignId({ campaignId: currentCampaignId }));
     }
-  } else if (!isSessionsListDownloaded || sessionsCampaignId !== currentCampaignId) {
-    dispatch(fetchSessions(currentCampaignId));
-    dispatch(fetchSchemasAndEntries(currentCampaignId));
-    dispatch(resetCurrent({}));
-    dispatch(updateCampaignId({ campaignId: currentCampaignId }));
-  }
+  }, [campaignsList, currentCampaignId, dispatch, isSessionsListDownloaded, sessionsCampaignId]);
 
   const handleFab = () => {
     setDialogType(NavBarViewDialog.NewSession);
