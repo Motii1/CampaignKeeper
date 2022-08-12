@@ -48,6 +48,9 @@ export const NavBar: React.FC<NavBarProps> = props => {
     else props.setSnackbarError(`You can't open ${name} without selecting session`);
   };
 
+  // eslint-disable-next-line no-console
+  console.log(props.currentView);
+
   return (
     <Paper elevation={0} square sx={{ backgroundColor: 'customPalette.surface', height: 50 }}>
       <Stack
@@ -89,13 +92,6 @@ export const NavBar: React.FC<NavBarProps> = props => {
           isChosen={props.currentView === viewsRoutes.CODEX}
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => history.push(viewsRoutes.CODEX)}
-        />
-        <PrimaryNavBarButton
-          text="NOTES"
-          isChosen={props.currentView === viewsRoutes.NOTES}
-          onClick={() => {
-            history.push(viewsRoutes.NOTES);
-          }}
         />
         <UserPanel
           setSnackbarInfo={props.setSnackbarInfo}
