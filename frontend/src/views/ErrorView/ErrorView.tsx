@@ -14,7 +14,7 @@ export const ErrorView: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(clearError());
+    dispatch(clearError({}));
   }, [dispatch]);
 
   return (

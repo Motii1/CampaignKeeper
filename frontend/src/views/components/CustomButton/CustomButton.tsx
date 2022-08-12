@@ -10,8 +10,8 @@ type CustomButtonProps = {
 };
 
 /**
- * Standard MUI Button with custom styles and props allowing to specify its role (form button,
- * upload button, button that causes execution of function)
+ * Standard MUI Button with custom styles and props allowing to specify its role
+ * (form button, upload button, button that causes execution of function)
  * @param param0
  * @returns
  */

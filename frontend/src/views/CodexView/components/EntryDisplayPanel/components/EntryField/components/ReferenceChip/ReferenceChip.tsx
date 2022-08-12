@@ -9,7 +9,7 @@ type ReferenceChipProps = {
 };
 
 /**
- * Component responsible for displaying another entry, referenced
+ * Component responsible for displaying reference to another entry
  * in currently displayed entry in distinct way and opening that entry on click
  * @param props
  * @returns

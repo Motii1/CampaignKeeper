@@ -10,7 +10,7 @@ type EntriesListElementProps = {
 };
 
 /**
- * Component reponsible for displaying name of entry,
+ * Component reponsible for displaying name of entry om entries list,
  * allows opening it in EntryDisplayPanel on click
  */
 export const EntriesListElement: React.FC<EntriesListElementProps> = props => {

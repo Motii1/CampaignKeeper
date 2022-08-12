@@ -18,7 +18,7 @@ import { fetchSessions, updateCampaignId } from './sessionsSlice';
 
 /**
  * Component responsible for UI and logic of CampaignView which displays campaign selected
- * by user in StartView, list of sessions in it, allows creation of new session
+ * by user in StartView (list of sessions in that campaign), allows creation of new sessions
  * and editing/deleting existing ones
  * @returns
  */

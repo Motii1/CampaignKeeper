@@ -48,8 +48,6 @@ export const ProtectedRouteWrapper: React.FC<ProtectedRouteWrapperProps> = ({
   else if (!isLoading && !isAccessValid)
     dispatch(setError({ isError: true, message: 'Unauthorized access' }));
 
-  // eslint-disable-next-line no-console
-  console.log(location);
   if (location && path !== location.pathname)
     return (
       <Route {...rest}>

@@ -12,10 +12,7 @@ import { Sidebar } from './components/Sidebar/Sidebar';
  */
 export const ViewWithSidebarWrapper: React.FC = props => (
   <Grid container wrap="nowrap" sx={{ minHeight: '100vh' }}>
-    <Sidebar>
-      {/* <SidebarPaper>{props.children}</SidebarPaper> */}
-      {props.children}
-    </Sidebar>
+    <Sidebar>{props.children}</Sidebar>
     <BackgroundGraphic />
   </Grid>
 );
