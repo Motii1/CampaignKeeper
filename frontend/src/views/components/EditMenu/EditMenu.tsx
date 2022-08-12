@@ -7,7 +7,7 @@ type EditMenuProps = {
 };
 
 /**
- * Context menu used to start process of edit of element it was open on
+ * Context menu used to start process of edition of element it was open on
  * (e.g. by opening dialog which allows to change element properties)
  * - process execution depends on function passed from parent (handleEdit)
  * @param props

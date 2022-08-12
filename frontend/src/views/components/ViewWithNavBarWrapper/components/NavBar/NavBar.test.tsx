@@ -36,7 +36,6 @@ describe('NavBar test', () => {
     test('renders main buttons', () => {
       expect(screen.getByText('START')).toBeInTheDocument();
       expect(screen.getByText('CAMPAIGN')).toBeInTheDocument();
-      expect(screen.getByText('NOTES')).toBeInTheDocument();
     });
 
     test('renders campaign buttons', () => {

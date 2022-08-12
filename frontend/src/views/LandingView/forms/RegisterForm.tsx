@@ -33,7 +33,7 @@ export const AUTH_URL = '/api/auth';
 
 /**
  * Component responsible for displaying register form, registering user
- * and login them in if registration is successful
+ * and logging them in if registration is successful
  * @param props
  * @returns
  */

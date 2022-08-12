@@ -33,8 +33,8 @@ export const fetchSessions = createAsyncThunk(
 );
 
 /**
- * Redux slice used to store and operate on information about sessions belonging
- * to currently selected campaign
+ * Redux slice used to store and operate on information about sessions
+ * belonging to currently selected campaign
  */
 const sessionsSlice = createSlice({
   name: 'sessions',

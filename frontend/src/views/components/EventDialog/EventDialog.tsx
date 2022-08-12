@@ -240,7 +240,7 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
 
   const handleOk = () => {
     if (eventTitleHelperText === '')
-      if (props.dialogType === NavBarViewDialog.NewEvent)
+      if (props.dialogType === NavBarViewDialog.NewEvent) {
         if (parentIds.length === 0 && eventsList.length > 0)
           props.setSnackbarError('Session can have only one starting event');
         else
@@ -258,7 +258,7 @@ export const EventDialog: React.FC<EventDialogProps> = props => {
             ),
             parentIds: parentIds,
           });
-      else {
+      } else {
         if (
           parentIds.length === 0 &&
           eventsList.length > 0 &&

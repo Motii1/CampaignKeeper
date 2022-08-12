@@ -14,8 +14,8 @@ const initialState: MapViewState = {
 };
 
 /**
- * Redux slice used to store data about session and event currently displayed/selected
- * in MapView
+ * Redux slice used to store data about session and event
+ * currently displayed/selected in MapView
  */
 const mapViewSlice = createSlice({
   name: 'mapView',

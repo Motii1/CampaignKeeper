@@ -20,9 +20,9 @@ type OtherEventsPanelProps = {
  * Components used to navigate between event currently displayed in MapView
  * and its children/parents by displaying two set of buttons:
  *  - first allows to open OtherEventsDialog with detailed display
- *  of event's parents/children,
- *  which in turn allows to open them in ExplorerView by clicking
- *  - second displays names of children (selecting them on click)
+ *  of event's parents/children, which in turn allows to open them
+ * in ExplorerView by clicking
+ *  - second displays names of children (opening them in ExplorerView on click)
  *  and button for creating new children (opens ExplorerDialog
  *  with currentEvent already filled in as child)
  * @param props

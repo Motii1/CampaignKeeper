@@ -14,7 +14,7 @@ type useQueryArgs<T> = {
 
 /**
  * Custom React hook used to performe queries to server through the application.
- * Requires url to query, query method and optional headers for the query.
+ * Requires url for query, query method and optional headers for the query.
  * Provides developers with information about query execution status (loading/loaded),
  * response status (http), error (if occurs), data returned in response (if any)
  * and methods for running the query and reseting it (so it can be run again)

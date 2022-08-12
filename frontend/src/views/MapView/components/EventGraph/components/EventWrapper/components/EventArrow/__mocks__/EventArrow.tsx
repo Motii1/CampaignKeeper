@@ -3,7 +3,7 @@ import { EventArrowProps } from '../EventArrow';
 
 /**
  * Mock for EventArrow component, used to allow testing with Jest library
- * as well as simplify checking if arrows has been rendered correctly during tests
+ * as well as to simplify checking if arrows has been rendered correctly during tests
  * @param props
  * @returns
  */

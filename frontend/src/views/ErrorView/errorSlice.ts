@@ -15,7 +15,8 @@ const errorSlice = createSlice({
       state.isError = action.payload.isError;
       state.message = action.payload.message;
     },
-    clearError: state => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    clearError: (state, _action) => {
       state.isError = false;
       state.message = null;
     },

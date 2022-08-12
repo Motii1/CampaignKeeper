@@ -12,7 +12,7 @@ import {
 } from '../views/MapView/eventsSlice';
 
 /**
- * Used to convert files into base64
+ * Used to convert files into base64 encoding
  * @param file
  * @returns
  */
@@ -49,7 +49,7 @@ export const convertReferenceFieldToCodexMetadata = (
   let index = 0;
   const metadata: CodexMetadataInstance[] = [];
   // no data is present in field, but it must be provided to validate request on backend
-  if (fieldMetadata.length === 0)
+  if (fieldMetadata.length === 0 || (fieldMetadata.length === 1 && fieldMetadata[0].value === '')) {
     return [
       {
         type: 'string',
@@ -58,6 +58,7 @@ export const convertReferenceFieldToCodexMetadata = (
         fieldName: fieldName,
       },
     ];
+  }
   fieldMetadata.forEach(field => {
     if (field.value !== '')
       if (field.id)
@@ -346,5 +347,17 @@ export const compareEventsByXThenId = (
   if (e1.x > e2.x) return 1;
   if (e1.id > e2.id) return 1;
   if (e1.id < e2.id) return -1;
+  return 0;
+};
+
+/**
+ * Used to compare codex entries by their id (ASC)
+ * @param e1
+ * @param e2
+ * @returns
+ */
+export const compareEntriesById = (e1: Entry, e2: Entry): number => {
+  if (e1.id < e2.id) return -1;
+  if (e1.id > e2.id) return 1;
   return 0;
 };

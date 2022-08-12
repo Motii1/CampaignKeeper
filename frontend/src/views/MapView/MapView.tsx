@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { RootState } from '../../store';
@@ -26,22 +26,31 @@ export const MapView: React.FC = () => {
 
   const history = useHistory();
 
-  if (currentCampaignId === '' || currentSessionId === '') history.push(viewsRoutes.CAMPAIGN);
-  else if (!isEventsListDownloaded) {
-    const sessionIdForFetching =
-      currentSessionId !== '' ? currentSessionId : sessionsList[sessionsList.length - 1]?.id;
-    if (sessionIdForFetching) {
-      dispatch(
-        setCurrentSession({
-          currentSessionId: sessionIdForFetching,
-          currentSessionTitle: sessionsList.find(session => session.id === sessionIdForFetching)
-            ?.name,
-        })
-      );
-      dispatch(setSessionId({ currentSessionId: sessionIdForFetching }));
-      dispatch(fetchEvents(sessionIdForFetching));
-    } else history.push(viewsRoutes.CAMPAIGN);
-  }
+  useEffect(() => {
+    if (currentCampaignId === '' || currentSessionId === '') history.push(viewsRoutes.CAMPAIGN);
+    else if (!isEventsListDownloaded) {
+      const sessionIdForFetching =
+        currentSessionId !== '' ? currentSessionId : sessionsList[sessionsList.length - 1]?.id;
+      if (sessionIdForFetching) {
+        dispatch(
+          setCurrentSession({
+            currentSessionId: sessionIdForFetching,
+            currentSessionTitle: sessionsList.find(session => session.id === sessionIdForFetching)
+              ?.name,
+          })
+        );
+        dispatch(setSessionId({ currentSessionId: sessionIdForFetching }));
+        dispatch(fetchEvents(sessionIdForFetching));
+      } else history.push(viewsRoutes.CAMPAIGN);
+    }
+  }, [
+    currentCampaignId,
+    currentSessionId,
+    dispatch,
+    history,
+    isEventsListDownloaded,
+    sessionsList,
+  ]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewEvent);
