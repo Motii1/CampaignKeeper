@@ -13,5 +13,3 @@ const CODEX = '/codex';
 const ERROR = '/error';
 
 export default { LANDING, START, CAMPAIGN, MAP, EXPLORER, CODEX, ERROR };
-
-export const viewsRoutesArray = [LANDING, START, CAMPAIGN, MAP, EXPLORER, CODEX, ERROR];

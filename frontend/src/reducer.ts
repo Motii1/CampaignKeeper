@@ -14,7 +14,7 @@ import campaignsReducer from './views/StartView/campaignsSlice';
 import startViewReducer from './views/StartView/startViewSlice';
 
 /**
- * Reducer for reducer from all slices used in project
+ * Combined reducer containing reducers from all slices used in project
  */
 export const appReducer = combineReducers({
   theme: themeReducer,

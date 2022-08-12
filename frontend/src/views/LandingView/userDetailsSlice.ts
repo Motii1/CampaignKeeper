@@ -19,6 +19,9 @@ export const fetchUserDetails = createAsyncThunk('userDetails/fetchDetails', asy
   return response;
 });
 
+/**
+ * Redux slice used to store user data (username, email, avatar)
+ */
 const userDetailsSlice = createSlice({
   name: 'userDetails',
   initialState,

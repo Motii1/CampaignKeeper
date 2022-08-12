@@ -6,7 +6,7 @@ import { ViewWithSidebarWrapper } from '../components/ViewWithSidebarWrapper/Vie
 import { clearError } from './errorSlice';
 
 /**
- * Component shown in error boundary
+ * Component shown as error boundary
  * @returns
  */
 export const ErrorView: React.FC = () => {

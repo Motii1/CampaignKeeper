@@ -11,7 +11,7 @@ type useSnackbarArgs = {
 
 /**
  * Custom React hook used to simplify control of CustomSnackbar
- * in its parent componentand sometimes allow children components
+ * in its parent component and allow children components
  * to control it as well (by passing control functions as props)
  * @returns
  */

@@ -19,7 +19,7 @@ type StartSecondaryDialogProps = {
 
 /**
  * Component used as secondary dialog in StartView
- * to ask user for reconfirmation that they want to delete selected dialog
+ * to ask user for confirmation that they want to delete selected dialog
  * @returns
  */
 export const StartSecondaryDialog: React.FC<StartSecondaryDialogProps> = props => {

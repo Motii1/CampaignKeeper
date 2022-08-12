@@ -6,7 +6,7 @@ type EmptyPlaceholderProps = {
 
 /**
  * Generic component shown when there is no content to be shown
- * (e.g. user opened CampaignView and hasn't as of yet created any campaigns),
+ * (e.g. user opened CampaignView and hasn't created any campaigns as of yet),
  * displays text message passed from parent
  * NOTE: in the future it would be nice to add custom graphics
  * to every usage of this component (e.g. a planet forming out of empty space in CampaignView)
