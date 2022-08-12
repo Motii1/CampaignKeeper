@@ -8,7 +8,7 @@ export const AboutDialogContent: React.FC = () => (
   <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={0.5}>
     <Typography variant="subtitle2">
       Version:
-      <br />• Terra Nova
+      <br />• Horizon
     </Typography>
     <Typography variant="subtitle2">
       Authors:

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { RootState } from '../../store';
@@ -14,7 +14,10 @@ import { RegisterForm } from './forms/RegisterForm';
 export const LandingView: React.FC = () => {
   const userState = useSelector((state: RootState) => state.user);
   const history = useHistory();
-  if (userState.isDownloaded) history.push(viewsRoutes.START);
+
+  useEffect(() => {
+    if (userState.isDownloaded) history.push(viewsRoutes.START);
+  }, [history, userState.isDownloaded]);
 
   const [currentForm, setCurrentForm] = useState('login');
 
