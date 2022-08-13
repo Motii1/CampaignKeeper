@@ -63,6 +63,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const [entryImageBase64, setEntryImageBase64] = useState<string | null>(null);
 
   const resetDialog = useCallback(() => {
+    setEntryTitleHelperText('');
     if (currentEntry) {
       setDialogTitle(`Edit ${currentSchema?.title} entry`);
       setFields(createFilledCodexFields(currentSchema, currentEntry, entries));
