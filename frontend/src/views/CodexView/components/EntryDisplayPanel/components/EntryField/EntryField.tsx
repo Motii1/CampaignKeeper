@@ -24,6 +24,7 @@ export const EntryField: React.FC<EntryFieldProps> = props => {
             display: 'inline',
             width: 'fit-content',
             color: 'customPalette.onSurface',
+            whiteSpace: 'pre-line',
           }}
           key={metadata.sequenceNumber}
         >
