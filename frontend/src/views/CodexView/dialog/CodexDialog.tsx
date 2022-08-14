@@ -62,19 +62,8 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const [fields, setFields] = useState(createEmptyCodexFields(currentSchema));
   const [entryImageBase64, setEntryImageBase64] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (currentEntry) {
-      setDialogTitle(`Edit ${currentSchema?.title} entry`);
-      setFields(createFilledCodexFields(currentSchema, currentEntry, entries));
-      setEntryTitle(currentEntry.title);
-    } else {
-      setDialogTitle('Create new entry');
-      setFields(createEmptyCodexFields(currentSchema));
-      setEntryTitle('');
-    }
-  }, [currentEntry, currentSchema, entries]);
-
   const resetDialog = useCallback(() => {
+    setEntryTitleHelperText('');
     if (currentEntry) {
       setDialogTitle(`Edit ${currentSchema?.title} entry`);
       setFields(createFilledCodexFields(currentSchema, currentEntry, entries));
@@ -87,6 +76,10 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       setEntryImageBase64(null);
     }
   }, [currentEntry, currentSchema, entries]);
+
+  useEffect(() => {
+    resetDialog();
+  }, [resetDialog]);
 
   const {
     isLoading: isLoadingNew,
