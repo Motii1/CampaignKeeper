@@ -10,12 +10,15 @@ import viewsRoutes from '../../../../../../viewsRoutes';
  */
 export const SidebarLogo: React.FC = () => {
   const history = useHistory();
+
+  const handleClick = () => {
+    history.push(viewsRoutes.LANDING);
+  };
+
   return (
     <Box
       component="img"
-      onClick={() => {
-        history.push(viewsRoutes.LANDING);
-      }}
+      onClick={handleClick}
       sx={{
         cursor: 'pointer',
         height: 114,

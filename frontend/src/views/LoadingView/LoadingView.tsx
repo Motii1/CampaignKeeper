@@ -1,5 +1,10 @@
 import { CircularProgress, Paper, Stack } from '@mui/material';
 
+/**
+ * Component shown when an operation is being performed
+ * and application waits for data to display proper view
+ * @returns
+ */
 export const LoadingView: React.FC = () => (
   <Paper
     square

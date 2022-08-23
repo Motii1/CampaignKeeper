@@ -21,7 +21,7 @@ type ViewWithNavBarWrapperProps = {
 /**
  * Component serving as wrapper for all views using NavBar (that is: all views
  * shown to logged user). It provides it's children (views) with wrapper
- * for primary (various form which crete/edit object, e.g. sessions and event)
+ * for primary (various form which create/edit object, e.g. sessions and event)
  * and secondary dialog (mostly confirmation of e.g. deleting Codex entry),
  * Floating Action Button wrapper (used to open primary dialog in all views)
  * and Snackbar for displaying feedback and tools to use it

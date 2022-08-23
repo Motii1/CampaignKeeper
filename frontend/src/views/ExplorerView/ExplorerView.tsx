@@ -1,5 +1,5 @@
 import { Box, Paper, Stack } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { RootState } from '../../store';
@@ -27,12 +27,22 @@ export const ExplorerView: React.FC = () => {
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
 
-  if (currentCampaignId === '') history.push(viewsRoutes.CAMPAIGN);
-  else if (!isEventsListDownloaded || currentSessionId === '') history.push(viewsRoutes.MAP);
-  else if (!currentEvent) {
-    const rootEvent = eventsList.find(event => event.parentIds.length === 0);
-    if (rootEvent) dispatch(setCurrentEvent({ currentEvent: rootEvent }));
-  }
+  useEffect(() => {
+    if (currentCampaignId === '') history.push(viewsRoutes.CAMPAIGN);
+    else if (!isEventsListDownloaded || currentSessionId === '') history.push(viewsRoutes.MAP);
+    else if (!currentEvent) {
+      const rootEvent = eventsList.find(event => event.parentIds.length === 0);
+      if (rootEvent) dispatch(setCurrentEvent({ currentEvent: rootEvent }));
+    }
+  }, [
+    currentCampaignId,
+    currentEvent,
+    currentSessionId,
+    dispatch,
+    eventsList,
+    history,
+    isEventsListDownloaded,
+  ]);
 
   const handleFab = () => {
     if (currentEvent) setIsOpen(true);

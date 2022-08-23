@@ -20,7 +20,7 @@ type CampaignSecondaryDialogProps = {
 
 /**
  * Component used as secondary dialog in CampaignView to ask user
- * for reconfirmation that they want to delete selected session
+ * for confirmation that they want to delete selected session
  * @param props
  * @returns
  */

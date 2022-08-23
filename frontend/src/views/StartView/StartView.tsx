@@ -22,7 +22,9 @@ export const StartView: React.FC = () => {
   const { isCampaignsListDownloaded: isCampaignListDownloaded, campaignsList } = useSelector(
     (state: RootState) => state.campaigns
   );
-  if (!isCampaignListDownloaded) dispatch(fetchCampaigns());
+  useEffect(() => {
+    if (!isCampaignListDownloaded) dispatch(fetchCampaigns());
+  }, [dispatch, isCampaignListDownloaded]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [dialogType, setDialogType] = useState<NavBarViewDialog>(NavBarViewDialog.NewCampaign);

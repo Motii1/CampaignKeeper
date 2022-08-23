@@ -17,14 +17,14 @@ import { addEntry, CodexMetadataInstance, editEntry } from '../codexSlice';
 import { setCurrentEntry } from '../codexViewSlice';
 import { CodexFieldList } from './components/EditFieldList/CodexFieldList';
 
-export type NewEntryData = {
+type NewEntryData = {
   title: string;
   schemaId: string;
   imageBase64: string;
   metadataArray: CodexMetadataInstance[];
 };
 
-export type EditEntryData = {
+type EditEntryData = {
   title: string;
   imageBase64: string;
   metadataArray: CodexMetadataInstance[];
@@ -43,8 +43,7 @@ type CodexDialogProps = {
  * Component serving as main dialog in CodexView, used for creation of new entries
  * and editing/deleting existing ones. Can be opened in "create new entry" mode
  * (all fields are empty) by FAB when schema is selected and no entry is selected
- * or in "edit entry" mode (title is filled with data from existing entry)
- * by FAB when entry is selected
+ * or in "edit entry" mode by FAB when entry is selected
  * @param props
  * @returns
  */
@@ -63,19 +62,8 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
   const [fields, setFields] = useState(createEmptyCodexFields(currentSchema));
   const [entryImageBase64, setEntryImageBase64] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (currentEntry) {
-      setDialogTitle(`Edit ${currentSchema?.title} entry`);
-      setFields(createFilledCodexFields(currentSchema, currentEntry, entries));
-      setEntryTitle(currentEntry.title);
-    } else {
-      setDialogTitle('Create new entry');
-      setFields(createEmptyCodexFields(currentSchema));
-      setEntryTitle('');
-    }
-  }, [currentEntry, currentSchema, entries]);
-
   const resetDialog = useCallback(() => {
+    setEntryTitleHelperText('');
     if (currentEntry) {
       setDialogTitle(`Edit ${currentSchema?.title} entry`);
       setFields(createFilledCodexFields(currentSchema, currentEntry, entries));
@@ -89,7 +77,9 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
     }
   }, [currentEntry, currentSchema, entries]);
 
-  // useEffect(() => resetDialog(), [resetDialog, props.isOpen]);
+  useEffect(() => {
+    resetDialog();
+  }, [resetDialog]);
 
   const {
     isLoading: isLoadingNew,
@@ -185,7 +175,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
 
   const handleOk = () => {
     if (entryTitleHelperText === '' && currentSchema)
-      if (props.dialogType === NavBarViewDialog.NewEntry)
+      if (props.dialogType === NavBarViewDialog.NewEntry) {
         runQueryNew({
           title: entryTitle,
           schemaId: currentSchema.id.toString(),
@@ -194,7 +184,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
             .map(fieldName => convertReferenceFieldToCodexMetadata(fields[fieldName], fieldName))
             .flat(),
         });
-      else
+      } else {
         runQueryEdit({
           title: entryTitle,
           imageBase64: entryImageBase64,
@@ -202,6 +192,7 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
             .map(fieldName => convertReferenceFieldToCodexMetadata(fields[fieldName], fieldName))
             .flat(),
         });
+      }
   };
 
   const handleCancel = () => {
@@ -283,6 +274,5 @@ export const CodexDialog: React.FC<CodexDialogProps> = props => {
       </CustomDialog>
     );
 
-  // props.setIsOpen(false);
   return null;
 };

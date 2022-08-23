@@ -12,7 +12,12 @@ type RouteWrapperProps = {
  * @param param0
  * @returns
  */
-export const RouteWrapper: React.FC<RouteWrapperProps> = ({ path, children, ...rest }) => {
+export const RouteWrapper: React.FC<RouteWrapperProps> = ({
+  path,
+
+  children,
+  ...rest
+}) => {
   const isError = useSelector((state: RootState) => state.error.isError);
 
   if (isError)
@@ -21,6 +26,7 @@ export const RouteWrapper: React.FC<RouteWrapperProps> = ({ path, children, ...r
         <Redirect to={viewsRoutes.ERROR} />
       </Route>
     );
+
   return (
     <Route path={path} exact {...rest}>
       {children}

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import protectedApiClient from '../../axios/axios';
+import { compareEntriesById } from '../../utils/utils';
 
 export type Schema = {
   id: string;
@@ -83,6 +84,7 @@ const codexViewSlice = createSlice({
       newEntries[action.payload.schemaId] = newEntries[action.payload.schemaId].concat(
         action.payload.newEntry
       );
+      newEntries[action.payload.schemaId].sort(compareEntriesById);
       state.entries = newEntries;
     },
     editEntry: (state, action) => {
@@ -93,6 +95,7 @@ const codexViewSlice = createSlice({
       newEntries[action.payload.schemaId] = newEntries[action.payload.schemaId].concat(
         action.payload.newEntry
       );
+      newEntries[action.payload.schemaId].sort(compareEntriesById);
       state.entries = newEntries;
     },
     deleteEntry: (state, action) => {
@@ -100,6 +103,7 @@ const codexViewSlice = createSlice({
       newEntries[action.payload.schemaId] = newEntries[action.payload.schemaId].filter(
         element => element.id !== action.payload.entryId
       );
+      newEntries[action.payload.schemaId].sort(compareEntriesById);
       state.entries = newEntries;
     },
   },

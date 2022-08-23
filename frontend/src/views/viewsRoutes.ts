@@ -10,8 +10,6 @@ const EXPLORER = '/explorer';
 
 const CODEX = '/codex';
 
-const NOTES = '/notes';
-
 const ERROR = '/error';
 
-export default { LANDING, START, CAMPAIGN, MAP, EXPLORER, CODEX, NOTES, ERROR };
+export default { LANDING, START, CAMPAIGN, MAP, EXPLORER, CODEX, ERROR };

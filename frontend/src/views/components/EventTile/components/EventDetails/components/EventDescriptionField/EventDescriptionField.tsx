@@ -32,6 +32,7 @@ export const EventDescriptionField: React.FC<EventDescriptionFieldProps> = props
               display: 'inline',
               width: 'fit-content',
               color: 'customPalette.onSurface',
+              whiteSpace: 'pre-line',
             }}
             variant={props.type === EventTileType.Explorer ? 'subtitle1' : 'subtitle2'}
             key={metadata.sequenceNumber}

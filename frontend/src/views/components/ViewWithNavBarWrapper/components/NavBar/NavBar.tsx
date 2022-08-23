@@ -90,13 +90,6 @@ export const NavBar: React.FC<NavBarProps> = props => {
           isDisplayed={areSecondaryButtonsDisplayed}
           onClick={() => history.push(viewsRoutes.CODEX)}
         />
-        <PrimaryNavBarButton
-          text="NOTES"
-          isChosen={props.currentView === viewsRoutes.NOTES}
-          onClick={() => {
-            history.push(viewsRoutes.NOTES);
-          }}
-        />
         <UserPanel
           setSnackbarInfo={props.setSnackbarInfo}
           setSnackbarSuccess={props.setSnackbarSuccess}
