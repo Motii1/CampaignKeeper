@@ -300,14 +300,16 @@ class _EventBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> buttons = getButtons(context);
+
     return SizedBox(
-      height: 70,
+      height: buttons.isEmpty ? 0 : 70,
       child: Material(
         color: Theme.of(context).colorScheme.surface,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Row(
-            children: getButtons(context),
+            children: buttons,
           ),
         ),
       ),
