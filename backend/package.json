@@ -18,7 +18,8 @@
     "format": "npm run lint -- --fix",
     "migration:generate": "typeorm migration:generate -n",
     "migration:run": "typeorm migration:run",
-    "migration:revert": "typeorm migration:revert"
+    "migration:revert": "typeorm migration:revert",
+    "reset-database": "ts-node ./scripts/reset-database.ts"
   },
   "repository": {
     "type": "git",

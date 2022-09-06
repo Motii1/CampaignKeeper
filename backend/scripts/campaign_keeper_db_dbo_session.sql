@@ -1,0 +1,17 @@
+insert into "session" (id, name, campaign_id, created_at)
+values  (3, N'Welcome to Jurassic Park', 3, N'2022-07-22 17:44:15.5066667'),
+        (8, N'dsadsadasads', 16, N'2022-07-31 16:43:28.7100000'),
+        (10, N'adsasddas', 11, N'2022-07-31 18:31:25.0700000'),
+        (12, N'Battle of Northern Outpost', 23, N'2022-08-08 14:18:15.1500000'),
+        (13, N'Example Session', 17, N'2022-08-10 12:32:54.1633333'),
+        (15, N'Chapter XXVII: Crossing the Styx', 24, N'2022-08-13 11:15:16.4966667'),
+        (16, N'First Haunting', 25, N'2022-08-14 13:50:18.3966667'),
+        (17, N'Hello There', 4, N'2022-08-23 09:43:55.0866667'),
+        (18, N'Session 1: The Beginning', 27, N'2022-08-25 17:49:07.6433333'),
+        (19, N'Session 2: Into the Ice', 27, N'2022-08-25 17:49:21.0466667'),
+        (20, N'Session 3: The Lone Cottage', 27, N'2022-08-25 17:49:27.5766667'),
+        (21, N'Session 4: The Cold Cave', 27, N'2022-08-25 17:49:34.3600000'),
+        (22, N'Session 4.1: The Cold Cave Continues', 27, N'2022-08-25 17:49:52.8300000'),
+        (23, N'2145364', 23, N'2022-08-25 18:11:36.9600000'),
+        (24, N'Example Session', 23, N'2022-08-25 18:15:36.9200000'),
+        (25, N'Chapter XXX: Infiltrating the Greyskull', 24, N'2022-08-31 17:31:58.2366667');
